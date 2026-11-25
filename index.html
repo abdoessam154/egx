@@ -8,14 +8,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root { --bg: #050811; --bg-card: #0b1120; --bg-elevated: #10182b; --bg-input: #070c17; --border: rgba(255, 255, 255, 0.07); --border-strong: rgba(255, 255, 255, 0.14); --text: #f8fafc; --text-muted: #94a3b8; --emerald: #10b981; --emerald-dim: rgba(16, 185, 129, 0.12); --gold: #f59e0b; --gold-dim: rgba(245, 158, 11, 0.13); --red: #f43f5e; --red-dim: rgba(244, 63, 94, 0.12); --blue: #38bdf8; --blue-dim: rgba(56, 189, 248, 0.13); --shadow: 0 14px 36px rgba(0, 0, 0, 0.5); --radius: 16px; }
-    [data-theme="light"] { --bg: #f1f5f9; --bg-card: #ffffff; --bg-elevated: #f8fafc; --bg-input: #f1f5f9; --border: rgba(15, 23, 42, 0.09); --border-strong: rgba(15, 23, 42, 0.17); --text: #0f172a; --text-muted: #64748b; --red: #e11d48; --blue: #0284c7; --shadow: 0 10px 28px rgba(15, 23, 42, 0.07); }
+    :root { --bg: #050811; --bg-card: #0b1120; --bg-elevated: #10182b; --bg-input: #070c17; --border: rgba(255, 255, 255, 0.07); --border-strong: rgba(255, 255, 255, 0.14); --text: #f8fafc; --text-muted: #94a3b8; --emerald: #10b981; --emerald-dim: rgba(16, 185, 129, 0.12); --gold: #f59e0b; --gold-dim: rgba(245, 158, 11, 0.13); --red: #f43f5e; --red-dim: rgba(244, 63, 94, 0.12); --blue: #38bdf8; --blue-dim: rgba(56, 189, 248, 0.13); --purple: #a78bfa; --purple-dim: rgba(167, 139, 250, 0.13); --shadow: 0 14px 36px rgba(0, 0, 0, 0.5); --radius: 16px; }
+    [data-theme="light"] { --bg: #f1f5f9; --bg-card: #ffffff; --bg-elevated: #f8fafc; --bg-input: #f1f5f9; --border: rgba(15, 23, 42, 0.09); --border-strong: rgba(15, 23, 42, 0.17); --text: #0f172a; --text-muted: #64748b; --red: #e11d48; --blue: #0284c7; --purple: #7c3aed; --shadow: 0 10px 28px rgba(15, 23, 42, 0.07); }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Cairo', system-ui, -apple-system, sans-serif; background: radial-gradient(900px 420px at 85% -10%, rgba(16, 185, 129, 0.08), transparent 60%), radial-gradient(700px 380px at 10% -10%, rgba(245, 158, 11, 0.07), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; line-height: 1.5; }
     button, input, select, textarea { font-family: inherit; color: inherit; }
-    .header { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 14px; background: rgba(5, 8, 17, 0.86); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
-    [data-theme="light"] .header { background: rgba(255, 255, 255, 0.88); }
+    .header { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 14px; background: rgba(5, 8, 17, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    [data-theme="light"] .header { background: rgba(255, 255, 255, 0.9); }
     .header-right, .header-left { display: flex; align-items: center; gap: 7px; min-width: 0; }
     .header-left { flex-shrink: 0; }
     .icon-btn { width: 35px; height: 35px; border-radius: 10px; border: 1px solid var(--border-strong); background: var(--bg-elevated); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; font-weight: 700; transition: 0.18s; flex-shrink: 0; }
@@ -29,10 +29,7 @@
     .market-pill.open { border-color: rgba(16, 185, 129, 0.4); background: var(--emerald-dim); color: var(--emerald); }
     .market-pill.open .dot { background: var(--emerald); box-shadow: 0 0 8px var(--emerald); }
     @media (max-width: 680px) { .brand-title span, .market-pill .mkt-timer { display: none; } }
-    .auth-btn, .mcp-btn { height: 35px; padding: 0 10px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: 0.18s; }
-    .mcp-btn { border: 1px solid rgba(56, 189, 248, 0.4); background: var(--blue-dim); color: var(--blue); }
-    .mcp-btn:hover { background: var(--blue); color: #04121d; }
-    .auth-btn { border: 1px solid rgba(16, 185, 129, 0.4); background: var(--emerald-dim); color: var(--emerald); max-width: 145px; }
+    .auth-btn { height: 35px; padding: 0 10px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: 0.18s; border: 1px solid rgba(16, 185, 129, 0.4); background: var(--emerald-dim); color: var(--emerald); max-width: 145px; }
     .auth-btn:hover { background: var(--emerald); color: #03150e; }
     .auth-btn.signed-in { border-color: var(--border-strong); background: var(--bg-elevated); color: var(--text); padding: 0 7px 0 9px; }
     .auth-avatar { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; border: 1px solid var(--emerald); flex-shrink: 0; }
@@ -52,12 +49,16 @@
     .index-filter-btn { padding: 4px 9px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-elevated); font-size: 11px; font-weight: 700; cursor: pointer; flex-shrink: 0; transition: 0.15s; }
     .index-filter-btn:hover { background: var(--emerald); color: #04130d; border-color: var(--emerald); }
     .chart-topbar { padding: 10px 12px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg-elevated); }
-    .stock-identity, .chart-controls { display: flex; align-items: center; gap: 7px; flex-wrap: wrap; }
+    .stock-identity, .chart-controls { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
     .fav-star-main { width: 33px; height: 33px; border-radius: 9px; border: 1px solid var(--border-strong); background: var(--bg-card); color: var(--text-muted); font-size: 17px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.15s; }
     .fav-star-main.active { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
     .active-stock-name { font-size: 15px; font-weight: 800; }
-    .badge { padding: 2px 8px; border-radius: 7px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+    .stock-badges { display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+    .badge { padding: 2px 7px; border-radius: 7px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.25px; display: inline-flex; align-items: center; gap: 3px; white-space: nowrap; }
     .badge-ticker { background: var(--emerald-dim); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.3); direction: ltr; }
+    .badge-egx30 { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(56, 189, 248, 0.32); direction: ltr; }
+    .badge-egx70 { background: var(--purple-dim); color: var(--purple); border: 1px solid rgba(167, 139, 250, 0.32); direction: ltr; }
+    .badge-egx100 { background: rgba(148, 163, 184, 0.12); color: var(--text-muted); border: 1px solid var(--border-strong); direction: ltr; }
     .badge-shariah { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(245, 158, 11, 0.35); }
     .tf-group { display: inline-flex; background: var(--bg-input); border: 1px solid var(--border); border-radius: 10px; padding: 3px; gap: 2px; }
     .tf-btn { padding: 5px 9px; border: none; background: transparent; color: var(--text-muted); border-radius: 7px; font-size: 11.5px; font-weight: 700; cursor: pointer; transition: 0.15s; }
@@ -69,20 +70,7 @@
     .ind-label { font-size: 11px; font-weight: 800; color: var(--text-muted); white-space: nowrap; }
     .ind-chip { padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border-strong); background: var(--bg-elevated); color: var(--text-muted); font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.15s; }
     .ind-chip.active { border-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
-    .ind-chip.sr-toggle.active { border-color: var(--emerald); background: var(--emerald-dim); color: var(--emerald); }
     .sync-pill { margin-right: auto; font-size: 11px; color: var(--emerald); font-weight: 700; white-space: nowrap; }
-    .sr-strip { display: flex; align-items: center; gap: 6px; padding: 4px 10px; min-height: 30px; background: rgba(7, 12, 23, 0.72); border-bottom: 1px solid var(--border); overflow-x: auto; scrollbar-width: none; font-size: 11px; }
-    [data-theme="light"] .sr-strip { background: #f8fafc; }
-    .sr-strip::-webkit-scrollbar { display: none; }
-    .sr-strip.hidden { display: none; }
-    .sr-pill { display: inline-flex; align-items: center; gap: 4px; padding: 1px 7px; border-radius: 6px; font-weight: 700; white-space: nowrap; border: 1px solid transparent; line-height: 1.5; }
-    .sr-pill.res { color: var(--red); background: var(--red-dim); border-color: rgba(244, 63, 94, 0.28); }
-    .sr-pill.sup { color: var(--emerald); background: var(--emerald-dim); border-color: rgba(16, 185, 129, 0.28); }
-    .sr-pill.piv { color: var(--gold); background: var(--gold-dim); border-color: rgba(245, 158, 11, 0.28); }
-    .sr-pill.vol { color: var(--blue); background: var(--blue-dim); border-color: rgba(56, 189, 248, 0.28); }
-    .sr-pill b { font-weight: 800; direction: ltr; display: inline-block; }
-    .sr-hide-btn { margin-right: auto; flex-shrink: 0; width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-elevated); color: var(--text-muted); font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
-    .sr-hide-btn:hover { color: var(--red); border-color: var(--red); }
     .chart-wrap { width: 100%; height: 530px; position: relative; background: var(--bg-card); }
     @media (max-width: 768px) { .chart-wrap { height: 420px; } }
     .scroll-helper { display: flex; align-items: center; justify-content: space-between; padding: 7px 14px; background: var(--bg-elevated); border-top: 1px solid var(--border); font-size: 11.5px; color: var(--text-muted); gap: 8px; flex-wrap: wrap; }
@@ -96,7 +84,6 @@
     .focus-bar { display: none; height: 44px; padding: 0 12px; background: var(--bg-input); border-bottom: 1px solid var(--border-strong); align-items: center; justify-content: space-between; gap: 8px; }
     body.focus-mode .focus-bar { display: flex; }
     body.focus-mode .chart-wrap { height: calc(100dvh - 44px); }
-    body.focus-mode .sr-strip:not(.hidden) ~ .chart-wrap { height: calc(100dvh - 74px); }
     .focus-bar-right, .focus-bar-left { display: flex; align-items: center; gap: 6px; overflow-x: auto; }
     .btn-sm { padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-elevated); font-size: 11.5px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.15s; }
     .btn-sm:hover { border-color: var(--emerald); }
@@ -182,9 +169,9 @@
     .stock-row:hover, .stock-row.active { border-color: var(--emerald); }
     .stock-row.active { background: var(--emerald-dim); }
     .stock-row-main { min-width: 0; flex: 1; }
-    .stock-row-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .stock-row-top { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
     .stock-row-name { font-size: 12.5px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .stock-row-sub { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; margin-top: 2px; }
+    .stock-row-sub { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin-top: 2px; }
     .row-ticker { font-weight: 800; color: var(--emerald); direction: ltr; }
     .row-star { width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .row-star.active { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
@@ -198,7 +185,7 @@
     .field-label-row label { margin-bottom: 0; }
     .field input, .field select { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border-strong); background: var(--bg-input); font-size: 13px; outline: none; }
     .field input:focus, .field select:focus { border-color: var(--emerald); }
-    .field input[readonly] { opacity: 0.85; cursor: default; }
+    .field input[readonly] { opacity: 0.9; cursor: default; user-select: all; }
     .input-with-btn { display: flex; gap: 6px; align-items: center; }
     .input-with-btn input { flex: 1; min-width: 0; }
     .field-hint { font-size: 11.5px; color: var(--text-muted); margin-top: 5px; line-height: 1.5; }
@@ -236,7 +223,6 @@
       </div>
     </div>
     <div class="header-left">
-      <button class="mcp-btn" id="openMcpHeaderBtn" title="ربط الموقع بالذكاء الاصطناعي عبر MCP">🔌 MCP</button>
       <button class="icon-btn" id="langToggleBtn" title="تبديل لغة الشارت">AR</button>
       <button class="icon-btn" id="themeToggleBtn" title="الوضع الليلي / النهاري">🌙</button>
       <button class="auth-btn" id="authHeaderBtn" title="تسجيل الدخول بحساب Google"><span>👤 دخول</span></button>
@@ -283,7 +269,7 @@
           <button class="fav-star-main" id="mainFavBtn" title="إضافة للمفضلة">☆</button>
           <div class="active-stock-name" id="activeStockName">السويدي إليكتريك</div>
           <span class="badge badge-ticker" id="activeTickerBadge">EGX:SWDY</span>
-          <span class="badge badge-shariah" id="activeShariahBadge" style="display:none;">☪ شريعة</span>
+          <div class="stock-badges" id="activeIndexBadges"></div>
           <button class="btn-sm" id="shareTickerBtn" title="نسخ رابط مباشر لهذا السهم">🔗 مشاركة</button>
         </div>
         <div class="chart-controls">
@@ -299,10 +285,9 @@
         </div>
       </div>
 
-      <!-- شريط المؤشرات -->
+      <!-- شريط المؤشرات المحفوظة دائماً -->
       <div class="indicators-bar" id="indicatorsBar">
         <span class="ind-label">📐 المؤشرات:</span>
-        <button class="ind-chip sr-toggle active" id="toggleSrBarChip" title="إظهار أو إخفاء شريط الدعوم والمقاومات">دعم/مقاومة</button>
         <button class="ind-chip" data-study="MAExp@tv-basicstudies">EMA</button>
         <button class="ind-chip" data-study="MASimple@tv-basicstudies">SMA</button>
         <button class="ind-chip" data-study="RSI@tv-basicstudies">RSI</button>
@@ -311,12 +296,9 @@
         <button class="ind-chip" data-study="VWAP@tv-basicstudies">VWAP</button>
         <button class="ind-chip" data-study="StochasticRSI@tv-basicstudies">Stoch RSI</button>
         <button class="ind-chip" data-study="Volume@tv-basicstudies">Volume</button>
+        <button class="ind-chip" data-study="ATR@tv-basicstudies">ATR</button>
+        <button class="ind-chip" data-study="IchimokuCloud@tv-basicstudies">Ichimoku</button>
         <span class="sync-pill" id="cloudSyncPill"></span>
-      </div>
-
-      <!-- شريط الدعوم والمقاومات الرفيع بألوان مميزة وقابل للإخفاء -->
-      <div class="sr-strip" id="srLevelsStrip">
-        <span style="color:var(--text-muted);">جاري حساب الدعوم والمقاومات...</span>
       </div>
 
       <div class="chart-wrap">
@@ -398,10 +380,8 @@
         <div class="composer-tools">
           <input type="file" id="imgFileInput" accept="image/*" style="display:none;" />
           <button class="tool-btn gold" id="attachImgBtn">📷 إرفاق صورة</button>
-          <button class="tool-btn" id="captureScreenBtn">🖥️ التقاط الشاشة</button>
           <button class="tool-btn emerald" id="copyPromptBtn2">📋 نسخ البرومبت</button>
           <button class="tool-btn" id="openApiModalBtn2">⚙️ API</button>
-          <button class="tool-btn blue" id="openMcpToolBtn">🔌 MCP</button>
         </div>
 
         <div class="composer-row">
@@ -512,7 +492,7 @@
     </div>
   </div>
 
-  <!-- نافذة ربط MCP السحابي فقط -->
+  <!-- نافذة ربط MCP السحابي (للقراءة والنسخ فقط بدون تعديل) -->
   <div class="modal-backdrop" id="mcpModalBackdrop">
     <div class="modal">
       <div class="modal-head">
@@ -525,7 +505,6 @@
             <span class="status-dot" id="mcpHealthDot"></span>
             <span id="mcpHealthText">جاري فحص السيرفر...</span>
           </span>
-          <button type="button" class="btn-sm" id="editMcpUrlBtn">✏️ تعديل الرابط</button>
         </div>
 
         <div class="field">
@@ -576,7 +555,7 @@
       }
     } catch (e) {}
 
-    // 1. قاعدة بيانات الأسهم (190+ سهم)
+    // 1. قاعدة بيانات الأسهم (200 سهم)
     const RAW_STOCKS = [
       ["COMI","البنك التجاري الدولي","CIB","بنوك","EGX30,EGX100",false], ["SWDY","السويدي إليكتريك","Elsewedy Electric","صناعة","EGX30,EGX100,SHARIAH",true], ["TMGH","مجموعة طلعت مصطفى القابضة","Talaat Moustafa","عقارات","EGX30,EGX100,SHARIAH",true],
       ["EAST","الشرقية للدخان - إيسترن كومباني","Eastern Company","أغذية وتبغ","EGX30,EGX100",false], ["FWRY","فوري لتكنولوجيا البنوك والمدفوعات","Fawry","تكنولوجيا مالية","EGX30,EGX100,SHARIAH",true], ["ETEL","المصرية للاتصالات","Telecom Egypt","اتصالات","EGX30,EGX100,SHARIAH",true],
@@ -648,10 +627,10 @@
     ];
 
     const INDICES_META = {
-      EGX30:    { ticker:"EGX30",    name:"مؤشر EGX 30 الرئيسي",       en:"EGX 30 Index",     sector:"مؤشر سوق",    shariah:false, isIndex:true },
-      EGX70EWI: { ticker:"EGX70EWI", name:"مؤشر EGX 70 متساوي الأوزان", en:"EGX 70 EWI Index", sector:"مؤشر سوق",    shariah:false, isIndex:true },
-      EGX100EWI:{ ticker:"EGX100EWI",name:"مؤشر EGX 100 الأوسع نطاقاً", en:"EGX 100 EWI Index",sector:"مؤشر سوق",    shariah:false, isIndex:true },
-      SHARIAH:  { ticker:"SHARIAH",  name:"مؤشر الشريعة EGX 33",        en:"EGX 33 Shariah",   sector:"مؤشر إسلامي", shariah:true,  isIndex:true }
+      EGX30:    { ticker:"EGX30",    name:"مؤشر EGX 30 الرئيسي",       en:"EGX 30 Index",     sector:"مؤشر سوق",    groups:["EGX30"],   shariah:false, isIndex:true },
+      EGX70EWI: { ticker:"EGX70EWI", name:"مؤشر EGX 70 متساوي الأوزان", en:"EGX 70 EWI Index", sector:"مؤشر سوق",    groups:["EGX70"],   shariah:false, isIndex:true },
+      EGX100EWI:{ ticker:"EGX100EWI",name:"مؤشر EGX 100 الأوسع نطاقاً", en:"EGX 100 EWI Index",sector:"مؤشر سوق",    groups:["EGX100"],  shariah:false, isIndex:true },
+      SHARIAH:  { ticker:"SHARIAH",  name:"مؤشر الشريعة EGX 33",        en:"EGX 33 Shariah",   sector:"مؤشر إسلامي", groups:["SHARIAH"], shariah:true,  isIndex:true }
     };
 
     const STOCKS = RAW_STOCKS.map(([ticker, name, en, sector, groups, shariah]) => ({
@@ -660,12 +639,12 @@
     const STOCK_MAP = Object.fromEntries(STOCKS.map(s => [s.ticker, s]));
 
     // 2. الإعدادات والحالة
-    const DEFAULT_MCP_URL = "https://egx-mcp.boodyessam1542004.workers.dev/mcp";
+    const FIXED_MCP_URL = "https://egx-mcp.boodyessam1542004.workers.dev/mcp";
     const LS = {
       FAVS: "egx_term_favs_v3", CUSTOM: "egx_term_custom_v3", API: "egx_term_api_v3",
       THEME: "egx_term_theme_v3", LANG: "egx_term_lang_v3", INDICATORS: "egx_term_indicators_v4",
-      LAST_TICKER: "egx_term_last_ticker_v4", TF: "egx_term_tf_v4", MCP_URL: "egx_term_mcp_url_v4",
-      SR_BAR: "egx_term_sr_bar_v5"
+      LAST_TICKER: "egx_term_last_ticker_v4", TF: "egx_term_tf_v4",
+      UPDATED_AT: "egx_term_updated_at_v5", IND_UPDATED_AT: "egx_term_ind_updated_at_v5"
     };
 
     const PROVIDER_DEFAULTS = {
@@ -676,15 +655,13 @@
       openai:     { model:"gpt-4o-mini", hint:"platform.openai.com/api-keys" }
     };
 
-    function sanitizeMcpUrl(raw) {
-      let u = (raw || "").trim().replace(/\/+$/, "");
-      if (!u || u.includes("egx-mcp.abdoessam.workers.dev")) return DEFAULT_MCP_URL;
-      if (u === "https://egx-mcp.boodyessam1542004.workers.dev") return DEFAULT_MCP_URL;
-      return u;
-    }
-
     const urlTicker = new URLSearchParams(window.location.search).get("ticker");
     const $ = id => document.getElementById(id);
+
+    function safeJson(key, fallback) {
+      try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
+      catch { return fallback; }
+    }
 
     const state = {
       ticker: (urlTicker ? urlTicker.toUpperCase().replace(/^EGX:/i, "").replace(/[^A-Z0-9]/g, "") : "") || localStorage.getItem(LS.LAST_TICKER) || "SWDY",
@@ -693,32 +670,36 @@
       theme: localStorage.getItem(LS.THEME) || "dark",
       filter: "ALL",
       search: "",
-      showSrBar: localStorage.getItem(LS.SR_BAR) !== "0",
-      favs: JSON.parse(localStorage.getItem(LS.FAVS) || '["SWDY","COMI","TMGH","AMES"]'),
-      customStocks: JSON.parse(localStorage.getItem(LS.CUSTOM) || "{}"),
-      indicators: JSON.parse(localStorage.getItem(LS.INDICATORS) || '["MAExp@tv-basicstudies","RSI@tv-basicstudies"]'),
-      api: JSON.parse(localStorage.getItem(LS.API) || '{"provider":"gemini","key":"","model":"gemini-2.5-flash"}'),
-      mcpRemoteUrl: sanitizeMcpUrl(localStorage.getItem(LS.MCP_URL)),
+      favs: safeJson(LS.FAVS, ["SWDY","COMI","TMGH","AMES"]),
+      customStocks: safeJson(LS.CUSTOM, {}),
+      indicators: safeJson(LS.INDICATORS, ["MAExp@tv-basicstudies","RSI@tv-basicstudies"]),
+      api: safeJson(LS.API, { provider:"gemini", key:"", model:"gemini-2.5-flash" }),
+      localUpdatedAt: Number(localStorage.getItem(LS.UPDATED_AT) || 0),
+      indUpdatedAt: Number(localStorage.getItem(LS.IND_UPDATED_AT) || 0),
       user: null,
       liveMetrics: null,
       attachedImage: null,
       chatHistory: [],
       sending: false
     };
-    localStorage.setItem(LS.MCP_URL, state.mcpRemoteUrl);
+
+    function markLocalChange(isIndicatorChange = false) {
+      const now = Date.now();
+      state.localUpdatedAt = now;
+      localStorage.setItem(LS.UPDATED_AT, String(now));
+      if (isIndicatorChange) {
+        state.indUpdatedAt = now;
+        localStorage.setItem(LS.IND_UPDATED_AT, String(now));
+      }
+    }
 
     async function copyText(text) {
-      try {
-        await navigator.clipboard.writeText(text);
-        return true;
-      } catch {
+      try { await navigator.clipboard.writeText(text); return true; }
+      catch {
         const ta = document.createElement("textarea");
-        ta.value = text;
-        ta.style.cssText = "position:fixed;opacity:0;";
-        document.body.appendChild(ta);
-        ta.select();
-        const ok = document.execCommand("copy");
-        ta.remove();
+        ta.value = text; ta.style.cssText = "position:fixed;opacity:0;";
+        document.body.appendChild(ta); ta.select();
+        const ok = document.execCommand("copy"); ta.remove();
         return ok;
       }
     }
@@ -726,98 +707,131 @@
     // 3. حالة جلسة البورصة المصرية (توقيت القاهرة)
     function updateMarketStatus() {
       const pill = $("marketStatusPill"), txt = $("marketStatusText"), timer = $("marketStatusTimer");
-      const now = new Date();
       const parts = new Intl.DateTimeFormat("en-US", {
         timeZone: "Africa/Cairo", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false
-      }).formatToParts(now);
+      }).formatToParts(new Date());
       const get = t => parts.find(p => p.type === t)?.value;
-      const day = get("weekday");
-      const h = parseInt(get("hour"), 10) % 24;
-      const m = parseInt(get("minute"), 10);
-      const mins = h * 60 + m;
-      const isWorkday = ["Sun", "Mon", "Tue", "Wed", "Thu"].includes(day);
-      const openM = 600, closeM = 870; // 10:00 - 14:30
-
-      if (isWorkday && mins >= openM && mins < closeM) {
-        const left = closeM - mins;
-        pill.classList.add("open");
-        txt.textContent = "السوق مفتوح";
+      const day = get("weekday"), h = parseInt(get("hour"), 10) % 24, m = parseInt(get("minute"), 10);
+      const mins = h * 60 + m, isWorkday = ["Sun", "Mon", "Tue", "Wed", "Thu"].includes(day);
+      if (isWorkday && mins >= 600 && mins < 870) {
+        const left = 870 - mins;
+        pill.classList.add("open"); txt.textContent = "السوق مفتوح";
         timer.textContent = `• يغلق خلال ${Math.floor(left / 60)}س ${left % 60}د`;
       } else {
-        pill.classList.remove("open");
-        txt.textContent = "السوق مغلق";
-        if (isWorkday && mins < openM) {
-          const left = openM - mins;
+        pill.classList.remove("open"); txt.textContent = "السوق مغلق";
+        if (isWorkday && mins < 600) {
+          const left = 600 - mins;
           timer.textContent = `• يفتح خلال ${Math.floor(left / 60)}س ${left % 60}د`;
-        } else {
-          timer.textContent = "• 10:00 ص – 2:30 م";
-        }
+        } else timer.textContent = "• 10:00 ص – 2:30 م";
       }
     }
 
-    // 4. المزامنة السحابية وحساب Google
+    // 4. المزامنة السحابية وحساب Google (حفظ فوري للمؤشرات مع مقارنة التوقيت لمنع المسح)
     let cloudSaveTimer = null;
-    function syncUserToCloud() {
+    async function writeCloudNow() {
       if (!state.user || !fbDb) return;
+      try {
+        await fbDb.collection("users").doc(state.user.uid).set({
+          displayName: state.user.displayName || "",
+          email: state.user.email || "",
+          photoURL: state.user.photoURL || "",
+          favs: [...state.favs],
+          customStocks: state.customStocks,
+          indicators: [...state.indicators],
+          lastTicker: state.ticker,
+          tf: state.tf,
+          theme: state.theme,
+          lang: state.lang,
+          updatedAtMs: state.localUpdatedAt || Date.now(),
+          indUpdatedAtMs: state.indUpdatedAt || Date.now(),
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+        $("cloudSyncPill").textContent = "☁️ محفوظ بحسابك";
+      } catch (err) {
+        console.warn("Firestore save error:", err);
+        $("cloudSyncPill").textContent = "💾 محفوظ محلياً";
+      }
+    }
+
+    function syncUserToCloud(immediate = false) {
+      if (!state.user || !fbDb) {
+        $("cloudSyncPill").textContent = state.indicators.length ? `💾 محفوظ (${state.indicators.length})` : "";
+        return;
+      }
       clearTimeout(cloudSaveTimer);
-      $("cloudSyncPill").textContent = "⏳ حفظ...";
-      cloudSaveTimer = setTimeout(async () => {
-        try {
-          await fbDb.collection("users").doc(state.user.uid).set({
-            displayName: state.user.displayName || "",
-            email: state.user.email || "",
-            photoURL: state.user.photoURL || "",
-            favs: state.favs,
-            customStocks: state.customStocks,
-            indicators: state.indicators,
-            lastTicker: state.ticker,
-            tf: state.tf,
-            theme: state.theme,
-            lang: state.lang,
-            mcpRemoteUrl: state.mcpRemoteUrl,
-            updatedAt: new Date().toISOString()
-          }, { merge: true });
-          $("cloudSyncPill").textContent = "☁️ محفوظ";
-        } catch {
-          $("cloudSyncPill").textContent = "⚠️ تعذر الحفظ";
-        }
-      }, 600);
+      $("cloudSyncPill").textContent = "⏳ جاري الحفظ...";
+      if (immediate) writeCloudNow();
+      else cloudSaveTimer = setTimeout(writeCloudNow, 300);
     }
 
     async function loadUserFromCloud(user) {
       if (!user || !fbDb) return;
-      $("cloudSyncPill").textContent = "☁️ استرجاع...";
+      $("cloudSyncPill").textContent = "☁️ مزامنة...";
       try {
         const doc = await fbDb.collection("users").doc(user.uid).get();
-        if (doc.exists) {
-          const d = doc.data();
-          if (Array.isArray(d.favs)) { state.favs = d.favs; localStorage.setItem(LS.FAVS, JSON.stringify(state.favs)); }
-          if (d.customStocks && typeof d.customStocks === "object") { state.customStocks = d.customStocks; localStorage.setItem(LS.CUSTOM, JSON.stringify(state.customStocks)); }
-          if (Array.isArray(d.indicators)) { state.indicators = d.indicators; localStorage.setItem(LS.INDICATORS, JSON.stringify(state.indicators)); }
-          if (d.tf) { state.tf = d.tf; localStorage.setItem(LS.TF, state.tf); }
-          if (d.theme) {
+        if (!doc.exists) { await writeCloudNow(); return; }
+        const d = doc.data();
+        const cloudUpdatedMs = Number(d.updatedAtMs || (d.updatedAt ? Date.parse(d.updatedAt) : 0) || 0);
+        const cloudIndMs = Number(d.indUpdatedAtMs || cloudUpdatedMs || 0);
+        let chartNeedsReload = false;
+        let shouldPushBack = false;
+
+        // المؤشرات: لا نمسح المؤشرات المحلية ببيانات سحابية أقدم أبداً
+        if (Array.isArray(d.indicators)) {
+          if (cloudIndMs > state.indUpdatedAt && (d.indicators.length > 0 || state.indUpdatedAt === 0)) {
+            const changed = JSON.stringify(state.indicators) !== JSON.stringify(d.indicators);
+            state.indicators = [...d.indicators];
+            state.indUpdatedAt = cloudIndMs;
+            localStorage.setItem(LS.INDICATORS, JSON.stringify(state.indicators));
+            localStorage.setItem(LS.IND_UPDATED_AT, String(cloudIndMs));
+            if (changed) chartNeedsReload = true;
+          } else if (state.indUpdatedAt > cloudIndMs) {
+            shouldPushBack = true;
+          }
+        } else {
+          shouldPushBack = true;
+        }
+
+        if (cloudUpdatedMs > state.localUpdatedAt) {
+          if (Array.isArray(d.favs) && d.favs.length) {
+            state.favs = d.favs; localStorage.setItem(LS.FAVS, JSON.stringify(state.favs));
+          }
+          if (d.customStocks && typeof d.customStocks === "object") {
+            state.customStocks = { ...state.customStocks, ...d.customStocks };
+            localStorage.setItem(LS.CUSTOM, JSON.stringify(state.customStocks));
+          }
+          if (d.tf && d.tf !== state.tf) {
+            state.tf = d.tf; localStorage.setItem(LS.TF, state.tf); chartNeedsReload = true;
+          }
+          if (d.theme && d.theme !== state.theme) {
             state.theme = d.theme; localStorage.setItem(LS.THEME, state.theme);
             document.documentElement.setAttribute("data-theme", state.theme);
             $("themeToggleBtn").textContent = state.theme === "dark" ? "🌙" : "☀️";
+            chartNeedsReload = true;
           }
-          if (d.lang) {
+          if (d.lang && d.lang !== state.lang) {
             state.lang = d.lang; localStorage.setItem(LS.LANG, state.lang);
             $("langToggleBtn").textContent = state.lang === "ar" ? "AR" : "EN";
+            chartNeedsReload = true;
           }
-          if (d.mcpRemoteUrl) {
-            state.mcpRemoteUrl = sanitizeMcpUrl(d.mcpRemoteUrl);
-            localStorage.setItem(LS.MCP_URL, state.mcpRemoteUrl);
+          if (!urlTicker && d.lastTicker && d.lastTicker !== state.ticker) {
+            state.ticker = d.lastTicker; localStorage.setItem(LS.LAST_TICKER, state.ticker);
+            chartNeedsReload = true;
           }
-          if (!urlTicker && d.lastTicker) {
-            state.ticker = d.lastTicker;
-            localStorage.setItem(LS.LAST_TICKER, state.ticker);
-          }
-          syncTfButtonsUI(); syncIndicatorsUI(); selectStock(state.ticker, false);
-          $("cloudSyncPill").textContent = "☁️ تمت المزامنة";
-        } else {
-          syncUserToCloud();
+          state.localUpdatedAt = cloudUpdatedMs;
+          localStorage.setItem(LS.UPDATED_AT, String(cloudUpdatedMs));
+        } else if (state.localUpdatedAt > cloudUpdatedMs) {
+          shouldPushBack = true;
         }
-      } catch { $("cloudSyncPill").textContent = ""; }
+
+        syncTfButtonsUI(); syncIndicatorsUI(); updateHeaderFavStar(); renderStockList();
+        if (chartNeedsReload) selectStock(state.ticker, false, false);
+        if (shouldPushBack) await writeCloudNow();
+        else $("cloudSyncPill").textContent = "☁️ محفوظ بحسابك";
+      } catch (err) {
+        console.warn("Firestore load error:", err);
+        $("cloudSyncPill").textContent = state.indicators.length ? `💾 محفوظ (${state.indicators.length})` : "";
+      }
     }
 
     function updateAuthUI() {
@@ -829,7 +843,7 @@
       } else {
         btn.classList.remove("signed-in");
         btn.innerHTML = `<span>👤 دخول</span>`;
-        $("cloudSyncPill").textContent = "";
+        $("cloudSyncPill").textContent = state.indicators.length ? `💾 محفوظ (${state.indicators.length})` : "";
       }
       renderMcpConfig();
     }
@@ -857,15 +871,15 @@
             </div>
           </div>
           <div class="account-meta-grid">
-            <div class="meta-stat"><strong>${state.indicators.length}</strong><span>مؤشرات</span></div>
+            <div class="meta-stat"><strong>${state.indicators.length}</strong><span>مؤشرات محفوظة</span></div>
             <div class="meta-stat"><strong>${state.favs.length}</strong><span>المفضلة</span></div>
             <div class="meta-stat"><strong>${state.ticker}</strong><span>آخر سهم</span></div>
           </div>
           <div class="modal-actions">
-            <button class="btn-primary" id="btnForceSyncNow">☁️ مزامنة الآن</button>
+            <button class="btn-primary" id="btnForceSyncNow">☁️ حفظ ومزامنة الآن</button>
             <button class="btn-secondary" id="btnLogoutGoogle" style="color:var(--red);border-color:rgba(244,63,94,0.4);">تسجيل الخروج</button>
           </div>`;
-        $("btnForceSyncNow").onclick = () => { syncUserToCloud(); closeAccountModal(); };
+        $("btnForceSyncNow").onclick = () => { markLocalChange(true); syncUserToCloud(true); closeAccountModal(); };
         $("btnLogoutGoogle").onclick = async () => { if (fbAuth) await fbAuth.signOut(); closeAccountModal(); };
       } else {
         body.innerHTML = `
@@ -881,13 +895,29 @@
     }
     const closeAccountModal = () => $("accountModalBackdrop").classList.remove("open");
 
-    // 5. أدوات الأسهم والمفضلة
+    // 5. أدوات الأسهم وشارات المؤشرات (EGX 30 / 70 / 100 / الشريعة)
     function getStockInfo(ticker) {
       const t = ticker.toUpperCase();
       return INDICES_META[t] || STOCK_MAP[t] || state.customStocks[t] ||
         { ticker: t, name: `سهم مصري (${t})`, en: t, sector: "البورصة المصرية", groups: [], shariah: false };
     }
-    const normalizeAr = s => (s || "").toLowerCase().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/[\u064B-\u065F]/g, "").trim();
+
+    function buildIndexBadgesHtml(info, compact = false) {
+      const groups = Array.isArray(info.groups) ? info.groups : [];
+      const pad = compact ? 'style="font-size:9.5px;padding:1px 5px;"' : '';
+      const out = [];
+      if (!info.isIndex) {
+        if (groups.includes("EGX30"))  out.push(`<span class="badge badge-egx30" ${pad}>EGX 30</span>`);
+        if (groups.includes("EGX70"))  out.push(`<span class="badge badge-egx70" ${pad}>EGX 70</span>`);
+        if (groups.includes("EGX100")) out.push(`<span class="badge badge-egx100" ${pad}>EGX 100</span>`);
+      }
+      if (info.shariah || groups.includes("SHARIAH")) {
+        out.push(`<span class="badge badge-shariah" ${pad}>☪ شريعة</span>`);
+      }
+      return out.join("");
+    }
+
+    const normalizeAr = s => (s || "").toLowerCase().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/[ً-ٟ]/g, "").trim();
 
     function toggleFavorite(ticker) {
       const t = ticker.toUpperCase(), idx = state.favs.indexOf(t);
@@ -900,21 +930,19 @@
         }
       }
       localStorage.setItem(LS.FAVS, JSON.stringify(state.favs));
-      syncUserToCloud(); updateHeaderFavStar(); renderStockList(); updateCustomRowStar();
+      markLocalChange(false); syncUserToCloud(true); updateHeaderFavStar(); renderStockList(); updateCustomRowStar();
     }
 
     function syncIndicatorsUI() {
       document.querySelectorAll("#indicatorsBar .ind-chip[data-study]").forEach(c => {
         c.classList.toggle("active", state.indicators.includes(c.dataset.study));
       });
-      $("toggleSrBarChip").classList.toggle("active", state.showSrBar);
-      $("srLevelsStrip").classList.toggle("hidden", !state.showSrBar);
     }
     function syncTfButtonsUI() {
       document.querySelectorAll(".tf-btn").forEach(b => b.classList.toggle("active", b.dataset.tf === state.tf));
     }
 
-    // 6. TradingView
+    // 6. TradingView (يمرر نسخة محفوظة من المؤشرات في كل تحميل)
     const tfToTVTA = tf => ({ "5":"5m","15":"15m","60":"1h","240":"4h","D":"1D","W":"1W" }[tf] || "1D");
     const tfLabelAr = tf => ({ "5":"5 دقائق","15":"15 دقيقة","60":"ساعة","240":"4 ساعات","D":"يومي","W":"أسبوعي" }[tf] || "يومي");
 
@@ -932,7 +960,7 @@
         toolbar_bg: state.theme === "dark" ? "#0b1120" : "#ffffff",
         enable_publishing: false, allow_symbol_change: true, withdateranges: true,
         hide_side_toolbar: false, save_image: true, details: false, hotlist: false, calendar: false,
-        studies: state.indicators
+        studies: [...state.indicators]
       });
     }
 
@@ -960,7 +988,7 @@
       $("mainFavBtn").classList.toggle("active", isFav);
     }
 
-    function selectStock(ticker, closeMenu = true) {
+    function selectStock(ticker, closeMenu = true, saveCloud = true) {
       const t = ticker.trim().toUpperCase().replace(/^EGX:/i, "");
       if (!t) return;
       state.ticker = t;
@@ -970,12 +998,12 @@
         u.searchParams.set("ticker", t);
         window.history.replaceState({}, "", u.toString());
       } catch {}
-      syncUserToCloud();
+      if (saveCloud) { markLocalChange(false); syncUserToCloud(false); }
 
       const info = getStockInfo(t);
       $("activeStockName").textContent = info.name;
       $("activeTickerBadge").textContent = `EGX:${t}`;
-      $("activeShariahBadge").style.display = info.shariah ? "inline-flex" : "none";
+      $("activeIndexBadges").innerHTML = buildIndexBadgesHtml(info, false);
       $("focusTickerBadge").textContent = `EGX:${t}`;
       $("focusNameLabel").textContent = info.name;
       $("aiTargetLabel").textContent = `متصل تلقائياً بالسهم المفتوح: EGX:${t} — ${info.name}`;
@@ -1029,9 +1057,13 @@
           <div class="stock-row-main">
             <div class="stock-row-top">
               <span class="stock-row-name">${s.name}</span>
-              ${s.shariah ? `<span class="badge badge-shariah" style="font-size:10px;padding:1px 6px;">شريعة</span>` : ""}
             </div>
-            <div class="stock-row-sub"><span class="row-ticker">${s.ticker}</span><span>•</span><span>${s.sector}</span></div>
+            <div class="stock-row-sub">
+              <span class="row-ticker">${s.ticker}</span>
+              <span>•</span>
+              <span>${s.sector}</span>
+              ${buildIndexBadgesHtml(s, true)}
+            </div>
           </div>
           <button class="row-star ${isFav ? "active" : ""}" data-star="${s.ticker}">${isFav ? "★" : "☆"}</button>
         </div>`;
@@ -1049,7 +1081,7 @@
     }
     function closeDrawer() { $("drawerBackdrop").classList.remove("open"); $("stockDrawer").classList.remove("open"); }
 
-    // 8. حساب المؤشرات + الدعوم والمقاومات والسيولة والملخص التلقائي
+    // 8. سحب بيانات السهم (عبر سيرفر MCP السحابي أولاً ثم البروكسي كاحتياطي)
     function calcEMA(arr, p) {
       if (!arr || arr.length < p) return null;
       const k = 2 / (p + 1);
@@ -1086,53 +1118,82 @@
       return { macd, signal: sig, hist: sig !== null ? macd - sig : null };
     }
 
-    function renderSrStripAndSummary(m) {
-      const strip = $("srLevelsStrip"), sumBody = $("autoSummaryBody");
+    function renderAutoSummary(m) {
+      const sumBody = $("autoSummaryBody");
       if (!m) {
-        strip.innerHTML = `<span style="color:var(--text-muted);">لا تتوفر مستويات تلقائية لهذا الرمز حالياً</span><button class="sr-hide-btn" id="hideSrBtn" title="إخفاء الشريط">✕</button>`;
-        sumBody.innerHTML = `<span style="color:var(--text-muted);">لم يتم سحب أرقام تلقائية لهذا السهم — يمكنك الاعتماد على شارت TradingView أو إرفاق لقطة شاشة.</span>`;
-        $("hideSrBtn").onclick = () => setSrBarVisible(false);
+        sumBody.innerHTML = `<span style="color:var(--text-muted);">اضغط "نسخ برومبت تحليل السهم" أو أرفق لقطة شاشة من الشارت لتحليل فوري.</span>`;
         return;
       }
-
-      const volLabel = m.volRatio ? `${m.volRatio.toFixed(1)}x` : "-";
-      strip.innerHTML = `
-        <span class="sr-pill sup">دعم 1 <b>${m.s1.toFixed(2)}</b></span>
-        <span class="sr-pill sup">دعم 2 <b>${m.s2.toFixed(2)}</b></span>
-        <span class="sr-pill piv">ارتكاز <b>${m.pivot.toFixed(2)}</b></span>
-        <span class="sr-pill res">مقاومة 1 <b>${m.r1.toFixed(2)}</b></span>
-        <span class="sr-pill res">مقاومة 2 <b>${m.r2.toFixed(2)}</b></span>
-        <span class="sr-pill vol">سيولة <b>${volLabel}</b></span>
-        <button class="sr-hide-btn" id="hideSrBtn" title="إخفاء شريط المستويات">✕</button>`;
-      $("hideSrBtn").onclick = () => setSrBarVisible(false);
-
-      const distSup = (((m.last - m.support1) / m.last) * 100).toFixed(1);
-      const distRes = (((m.resistance1 - m.last) / m.last) * 100).toFixed(1);
-      const rsiTxt = m.rsi == null ? "غير متاح" : m.rsi > 70 ? `تشبع شرائي (${m.rsi.toFixed(1)})` : m.rsi < 30 ? `تشبع بيعي (${m.rsi.toFixed(1)})` : `متوازن (${m.rsi.toFixed(1)})`;
+      const distSup = m.support1 ? (((m.last - m.support1) / m.last) * 100).toFixed(1) : null;
+      const distRes = m.resistance1 ? (((m.resistance1 - m.last) / m.last) * 100).toFixed(1) : null;
+      const rsiTxt = m.rsi == null ? "-" : m.rsi > 70 ? `تشبع شرائي (${m.rsi.toFixed(1)})` : m.rsi < 30 ? `تشبع بيعي (${m.rsi.toFixed(1)})` : `متوازن (${m.rsi.toFixed(1)})`;
       const macdTxt = m.macd?.hist != null ? (m.macd.hist >= 0 ? "إيجابي ↑" : "سلبي ↓") : "-";
-      const volTxt = m.volRatio >= 1.5 ? `سيولة قوية (${m.volRatio.toFixed(1)}x)` : m.volRatio ? `عادية (${m.volRatio.toFixed(1)}x)` : "-";
-
       sumBody.innerHTML = `
         <span class="auto-tag">الاتجاه: <strong style="color:${m.trend.includes("صاعد") ? "var(--emerald)" : m.trend.includes("هابط") ? "var(--red)" : "var(--gold)"}">${m.trend}</strong></span>
         <span class="auto-tag">RSI: ${rsiTxt}</span>
-        <span class="auto-tag">MACD: ${macdTxt}</span>
-        <span class="auto-tag">السيولة: ${volTxt}</span>
-        <span class="auto-tag" style="color:var(--emerald);">أقرب دعم: ${m.support1.toFixed(2)} (${distSup}%)</span>
-        <span class="auto-tag" style="color:var(--red);">أقرب مقاومة: ${m.resistance1.toFixed(2)} (+${distRes}%)</span>`;
+        ${m.macd ? `<span class="auto-tag">MACD: ${macdTxt}</span>` : ""}
+        ${m.support1 ? `<span class="auto-tag" style="color:var(--emerald);">دعم: ${m.support1.toFixed(2)} (${distSup}%)</span>` : ""}
+        ${m.resistance1 ? `<span class="auto-tag" style="color:var(--red);">مقاومة: ${m.resistance1.toFixed(2)} (+${distRes}%)</span>` : ""}`;
     }
 
-    function setSrBarVisible(visible) {
-      state.showSrBar = visible;
-      localStorage.setItem(LS.SR_BAR, visible ? "1" : "0");
-      syncIndicatorsUI();
+    function applyMetricsUI(m) {
+      state.liveMetrics = m;
+      const isUp = (m.chgPct || 0) >= 0;
+      $("liveMetricsRow").innerHTML = `
+        <span class="metric-pill ${isUp ? "up" : "down"}"><span class="lbl">السعر:</span> ${m.last.toFixed(2)} (${isUp ? "+" : ""}${m.chgPct.toFixed(2)}%)</span>
+        <span class="metric-pill"><span class="lbl">الاتجاه:</span> ${m.trend}</span>
+        ${m.rsi != null ? `<span class="metric-pill"><span class="lbl">RSI:</span> ${m.rsi.toFixed(1)}</span>` : ""}
+        ${m.support1 ? `<span class="metric-pill"><span class="lbl">دعم:</span> ${m.support1.toFixed(2)}</span>` : ""}
+        ${m.resistance1 ? `<span class="metric-pill"><span class="lbl">مقاومة:</span> ${m.resistance1.toFixed(2)}</span>` : ""}`;
+      renderAutoSummary(m);
+    }
+
+    async function fetchMetricsViaWorker(ticker) {
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 5000);
+        const res = await fetch(FIXED_MCP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "Accept": "application/json" },
+          body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "get_egx_stock_analysis", arguments: { ticker } } }),
+          signal: ctrl.signal
+        });
+        clearTimeout(t);
+        if (!res.ok) return null;
+        const json = await res.json();
+        const txt = json?.result?.content?.[0]?.text;
+        if (!txt) return null;
+        const d = JSON.parse(txt);
+        if (typeof d.price_egp !== "number") return null;
+        const last = d.price_egp, chgPct = Number(d.change_pct || 0);
+        const ema10 = d.ema10 ?? null, ema20 = d.ema20 ?? null, ema50 = d.ema50 ?? null;
+        let trend = "عرضي";
+        if (ema10 && ema20 && ema50) {
+          if (last > ema20 && ema10 > ema20 && ema20 > ema50) trend = "صاعد قوي";
+          else if (last > ema20) trend = "صاعد";
+          else if (last < ema20 && ema10 < ema20 && ema20 < ema50) trend = "هابط قوي";
+          else trend = "هابط";
+        }
+        return {
+          ticker, last, chg: (last * chgPct) / 100, chgPct,
+          ema10, ema20, ema50, rsi: d.rsi14 ?? null, macd: null,
+          support1: d.support_20d ?? null, resistance1: d.resistance_20d ?? null,
+          support2: d.support_60d ?? null, resistance2: d.resistance_60d ?? null, trend
+        };
+      } catch { return null; }
     }
 
     async function fetchLiveMetrics(ticker) {
       const row = $("liveMetricsRow");
       state.liveMetrics = null;
       row.innerHTML = `<span class="metric-pill"><span class="lbl">⏳ جاري قراءة EGX:${ticker}...</span></span>`;
-      $("srLevelsStrip").innerHTML = `<span style="color:var(--text-muted);">⏳ جاري حساب الدعوم والمقاومات...</span>`;
 
+      // 1) محاولة الجلب المباشر من Cloudflare Worker الخاص بك (أسرع وبدون CORS)
+      const workerMetrics = await fetchMetricsViaWorker(ticker);
+      if (state.ticker !== ticker) return;
+      if (workerMetrics) return applyMetricsUI(workerMetrics);
+
+      // 2) الاحتياطي عبر Yahoo Proxies
       const ySym = ticker === "EGX30" ? "^CASE30" : `${ticker}.CA`;
       const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym)}?range=6mo&interval=1d`;
       const proxies = [
@@ -1145,7 +1206,7 @@
       for (const url of proxies) {
         try {
           const ctrl = new AbortController();
-          const t = setTimeout(() => ctrl.abort(), 6000);
+          const t = setTimeout(() => ctrl.abort(), 5000);
           const res = await fetch(url, { signal: ctrl.signal });
           clearTimeout(t);
           if (!res.ok) continue;
@@ -1157,20 +1218,20 @@
       if (state.ticker !== ticker) return;
       if (!data) {
         row.innerHTML = `<span class="metric-pill"><span class="lbl">ℹ️ EGX:${ticker} — يمكنك إرفاق صورة الشارت للتحليل</span></span>`;
-        renderSrStripAndSummary(null);
+        renderAutoSummary(null);
         return;
       }
 
       const q = data.indicators.quote[0];
-      const closes = [], highs = [], lows = [], vols = [];
+      const closes = [], highs = [], lows = [];
       for (let i = 0; i < q.close.length; i++) {
         if (q.close[i] != null && q.high[i] != null && q.low[i] != null) {
-          closes.push(q.close[i]); highs.push(q.high[i]); lows.push(q.low[i]); vols.push(q.volume[i] || 0);
+          closes.push(q.close[i]); highs.push(q.high[i]); lows.push(q.low[i]);
         }
       }
       if (closes.length < 5) {
         row.innerHTML = `<span class="metric-pill"><span class="lbl">ℹ️ بيانات محدودة لـ EGX:${ticker}</span></span>`;
-        renderSrStripAndSummary(null);
+        renderAutoSummary(null);
         return;
       }
 
@@ -1180,16 +1241,6 @@
       const support1 = Math.min(...lows.slice(-20)), resistance1 = Math.max(...highs.slice(-20));
       const support2 = Math.min(...lows.slice(-60)), resistance2 = Math.max(...highs.slice(-60));
 
-      // Classic Pivot من آخر جلسة + نسبة السيولة مقارنة بمتوسط 20 جلسة
-      const H = highs.at(-1), L = lows.at(-1), C = last;
-      const pivot = (H + L + C) / 3;
-      const r1 = 2 * pivot - L, s1 = 2 * pivot - H;
-      const r2 = pivot + (H - L), s2 = pivot - (H - L);
-      const validVols = vols.slice(-21, -1).filter(v => v > 0);
-      const avgVol20 = validVols.length ? validVols.reduce((a, b) => a + b, 0) / validVols.length : 0;
-      const lastVol = vols.at(-1) || 0;
-      const volRatio = avgVol20 > 0 ? lastVol / avgVol20 : null;
-
       let trend = "عرضي";
       if (ema10 && ema20 && ema50) {
         if (last > ema20 && ema10 > ema20 && ema20 > ema50) trend = "صاعد قوي";
@@ -1198,36 +1249,30 @@
         else trend = "هابط";
       }
 
-      state.liveMetrics = { ticker, last, chg, chgPct, ema10, ema20, ema50, rsi, macd, support1, resistance1, support2, resistance2, pivot, r1, r2, s1, s2, lastVol, volRatio, trend };
-      const isUp = chg >= 0;
-      row.innerHTML = `
-        <span class="metric-pill ${isUp ? "up" : "down"}"><span class="lbl">السعر:</span> ${last.toFixed(2)} (${isUp ? "+" : ""}${chgPct.toFixed(2)}%)</span>
-        <span class="metric-pill"><span class="lbl">الاتجاه:</span> ${trend}</span>
-        ${rsi !== null ? `<span class="metric-pill"><span class="lbl">RSI:</span> ${rsi.toFixed(1)}</span>` : ""}
-        <span class="metric-pill"><span class="lbl">دعم 20ي:</span> ${support1.toFixed(2)}</span>
-        <span class="metric-pill"><span class="lbl">مقاومة 20ي:</span> ${resistance1.toFixed(2)}</span>`;
-      renderSrStripAndSummary(state.liveMetrics);
+      applyMetricsUI({ ticker, last, chg, chgPct, ema10, ema20, ema50, rsi, macd, support1, resistance1, support2, resistance2, trend });
     }
 
     // 9. المحلل الذكي + نسخ البرومبت + جلب موديلات Gemini
     function buildStockContextString() {
       const info = getStockInfo(state.ticker), m = state.liveMetrics;
       const activeInd = state.indicators.map(s => s.split("@")[0]).join(", ") || "بدون";
-      let ctx = `السهم: ${info.name} (EGX:${state.ticker} | القطاع: ${info.sector} | الفريم: ${tfLabelAr(state.tf)} | الشريعة: ${info.shariah ? "نعم" : "لا"} | المؤشرات: ${activeInd}).`;
+      const idxList = (info.groups || []).join(" / ") || "عام";
+      let ctx = `السهم: ${info.name} (EGX:${state.ticker} | التصنيف: ${idxList} | القطاع: ${info.sector} | الفريم: ${tfLabelAr(state.tf)} | المؤشرات: ${activeInd}).`;
       if (m) {
-        ctx += `\nالبيانات الفنية المحسوبة:
-- السعر: ${m.last.toFixed(2)} ج.م (${m.chg >= 0 ? "+" : ""}${m.chgPct.toFixed(2)}%) | الاتجاه: ${m.trend}
+        ctx += `
+البيانات الفنية المحسوبة:
+- السعر: ${m.last.toFixed(2)} ج.م (${m.chgPct >= 0 ? "+" : ""}${m.chgPct.toFixed(2)}%) | الاتجاه: ${m.trend}
 - المتوسطات: EMA10=${m.ema10?.toFixed(2) || "-"} | EMA20=${m.ema20?.toFixed(2) || "-"} | EMA50=${m.ema50?.toFixed(2) || "-"}
-- RSI(14): ${m.rsi ? m.rsi.toFixed(1) : "-"} | MACD: ${m.macd ? `${m.macd.macd.toFixed(3)} / Sig ${m.macd.signal?.toFixed(3)}` : "-"}
-- نقاط الارتكاز اليومية: Pivot=${m.pivot.toFixed(2)} | S1=${m.s1.toFixed(2)}, S2=${m.s2.toFixed(2)} | R1=${m.r1.toFixed(2)}, R2=${m.r2.toFixed(2)}
-- دعوم ومقاومات (20/60 جلسة): دعم ${m.support1.toFixed(2)} / ${m.support2.toFixed(2)} | مقاومة ${m.resistance1.toFixed(2)} / ${m.resistance2.toFixed(2)}
-- نسبة السيولة (مقارنة بمتوسط 20 يوم): ${m.volRatio ? m.volRatio.toFixed(2) + "x" : "غير متاح"}`;
+- RSI(14): ${m.rsi != null ? m.rsi.toFixed(1) : "-"} | MACD: ${m.macd ? `${m.macd.macd.toFixed(3)} / Sig ${m.macd.signal?.toFixed(3)}` : "-"}
+- دعوم ومقاومات (20/60 جلسة): دعم ${m.support1?.toFixed(2) || "-"} / ${m.support2?.toFixed(2) || "-"} | مقاومة ${m.resistance1?.toFixed(2) || "-"} / ${m.resistance2?.toFixed(2) || "-"}`;
       }
       return ctx;
     }
 
     async function copyAnalysisPrompt(btnEl) {
-      const prompt = `حلل السهم التالي في البورصة المصرية تحليلاً فنياً عملياً ومرتباً (الاتجاه، الزخم، السيولة، أهم الدعوم والمقاومات، والسيناريو الإيجابي والسلبي):\n\n${buildStockContextString()}`;
+      const prompt = `حلل السهم التالي في البورصة المصرية تحليلاً فنياً عملياً ومرتباً (الاتجاه، الزخم، أهم الدعوم والمقاومات، والسيناريو الإيجابي والسلبي):
+
+${buildStockContextString()}`;
       await copyText(prompt);
       const old = btnEl.textContent;
       btnEl.textContent = "✅ تم نسخ البرومبت";
@@ -1281,19 +1326,27 @@
 
     function generateLocalFallbackReply() {
       const info = getStockInfo(state.ticker), m = state.liveMetrics;
-      if (!m) return `**لم يتم ربط مفتاح API بعد.**\nالسهم المفتوح هو **${info.name} (EGX:${state.ticker})**.\nاضغط **⚙️ API** لربط مفتاحك، أو اضغط **📋 نسخ البرومبت** للصق الأرقام في أي تطبيق ذكاء اصطناعي.`;
+      if (!m) return `**لم يتم ربط مفتاح API بعد.**
+السهم المفتوح هو **${info.name} (EGX:${state.ticker})**.
+اضغط **⚙️ API** لربط مفتاحك، أو اضغط **📋 نسخ البرومبت** للصق الأرقام في أي تطبيق ذكاء اصطناعي.`;
       const rsiNote = m.rsi > 70 ? "تشبع شرائي" : m.rsi < 30 ? "تشبع بيعي" : "نطاق متوازن";
-      return `**ملخص فني فوري — ${info.name} (EGX:${state.ticker})**\n` +
-        `• **السعر:** ${m.last.toFixed(2)} ج.م (${m.chg >= 0 ? "+" : ""}${m.chgPct.toFixed(2)}%) | **الاتجاه:** ${m.trend}\n` +
-        `• **RSI(14):** ${m.rsi ? m.rsi.toFixed(1) : "-"} (${rsiNote}) | **السيولة:** ${m.volRatio ? m.volRatio.toFixed(1) + "x" : "-"}\n` +
-        `• **نقاط الارتكاز:** ارتكاز ${m.pivot.toFixed(2)} | دعم ${m.s1.toFixed(2)} / ${m.s2.toFixed(2)} | مقاومة ${m.r1.toFixed(2)} / ${m.r2.toFixed(2)}\n` +
-        `• **نطاق 20 جلسة:** دعم ${m.support1.toFixed(2)} | مقاومة ${m.resistance1.toFixed(2)}\n\n` +
+      return `**ملخص فني فوري — ${info.name} (EGX:${state.ticker})**
+` +
+        `• **السعر:** ${m.last.toFixed(2)} ج.م (${m.chgPct >= 0 ? "+" : ""}${m.chgPct.toFixed(2)}%) | **الاتجاه:** ${m.trend}
+` +
+        `• **RSI(14):** ${m.rsi != null ? m.rsi.toFixed(1) : "-"} (${rsiNote})
+` +
+        `• **نطاق 20 جلسة:** دعم ${m.support1?.toFixed(2) || "-"} | مقاومة ${m.resistance1?.toFixed(2) || "-"}
+
+` +
         `💡 لتحليل تفصيلي مفتوح: اضغط **📋 نسخ البرومبت** أو اربط مفتاحك من **⚙️ API**.`;
     }
 
     async function callExternalAI(userPrompt, imgObj) {
       const { provider, key, model } = state.api;
-      const sys = `أنت محلل فني محترف متخصص في البورصة المصرية (EGX). أجب بالعربية بأسلوب واضح ومنظم ومباشر.\n${buildStockContextString()}\nإذا أرفق المستخدم صورة شارت فاقرأ الشموع والمؤشرات الظاهرة بدقة.`;
+      const sys = `أنت محلل فني محترف متخصص في البورصة المصرية (EGX). أجب بالعربية بأسلوب واضح ومنظم ومباشر.
+${buildStockContextString()}
+إذا أرفق المستخدم صورة شارت فاقرأ الشموع والمؤشرات الظاهرة بدقة.`;
       const hist = state.chatHistory.slice(-8);
 
       if (provider === "claude") {
@@ -1384,7 +1437,7 @@
     }
     function clearAttachedImage() { state.attachedImage = null; $("imgPreviewBar").classList.remove("show"); $("imgFileInput").value = ""; }
 
-    // 10. نافذة API و MCP السحابي
+    // 10. نافذة API و MCP السحابي (الرابط ثابت للقراءة والنسخ فقط)
     function toggleGeminiTools(p) {
       $("btnFetchModels").style.display = p === "gemini" ? "inline-flex" : "none";
       if (p !== "gemini") { $("apiModelSelect").style.display = "none"; $("modelFetchStatus").textContent = ""; }
@@ -1405,12 +1458,12 @@
     const closeApiModal = () => $("apiModalBackdrop").classList.remove("open");
 
     function getFullMcpUrl() {
-      const base = sanitizeMcpUrl(state.mcpRemoteUrl);
-      return state.user?.uid ? `${base}?uid=${state.user.uid}` : base;
+      return state.user?.uid ? `${FIXED_MCP_URL}?uid=${state.user.uid}` : FIXED_MCP_URL;
     }
 
     function renderMcpConfig() {
       const fullUrl = getFullMcpUrl();
+      $("mcpRemoteUrlInput").value = FIXED_MCP_URL;
       $("mcpRemoteCode").textContent = JSON.stringify({ mcpServers: { "egx-terminal": { url: fullUrl } } }, null, 2);
       $("mcpUidNote").textContent = state.user
         ? `✅ مربوط بحسابك (${state.user.displayName || state.user.email}) لسحب مفضلتك ومؤشراتك.`
@@ -1421,10 +1474,9 @@
       const dot = $("mcpHealthDot"), txt = $("mcpHealthText");
       dot.className = "status-dot"; txt.textContent = "جاري فحص السيرفر...";
       try {
-        const base = sanitizeMcpUrl(state.mcpRemoteUrl);
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 5000);
-        const res = await fetch(base, { signal: ctrl.signal });
+        const res = await fetch(FIXED_MCP_URL, { signal: ctrl.signal });
         clearTimeout(t);
         if (res.ok) { dot.classList.add("connected"); txt.textContent = "السيرفر متصل (Online)"; }
         else { dot.classList.add("err"); txt.textContent = `حالة السيرفر (${res.status})`; }
@@ -1434,10 +1486,6 @@
     }
 
     function openMcpModal() {
-      const inp = $("mcpRemoteUrlInput");
-      inp.value = sanitizeMcpUrl(state.mcpRemoteUrl);
-      inp.readOnly = true;
-      $("editMcpUrlBtn").textContent = "✏️ تعديل الرابط";
       renderMcpConfig();
       $("mcpStatusMsg").className = "test-result"; $("mcpStatusMsg").textContent = "";
       $("mcpModalBackdrop").classList.add("open");
@@ -1467,24 +1515,10 @@
       $("closeAccountModalBtn").onclick = closeAccountModal;
       $("accountModalBackdrop").onclick = e => { if (e.target.id === "accountModalBackdrop") closeAccountModal(); };
 
-      ["openMcpHeaderBtn", "openMcpAiBtn", "openMcpToolBtn"].forEach(id => $(id).onclick = openMcpModal);
+      $("openMcpAiBtn").onclick = openMcpModal;
       $("closeMcpModalBtn").onclick = closeMcpModal;
       $("mcpModalBackdrop").onclick = e => { if (e.target.id === "mcpModalBackdrop") closeMcpModal(); };
 
-      $("editMcpUrlBtn").onclick = () => {
-        const inp = $("mcpRemoteUrlInput");
-        if (inp.readOnly) {
-          inp.readOnly = false; inp.focus();
-          $("editMcpUrlBtn").textContent = "💾 حفظ الرابط";
-        } else {
-          state.mcpRemoteUrl = sanitizeMcpUrl(inp.value);
-          inp.value = state.mcpRemoteUrl; inp.readOnly = true;
-          localStorage.setItem(LS.MCP_URL, state.mcpRemoteUrl);
-          $("editMcpUrlBtn").textContent = "✏️ تعديل الرابط";
-          renderMcpConfig(); syncUserToCloud(); checkMcpHealth();
-        }
-      };
-      $("mcpRemoteUrlInput").oninput = e => { state.mcpRemoteUrl = e.target.value.trim(); renderMcpConfig(); };
       $("copyMcpRemoteBtn").onclick = async () => {
         await copyText($("mcpRemoteCode").textContent);
         $("mcpStatusMsg").className = "test-result ok"; $("mcpStatusMsg").textContent = "✅ تم نسخ كود JSON بنجاح!";
@@ -1506,22 +1540,23 @@
         localStorage.setItem(LS.THEME, state.theme);
         document.documentElement.setAttribute("data-theme", state.theme);
         $("themeToggleBtn").textContent = state.theme === "dark" ? "🌙" : "☀️";
-        renderChart(); renderTechnicalWidget(); syncUserToCloud();
+        markLocalChange(false); renderChart(); renderTechnicalWidget(); syncUserToCloud(true);
       };
       $("langToggleBtn").onclick = () => {
         state.lang = state.lang === "ar" ? "en" : "ar";
         localStorage.setItem(LS.LANG, state.lang);
         $("langToggleBtn").textContent = state.lang === "ar" ? "AR" : "EN";
-        renderChart(); renderTechnicalWidget(); syncUserToCloud();
+        markLocalChange(false); renderChart(); renderTechnicalWidget(); syncUserToCloud(true);
       };
 
-      $("toggleSrBarChip").onclick = () => setSrBarVisible(!state.showSrBar);
+      // تبديل المؤشرات مع حفظ فوري محلياً وسحابياً
       document.querySelectorAll("#indicatorsBar .ind-chip[data-study]").forEach(c => {
         c.onclick = () => {
           const s = c.dataset.study, i = state.indicators.indexOf(s);
           if (i >= 0) state.indicators.splice(i, 1); else state.indicators.push(s);
           localStorage.setItem(LS.INDICATORS, JSON.stringify(state.indicators));
-          syncIndicatorsUI(); renderChart(); syncUserToCloud();
+          markLocalChange(true);
+          syncIndicatorsUI(); renderChart(); syncUserToCloud(true);
         };
       });
 
@@ -1537,7 +1572,7 @@
       document.querySelectorAll(".tf-btn").forEach(b => {
         b.onclick = () => {
           state.tf = b.dataset.tf; localStorage.setItem(LS.TF, state.tf);
-          syncTfButtonsUI(); renderChart(); renderTechnicalWidget(); syncUserToCloud();
+          markLocalChange(false); syncTfButtonsUI(); renderChart(); renderTechnicalWidget(); syncUserToCloud(true);
         };
       });
 
@@ -1582,18 +1617,6 @@
       $("attachImgBtn").onclick = () => $("imgFileInput").click();
       $("imgFileInput").onchange = e => { if (e.target.files?.[0]) setAttachedImageFromFile(e.target.files[0]); };
       $("removeImgBtn").onclick = clearAttachedImage;
-      $("captureScreenBtn").onclick = async () => {
-        if (!navigator.mediaDevices?.getDisplayMedia) return alert("التقاط الشاشة متاح على الكمبيوتر. على الموبايل استخدم (📷 إرفاق صورة).");
-        try {
-          const stream = await navigator.mediaDevices.getDisplayMedia({ video: true });
-          const v = document.createElement("video"); v.srcObject = stream; await v.play();
-          const c = document.createElement("canvas"); c.width = v.videoWidth; c.height = v.videoHeight;
-          c.getContext("2d").drawImage(v, 0, 0); stream.getTracks().forEach(t => t.stop());
-          const dataUrl = c.toDataURL("image/png");
-          state.attachedImage = { dataUrl, base64: dataUrl.split(",")[1], mimeType: "image/png" };
-          $("imgPreviewThumb").src = dataUrl; $("imgPreviewBar").classList.add("show");
-        } catch {}
-      };
       document.addEventListener("paste", e => {
         for (const item of (e.clipboardData?.items || [])) if (item.type.startsWith("image/")) { setAttachedImageFromFile(item.getAsFile()); break; }
       });
@@ -1648,8 +1671,9 @@
       };
 
       updateApiBadge(); updateAuthUI();
-      appendMessage("ai", "أهلاً بك في **EGX Terminal** 👋\nاقرأ الملخص الفني الفوري فوق بدون API، أو انسخ البرومبت الجاهز، أو اربط مفتاحك من **⚙️ API** للتحليل المباشر.");
-      selectStock(state.ticker, false);
+      appendMessage("ai", "أهلاً بك في **EGX Terminal** 👋
+اقرأ الملخص الفني الفوري فوق بدون API، أو انسخ البرومبت الجاهز، أو اربط مفتاحك من **⚙️ API** للتحليل المباشر.");
+      selectStock(state.ticker, false, false);
     });
   </script>
 </body>
