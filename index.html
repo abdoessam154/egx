@@ -79,14 +79,15 @@
     .jump-links { display: flex; gap: 12px; }
     .jump-links a { color: var(--emerald); text-decoration: none; font-weight: 700; }
     .jump-links a.ai-link { color: var(--gold); }
-    body.focus-mode { overflow: hidden; }
+    body.focus-mode { overflow: hidden !important; position: fixed; inset: 0; width: 100%; height: 100dvh; }
     body.focus-mode .top-brand-bar, body.focus-mode .header, body.focus-mode .indices-grid, body.focus-mode .chart-topbar, body.focus-mode .indicators-bar, body.focus-mode .scroll-helper, body.focus-mode #taSection, body.focus-mode #aiSection, body.focus-mode .footer { display: none !important; }
     body.focus-mode .container { padding: 0; max-width: 100%; gap: 0; }
-    body.focus-mode .card { border-radius: 0; border: none; }
-    .focus-bar { display: none; height: 44px; padding: 0 12px; background: var(--bg-input); border-bottom: 1px solid var(--border-strong); align-items: center; justify-content: space-between; gap: 8px; }
-    body.focus-mode .focus-bar { display: flex; }
-    body.focus-mode .chart-wrap { height: calc(100dvh - 44px); }
-    .focus-bar-right, .focus-bar-left { display: flex; align-items: center; gap: 6px; overflow-x: auto; }
+    body.focus-mode #chartCard { position: fixed !important; inset: 0 !important; z-index: 200 !important; width: 100vw !important; height: 100dvh !important; border-radius: 0 !important; border: none !important; display: flex !important; flex-direction: column !important; margin: 0 !important; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--bg-card); }
+    .focus-bar { display: none; height: 46px; flex-shrink: 0; padding: 0 12px; background: var(--bg-input); border-bottom: 1px solid var(--border-strong); align-items: center; justify-content: space-between; gap: 8px; }
+    body.focus-mode .focus-bar { display: flex !important; }
+    body.focus-mode .chart-wrap { flex: 1 !important; height: auto !important; min-height: 0 !important; width: 100% !important; }
+    .focus-bar-right, .focus-bar-left { display: flex; align-items: center; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+    .focus-bar-right::-webkit-scrollbar, .focus-bar-left::-webkit-scrollbar { display: none; }
     .btn-sm { padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-elevated); font-size: 11.5px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.15s; }
     .btn-sm:hover { border-color: var(--emerald); }
     .btn-sm.danger { border-color: rgba(244, 63, 94, 0.45); color: var(--red); background: var(--red-dim); }
@@ -217,8 +218,17 @@
     .pro-chip.active { border-color: var(--emerald); background: var(--emerald-dim); color: var(--emerald); }
     .pro-edit-toggle { padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.5); background: var(--gold-dim); color: var(--gold); font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
     .pro-edit-toggle.open { background: var(--gold); color: #071018; }
-    .pro-stage { display: none; width: 100%; height: 100%; position: relative; background: var(--bg-card); }
-    .pro-stage.show { display: block; }
+    .pro-stage { display: none; width: 100%; height: 100%; position: relative; background: var(--bg-card); flex-direction: column; overflow: hidden; }
+    .pro-stage.show { display: flex; }
+    .pro-main-pane { flex: 1; min-height: 0; width: 100%; position: relative; touch-action: none; }
+    .pro-sub-pane { display: none; height: 130px; flex-shrink: 0; width: 100%; position: relative; border-top: 1px solid var(--border-strong); touch-action: none; }
+    .pro-sub-pane.show { display: block; }
+    .pro-sub-label { position: absolute; top: 4px; right: 8px; z-index: 5; pointer-events: none; font-size: 10px; font-weight: 800; color: var(--text-muted); background: rgba(5, 8, 17, 0.72); padding: 1px 7px; border-radius: 6px; border: 1px solid var(--border); }
+    [data-theme="light"] .pro-sub-label { background: rgba(255, 255, 255, 0.85); }
+    .pro-zoom-bar { position: absolute; bottom: 32px; left: 10px; z-index: 7; display: flex; align-items: center; gap: 4px; background: rgba(5, 8, 17, 0.78); backdrop-filter: blur(8px); padding: 3px; border-radius: 10px; border: 1px solid var(--border-strong); }
+    [data-theme="light"] .pro-zoom-bar { background: rgba(255, 255, 255, 0.9); }
+    .pro-zoom-btn { min-width: 28px; height: 28px; padding: 0 7px; border-radius: 7px; border: 1px solid transparent; background: var(--bg-elevated); color: var(--text); font-size: 13px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: 0.15s; }
+    .pro-zoom-btn:hover { border-color: var(--emerald); color: var(--emerald); }
     .pro-legend { position: absolute; top: 8px; right: 10px; left: 10px; z-index: 6; pointer-events: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; }
     .pro-legend-pill { padding: 2px 8px; border-radius: 7px; background: rgba(5, 8, 17, 0.78); backdrop-filter: blur(6px); border: 1px solid var(--border-strong); color: var(--text); direction: ltr; display: inline-flex; align-items: center; gap: 6px; }
     [data-theme="light"] .pro-legend-pill { background: rgba(255, 255, 255, 0.88); }
@@ -334,10 +344,12 @@
       <!-- شريط المؤشرات المحفوظة دائماً -->
       <div class="indicators-bar" id="indicatorsBar">
         <span class="ind-label">📐 المؤشرات:</span>
+        <button class="ind-chip" data-study="MACD@tv-basicstudies">MACD</button>
+        <button class="ind-chip" data-study="MF@tv-basicstudies">MFI</button>
+        <button class="ind-chip" data-study="STD;MA%1Cross">MA Cross</button>
+        <button class="ind-chip" data-study="RSI@tv-basicstudies">RSI</button>
         <button class="ind-chip" data-study="MAExp@tv-basicstudies">EMA</button>
         <button class="ind-chip" data-study="MASimple@tv-basicstudies">SMA</button>
-        <button class="ind-chip" data-study="RSI@tv-basicstudies">RSI</button>
-        <button class="ind-chip" data-study="MACD@tv-basicstudies">MACD</button>
         <button class="ind-chip" data-study="BB@tv-basicstudies">Bollinger</button>
         <button class="ind-chip" data-study="VWAP@tv-basicstudies">VWAP</button>
         <button class="ind-chip" data-study="StochasticRSI@tv-basicstudies">Stoch RSI</button>
@@ -357,8 +369,20 @@
       <div class="chart-wrap">
         <div id="tvChartContainer" style="width:100%;height:100%;"></div>
         <div class="pro-stage" id="proChartStage">
-          <div class="pro-legend" id="proChartLegend"></div>
-          <div id="proChartContainer" style="width:100%;height:100%;"></div>
+          <div class="pro-main-pane">
+            <div class="pro-legend" id="proChartLegend"></div>
+            <div id="proChartContainer" style="width:100%;height:100%;"></div>
+            <div class="pro-zoom-bar" id="proZoomBar">
+              <button class="pro-zoom-btn" id="proZoomInBtn" title="تكبير الشموع">+</button>
+              <button class="pro-zoom-btn" id="proZoomOutBtn" title="تصغير الشموع">−</button>
+              <button class="pro-zoom-btn" id="proZoomResetBtn" title="إعادة ضبط الزووم">↺</button>
+              <button class="pro-zoom-btn" id="proZoomAllBtn" title="عرض كل الشموع" style="font-size:10.5px;">الكل</button>
+            </div>
+          </div>
+          <div class="pro-sub-pane" id="proSubPane">
+            <div class="pro-sub-label" id="proSubLabel"></div>
+            <div id="proSubChartContainer" style="width:100%;height:100%;"></div>
+          </div>
           <div class="pro-overlay" id="proChartOverlay">
             <span id="proOverlayText">⏳ جاري تحميل شموع السهم...</span>
             <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
@@ -386,9 +410,9 @@
         <div class="pro-docs-box" id="proDocsBox">
           <strong>الدوال والمتغيرات المتاحة لبرمجة مؤشرك (بأسلوب شبيه بـ Pine Script):</strong><br/>
           • <strong>البيانات:</strong> <code>open</code> <code>high</code> <code>low</code> <code>close</code> <code>volume</code> <code>len</code> <code>bars</code><br/>
-          • <strong>المؤشرات:</strong> <code>ema(close, 20)</code> <code>sma(close, 50)</code> <code>rsi(close, 14)</code> <code>atr(14)</code> <code>macd(close, 12, 26, 9)</code> <code>bb(close, 20, 2)</code> <code>supertrend(10, 2.5)</code> <code>vwap(20)</code> <code>pivots(6, 6)</code> <code>highest(high, 20)</code> <code>lowest(low, 20)</code><br/>
+          • <strong>المؤشرات:</strong> <code>ema(close, 20)</code> <code>sma(close, 50)</code> <code>rsi(close, 14)</code> <code>mfi(14)</code> <code>atr(14)</code> <code>macd(close, 12, 26, 9)</code> <code>bb(close, 20, 2)</code> <code>supertrend(10, 2.5)</code> <code>vwap(20)</code> <code>pivots(6, 6)</code> <code>highest(high, 20)</code> <code>lowest(low, 20)</code><br/>
           • <strong>التقاطعات:</strong> <code>crossover(fast, slow, i)</code> <code>crossunder(fast, slow, i)</code> (يدعم رقم ثابت مثل <code>crossover(r, 30, i)</code>)<br/>
-          • <strong>الرسم والإشارات:</strong> <code>plot(arr, {title, color, width, style})</code> • <code>hline(price, {title, color, style})</code> • <code>buy(i, "شراء")</code> • <code>sell(i, "بيع")</code> • <code>log("نص")</code>
+          • <strong>الرسم والإشارات:</strong> <code>plot(arr, {title, color, width, style})</code> • <code>hline(price, {title, color, style})</code> • <code>plotPane(arr, opts)</code> • <code>histPane(arr, opts)</code> • <code>hlinePane(val, opts)</code> • <code>buy(i, "شراء")</code> • <code>sell(i, "بيع")</code> • <code>log("نص")</code>
         </div>
 
         <textarea class="pro-code-area" id="proCodeArea" spellcheck="false"></textarea>
@@ -774,7 +798,7 @@
       },
       {
         id: "ema_cross",
-        name: "تقاطع EMA (9/21/50)",
+        name: "MA Cross (9/21/50)",
         builtin: true,
         code: [
           "// تقاطع المتوسطات السريعة مع فلتر الاتجاه EMA 50",
@@ -833,6 +857,43 @@
           "  if (low[i] <= b.lower[i] && r[i] < 35)  buy(i, 'ارتداد RSI');",
           "  if (high[i] >= b.upper[i] && r[i] > 65) sell(i, 'تشبع RSI');",
           "}"
+        ].join("\n")
+      },
+      {
+        id: "pro_macd",
+        name: "MACD (12/26/9)",
+        builtin: true,
+        code: [
+          "// مؤشر MACD في نافذة سفلية متزامنة مع الشارت",
+          "const m = macd(close, 12, 26, 9);",
+          "histPane(m.hist,   { title: 'Hist',   upColor: 'rgba(16,185,129,0.55)', downColor: 'rgba(244,63,94,0.55)' });",
+          "plotPane(m.macd,   { title: 'MACD',   color: '#38bdf8', width: 2 });",
+          "plotPane(m.signal, { title: 'Signal', color: '#f59e0b', width: 1 });",
+          "hlinePane(0,       { title: '0',      color: '#64748b', style: 'dashed' });"
+        ].join("\n")
+      },
+      {
+        id: "pro_mfi",
+        name: "MFI (14)",
+        builtin: true,
+        code: [
+          "// مؤشر تدفق السيولة Money Flow Index (MFI 14)",
+          "const f = mfi(14);",
+          "plotPane(f,  { title: 'MFI 14', color: '#10b981', width: 2 });",
+          "hlinePane(80, { title: '80', color: '#f43f5e', style: 'dashed' });",
+          "hlinePane(20, { title: '20', color: '#10b981', style: 'dashed' });"
+        ].join("\n")
+      },
+      {
+        id: "pro_rsi",
+        name: "RSI (14)",
+        builtin: true,
+        code: [
+          "// مؤشر القوة النسبية Relative Strength Index (RSI 14)",
+          "const r = rsi(close, 14);",
+          "plotPane(r,  { title: 'RSI 14', color: '#a78bfa', width: 2 });",
+          "hlinePane(70, { title: '70', color: '#f43f5e', style: 'dashed' });",
+          "hlinePane(30, { title: '30', color: '#10b981', style: 'dashed' });"
         ].join("\n")
       }
     ];
@@ -1164,11 +1225,14 @@
     // 6.1 محرك الشارت المبرمج (Lightweight Charts + Pine-like Script Engine)
     const ohlcCache = new Map();
     let proChart = null;
+    let proSubChart = null;
     let proCandleSeries = null;
     let proVolumeSeries = null;
     let proOverlaySeries = [];
     let proPriceLines = [];
+    let proSubSeries = [];
     let proResizeObs = null;
+    let isSyncingProRange = false;
     let currentProBars = [];
     let currentProMeta = { fallbackDaily: false, label: "" };
 
@@ -1210,10 +1274,50 @@
       }
     }
 
+    function destroyProSubChart() {
+      if (proSubChart) { try { proSubChart.remove(); } catch {} proSubChart = null; }
+      proSubSeries = [];
+      const subPane = $("proSubPane");
+      if (subPane) subPane.classList.remove("show");
+      const subEl = $("proSubChartContainer");
+      if (subEl) subEl.innerHTML = "";
+    }
+
     function destroyProChart() {
       if (proResizeObs) { try { proResizeObs.disconnect(); } catch {} proResizeObs = null; }
+      destroyProSubChart();
       if (proChart) { try { proChart.remove(); } catch {} proChart = null; }
       proCandleSeries = null; proVolumeSeries = null; proOverlaySeries = []; proPriceLines = [];
+    }
+
+    function resizeProCharts() {
+      const c1 = $("proChartContainer");
+      if (proChart && c1 && c1.clientWidth > 0 && c1.clientHeight > 0) {
+        proChart.applyOptions({ width: c1.clientWidth, height: c1.clientHeight });
+      }
+      const c2 = $("proSubChartContainer");
+      if (proSubChart && c2 && c2.clientWidth > 0 && c2.clientHeight > 0) {
+        proSubChart.applyOptions({ width: c2.clientWidth, height: c2.clientHeight });
+      }
+    }
+
+    function applyProDefaultZoom() {
+      if (!proChart || !currentProBars.length) return;
+      const n = currentProBars.length;
+      const visibleCount = window.innerWidth < 640 ? 60 : 95;
+      proChart.timeScale().setVisibleLogicalRange({ from: Math.max(0, n - visibleCount), to: n + 4 });
+      proChart.priceScale("right").applyOptions({ autoScale: true });
+    }
+
+    function zoomProChart(factor) {
+      if (!proChart || !currentProBars.length) return;
+      const ts = proChart.timeScale();
+      const range = ts.getVisibleLogicalRange();
+      if (!range) return applyProDefaultZoom();
+      const span = range.to - range.from;
+      const newSpan = Math.max(12, Math.min(currentProBars.length + 12, span * factor));
+      const newFrom = range.to - newSpan;
+      ts.setVisibleLogicalRange({ from: newFrom, to: range.to });
     }
 
     function formatCairoDate(tsSec) {
@@ -1540,9 +1644,34 @@
         return a0 != null && b0 != null && a1 != null && b1 != null && a0 >= b0 && a1 < b1;
       };
 
-      const plots = [], hlines = [], markers = [], logs = [];
+      const mfi = (period = 14) => {
+        const out = new Array(len).fill(null);
+        const tp = new Array(len);
+        const pos = new Array(len).fill(0), neg = new Array(len).fill(0);
+        for (let i = 0; i < len; i++) {
+          tp[i] = (high[i] + low[i] + close[i]) / 3;
+          if (i > 0) {
+            const mf = tp[i] * (volume[i] || 0);
+            if (tp[i] > tp[i - 1]) pos[i] = mf;
+            else if (tp[i] < tp[i - 1]) neg[i] = mf;
+          }
+        }
+        for (let i = period; i < len; i++) {
+          let pSum = 0, nSum = 0;
+          for (let j = i - period + 1; j <= i; j++) { pSum += pos[j]; nSum += neg[j]; }
+          if (pSum === 0 && nSum === 0) out[i] = 50;
+          else if (nSum === 0) out[i] = 100;
+          else out[i] = 100 - (100 / (1 + pSum / nSum));
+        }
+        return out;
+      };
+
+      const plots = [], hlines = [], markers = [], logs = [], panePlots = [], paneHists = [], paneHlines = [];
       const plot = (values, opts = {}) => { if (Array.isArray(values)) plots.push({ values, opts }); };
       const hline = (price, opts = {}) => { if (Number.isFinite(price)) hlines.push({ price, opts }); };
+      const plotPane = (values, opts = {}) => { if (Array.isArray(values)) panePlots.push({ values, opts }); };
+      const histPane = (values, opts = {}) => { if (Array.isArray(values)) paneHists.push({ values, opts }); };
+      const hlinePane = (price, opts = {}) => { if (Number.isFinite(price)) paneHlines.push({ price, opts }); };
       const buy = (i, text = "شراء") => { if (i >= 0 && i < len) markers.push({ index: i, position: "belowBar", color: "#10b981", shape: "arrowUp", text: String(text) }); };
       const sell = (i, text = "بيع") => { if (i >= 0 && i < len) markers.push({ index: i, position: "aboveBar", color: "#f43f5e", shape: "arrowDown", text: String(text) }); };
       const mark = (i, opts = {}) => {
@@ -1551,8 +1680,8 @@
       const log = (msg) => { logs.push(String(msg)); };
 
       return {
-        env: { bars, len, open, high, low, close, volume, time, sma, ema, rma, rsi, atr, macd, bb, highest, lowest, vwap, supertrend, pivots, crossover, crossunder, plot, hline, buy, sell, mark, log },
-        out: { plots, hlines, markers, logs }
+        env: { bars, len, open, high, low, close, volume, time, sma, ema, rma, rsi, mfi, atr, macd, bb, highest, lowest, vwap, supertrend, pivots, crossover, crossunder, plot, hline, plotPane, histPane, hlinePane, buy, sell, mark, log },
+        out: { plots, hlines, markers, logs, panePlots, paneHists, paneHlines }
       };
     }
 
@@ -1566,6 +1695,7 @@
       }
       proOverlaySeries = [];
       proPriceLines = [];
+      destroyProSubChart();
     }
 
     function updateProLegend(bar) {
@@ -1601,6 +1731,7 @@
       const allMarkers = [];
       const allLogs = [];
       const errors = [];
+      const allPanePlots = [], allPaneHists = [], allPaneHlines = [], paneNames = [];
       const lineStyleMap = { solid: 0, dotted: 1, dashed: 2 };
 
       for (const sc of scriptsToRun) {
@@ -1643,11 +1774,104 @@
             proPriceLines.push(pl);
           });
 
+          if (api.out.panePlots.length || api.out.paneHists.length) {
+            paneNames.push(sc.name);
+            api.out.panePlots.forEach(x => allPanePlots.push(x));
+            api.out.paneHists.forEach(x => allPaneHists.push(x));
+            api.out.paneHlines.forEach(x => allPaneHlines.push(x));
+          }
+
           api.out.markers.forEach(m => allMarkers.push(m));
           api.out.logs.forEach(l => allLogs.push(l));
         } catch (err) {
           errors.push(`${sc.name}: ${err.message}`);
         }
+      }
+
+      if (allPanePlots.length || allPaneHists.length) {
+        const subPane = $("proSubPane");
+        const subContainer = $("proSubChartContainer");
+        subPane.classList.add("show");
+        $("proSubLabel").textContent = paneNames.join(" + ");
+        const isDark = state.theme === "dark";
+        proSubChart = LightweightCharts.createChart(subContainer, {
+          width: subContainer.clientWidth || ($("proChartContainer").clientWidth || 340),
+          height: subContainer.clientHeight || 130,
+          layout: {
+            background: { type: "solid", color: isDark ? "#0b1120" : "#ffffff" },
+            textColor: isDark ? "#94a3b8" : "#334155",
+            fontFamily: "'Cairo', system-ui, sans-serif"
+          },
+          grid: {
+            vertLines: { color: isDark ? "rgba(255,255,255,0.03)" : "rgba(15,23,42,0.05)" },
+            horzLines: { color: isDark ? "rgba(255,255,255,0.05)" : "rgba(15,23,42,0.07)" }
+          },
+          rightPriceScale: { borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.12)", scaleMargins: { top: 0.12, bottom: 0.12 } },
+          timeScale: { visible: false, rightOffset: 6, barSpacing: 7, minBarSpacing: 2 },
+          handleScroll: { mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false },
+          handleScale: { axisPressedMouseMove: true, mouseWheel: true, pinch: true }
+        });
+
+        let anchorSeries = null;
+        allPaneHists.forEach(h => {
+          const hs = proSubChart.addHistogramSeries({ priceLineVisible: false, lastValueVisible: false, title: h.opts.title || "" });
+          const data = [];
+          for (let i = 0; i < currentProBars.length; i++) {
+            const v = h.values[i];
+            if (Number.isFinite(v)) {
+              data.push({ time: currentProBars[i].time, value: v, color: v >= 0 ? (h.opts.upColor || "rgba(16,185,129,0.55)") : (h.opts.downColor || "rgba(244,63,94,0.55)") });
+            } else data.push({ time: currentProBars[i].time });
+          }
+          hs.setData(data);
+          proSubSeries.push(hs);
+          if (!anchorSeries) anchorSeries = hs;
+        });
+
+        allPanePlots.forEach(p => {
+          const ls = proSubChart.addLineSeries({
+            color: p.opts.color || "#a78bfa",
+            lineWidth: p.opts.width || 2,
+            lineStyle: lineStyleMap[p.opts.style] ?? 0,
+            priceLineVisible: false,
+            lastValueVisible: true,
+            crosshairMarkerVisible: false,
+            title: p.opts.title || ""
+          });
+          const data = [];
+          for (let i = 0; i < currentProBars.length; i++) {
+            const v = p.values[i];
+            if (Number.isFinite(v)) data.push({ time: currentProBars[i].time, value: v });
+            else data.push({ time: currentProBars[i].time });
+          }
+          ls.setData(data);
+          proSubSeries.push(ls);
+          if (!anchorSeries) anchorSeries = ls;
+        });
+
+        if (anchorSeries) {
+          allPaneHlines.forEach(h => {
+            anchorSeries.createPriceLine({
+              price: h.price,
+              color: h.opts.color || "#64748b",
+              lineWidth: 1,
+              lineStyle: lineStyleMap[h.opts.style] ?? 2,
+              axisLabelVisible: true,
+              title: h.opts.title || ""
+            });
+          });
+        }
+
+        const curRange = proChart.timeScale().getVisibleLogicalRange();
+        if (curRange) proSubChart.timeScale().setVisibleLogicalRange(curRange);
+        proSubChart.timeScale().subscribeVisibleLogicalRangeChange(r => {
+          if (isSyncingProRange || !r || !proChart) return;
+          isSyncingProRange = true;
+          try { proChart.timeScale().setVisibleLogicalRange(r); } catch {}
+          isSyncingProRange = false;
+        });
+        requestAnimationFrame(resizeProCharts);
+      } else {
+        requestAnimationFrame(resizeProCharts);
       }
 
       if (allMarkers.length) {
@@ -1718,12 +1942,21 @@
           horzLines: { color: isDark ? "rgba(255,255,255,0.05)" : "rgba(15,23,42,0.07)" }
         },
         crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
-        rightPriceScale: { borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.12)" },
+        rightPriceScale: {
+          borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.12)",
+          autoScale: true,
+          scaleMargins: { top: 0.14, bottom: 0.22 }
+        },
         timeScale: {
           borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.12)",
           timeVisible: result.isIntraday,
-          secondsVisible: false
-        }
+          secondsVisible: false,
+          rightOffset: 6,
+          barSpacing: 7,
+          minBarSpacing: 2
+        },
+        handleScroll: { mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: true },
+        handleScale: { axisPressedMouseMove: true, mouseWheel: true, pinch: true }
       });
 
       proCandleSeries = proChart.addCandlestickSeries({
@@ -1735,14 +1968,23 @@
 
       proVolumeSeries = proChart.addHistogramSeries({
         priceFormat: { type: "volume" },
-        priceScaleId: ""
+        priceScaleId: "",
+        lastValueVisible: false,
+        priceLineVisible: false
       });
-      proVolumeSeries.priceScale().applyOptions({ scaleMargins: { top: 0.83, bottom: 0 } });
+      proVolumeSeries.priceScale().applyOptions({ scaleMargins: { top: 0.84, bottom: 0 } });
       proVolumeSeries.setData(currentProBars.map(b => ({
         time: b.time,
         value: b.volume,
-        color: b.close >= b.open ? "rgba(16, 185, 129, 0.28)" : "rgba(244, 63, 94, 0.28)"
+        color: b.close >= b.open ? "rgba(16, 185, 129, 0.26)" : "rgba(244, 63, 94, 0.26)"
       })));
+
+      proChart.timeScale().subscribeVisibleLogicalRangeChange(r => {
+        if (isSyncingProRange || !r || !proSubChart) return;
+        isSyncingProRange = true;
+        try { proSubChart.timeScale().setVisibleLogicalRange(r); } catch {}
+        isSyncingProRange = false;
+      });
 
       updateProLegend(currentProBars[currentProBars.length - 1]);
       proChart.subscribeCrosshairMove(param => {
@@ -1752,14 +1994,11 @@
       });
 
       runActiveProScripts();
-      proChart.timeScale().fitContent();
+      applyProDefaultZoom();
 
       if (typeof ResizeObserver !== "undefined") {
-        proResizeObs = new ResizeObserver(() => {
-          if (proChart && container.clientWidth > 0 && container.clientHeight > 0) {
-            proChart.applyOptions({ width: container.clientWidth, height: container.clientHeight });
-          }
-        });
+        proResizeObs = new ResizeObserver(() => resizeProCharts());
+        proResizeObs.observe($("proChartStage"));
         proResizeObs.observe(container);
       }
     }
@@ -2173,7 +2412,7 @@ ${buildStockContextString()}`;
 
     async function callExternalAI(userPrompt, imgObj) {
       const { provider, key, model } = state.api;
-      const sys = `أنت محلل فني محترف ومبرمج مؤشرات متخصص في البورصة المصرية (EGX). أجب بالعربية بأسلوب واضح ومنظم ومباشر. إذا طلب المستخدم برمجة مؤشر للشارت المبرمج (Pro) فاكتب كود JavaScript نظيفاً ومباشراً يستخدم فقط الدوال الجاهزة في الموقع: open, high, low, close, volume, len, ema(src,p), sma(src,p), rsi(src,p), atr(p), macd(src,f,s,sig), bb(src,p,m), supertrend(p,m), vwap(p), pivots(l,r), highest(src,p), lowest(src,p), crossover(a,b,i), crossunder(a,b,i), plot(arr,{title,color,width,style}), hline(price,{title,color,style}), buy(i,text), sell(i,text), log(msg).
+      const sys = `أنت محلل فني محترف ومبرمج مؤشرات متخصص في البورصة المصرية (EGX). أجب بالعربية بأسلوب واضح ومنظم ومباشر. إذا طلب المستخدم برمجة مؤشر للشارت المبرمج (Pro) فاكتب كود JavaScript نظيفاً ومباشراً يستخدم فقط الدوال الجاهزة في الموقع: open, high, low, close, volume, len, ema(src,p), sma(src,p), rsi(src,p), mfi(p), atr(p), macd(src,f,s,sig), bb(src,p,m), supertrend(p,m), vwap(p), pivots(l,r), highest(src,p), lowest(src,p), crossover(a,b,i), crossunder(a,b,i), plot(arr,{title,color,width,style}), hline(price,{title,color,style}), plotPane(arr,opts), histPane(arr,opts), hlinePane(val,opts), buy(i,text), sell(i,text), log(msg).
 ${buildStockContextString()}
 إذا أرفق المستخدم صورة شارت فاقرأ الشموع والمؤشرات الظاهرة بدقة.`;
       const hist = state.chatHistory.slice(-8);
@@ -2544,13 +2783,38 @@ ${buildStockContextString()}
         };
       });
 
-      const exitFocus = () => { document.body.classList.remove("focus-mode"); if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); };
-      $("enterFocusBtn").onclick = () => document.body.classList.add("focus-mode");
+      let savedScrollY = 0;
+      const enterFocus = () => {
+        savedScrollY = window.scrollY || 0;
+        document.body.classList.add("focus-mode");
+        window.scrollTo(0, 0);
+        resizeProCharts();
+        requestAnimationFrame(resizeProCharts);
+        setTimeout(resizeProCharts, 180);
+      };
+      const exitFocus = () => {
+        document.body.classList.remove("focus-mode");
+        if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+        window.scrollTo(0, savedScrollY);
+        resizeProCharts();
+        requestAnimationFrame(resizeProCharts);
+        setTimeout(resizeProCharts, 180);
+      };
+      $("enterFocusBtn").onclick = enterFocus;
       $("exitFocusBtn").onclick = exitFocus;
+      if (!document.documentElement.requestFullscreen) {
+        $("fullscreenApiBtn").style.display = "none";
+      }
       $("fullscreenApiBtn").onclick = () => {
         if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(() => {});
         else document.exitFullscreen?.().catch(() => {});
       };
+      $("proZoomInBtn").onclick = () => zoomProChart(0.7);
+      $("proZoomOutBtn").onclick = () => zoomProChart(1.4);
+      $("proZoomResetBtn").onclick = () => applyProDefaultZoom();
+      $("proZoomAllBtn").onclick = () => { if (proChart) proChart.timeScale().fitContent(); };
+      window.addEventListener("resize", () => { resizeProCharts(); setTimeout(resizeProCharts, 120); });
+      window.addEventListener("orientationchange", () => setTimeout(resizeProCharts, 250));
       document.addEventListener("keydown", e => {
         if (e.key === "Escape") { exitFocus(); closeDrawer(); closeApiModal(); closeAccountModal(); closeMcpModal(); }
       });
