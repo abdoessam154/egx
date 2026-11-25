@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>بورصة مصر | EGX Terminal</title>
+  <title>البورصة المصرية | EGX Terminal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -14,21 +14,23 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Cairo', system-ui, -apple-system, sans-serif; background: radial-gradient(900px 420px at 85% -10%, rgba(16, 185, 129, 0.08), transparent 60%), radial-gradient(700px 380px at 10% -10%, rgba(245, 158, 11, 0.07), transparent 60%), var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; line-height: 1.5; }
     button, input, select, textarea { font-family: inherit; color: inherit; }
-    .header { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 9px 14px; background: rgba(5, 8, 17, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .top-brand-bar { display: flex; align-items: center; justify-content: center; padding: 10px 14px 8px; background: rgba(5, 8, 17, 0.94); border-bottom: 1px solid var(--border); text-align: center; }
+    [data-theme="light"] .top-brand-bar { background: rgba(255, 255, 255, 0.96); }
+    .header { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 14px; background: rgba(5, 8, 17, 0.88); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
     [data-theme="light"] .header { background: rgba(255, 255, 255, 0.9); }
     .header-right, .header-left { display: flex; align-items: center; gap: 7px; min-width: 0; }
     .header-left { flex-shrink: 0; }
     .icon-btn { width: 35px; height: 35px; border-radius: 10px; border: 1px solid var(--border-strong); background: var(--bg-elevated); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; font-weight: 700; transition: 0.18s; flex-shrink: 0; }
     .icon-btn:hover { border-color: var(--emerald); color: var(--emerald); }
-    .brand { display: flex; align-items: center; gap: 8px; min-width: 0; }
-    .brand-logo { width: 33px; height: 33px; border-radius: 10px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(16, 185, 129, 0.22)); border: 1px solid rgba(245, 158, 11, 0.42); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
-    .brand-title { font-size: 14px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .brand-title span { color: var(--gold); }
-    .market-pill { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; border-radius: 20px; font-size: 10.5px; font-weight: 700; border: 1px solid var(--border-strong); background: var(--bg-elevated); color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
+    .brand { display: inline-flex; align-items: center; justify-content: center; gap: 9px; }
+    .brand-logo { width: 32px; height: 32px; border-radius: 10px; background: linear-gradient(135deg, rgba(245, 158, 11, 0.22), rgba(16, 185, 129, 0.22)); border: 1px solid rgba(245, 158, 11, 0.45); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+    .brand-title { font-size: 16px; font-weight: 800; letter-spacing: 0.2px; white-space: nowrap; }
+    .brand-title span { color: var(--gold); font-size: 13px; font-weight: 700; }
+    .market-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid var(--border-strong); background: var(--bg-elevated); color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
     .market-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
     .market-pill.open { border-color: rgba(16, 185, 129, 0.4); background: var(--emerald-dim); color: var(--emerald); }
     .market-pill.open .dot { background: var(--emerald); box-shadow: 0 0 8px var(--emerald); }
-    @media (max-width: 680px) { .brand-title span, .market-pill .mkt-timer { display: none; } }
+    @media (max-width: 560px) { .market-pill .mkt-timer { display: none; } .brand-title { font-size: 15px; } .brand-title span { font-size: 12px; } }
     .auth-btn { height: 35px; padding: 0 10px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: 0.18s; border: 1px solid rgba(16, 185, 129, 0.4); background: var(--emerald-dim); color: var(--emerald); max-width: 145px; }
     .auth-btn:hover { background: var(--emerald); color: #03150e; }
     .auth-btn.signed-in { border-color: var(--border-strong); background: var(--bg-elevated); color: var(--text); padding: 0 7px 0 9px; }
@@ -78,7 +80,7 @@
     .jump-links a { color: var(--emerald); text-decoration: none; font-weight: 700; }
     .jump-links a.ai-link { color: var(--gold); }
     body.focus-mode { overflow: hidden; }
-    body.focus-mode .header, body.focus-mode .indices-grid, body.focus-mode .chart-topbar, body.focus-mode .indicators-bar, body.focus-mode .scroll-helper, body.focus-mode #taSection, body.focus-mode #aiSection, body.focus-mode .footer { display: none !important; }
+    body.focus-mode .top-brand-bar, body.focus-mode .header, body.focus-mode .indices-grid, body.focus-mode .chart-topbar, body.focus-mode .indicators-bar, body.focus-mode .scroll-helper, body.focus-mode #taSection, body.focus-mode #aiSection, body.focus-mode .footer { display: none !important; }
     body.focus-mode .container { padding: 0; max-width: 100%; gap: 0; }
     body.focus-mode .card { border-radius: 0; border: none; }
     .focus-bar { display: none; height: 44px; padding: 0 12px; background: var(--bg-input); border-bottom: 1px solid var(--border-strong); align-items: center; justify-content: space-between; gap: 8px; }
@@ -208,14 +210,18 @@
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Top Centered Brand -->
+  <div class="top-brand-bar">
+    <div class="brand">
+      <div class="brand-logo">📈</div>
+      <div class="brand-title">البورصة المصرية <span>| EGX Terminal</span></div>
+    </div>
+  </div>
+
+  <!-- Sticky Controls Header -->
   <header class="header">
     <div class="header-right">
       <button class="icon-btn" id="openDrawerBtn" title="قائمة الأسهم">☰</button>
-      <div class="brand">
-        <div class="brand-logo">📈</div>
-        <div class="brand-title">بورصة مصر <span>| EGX Terminal</span></div>
-      </div>
       <div class="market-pill" id="marketStatusPill" title="مواعيد جلسة البورصة المصرية: الأحد–الخميس 10:00 ص – 2:30 م بتوقيت القاهرة">
         <span class="dot"></span>
         <span id="marketStatusText">السوق</span>
@@ -1235,7 +1241,12 @@
         return;
       }
 
-      const last = closes.at(-1), prev = closes.at(-2), chg = last - prev, chgPct = prev ? (chg / prev) * 100 : 0;
+      const meta = data.meta || {};
+      const last = typeof meta.regularMarketPrice === "number" ? meta.regularMarketPrice : closes.at(-1);
+      let prev = typeof meta.chartPreviousClose === "number" && closes.length < 2 ? meta.chartPreviousClose : closes.at(-2);
+      if (typeof meta.previousClose === "number" && meta.previousClose > 0) prev = meta.previousClose;
+      else if (prev === last && closes.length >= 3) prev = closes.at(-3);
+      const chg = last - prev, chgPct = prev ? (chg / prev) * 100 : 0;
       const ema10 = calcEMA(closes, 10), ema20 = calcEMA(closes, 20), ema50 = calcEMA(closes, 50);
       const rsi = calcRSI(closes, 14), macd = calcMACD(closes);
       const support1 = Math.min(...lows.slice(-20)), resistance1 = Math.max(...highs.slice(-20));
