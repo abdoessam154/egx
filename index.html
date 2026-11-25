@@ -917,7 +917,7 @@
       return out.join("");
     }
 
-    const normalizeAr = s => (s || "").toLowerCase().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/[ً-ٟ]/g, "").trim();
+    const normalizeAr = s => (s || "").toLowerCase().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").replace(/[\u064B-\u065F]/g, "").trim();
 
     function toggleFavorite(ticker) {
       const t = ticker.toUpperCase(), idx = state.favs.indexOf(t);
@@ -1671,8 +1671,7 @@ ${buildStockContextString()}
       };
 
       updateApiBadge(); updateAuthUI();
-      appendMessage("ai", "أهلاً بك في **EGX Terminal** 👋
-اقرأ الملخص الفني الفوري فوق بدون API، أو انسخ البرومبت الجاهز، أو اربط مفتاحك من **⚙️ API** للتحليل المباشر.");
+      appendMessage("ai", "أهلاً بك في **EGX Terminal** 👋\nاقرأ الملخص الفني الفوري فوق بدون API، أو انسخ البرومبت الجاهز، أو اربط مفتاحك من **⚙️ API** للتحليل المباشر.");
       selectStock(state.ticker, false, false);
     });
   </script>
