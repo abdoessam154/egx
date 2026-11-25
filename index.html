@@ -206,6 +206,42 @@
     .meta-stat strong { display: block; font-size: 14.5px; color: var(--gold); }
     .meta-stat span { font-size: 11px; color: var(--text-muted); }
     .footer { text-align: center; padding: 12px 12px 22px; font-size: 11.5px; color: var(--text-muted); }
+
+    .mode-switch { display: inline-flex; background: var(--bg-input); border: 1px solid var(--border-strong); border-radius: 10px; padding: 3px; gap: 3px; }
+    .mode-btn { padding: 5px 10px; border: none; background: transparent; color: var(--text-muted); border-radius: 7px; font-size: 11.5px; font-weight: 800; cursor: pointer; transition: 0.16s; white-space: nowrap; }
+    .mode-btn.active { background: linear-gradient(135deg, rgba(16, 185, 129, 0.22), rgba(245, 158, 11, 0.22)); color: var(--text); border: 1px solid rgba(245, 158, 11, 0.45); }
+    .pro-scripts-bar { padding: 7px 12px; background: var(--bg-card); border-bottom: 1px solid var(--border); display: none; align-items: center; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+    .pro-scripts-bar::-webkit-scrollbar { display: none; }
+    .pro-scripts-bar.show { display: flex; }
+    .pro-chip { padding: 3px 10px; border-radius: 20px; border: 1px solid var(--border-strong); background: var(--bg-elevated); color: var(--text-muted); font-size: 11px; font-weight: 700; cursor: pointer; white-space: nowrap; transition: 0.15s; }
+    .pro-chip.active { border-color: var(--emerald); background: var(--emerald-dim); color: var(--emerald); }
+    .pro-edit-toggle { padding: 3px 10px; border-radius: 20px; border: 1px solid rgba(245, 158, 11, 0.5); background: var(--gold-dim); color: var(--gold); font-size: 11px; font-weight: 800; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+    .pro-edit-toggle.open { background: var(--gold); color: #071018; }
+    .pro-stage { display: none; width: 100%; height: 100%; position: relative; background: var(--bg-card); }
+    .pro-stage.show { display: block; }
+    .pro-legend { position: absolute; top: 8px; right: 10px; left: 10px; z-index: 6; pointer-events: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; }
+    .pro-legend-pill { padding: 2px 8px; border-radius: 7px; background: rgba(5, 8, 17, 0.78); backdrop-filter: blur(6px); border: 1px solid var(--border-strong); color: var(--text); direction: ltr; display: inline-flex; align-items: center; gap: 6px; }
+    [data-theme="light"] .pro-legend-pill { background: rgba(255, 255, 255, 0.88); }
+    .pro-overlay { position: absolute; inset: 0; z-index: 8; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: rgba(5, 8, 17, 0.78); backdrop-filter: blur(4px); padding: 20px; text-align: center; font-size: 13px; color: var(--text-muted); }
+    [data-theme="light"] .pro-overlay { background: rgba(255, 255, 255, 0.85); }
+    .pro-overlay.show { display: flex; }
+    .pro-editor-panel { display: none; border-top: 1px solid var(--border-strong); background: var(--bg-elevated); padding: 12px; flex-direction: column; gap: 9px; }
+    .pro-editor-panel.open { display: flex; }
+    .pro-editor-top { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; justify-content: space-between; }
+    .pro-editor-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; flex: 1; min-width: 200px; }
+    .pro-editor-controls select, .pro-editor-controls input { padding: 6px 10px; border-radius: 9px; border: 1px solid var(--border-strong); background: var(--bg-input); font-size: 12px; outline: none; }
+    .pro-editor-controls select:focus, .pro-editor-controls input:focus { border-color: var(--emerald); }
+    .pro-code-area { width: 100%; min-height: 195px; max-height: 360px; resize: vertical; background: #040710; color: #e2e8f0; border: 1px solid var(--border-strong); border-radius: 11px; padding: 11px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.6; direction: ltr; text-align: left; outline: none; tab-size: 2; }
+    .pro-code-area:focus { border-color: var(--gold); }
+    .pro-editor-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; justify-content: space-between; }
+    .pro-editor-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pro-console { padding: 7px 10px; border-radius: 9px; background: var(--bg-input); border: 1px solid var(--border); font-size: 11.5px; font-weight: 700; color: var(--text-muted); line-height: 1.5; }
+    .pro-console.ok { color: var(--emerald); border-color: rgba(16, 185, 129, 0.35); background: var(--emerald-dim); }
+    .pro-console.err { color: var(--red); border-color: rgba(244, 63, 94, 0.35); background: var(--red-dim); }
+    .pro-docs-box { display: none; padding: 10px 12px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-strong); font-size: 11.5px; line-height: 1.75; color: var(--text-muted); }
+    .pro-docs-box.show { display: block; }
+    .pro-docs-box code { color: var(--gold); background: rgba(245, 158, 11, 0.1); padding: 1px 5px; border-radius: 5px; direction: ltr; display: inline-block; font-family: ui-monospace, monospace; font-size: 11px; }
+    body.focus-mode .pro-scripts-bar, body.focus-mode .pro-editor-panel { display: none !important; }
   </style>
 </head>
 <body>
@@ -279,6 +315,10 @@
           <button class="btn-sm" id="shareTickerBtn" title="نسخ رابط مباشر لهذا السهم">🔗 مشاركة</button>
         </div>
         <div class="chart-controls">
+          <div class="mode-switch" id="chartModeSwitch">
+            <button class="mode-btn active" data-mode="tv">📊 TradingView</button>
+            <button class="mode-btn" data-mode="pro">⚡ شارت مبرمج (Pro)</button>
+          </div>
           <div class="tf-group" id="tfGroup">
             <button class="tf-btn" data-tf="5">5m</button>
             <button class="tf-btn" data-tf="15">15m</button>
@@ -307,8 +347,62 @@
         <span class="sync-pill" id="cloudSyncPill"></span>
       </div>
 
+      <!-- شريط مؤشرات الشارت المبرمج (Pro) -->
+      <div class="pro-scripts-bar" id="proScriptsBar">
+        <button class="pro-edit-toggle" id="toggleProEditorBtn">&lt;/&gt; محرر الكود</button>
+        <div id="proScriptChips" style="display:inline-flex;align-items:center;gap:6px;"></div>
+        <button class="btn-sm" id="proReloadDataBtn" title="تحديث شموع الشارت المبرمج" style="margin-right:auto;">↻ تحديث</button>
+      </div>
+
       <div class="chart-wrap">
         <div id="tvChartContainer" style="width:100%;height:100%;"></div>
+        <div class="pro-stage" id="proChartStage">
+          <div class="pro-legend" id="proChartLegend"></div>
+          <div id="proChartContainer" style="width:100%;height:100%;"></div>
+          <div class="pro-overlay" id="proChartOverlay">
+            <span id="proOverlayText">⏳ جاري تحميل شموع السهم...</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+              <button class="btn-sm emerald" id="proRetryBtn">↻ إعادة المحاولة</button>
+              <button class="btn-sm" id="proBackToTvBtn">📊 العودة لـ TradingView</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- محرر الأكواد المدمج (شبيه Pine Script) -->
+      <div class="pro-editor-panel" id="proEditorPanel">
+        <div class="pro-editor-top">
+          <div class="pro-editor-controls">
+            <select id="proEditorSelect" title="اختر مؤشر للتعديل"></select>
+            <input type="text" id="proScriptNameInput" placeholder="اسم المؤشر..." style="min-width:140px;flex:1;" />
+          </div>
+          <div class="pro-editor-btns">
+            <button class="btn-sm emerald" id="proNewScriptBtn">+ مؤشر جديد</button>
+            <button class="btn-sm danger" id="proDeleteScriptBtn" title="حذف المؤشر">🗑️ حذف</button>
+            <button class="btn-sm" id="proToggleDocsBtn">📘 الدوال</button>
+          </div>
+        </div>
+
+        <div class="pro-docs-box" id="proDocsBox">
+          <strong>الدوال والمتغيرات المتاحة لبرمجة مؤشرك (بأسلوب شبيه بـ Pine Script):</strong><br/>
+          • <strong>البيانات:</strong> <code>open</code> <code>high</code> <code>low</code> <code>close</code> <code>volume</code> <code>len</code> <code>bars</code><br/>
+          • <strong>المؤشرات:</strong> <code>ema(close, 20)</code> <code>sma(close, 50)</code> <code>rsi(close, 14)</code> <code>atr(14)</code> <code>macd(close, 12, 26, 9)</code> <code>bb(close, 20, 2)</code> <code>supertrend(10, 2.5)</code> <code>vwap(20)</code> <code>pivots(6, 6)</code> <code>highest(high, 20)</code> <code>lowest(low, 20)</code><br/>
+          • <strong>التقاطعات:</strong> <code>crossover(fast, slow, i)</code> <code>crossunder(fast, slow, i)</code> (يدعم رقم ثابت مثل <code>crossover(r, 30, i)</code>)<br/>
+          • <strong>الرسم والإشارات:</strong> <code>plot(arr, {title, color, width, style})</code> • <code>hline(price, {title, color, style})</code> • <code>buy(i, "شراء")</code> • <code>sell(i, "بيع")</code> • <code>log("نص")</code>
+        </div>
+
+        <textarea class="pro-code-area" id="proCodeArea" spellcheck="false"></textarea>
+
+        <div class="pro-editor-actions">
+          <div class="pro-editor-btns">
+            <button class="btn-sm emerald" id="proRunCodeBtn">▶ تشغيل على الشارت</button>
+            <button class="btn-sm gold" id="proSaveScriptBtn">💾 حفظ المؤشر</button>
+            <button class="btn-sm" id="proResetScriptBtn">↺ استعادة الافتراضي</button>
+          </div>
+          <span style="font-size:11px;color:var(--text-muted);">يُحفظ محلياً + في حساب Google</span>
+        </div>
+
+        <div class="pro-console" id="proConsole">جاهز — عدّل الكود واضغط "▶ تشغيل على الشارت".</div>
       </div>
 
       <div class="scroll-helper">
@@ -371,6 +465,7 @@
         <button class="quick-chip" data-prompt="ما هي أقوى مناطق الدعم والمقاومة الحالية للسهم المفتوح؟">أقوى الدعوم والمقاومات</button>
         <button class="quick-chip" data-prompt="هل مؤشرات الزخم والسيولة (RSI و MACD والمتوسطات والفوليوم) إيجابية أم سلبية الآن؟">الزخم والسيولة</button>
         <button class="quick-chip" data-prompt="لخّص لي نقاط القوة والمخاطر الفنية في السهم حالياً في 5 نقاط سريعة">ملخص سريع</button>
+        <button class="quick-chip" data-prompt="اكتب لي كود مؤشر احترافي جاهز للشارت المبرمج (Pro) في الموقع يجمع بين EMA و RSI ويعطي إشارات شراء وبيع دقيقة باستخدام الدوال: ema, rsi, crossover, crossunder, plot, buy, sell">برمجة مؤشر Pro بالـ AI</button>
       </div>
 
       <div class="chat-composer">
@@ -540,6 +635,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
   <script src="https://s3.tradingview.com/tv.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js" onerror="this.onerror=null;this.src='https://unpkg.com/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js'"></script>
 
   <script>
     // 0. Firebase
@@ -650,8 +746,105 @@
       FAVS: "egx_term_favs_v3", CUSTOM: "egx_term_custom_v3", API: "egx_term_api_v3",
       THEME: "egx_term_theme_v3", LANG: "egx_term_lang_v3", INDICATORS: "egx_term_indicators_v4",
       LAST_TICKER: "egx_term_last_ticker_v4", TF: "egx_term_tf_v4",
-      UPDATED_AT: "egx_term_updated_at_v5", IND_UPDATED_AT: "egx_term_ind_updated_at_v5"
+      UPDATED_AT: "egx_term_updated_at_v5", IND_UPDATED_AT: "egx_term_ind_updated_at_v5",
+      CHART_MODE: "egx_term_chart_mode_v6", PRO_SCRIPTS: "egx_term_pro_scripts_v6", PRO_ACTIVE: "egx_term_pro_active_v6"
     };
+
+    const DEFAULT_PRO_SCRIPTS = [
+      {
+        id: "ut_bot",
+        name: "UT Bot (Supertrend)",
+        builtin: true,
+        code: [
+          "// مؤشر UT Bot / Supertrend مع إشارات شراء وبيع",
+          "const period = 10;",
+          "const mult = 2.5;",
+          "const st = supertrend(period, mult);",
+          "",
+          "plot(st.up,   { title: 'دعم صاعد',    color: '#10b981', width: 2 });",
+          "plot(st.down, { title: 'مقاومة هابطة', color: '#f43f5e', width: 2 });",
+          "",
+          "let bCnt = 0, sCnt = 0;",
+          "for (let i = 1; i < len; i++) {",
+          "  if (st.buy[i])  { buy(i, 'شراء'); bCnt++; }",
+          "  if (st.sell[i]) { sell(i, 'بيع'); sCnt++; }",
+          "}",
+          "log(`UT Bot(${period}, ${mult}): ${bCnt} شراء | ${sCnt} بيع`);"
+        ].join("\n")
+      },
+      {
+        id: "ema_cross",
+        name: "تقاطع EMA (9/21/50)",
+        builtin: true,
+        code: [
+          "// تقاطع المتوسطات السريعة مع فلتر الاتجاه EMA 50",
+          "const fast  = ema(close, 9);",
+          "const slow  = ema(close, 21);",
+          "const trend = ema(close, 50);",
+          "",
+          "plot(fast,  { title: 'EMA 9',  color: '#38bdf8', width: 2 });",
+          "plot(slow,  { title: 'EMA 21', color: '#f59e0b', width: 2 });",
+          "plot(trend, { title: 'EMA 50', color: '#a78bfa', width: 1, style: 'dashed' });",
+          "",
+          "for (let i = 1; i < len; i++) {",
+          "  if (crossover(fast, slow, i))  buy(i, 'شراء EMA');",
+          "  if (crossunder(fast, slow, i)) sell(i, 'بيع EMA');",
+          "}"
+        ].join("\n")
+      },
+      {
+        id: "auto_sr",
+        name: "دعوم ومقاومات تلقائية",
+        builtin: true,
+        code: [
+          "// أقرب دعمين ومقاومتين نظيفة من القمم والقيعان",
+          "const p = pivots(6, 6);",
+          "const price = close[len - 1];",
+          "const res = p.highs.map(x => x.price).filter(v => v > price).sort((a, b) => a - b);",
+          "const sup = p.lows.map(x => x.price).filter(v => v < price).sort((a, b) => b - a);",
+          "",
+          "const pick = (arr) => {",
+          "  const out = [];",
+          "  for (const v of arr) {",
+          "    if (!out.some(u => Math.abs(u - v) / v < 0.02)) out.push(v);",
+          "    if (out.length === 2) break;",
+          "  }",
+          "  return out;",
+          "};",
+          "",
+          "pick(res).forEach((lvl, idx) => hline(lvl, { title: 'مقاومة ' + (idx + 1), color: '#f43f5e', style: 'dashed', width: 1 }));",
+          "pick(sup).forEach((lvl, idx) => hline(lvl, { title: 'دعم ' + (idx + 1), color: '#10b981', style: 'dashed', width: 1 }));"
+        ].join("\n")
+      },
+      {
+        id: "bb_rsi",
+        name: "ارتداد Bollinger + RSI",
+        builtin: true,
+        code: [
+          "// فرص الارتداد عند حدود البولينجر مع تأكيد RSI",
+          "const b = bb(close, 20, 2);",
+          "const r = rsi(close, 14);",
+          "",
+          "plot(b.upper,  { title: 'BB علوي', color: '#f43f5e', width: 1, style: 'dotted' });",
+          "plot(b.middle, { title: 'BB وسط',  color: '#94a3b8', width: 1, style: 'dashed' });",
+          "plot(b.lower,  { title: 'BB سفلي', color: '#10b981', width: 1, style: 'dotted' });",
+          "",
+          "for (let i = 20; i < len; i++) {",
+          "  if (low[i] <= b.lower[i] && r[i] < 35)  buy(i, 'ارتداد RSI');",
+          "  if (high[i] >= b.upper[i] && r[i] > 65) sell(i, 'تشبع RSI');",
+          "}"
+        ].join("\n")
+      }
+    ];
+
+    function loadSavedProScripts() {
+      const saved = safeJson(LS.PRO_SCRIPTS, null);
+      if (!Array.isArray(saved) || !saved.length) return DEFAULT_PRO_SCRIPTS.map(s => ({ ...s }));
+      const byId = Object.fromEntries(saved.map(s => [s.id, s]));
+      const merged = DEFAULT_PRO_SCRIPTS.map(def => byId[def.id] ? { ...def, ...byId[def.id], builtin: true } : { ...def });
+      saved.forEach(s => { if (!DEFAULT_PRO_SCRIPTS.some(d => d.id === s.id)) merged.push(s); });
+      return merged;
+    }
 
     const PROVIDER_DEFAULTS = {
       gemini:     { model:"gemini-2.5-flash", hint:"aistudio.google.com/apikey — عند لصق المفتاح تظهر الموديلات المتاحة تلقائياً." },
@@ -685,6 +878,11 @@
       user: null,
       liveMetrics: null,
       attachedImage: null,
+      chartMode: localStorage.getItem(LS.CHART_MODE) || "tv",
+      proScripts: loadSavedProScripts(),
+      activeProScripts: safeJson(LS.PRO_ACTIVE, ["ut_bot", "auto_sr"]),
+      editingScriptId: "ut_bot",
+      proEditorOpen: false,
       chatHistory: [],
       sending: false
     };
@@ -744,6 +942,9 @@
           favs: [...state.favs],
           customStocks: state.customStocks,
           indicators: [...state.indicators],
+          proScripts: state.proScripts,
+          activeProScripts: [...state.activeProScripts],
+          chartMode: state.chartMode,
           lastTicker: state.ticker,
           tf: state.tf,
           theme: state.theme,
@@ -830,7 +1031,15 @@
           shouldPushBack = true;
         }
 
-        syncTfButtonsUI(); syncIndicatorsUI(); updateHeaderFavStar(); renderStockList();
+        if (Array.isArray(d.proScripts) && d.proScripts.length && cloudIndMs > state.indUpdatedAt) {
+          state.proScripts = d.proScripts;
+          localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
+        }
+        if (Array.isArray(d.activeProScripts) && cloudIndMs > state.indUpdatedAt) {
+          state.activeProScripts = d.activeProScripts;
+          localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+        }
+        syncTfButtonsUI(); syncIndicatorsUI(); syncChartModeUI(); renderProScriptsUI(); updateHeaderFavStar(); renderStockList();
         if (chartNeedsReload) selectStock(state.ticker, false, false);
         if (shouldPushBack) await writeCloudNow();
         else $("cloudSyncPill").textContent = "☁️ محفوظ بحسابك";
@@ -952,7 +1161,594 @@
     const tfToTVTA = tf => ({ "5":"5m","15":"15m","60":"1h","240":"4h","D":"1D","W":"1W" }[tf] || "1D");
     const tfLabelAr = tf => ({ "5":"5 دقائق","15":"15 دقيقة","60":"ساعة","240":"4 ساعات","D":"يومي","W":"أسبوعي" }[tf] || "يومي");
 
+    // 6.1 محرك الشارت المبرمج (Lightweight Charts + Pine-like Script Engine)
+    const ohlcCache = new Map();
+    let proChart = null;
+    let proCandleSeries = null;
+    let proVolumeSeries = null;
+    let proOverlaySeries = [];
+    let proPriceLines = [];
+    let proResizeObs = null;
+    let currentProBars = [];
+    let currentProMeta = { fallbackDaily: false, label: "" };
+
+    function syncChartModeUI() {
+      const isPro = state.chartMode === "pro";
+      document.querySelectorAll("#chartModeSwitch .mode-btn").forEach(b => {
+        b.classList.toggle("active", b.dataset.mode === state.chartMode);
+      });
+      $("indicatorsBar").style.display = isPro ? "none" : "flex";
+      $("proScriptsBar").classList.toggle("show", isPro);
+      $("tvChartContainer").style.display = isPro ? "none" : "block";
+      $("proChartStage").classList.toggle("show", isPro);
+      $("proEditorPanel").classList.toggle("open", isPro && state.proEditorOpen);
+      $("toggleProEditorBtn").classList.toggle("open", isPro && state.proEditorOpen);
+    }
+
+    function renderProScriptsUI() {
+      const chipsEl = $("proScriptChips");
+      const selEl = $("proEditorSelect");
+      if (!chipsEl || !selEl) return;
+
+      chipsEl.innerHTML = state.proScripts.map(s => {
+        const act = state.activeProScripts.includes(s.id);
+        return `<button class="pro-chip ${act ? "active" : ""}" data-pro-id="${s.id}">${s.name}</button>`;
+      }).join("");
+
+      if (!state.proScripts.some(s => s.id === state.editingScriptId)) {
+        state.editingScriptId = state.proScripts[0]?.id || "ut_bot";
+      }
+      selEl.innerHTML = state.proScripts.map(s => `<option value="${s.id}">${s.name}</option>`).join("");
+      selEl.value = state.editingScriptId;
+
+      const cur = state.proScripts.find(s => s.id === state.editingScriptId);
+      if (cur) {
+        $("proScriptNameInput").value = cur.name;
+        $("proCodeArea").value = cur.code;
+        $("proDeleteScriptBtn").style.display = cur.builtin ? "none" : "inline-flex";
+        $("proResetScriptBtn").style.display = cur.builtin ? "inline-flex" : "none";
+      }
+    }
+
+    function destroyProChart() {
+      if (proResizeObs) { try { proResizeObs.disconnect(); } catch {} proResizeObs = null; }
+      if (proChart) { try { proChart.remove(); } catch {} proChart = null; }
+      proCandleSeries = null; proVolumeSeries = null; proOverlaySeries = []; proPriceLines = [];
+    }
+
+    function formatCairoDate(tsSec) {
+      const d = new Date(tsSec * 1000);
+      const parts = new Intl.DateTimeFormat("en-CA", { timeZone: "Africa/Cairo", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(d);
+      const g = t => parts.find(p => p.type === t)?.value;
+      return `${g("year")}-${g("month")}-${g("day")}`;
+    }
+
+    async function fetchYahooChartRaw(ticker, interval, range) {
+      const ySym = ticker === "EGX30" ? "^CASE30" : `${ticker}.CA`;
+      const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym)}?range=${encodeURIComponent(range)}&interval=${encodeURIComponent(interval)}`;
+      const proxies = [
+        `https://corsproxy.io/?url=${encodeURIComponent(target)}`,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`,
+        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target)}`
+      ];
+      for (const url of proxies) {
+        try {
+          const ctrl = new AbortController();
+          const t = setTimeout(() => ctrl.abort(), 6500);
+          const res = await fetch(url, { signal: ctrl.signal });
+          clearTimeout(t);
+          if (!res.ok) continue;
+          const json = await res.json();
+          const result = json?.chart?.result?.[0];
+          if (result?.timestamp?.length && result?.indicators?.quote?.[0]?.close) return result;
+        } catch {}
+      }
+      return null;
+    }
+
+    function parseYahooBars(result, isIntraday, agg4h = false) {
+      const ts = result.timestamp || [];
+      const q = result.indicators?.quote?.[0] || {};
+      const raw = [];
+      for (let i = 0; i < ts.length; i++) {
+        const o = q.open?.[i], h = q.high?.[i], l = q.low?.[i], c = q.close?.[i], v = q.volume?.[i] || 0;
+        if (Number.isFinite(o) && Number.isFinite(h) && Number.isFinite(l) && Number.isFinite(c) && o > 0 && h > 0 && l > 0 && c > 0) {
+          raw.push({ ts: Math.floor(ts[i]), open: o, high: Math.max(h, o, c), low: Math.min(l, o, c), close: c, volume: Number.isFinite(v) ? v : 0 });
+        }
+      }
+      raw.sort((a, b) => a.ts - b.ts);
+
+      let list = raw;
+      if (agg4h && raw.length) {
+        const grouped = [];
+        for (let i = 0; i < raw.length; i += 4) {
+          const slice = raw.slice(i, i + 4);
+          grouped.push({
+            ts: slice[0].ts,
+            open: slice[0].open,
+            high: Math.max(...slice.map(x => x.high)),
+            low: Math.min(...slice.map(x => x.low)),
+            close: slice[slice.length - 1].close,
+            volume: slice.reduce((a, x) => a + x.volume, 0)
+          });
+        }
+        list = grouped;
+      }
+
+      // تنقية ومنع تكرار التوقيت (شرط أساسي لـ Lightweight Charts)
+      const map = new Map();
+      for (const b of list) {
+        const key = isIntraday ? (b.ts + 7200) : formatCairoDate(b.ts);
+        map.set(key, { time: key, open: b.open, high: b.high, low: b.low, close: b.close, volume: b.volume });
+      }
+      return Array.from(map.values()).sort((a, b) => (isIntraday ? a.time - b.time : a.time.localeCompare(b.time)));
+    }
+
+    async function fetchOhlcBars(ticker, tf, forceRefresh = false) {
+      const cacheKey = `${ticker}_${tf}`;
+      const cached = ohlcCache.get(cacheKey);
+      if (!forceRefresh && cached && Date.now() - cached.at < 180000) return cached;
+
+      const cfgMap = {
+        "5":   { interval: "5m",  range: "5d",  intraday: true,  agg4h: false },
+        "15":  { interval: "15m", range: "1mo", intraday: true,  agg4h: false },
+        "60":  { interval: "60m", range: "3mo", intraday: true,  agg4h: false },
+        "240": { interval: "60m", range: "6mo", intraday: true,  agg4h: true  },
+        "D":   { interval: "1d",  range: "2y",  intraday: false, agg4h: false },
+        "W":   { interval: "1wk", range: "5y",  intraday: false, agg4h: false }
+      };
+      const cfg = cfgMap[tf] || cfgMap["D"];
+      let res = await fetchYahooChartRaw(ticker, cfg.interval, cfg.range);
+      let bars = res ? parseYahooBars(res, cfg.intraday, cfg.agg4h) : [];
+      let fallbackDaily = false;
+
+      if (bars.length < 15 && cfg.intraday) {
+        res = await fetchYahooChartRaw(ticker, "1d", "2y");
+        bars = res ? parseYahooBars(res, false, false) : [];
+        fallbackDaily = bars.length >= 5;
+      }
+
+      const out = { bars, fallbackDaily, isIntraday: cfg.intraday && !fallbackDaily, at: Date.now() };
+      if (bars.length >= 5) ohlcCache.set(cacheKey, out);
+      return out;
+    }
+
+    // دوال المؤشرات الفنية لمحرك الأكواد (Pine-like Helpers)
+    function createScriptAPI(bars) {
+      const len = bars.length;
+      const open = bars.map(b => b.open);
+      const high = bars.map(b => b.high);
+      const low = bars.map(b => b.low);
+      const close = bars.map(b => b.close);
+      const volume = bars.map(b => b.volume);
+      const time = bars.map(b => b.time);
+
+      const resolveSrc = (s, p, defP) => (typeof s === "number" ? { src: close, period: s } : { src: Array.isArray(s) ? s : close, period: p ?? defP });
+
+      const sma = (s, p) => {
+        const { src, period } = resolveSrc(s, p, 20);
+        const out = new Array(len).fill(null);
+        if (period <= 0) return out;
+        let sum = 0;
+        for (let i = 0; i < len; i++) {
+          const v = src[i];
+          if (v == null) { sum = 0; continue; }
+          sum += v;
+          if (i >= period && src[i - period] != null) sum -= src[i - period];
+          if (i >= period - 1) out[i] = sum / period;
+        }
+        return out;
+      };
+
+      const ema = (s, p) => {
+        const { src, period } = resolveSrc(s, p, 20);
+        const out = new Array(len).fill(null);
+        if (period <= 0) return out;
+        const k = 2 / (period + 1);
+        let prev = null, seedSum = 0, seedCnt = 0;
+        for (let i = 0; i < len; i++) {
+          const v = src[i];
+          if (v == null) continue;
+          if (prev === null) {
+            seedSum += v; seedCnt++;
+            if (seedCnt === period) { prev = seedSum / period; out[i] = prev; }
+          } else {
+            prev = v * k + prev * (1 - k);
+            out[i] = prev;
+          }
+        }
+        return out;
+      };
+
+      const rma = (s, p) => {
+        const { src, period } = resolveSrc(s, p, 14);
+        const out = new Array(len).fill(null);
+        let prev = null, seedSum = 0, seedCnt = 0;
+        for (let i = 0; i < len; i++) {
+          const v = src[i];
+          if (v == null) continue;
+          if (prev === null) {
+            seedSum += v; seedCnt++;
+            if (seedCnt === period) { prev = seedSum / period; out[i] = prev; }
+          } else {
+            prev = (prev * (period - 1) + v) / period;
+            out[i] = prev;
+          }
+        }
+        return out;
+      };
+
+      const rsi = (s, p) => {
+        const { src, period } = resolveSrc(s, p, 14);
+        const gains = new Array(len).fill(null), losses = new Array(len).fill(null);
+        for (let i = 1; i < len; i++) {
+          if (src[i] == null || src[i - 1] == null) continue;
+          const d = src[i] - src[i - 1];
+          gains[i] = d > 0 ? d : 0;
+          losses[i] = d < 0 ? -d : 0;
+        }
+        const ag = rma(gains, period), al = rma(losses, period);
+        return ag.map((g, i) => (g == null || al[i] == null) ? null : (al[i] === 0 ? 100 : 100 - 100 / (1 + g / al[i])));
+      };
+
+      const atr = (period = 14) => {
+        const tr = new Array(len).fill(null);
+        for (let i = 0; i < len; i++) {
+          tr[i] = i === 0 ? (high[i] - low[i]) : Math.max(high[i] - low[i], Math.abs(high[i] - close[i - 1]), Math.abs(low[i] - close[i - 1]));
+        }
+        return rma(tr, period);
+      };
+
+      const macd = (s, f = 12, sl = 26, sg = 9) => {
+        const src = Array.isArray(s) ? s : close;
+        const fast = typeof s === "number" ? s : f;
+        const slow = typeof s === "number" ? (f || 26) : sl;
+        const sigP = typeof s === "number" ? (sl || 9) : sg;
+        const ef = ema(src, fast), es = ema(src, slow);
+        const line = ef.map((v, i) => (v != null && es[i] != null) ? v - es[i] : null);
+        const signal = ema(line, sigP);
+        const hist = line.map((v, i) => (v != null && signal[i] != null) ? v - signal[i] : null);
+        return { macd: line, signal, hist };
+      };
+
+      const bb = (s, p = 20, mult = 2) => {
+        const src = Array.isArray(s) ? s : close;
+        const period = typeof s === "number" ? s : p;
+        const m = typeof s === "number" ? (p || 2) : mult;
+        const mid = sma(src, period);
+        const upper = new Array(len).fill(null), lower = new Array(len).fill(null);
+        for (let i = period - 1; i < len; i++) {
+          if (mid[i] == null) continue;
+          let sumSq = 0;
+          for (let j = i - period + 1; j <= i; j++) sumSq += Math.pow(src[j] - mid[i], 2);
+          const sd = Math.sqrt(sumSq / period);
+          upper[i] = mid[i] + m * sd;
+          lower[i] = mid[i] - m * sd;
+        }
+        return { upper, middle: mid, lower };
+      };
+
+      const highest = (s, p) => {
+        const { src, period } = resolveSrc(s, p, 20);
+        const out = new Array(len).fill(null);
+        for (let i = period - 1; i < len; i++) {
+          let mx = -Infinity;
+          for (let j = i - period + 1; j <= i; j++) if (src[j] != null && src[j] > mx) mx = src[j];
+          out[i] = Number.isFinite(mx) ? mx : null;
+        }
+        return out;
+      };
+
+      const lowest = (s, p) => {
+        const { src, period } = resolveSrc(s, p, 20);
+        const out = new Array(len).fill(null);
+        for (let i = period - 1; i < len; i++) {
+          let mn = Infinity;
+          for (let j = i - period + 1; j <= i; j++) if (src[j] != null && src[j] < mn) mn = src[j];
+          out[i] = Number.isFinite(mn) ? mn : null;
+        }
+        return out;
+      };
+
+      const vwap = (period = 20) => {
+        const out = new Array(len).fill(null);
+        for (let i = 0; i < len; i++) {
+          const start = Math.max(0, i - period + 1);
+          let pv = 0, vol = 0;
+          for (let j = start; j <= i; j++) {
+            const tp = (high[j] + low[j] + close[j]) / 3;
+            pv += tp * volume[j]; vol += volume[j];
+          }
+          out[i] = vol > 0 ? pv / vol : null;
+        }
+        return out;
+      };
+
+      const supertrend = (period = 10, mult = 3) => {
+        const a = atr(period);
+        const finalUp = new Array(len).fill(null), finalDn = new Array(len).fill(null);
+        const dir = new Array(len).fill(1), line = new Array(len).fill(null);
+        const up = new Array(len).fill(null), down = new Array(len).fill(null);
+        const buyArr = new Array(len).fill(false), sellArr = new Array(len).fill(false);
+        for (let i = 0; i < len; i++) {
+          if (a[i] == null) continue;
+          const hl2 = (high[i] + low[i]) / 2;
+          const bUp = hl2 + mult * a[i], bDn = hl2 - mult * a[i];
+          if (i === 0 || finalUp[i - 1] == null) {
+            finalUp[i] = bUp; finalDn[i] = bDn; dir[i] = 1;
+          } else {
+            finalUp[i] = (bUp < finalUp[i - 1] || close[i - 1] > finalUp[i - 1]) ? bUp : finalUp[i - 1];
+            finalDn[i] = (bDn > finalDn[i - 1] || close[i - 1] < finalDn[i - 1]) ? bDn : finalDn[i - 1];
+            if (dir[i - 1] === -1 && close[i] > finalUp[i - 1]) dir[i] = 1;
+            else if (dir[i - 1] === 1 && close[i] < finalDn[i - 1]) dir[i] = -1;
+            else dir[i] = dir[i - 1];
+            if (dir[i] === 1 && dir[i - 1] === -1) buyArr[i] = true;
+            if (dir[i] === -1 && dir[i - 1] === 1) sellArr[i] = true;
+          }
+          line[i] = dir[i] === 1 ? finalDn[i] : finalUp[i];
+          if (dir[i] === 1) up[i] = finalDn[i]; else down[i] = finalUp[i];
+        }
+        return { line, up, down, dir, buy: buyArr, sell: sellArr };
+      };
+
+      const pivots = (left = 5, right = 5) => {
+        const highs = [], lows = [];
+        for (let i = left; i < len - right; i++) {
+          let isH = true, isL = true;
+          for (let j = i - left; j <= i + right; j++) {
+            if (j === i) continue;
+            if (high[j] >= high[i]) isH = false;
+            if (low[j] <= low[i]) isL = false;
+          }
+          if (isH) highs.push({ index: i, price: high[i], time: time[i] });
+          if (isL) lows.push({ index: i, price: low[i], time: time[i] });
+        }
+        return { highs, lows };
+      };
+
+      const valAt = (x, i) => (typeof x === "number" ? x : (Array.isArray(x) ? x[i] : null));
+      const crossover = (a, b, i) => {
+        if (i <= 0 || i >= len) return false;
+        const a0 = valAt(a, i - 1), b0 = valAt(b, i - 1), a1 = valAt(a, i), b1 = valAt(b, i);
+        return a0 != null && b0 != null && a1 != null && b1 != null && a0 <= b0 && a1 > b1;
+      };
+      const crossunder = (a, b, i) => {
+        if (i <= 0 || i >= len) return false;
+        const a0 = valAt(a, i - 1), b0 = valAt(b, i - 1), a1 = valAt(a, i), b1 = valAt(b, i);
+        return a0 != null && b0 != null && a1 != null && b1 != null && a0 >= b0 && a1 < b1;
+      };
+
+      const plots = [], hlines = [], markers = [], logs = [];
+      const plot = (values, opts = {}) => { if (Array.isArray(values)) plots.push({ values, opts }); };
+      const hline = (price, opts = {}) => { if (Number.isFinite(price)) hlines.push({ price, opts }); };
+      const buy = (i, text = "شراء") => { if (i >= 0 && i < len) markers.push({ index: i, position: "belowBar", color: "#10b981", shape: "arrowUp", text: String(text) }); };
+      const sell = (i, text = "بيع") => { if (i >= 0 && i < len) markers.push({ index: i, position: "aboveBar", color: "#f43f5e", shape: "arrowDown", text: String(text) }); };
+      const mark = (i, opts = {}) => {
+        if (i >= 0 && i < len) markers.push({ index: i, position: opts.position || "aboveBar", color: opts.color || "#f59e0b", shape: opts.shape || "circle", text: String(opts.text || "") });
+      };
+      const log = (msg) => { logs.push(String(msg)); };
+
+      return {
+        env: { bars, len, open, high, low, close, volume, time, sma, ema, rma, rsi, atr, macd, bb, highest, lowest, vwap, supertrend, pivots, crossover, crossunder, plot, hline, buy, sell, mark, log },
+        out: { plots, hlines, markers, logs }
+      };
+    }
+
+    function clearProOverlays() {
+      if (proChart) {
+        proOverlaySeries.forEach(s => { try { proChart.removeSeries(s); } catch {} });
+      }
+      if (proCandleSeries) {
+        proPriceLines.forEach(l => { try { proCandleSeries.removePriceLine(l); } catch {} });
+        try { proCandleSeries.setMarkers([]); } catch {}
+      }
+      proOverlaySeries = [];
+      proPriceLines = [];
+    }
+
+    function updateProLegend(bar) {
+      const leg = $("proChartLegend");
+      if (!leg || !bar) return;
+      const up = bar.close >= bar.open;
+      const pct = bar.open ? (((bar.close - bar.open) / bar.open) * 100) : 0;
+      const col = up ? "var(--emerald)" : "var(--red)";
+      const tfTag = currentProMeta.fallbackDaily ? "يومي (احتياطي)" : tfLabelAr(state.tf);
+      leg.innerHTML = `
+        <span class="pro-legend-pill">
+          <strong style="color:var(--gold);">${state.ticker}</strong>
+          <span style="color:var(--text-muted);">${tfTag}</span>
+          <span>O ${bar.open.toFixed(2)}</span>
+          <span>H ${bar.high.toFixed(2)}</span>
+          <span>L ${bar.low.toFixed(2)}</span>
+          <strong style="color:${col};">C ${bar.close.toFixed(2)} (${up ? "+" : ""}${pct.toFixed(2)}%)</strong>
+        </span>`;
+    }
+
+    function runActiveProScripts(previewOverride = null) {
+      if (!proChart || !proCandleSeries || !currentProBars.length) return;
+      clearProOverlays();
+
+      const scriptsToRun = state.proScripts
+        .filter(s => state.activeProScripts.includes(s.id))
+        .map(s => (previewOverride && previewOverride.id === s.id) ? { ...s, code: previewOverride.code } : s);
+
+      if (previewOverride && !scriptsToRun.some(s => s.id === previewOverride.id)) {
+        scriptsToRun.push(previewOverride);
+      }
+
+      const allMarkers = [];
+      const allLogs = [];
+      const errors = [];
+      const lineStyleMap = { solid: 0, dotted: 1, dashed: 2 };
+
+      for (const sc of scriptsToRun) {
+        const api = createScriptAPI(currentProBars);
+        try {
+          const keys = Object.keys(api.env);
+          const vals = Object.values(api.env);
+          const fn = new Function(...keys, `"use strict";\n${sc.code}`);
+          fn(...vals);
+
+          api.out.plots.forEach(p => {
+            const series = proChart.addLineSeries({
+              color: p.opts.color || "#38bdf8",
+              lineWidth: p.opts.width || 2,
+              lineStyle: lineStyleMap[p.opts.style] ?? 0,
+              priceLineVisible: !!p.opts.priceLine,
+              lastValueVisible: true,
+              crosshairMarkerVisible: false,
+              title: p.opts.title || ""
+            });
+            const data = [];
+            for (let i = 0; i < currentProBars.length; i++) {
+              const v = p.values[i];
+              if (Number.isFinite(v)) data.push({ time: currentProBars[i].time, value: v });
+              else data.push({ time: currentProBars[i].time });
+            }
+            series.setData(data);
+            proOverlaySeries.push(series);
+          });
+
+          api.out.hlines.forEach(h => {
+            const pl = proCandleSeries.createPriceLine({
+              price: h.price,
+              color: h.opts.color || "#f59e0b",
+              lineWidth: h.opts.width || 1,
+              lineStyle: lineStyleMap[h.opts.style] ?? 2,
+              axisLabelVisible: true,
+              title: h.opts.title || ""
+            });
+            proPriceLines.push(pl);
+          });
+
+          api.out.markers.forEach(m => allMarkers.push(m));
+          api.out.logs.forEach(l => allLogs.push(l));
+        } catch (err) {
+          errors.push(`${sc.name}: ${err.message}`);
+        }
+      }
+
+      if (allMarkers.length) {
+        allMarkers.sort((a, b) => a.index - b.index);
+        proCandleSeries.setMarkers(allMarkers.map(m => ({
+          time: currentProBars[m.index].time,
+          position: m.position,
+          color: m.color,
+          shape: m.shape,
+          text: m.text
+        })));
+      }
+
+      const con = $("proConsole");
+      if (errors.length) {
+        con.className = "pro-console err";
+        con.textContent = "❌ خطأ في الكود: " + errors.join(" | ");
+      } else {
+        const buys = allMarkers.filter(m => m.shape === "arrowUp").length;
+        const sells = allMarkers.filter(m => m.shape === "arrowDown").length;
+        con.className = "pro-console ok";
+        con.textContent = allLogs.length
+          ? `✅ ${allLogs.join(" • ")}`
+          : `✅ تم تشغيل ${scriptsToRun.length} مؤشر — ${buys} إشارة شراء | ${sells} إشارة بيع | ${proPriceLines.length} خطوط سعرية.`;
+      }
+    }
+
+    async function renderProChart(forceRefresh = false) {
+      const container = $("proChartContainer");
+      const overlay = $("proChartOverlay");
+      const ovText = $("proOverlayText");
+      const ticker = state.ticker;
+      const tf = state.tf;
+
+      overlay.classList.add("show");
+      ovText.textContent = `⏳ جاري تحميل شموع EGX:${ticker}...`;
+
+      if (typeof LightweightCharts === "undefined") {
+        ovText.textContent = "⚠️ تعذر تحميل مكتبة الشارت المبرمج — تأكد من اتصال الإنترنت.";
+        return;
+      }
+
+      const result = await fetchOhlcBars(ticker, tf, forceRefresh);
+      if (state.chartMode !== "pro" || state.ticker !== ticker) return;
+
+      if (!result.bars.length) {
+        destroyProChart();
+        ovText.textContent = `⚠️ لا تتوفر شموع تاريخية مجانية للرمز EGX:${ticker} من Yahoo Finance حالياً — يمكنك متابعته من تبويب TradingView.`;
+        return;
+      }
+
+      overlay.classList.remove("show");
+      currentProBars = result.bars;
+      currentProMeta = { fallbackDaily: result.fallbackDaily, isIntraday: result.isIntraday };
+
+      destroyProChart();
+      const isDark = state.theme === "dark";
+      proChart = LightweightCharts.createChart(container, {
+        width: container.clientWidth || 340,
+        height: container.clientHeight || 420,
+        layout: {
+          background: { type: "solid", color: isDark ? "#0b1120" : "#ffffff" },
+          textColor: isDark ? "#94a3b8" : "#334155",
+          fontFamily: "'Cairo', system-ui, sans-serif"
+        },
+        grid: {
+          vertLines: { color: isDark ? "rgba(255,255,255,0.04)" : "rgba(15,23,42,0.06)" },
+          horzLines: { color: isDark ? "rgba(255,255,255,0.05)" : "rgba(15,23,42,0.07)" }
+        },
+        crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+        rightPriceScale: { borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.12)" },
+        timeScale: {
+          borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.12)",
+          timeVisible: result.isIntraday,
+          secondsVisible: false
+        }
+      });
+
+      proCandleSeries = proChart.addCandlestickSeries({
+        upColor: "#10b981", downColor: "#f43f5e",
+        borderUpColor: "#10b981", borderDownColor: "#f43f5e",
+        wickUpColor: "#10b981", wickDownColor: "#f43f5e"
+      });
+      proCandleSeries.setData(currentProBars.map(b => ({ time: b.time, open: b.open, high: b.high, low: b.low, close: b.close })));
+
+      proVolumeSeries = proChart.addHistogramSeries({
+        priceFormat: { type: "volume" },
+        priceScaleId: ""
+      });
+      proVolumeSeries.priceScale().applyOptions({ scaleMargins: { top: 0.83, bottom: 0 } });
+      proVolumeSeries.setData(currentProBars.map(b => ({
+        time: b.time,
+        value: b.volume,
+        color: b.close >= b.open ? "rgba(16, 185, 129, 0.28)" : "rgba(244, 63, 94, 0.28)"
+      })));
+
+      updateProLegend(currentProBars[currentProBars.length - 1]);
+      proChart.subscribeCrosshairMove(param => {
+        if (!param || !param.time) return updateProLegend(currentProBars[currentProBars.length - 1]);
+        const pt = param.seriesData.get(proCandleSeries);
+        if (pt && pt.open != null) updateProLegend(pt);
+      });
+
+      runActiveProScripts();
+      proChart.timeScale().fitContent();
+
+      if (typeof ResizeObserver !== "undefined") {
+        proResizeObs = new ResizeObserver(() => {
+          if (proChart && container.clientWidth > 0 && container.clientHeight > 0) {
+            proChart.applyOptions({ width: container.clientWidth, height: container.clientHeight });
+          }
+        });
+        proResizeObs.observe(container);
+      }
+    }
+
     function renderChart() {
+      syncChartModeUI();
+      if (state.chartMode === "pro") {
+        renderProChart(false);
+        return;
+      }
+      destroyProChart();
       const el = $("tvChartContainer");
       el.innerHTML = "";
       if (typeof TradingView === "undefined") {
@@ -1355,7 +2151,7 @@ ${buildStockContextString()}`;
 
     async function callExternalAI(userPrompt, imgObj) {
       const { provider, key, model } = state.api;
-      const sys = `أنت محلل فني محترف متخصص في البورصة المصرية (EGX). أجب بالعربية بأسلوب واضح ومنظم ومباشر.
+      const sys = `أنت محلل فني محترف ومبرمج مؤشرات متخصص في البورصة المصرية (EGX). أجب بالعربية بأسلوب واضح ومنظم ومباشر. إذا طلب المستخدم برمجة مؤشر للشارت المبرمج (Pro) فاكتب كود JavaScript نظيفاً ومباشراً يستخدم فقط الدوال الجاهزة في الموقع: open, high, low, close, volume, len, ema(src,p), sma(src,p), rsi(src,p), atr(p), macd(src,f,s,sig), bb(src,p,m), supertrend(p,m), vwap(p), pivots(l,r), highest(src,p), lowest(src,p), crossover(a,b,i), crossunder(a,b,i), plot(arr,{title,color,width,style}), hline(price,{title,color,style}), buy(i,text), sell(i,text), log(msg).
 ${buildStockContextString()}
 إذا أرفق المستخدم صورة شارت فاقرأ الشموع والمؤشرات الظاهرة بدقة.`;
       const hist = state.chatHistory.slice(-8);
@@ -1509,7 +2305,146 @@ ${buildStockContextString()}
       document.documentElement.setAttribute("data-theme", state.theme);
       $("themeToggleBtn").textContent = state.theme === "dark" ? "🌙" : "☀️";
       $("langToggleBtn").textContent = state.lang === "ar" ? "AR" : "EN";
-      syncTfButtonsUI(); syncIndicatorsUI(); updateMarketStatus();
+      syncTfButtonsUI(); syncIndicatorsUI(); syncChartModeUI(); renderProScriptsUI(); updateMarketStatus();
+
+      // تبديل بين TradingView و الشارت المبرمج (Pro)
+      document.querySelectorAll("#chartModeSwitch .mode-btn").forEach(btn => {
+        btn.onclick = () => {
+          const mode = btn.dataset.mode;
+          if (mode === state.chartMode) return;
+          state.chartMode = mode;
+          localStorage.setItem(LS.CHART_MODE, mode);
+          markLocalChange(false); syncUserToCloud(false);
+          renderChart();
+        };
+      });
+
+      $("proBackToTvBtn").onclick = () => {
+        state.chartMode = "tv";
+        localStorage.setItem(LS.CHART_MODE, "tv");
+        renderChart();
+      };
+      $("proRetryBtn").onclick = () => renderProChart(true);
+      $("proReloadDataBtn").onclick = () => renderProChart(true);
+
+      $("toggleProEditorBtn").onclick = () => {
+        state.proEditorOpen = !state.proEditorOpen;
+        syncChartModeUI();
+      };
+
+      $("proScriptChips").onclick = e => {
+        const chip = e.target.closest("[data-pro-id]");
+        if (!chip) return;
+        const id = chip.dataset.proId;
+        const idx = state.activeProScripts.indexOf(id);
+        if (idx >= 0) state.activeProScripts.splice(idx, 1);
+        else state.activeProScripts.push(id);
+        localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+        markLocalChange(true); syncUserToCloud(true);
+        renderProScriptsUI();
+        runActiveProScripts();
+      };
+
+      $("proEditorSelect").onchange = e => {
+        state.editingScriptId = e.target.value;
+        renderProScriptsUI();
+      };
+
+      $("proToggleDocsBtn").onclick = () => $("proDocsBox").classList.toggle("show");
+
+      $("proCodeArea").addEventListener("keydown", e => {
+        if (e.key === "Tab") {
+          e.preventDefault();
+          const ta = e.target, s = ta.selectionStart, end = ta.selectionEnd;
+          ta.value = ta.value.substring(0, s) + "  " + ta.value.substring(end);
+          ta.selectionStart = ta.selectionEnd = s + 2;
+        }
+      });
+
+      $("proRunCodeBtn").onclick = () => {
+        const id = state.editingScriptId;
+        const code = $("proCodeArea").value;
+        const name = $("proScriptNameInput").value.trim() || "مؤشر مخصص";
+        if (!state.activeProScripts.includes(id)) {
+          state.activeProScripts.push(id);
+          localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+          renderProScriptsUI();
+        }
+        runActiveProScripts({ id, name, code });
+      };
+
+      $("proSaveScriptBtn").onclick = () => {
+        const id = state.editingScriptId;
+        const name = $("proScriptNameInput").value.trim() || "مؤشر مخصص";
+        const code = $("proCodeArea").value;
+        const sc = state.proScripts.find(s => s.id === id);
+        if (sc) { sc.name = name; sc.code = code; }
+        localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
+        if (!state.activeProScripts.includes(id)) {
+          state.activeProScripts.push(id);
+          localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+        }
+        markLocalChange(true); syncUserToCloud(true);
+        renderProScriptsUI();
+        runActiveProScripts();
+        const con = $("proConsole");
+        if (!con.classList.contains("err")) con.textContent = "💾 تم الحفظ والتشغيل بنجاح — " + con.textContent.replace(/^✅\s*/, "");
+      };
+
+      $("proNewScriptBtn").onclick = () => {
+        const id = "custom_" + Date.now();
+        const newScript = {
+          id,
+          name: "مؤشري الجديد",
+          builtin: false,
+          code: [
+            "// اكتب شروط مؤشرك الخاص هنا",
+            "const fast = ema(close, 10);",
+            "const slow = ema(close, 30);",
+            "const r = rsi(close, 14);",
+            "",
+            "plot(fast, { title: 'EMA 10', color: '#10b981', width: 2 });",
+            "plot(slow, { title: 'EMA 30', color: '#f59e0b', width: 2 });",
+            "",
+            "for (let i = 1; i < len; i++) {",
+            "  if (crossover(fast, slow, i) && r[i] < 65) buy(i, 'دخول');",
+            "  if (crossunder(fast, slow, i)) sell(i, 'خروج');",
+            "}"
+          ].join("\n")
+        };
+        state.proScripts.push(newScript);
+        state.editingScriptId = id;
+        if (!state.activeProScripts.includes(id)) state.activeProScripts.push(id);
+        localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
+        localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+        markLocalChange(true); syncUserToCloud(true);
+        renderProScriptsUI();
+        runActiveProScripts();
+      };
+
+      $("proDeleteScriptBtn").onclick = () => {
+        const sc = state.proScripts.find(s => s.id === state.editingScriptId);
+        if (!sc || sc.builtin) return;
+        state.proScripts = state.proScripts.filter(s => s.id !== sc.id);
+        state.activeProScripts = state.activeProScripts.filter(x => x !== sc.id);
+        state.editingScriptId = state.proScripts[0]?.id || "ut_bot";
+        localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
+        localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+        markLocalChange(true); syncUserToCloud(true);
+        renderProScriptsUI();
+        runActiveProScripts();
+      };
+
+      $("proResetScriptBtn").onclick = () => {
+        const def = DEFAULT_PRO_SCRIPTS.find(d => d.id === state.editingScriptId);
+        const sc = state.proScripts.find(s => s.id === state.editingScriptId);
+        if (!def || !sc) return;
+        sc.name = def.name; sc.code = def.code;
+        localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
+        markLocalChange(true); syncUserToCloud(true);
+        renderProScriptsUI();
+        runActiveProScripts();
+      };
       setInterval(updateMarketStatus, 60000);
 
       if (fbAuth) {
