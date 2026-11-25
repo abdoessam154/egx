@@ -1223,22 +1223,41 @@
       return `${g("year")}-${g("month")}-${g("day")}`;
     }
 
+    const WORKER_ORIGIN = FIXED_MCP_URL.replace(/\/mcp\/?$/, "");
+
     async function fetchYahooChartRaw(ticker, interval, range) {
+      // 1) الجلب المباشر والسريع عبر سيرفر Cloudflare Worker الخاص بك (بدون حظر CORS)
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 6000);
+        const wUrl = `${WORKER_ORIGIN}/chart?ticker=${encodeURIComponent(ticker)}&interval=${encodeURIComponent(interval)}&range=${encodeURIComponent(range)}`;
+        const res = await fetch(wUrl, { signal: ctrl.signal });
+        clearTimeout(t);
+        if (res.ok) {
+          const json = await res.json();
+          const result = json?.chart?.result?.[0];
+          if (result?.timestamp?.length && result?.indicators?.quote?.[0]?.close) return result;
+        }
+      } catch {}
+
+      // 2) احتياطي عبر بروكسيات خارجية في حال لم يتم تحديث كود الـ Worker بعد
       const ySym = ticker === "EGX30" ? "^CASE30" : `${ticker}.CA`;
-      const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym)}?range=${encodeURIComponent(range)}&interval=${encodeURIComponent(interval)}`;
+      const target1 = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym)}?range=${encodeURIComponent(range)}&interval=${encodeURIComponent(interval)}`;
+      const target2 = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym)}?range=${encodeURIComponent(range)}&interval=${encodeURIComponent(interval)}`;
       const proxies = [
-        `https://corsproxy.io/?url=${encodeURIComponent(target)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`,
-        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target)}`
+        { url: `https://api.allorigins.win/get?url=${encodeURIComponent(target1)}`, wrapped: true },
+        { url: `https://corsproxy.io/?url=${encodeURIComponent(target2)}`, wrapped: false },
+        { url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target1)}`, wrapped: false }
       ];
-      for (const url of proxies) {
+      for (const p of proxies) {
         try {
           const ctrl = new AbortController();
-          const t = setTimeout(() => ctrl.abort(), 6500);
-          const res = await fetch(url, { signal: ctrl.signal });
+          const t = setTimeout(() => ctrl.abort(), 6000);
+          const res = await fetch(p.url, { signal: ctrl.signal });
           clearTimeout(t);
           if (!res.ok) continue;
-          const json = await res.json();
+          const rawJson = await res.json();
+          const json = p.wrapped && rawJson?.contents ? JSON.parse(rawJson.contents) : rawJson;
           const result = json?.chart?.result?.[0];
           if (result?.timestamp?.length && result?.indicators?.quote?.[0]?.close) return result;
         } catch {}
@@ -1251,10 +1270,13 @@
       const q = result.indicators?.quote?.[0] || {};
       const raw = [];
       for (let i = 0; i < ts.length; i++) {
-        const o = q.open?.[i], h = q.high?.[i], l = q.low?.[i], c = q.close?.[i], v = q.volume?.[i] || 0;
-        if (Number.isFinite(o) && Number.isFinite(h) && Number.isFinite(l) && Number.isFinite(c) && o > 0 && h > 0 && l > 0 && c > 0) {
-          raw.push({ ts: Math.floor(ts[i]), open: o, high: Math.max(h, o, c), low: Math.min(l, o, c), close: c, volume: Number.isFinite(v) ? v : 0 });
-        }
+        const c = q.close?.[i];
+        if (!Number.isFinite(c) || c <= 0) continue;
+        const o = Number.isFinite(q.open?.[i]) && q.open[i] > 0 ? q.open[i] : c;
+        const h = Number.isFinite(q.high?.[i]) && q.high[i] > 0 ? Math.max(q.high[i], o, c) : Math.max(o, c);
+        const l = Number.isFinite(q.low?.[i])  && q.low[i] > 0  ? Math.min(q.low[i], o, c)  : Math.min(o, c);
+        const v = Number.isFinite(q.volume?.[i]) ? q.volume[i] : 0;
+        raw.push({ ts: Math.floor(ts[i]), open: o, high: h, low: l, close: c, volume: v });
       }
       raw.sort((a, b) => a.ts - b.ts);
 
@@ -1673,7 +1695,7 @@
 
       if (!result.bars.length) {
         destroyProChart();
-        ovText.textContent = `⚠️ لا تتوفر شموع تاريخية مجانية للرمز EGX:${ticker} من Yahoo Finance حالياً — يمكنك متابعته من تبويب TradingView.`;
+        ovText.textContent = `⚠️ تعذر سحب شموع EGX:${ticker} الآن — تأكد من تحديث كود Cloudflare Worker (ملف worker.js) ثم اضغط إعادة المحاولة.`;
         return;
       }
 
