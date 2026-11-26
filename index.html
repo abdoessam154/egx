@@ -1987,15 +1987,11 @@
     <section class="card" id="aiSection">
       <div class="section-head">
         <div>
-          <div class="section-title">🤖 المحلل الفني الذكي (AI)</div>
+          <div class="section-title">🤖 مساعد سهم الذكي (Sahm AI)</div>
           <div class="section-sub" id="aiTargetLabel">متصل تلقائياً بالمؤشر المفتوح: EGX:EGX30</div>
         </div>
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-          <button class="api-status-badge" id="openApiModalBtn">
-            <span class="status-dot" id="apiStatusDot"></span>
-            <span id="apiStatusText">⚙️ ربط API</span>
-          </button>
-          <button class="btn-sm blue" id="openMcpAiBtn">🔌 MCP</button>
+          <span class="sahm-live-tag" id="sahmAiLivePill" title="يعمل مجاناً عبر Cloudflare Workers AI"><span class="d"></span> Sahm AI • LIVE</span>
           <button class="btn-sm" id="clearChatBtn" title="مسح المحادثة">🗑️ مسح</button>
         </div>
       </div>
@@ -2041,7 +2037,6 @@
           <input type="file" id="imgFileInput" accept="image/*" style="display:none;" />
           <button class="tool-btn gold" id="attachImgBtn">📷 إرفاق صورة</button>
           <button class="tool-btn emerald" id="copyPromptBtn2">📋 نسخ البرومبت</button>
-          <button class="tool-btn" id="openApiModalBtn2">⚙️ API</button>
         </div>
 
         <div class="composer-row">
@@ -6962,8 +6957,9 @@ st.textContent = `تم جلب ${models.length} موديل — المختار: ${
 function updateApiBadge() {
 const names = { gemini:"Gemini", claude:"Claude", openrouter:"OpenRouter", groq:"Groq", openai:"OpenAI" };
 const has = state.api.key && state.api.key.trim().length > 6;
-$("apiStatusDot").classList.add("connected");
-$("apiStatusText").textContent = has ? `متصل: ${names[state.api.provider] || "API"} ⚙️` : "☁️ Sahm AI مجاني";
+if ($("apiStatusDot")) $("apiStatusDot").classList.add("connected");
+if ($("apiStatusText")) $("apiStatusText").textContent = has ? `متصل: ${names[state.api.provider] || "API"} ⚙️` : "☁️ Sahm AI مجاني";
+if ($("sahmAiLivePill")) $("sahmAiLivePill").innerHTML = has ? `<span class="d"></span> ${names[state.api.provider] || "API"} • LIVE` : `<span class="d"></span> Sahm AI • LIVE`;
 }
 function appendMessage(role, text, imgUrl = null) {
 const box = $("chatBox"), div = document.createElement("div");
@@ -7134,6 +7130,34 @@ dot.classList.add("err"); txt.textContent = "تعذر فحص السيرفر";
 // ==================== مساعد سهم الذكي (Cloudflare Workers AI) + مؤشر 26 مؤشر ====================
 const sahmAiModalState = { ticker: "", history: [], sending: false };
 
+function fixMojibake(str) {
+  if (typeof str !== "string" || !str) return str || "";
+  if (!/[ØÙÃ][-¿]|Ø§|Ù„|Ø¨|ÙŠ/.test(str)) return str;
+  try {
+    const bytes = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) {
+      const code = str.charCodeAt(i);
+      if (code > 255) return str;
+      bytes[i] = code;
+    }
+    const decoded = new TextDecoder("utf-8", { fatal: false }).decode(bytes);
+    if (/[؀-ۿ]/.test(decoded)) return decoded;
+  } catch {}
+  return str;
+}
+
+function getArabicSignalLabel(score, fallbackLabel = "") {
+  const sc = Number(score);
+  if (Number.isFinite(sc)) {
+    if (sc >= 50) return "شراء قوي";
+    if (sc >= 15) return "شراء";
+    if (sc <= -50) return "بيع قوي";
+    if (sc <= -15) return "بيع";
+    return "احتفاظ";
+  }
+  return fixMojibake(fallbackLabel) || "احتفاظ";
+}
+
 function renderSahmQuantCards(q) {
   const info = getStockInfo(state.ticker);
   const isIndexPts = info.isIndex && state.ticker !== "GOLD" && state.ticker !== "USDEGP";
@@ -7177,7 +7201,7 @@ function renderSahmQuantCards(q) {
   if (scoreEl) { scoreEl.textContent = scTxt; scoreEl.className = "sahm-sig-score " + cls; }
   if (confEl) confEl.textContent = `${qt.confidence}% ثقة النموذج`;
   if (pillEl) {
-    pillEl.textContent = `${qt.labelAr} (${scTxt})`;
+    pillEl.textContent = `${getArabicSignalLabel(sc, qt.labelAr)} (${scTxt})`;
     pillEl.className = "sahm-gauge-pill" + (cls !== "flat" ? " " + cls : "");
     pillEl.style.left = `${pctPos}%`;
   }
@@ -7218,6 +7242,7 @@ async function callSahmCloudAi(message, historyArr = []) {
   clearTimeout(tm);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(data.error || `خطأ في السيرفر (${res.status})`);
+  if (typeof data.reply === "string") data.reply = fixMojibake(data.reply);
   if (data.quote && data.quote.ticker === state.ticker && data.quote.price != null) {
     applyLiveQuoteToHeader(data.quote);
   }
@@ -7258,7 +7283,7 @@ function openSahmAiModal() {
     if ($("sahmAiChatBox")) $("sahmAiChatBox").innerHTML = "";
     const qt = q && q.quant ? q.quant : null;
     const summaryHint = qt
-      ? ` التقييم الفني الحالي هو **${qt.labelAr} (${qt.score > 0 ? "+" : ""}${qt.score})**، ونقطة المراقبة عند **${qt.watchPoint} ${unit}** والهدف الأول **${qt.target1} ${unit}**.`
+      ? ` التقييم الفني الحالي هو **${getArabicSignalLabel(qt.score, qt.labelAr)} (${qt.score > 0 ? "+" : ""}${qt.score})**، ونقطة المراقبة عند **${qt.watchPoint} ${unit}** والهدف الأول **${qt.target1} ${unit}**.`
       : "";
     appendSahmModalMsg("ai", `أهلاً بك يا غالي! أنا **مساعد سهم الذكي (Sahm AI)** لمتابعة **${info.name} (${state.ticker})**.${summaryHint}
 
@@ -7676,7 +7701,7 @@ if ($("sahmAiFaqsList")) $("sahmAiFaqsList").onclick = e => {
   const b = e.target.closest("[data-sahm-q]");
   if (b) sendSahmAiPrompt(b.dataset.sahmQ);
 };
-$("openMcpAiBtn").onclick = openMcpModal;
+if ($("openMcpAiBtn")) $("openMcpAiBtn").onclick = openMcpModal;
 $("closeMcpModalBtn").onclick = closeMcpModal;
 $("mcpModalBackdrop").onclick = e => { if (e.target.id === "mcpModalBackdrop") closeMcpModal(); };
 $("copyMcpRemoteBtn").onclick = async () => {
@@ -7837,8 +7862,8 @@ $("clearChatBtn").onclick = () => {
 state.chatHistory = []; $("chatBox").innerHTML = "";
 appendMessage("ai", `تم مسح المحادثة. متصل الآن بسهم **${getStockInfo(state.ticker).name} (EGX:${state.ticker})**.`);
 };
-$("openApiModalBtn").onclick = openApiModal;
-$("openApiModalBtn2").onclick = openApiModal;
+if ($("openApiModalBtn")) $("openApiModalBtn").onclick = openApiModal;
+if ($("openApiModalBtn2")) $("openApiModalBtn2").onclick = openApiModal;
 $("closeApiModalBtn").onclick = closeApiModal;
 $("apiModalBackdrop").onclick = e => { if (e.target.id === "apiModalBackdrop") closeApiModal(); };
 $("toggleApiKeyVisBtn").onclick = () => {
