@@ -246,7 +246,8 @@
     .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
     .status-dot.connected { background: var(--emerald); box-shadow: 0 0 8px var(--emerald); }
     .status-dot.err { background: var(--red); }
-    .chat-box { padding: 14px; display: flex; flex-direction: column; gap: 11px; max-height: 440px; min-height: 200px; overflow-y: auto; }
+    #aiSection { display: flex; flex-direction: column; min-height: calc(100dvh - 180px); }
+    .chat-box { padding: 14px; display: flex; flex-direction: column; gap: 11px; flex: 1; min-height: 280px; max-height: calc(100dvh - 335px); overflow-y: auto; }
     .msg { display: flex; gap: 9px; max-width: 92%; }
     .msg.user { align-self: flex-start; flex-direction: row-reverse; margin-right: auto; }
     .msg.ai { align-self: flex-end; margin-left: auto; width: 100%; }
@@ -1260,64 +1261,6 @@
     .sahm-level-box.stop .sahm-lvl-val { color: var(--red); }
     .sahm-lvl-pct { font-size: 10px; font-weight: 700; color: var(--text-muted); direction: ltr; }
 
-    /* نافذة الشات المنبثقة لمساعد سهم الذكي (ZED AI Style) */
-    .sahm-chat-modal {
-      width: min(500px, 100%); height: min(86vh, 680px);
-      display: flex; flex-direction: column; overflow: hidden;
-      background: var(--bg-card); border: 1px solid rgba(16, 185, 129, 0.32);
-      border-radius: 20px; box-shadow: 0 24px 64px rgba(0, 0, 0, 0.72);
-    }
-    @media (max-width: 600px) {
-      .sahm-chat-modal { width: 100%; height: 92dvh; border-radius: 22px 22px 0 0; }
-      #sahmAiModalBackdrop { align-items: flex-end; padding: 0; }
-    }
-    .sahm-chat-head {
-      padding: 13px 15px; border-bottom: 1px solid var(--border);
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.11), var(--bg-elevated));
-      display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-shrink: 0;
-    }
-    .sahm-chat-head-info { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
-    .sahm-chat-head-meta { min-width: 0; flex: 1; }
-    .sahm-chat-head-top { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .sahm-chat-head-top strong { font-size: 14px; font-weight: 800; }
-    .sahm-chat-head-sub { font-size: 11.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .sahm-chat-head-price { font-size: 12px; font-weight: 800; color: var(--emerald); direction: ltr; display: inline-block; margin-top: 1px; }
-    .sahm-chat-body {
-      flex: 1; min-height: 0; overflow-y: auto; padding: 13px 14px;
-      display: flex; flex-direction: column; gap: 10px;
-    }
-    .sahm-chat-faqs {
-      padding: 8px 13px; border-top: 1px solid var(--border);
-      background: var(--bg-elevated); display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;
-    }
-    .sahm-faqs-lbl { font-size: 11px; font-weight: 800; color: var(--text-muted); }
-    .sahm-faqs-list { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
-    .sahm-faqs-list::-webkit-scrollbar { display: none; }
-    .sahm-faq-btn {
-      padding: 6px 11px; border-radius: 10px; flex-shrink: 0;
-      border: 1px solid var(--border-strong); background: var(--bg-card);
-      color: var(--text); font-size: 11.5px; font-weight: 700; cursor: pointer;
-      transition: 0.14s; white-space: nowrap;
-    }
-    .sahm-faq-btn:hover { border-color: var(--emerald); color: var(--emerald); background: var(--emerald-dim); }
-    .sahm-chat-foot {
-      padding: 10px 13px calc(10px + env(safe-area-inset-bottom, 0px));
-      border-top: 1px solid var(--border); background: var(--bg-card);
-      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
-    }
-    .sahm-chat-input {
-      flex: 1; height: 42px; padding: 0 13px; border-radius: 12px;
-      border: 1px solid var(--border-strong); background: var(--bg-input);
-      color: var(--text); font-size: 13px; outline: none;
-    }
-    .sahm-chat-input:focus { border-color: var(--emerald); }
-    .sahm-chat-send {
-      width: 42px; height: 42px; border-radius: 12px; border: none; flex-shrink: 0;
-      background: linear-gradient(135deg, #059669, #10b981); color: #03150e;
-      font-size: 16px; font-weight: 800; cursor: pointer;
-      display: inline-flex; align-items: center; justify-content: center;
-    }
-    .sahm-chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
     body.focus-mode #sahmAiPromoCard, body.focus-mode #sahmSignalCard { display: none !important; }
 
   </style>
@@ -2002,64 +1945,31 @@
 
     <!-- ==================== 4. القسم الرابع: AI (المحلل الذكي) ==================== -->
     <div class="tab-view" id="tab-ai" data-tab-view="ai">
-    <!-- المحلل الفني الذكي AI -->
     <section class="card" id="aiSection">
       <div class="section-head">
-        <div>
+        <div style="min-width:0;flex:1;">
           <div class="section-title">🤖 مساعد سهم الذكي (Sahm AI)</div>
-          <div class="section-sub" id="aiTargetLabel">متصل تلقائياً بالمؤشر المفتوح: EGX:EGX30</div>
+          <div class="section-sub" id="aiTargetLabel">مؤشر EGX 30 الرئيسي (EGX30)</div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-          <span class="sahm-live-tag" id="sahmAiLivePill" title="يعمل مجاناً عبر Cloudflare Workers AI"><span class="d"></span> Sahm AI • LIVE</span>
+        <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+          <span class="sahm-live-tag" id="sahmAiLivePill"><span class="d"></span> LIVE</span>
           <button class="btn-sm" id="clearChatBtn" title="مسح المحادثة">🗑️ مسح</button>
-        </div>
-      </div>
-
-      <div class="ai-live-strip">
-        <div class="metrics-row" id="liveMetricsRow">
-          <span class="metric-pill"><span class="lbl">⏳ جاري قراءة بيانات السهم...</span></span>
-        </div>
-        <button class="btn-sm" id="refreshMetricsBtn">↻ تحديث</button>
-      </div>
-
-      <!-- ملخص فني فوري بدون API + نسخ برومبت -->
-      <div class="auto-summary-card" id="autoSummaryCard">
-        <div class="auto-summary-head">
-          <strong>⚡ ملخص فني لحظي (Cloudflare AI)</strong>
-        </div>
-        <div class="auto-summary-grid" id="autoSummaryBody">
-          <span style="color:var(--text-muted);">جاري تجهيز القراءة الفنية للسهم المفتوح...</span>
         </div>
       </div>
 
       <div class="chat-box" id="chatBox"></div>
 
       <div class="quick-prompts">
-        <button class="quick-chip" data-prompt="حلل السهم المفتوح حالياً تحليلاً فنياً شاملاً (الاتجاه، الزخم، الدعوم والمقاومات، والسيناريو الأقرب)">حلل السهم فنياً</button>
-        <button class="quick-chip" data-prompt="ما هي أقوى مناطق الدعم والمقاومة الحالية للسهم المفتوح؟">أقوى الدعوم والمقاومات</button>
-        <button class="quick-chip" data-prompt="هل مؤشرات الزخم والسيولة (RSI و MACD والمتوسطات والفوليوم) إيجابية أم سلبية الآن؟">الزخم والسيولة</button>
-        <button class="quick-chip" data-prompt="لخّص لي نقاط القوة والمخاطر الفنية في السهم حالياً في 5 نقاط سريعة">ملخص سريع</button>
-        <button class="quick-chip" data-prompt="اكتب لي كود مؤشر احترافي جاهز للشارت المبرمج (Pro) في الموقع يجمع بين EMA و RSI ويعطي إشارات شراء وبيع دقيقة باستخدام الدوال: ema, rsi, crossover, crossunder, plot, buy, sell">برمجة مؤشر Pro بالـ AI</button>
+        <button class="quick-chip" data-prompt="أشتري على كام دلوقتي وإزاي أقسم السيولة؟">أشتري على كام؟</button>
+        <button class="quick-chip" data-prompt="أبيع على كام وإيه الأهداف ووقف الخسارة؟">الأهداف ووقف الخسارة</button>
+        <button class="quick-chip" data-prompt="هل السهم في اتجاه صاعد ولا لا؟ وضحلي بالأرقام">الاتجاه الحالي</button>
+        <button class="quick-chip" data-prompt="لخّصلي سيناريو السهم وإدارة المخاطر في 4 نقاط">ملخص سريع</button>
+        <button class="quick-chip" data-prompt="أنا شاري السهم.. أبيع ولا أعدل السعر؟">أبيع ولا أعدل؟</button>
       </div>
 
       <div class="chat-composer">
-        <div class="img-preview-bar" id="imgPreviewBar">
-          <img id="imgPreviewThumb" src="" alt="chart" />
-          <div style="flex:1;font-size:12px;">
-            <strong style="color:var(--gold);">تم إرفاق صورة شارت</strong>
-            <div style="color:var(--text-muted);">اضغط إرسال لتحليل الصورة مباشرة</div>
-          </div>
-          <button class="btn-sm danger" id="removeImgBtn">حذف</button>
-        </div>
-
-        <div class="composer-tools">
-          <input type="file" id="imgFileInput" accept="image/*" style="display:none;" />
-          <button class="tool-btn gold" id="attachImgBtn">📷 إرفاق صورة</button>
-          <button class="tool-btn emerald" id="copyPromptBtn2">📋 نسخ البرومبت</button>
-        </div>
-
         <div class="composer-row">
-          <textarea class="composer-input" id="chatInput" rows="1" placeholder="اسأل عن السهم المفتوح أو أرفق صورة شارت..."></textarea>
+          <textarea class="composer-input" id="chatInput" rows="1" placeholder="اسأل عن السهم المفتوح..."></textarea>
           <button class="send-btn" id="sendChatBtn">إرسال ◀</button>
         </div>
       </div>
@@ -2186,42 +2096,6 @@
         <button class="icon-btn" id="closeAccountModalBtn">✕</button>
       </div>
       <div class="modal-body" id="accountModalBody"></div>
-    </div>
-  </div>
-
-  <!-- نافذة مساعد سهم الذكي (Cloudflare Workers AI) -->
-  <div class="modal-backdrop" id="sahmAiModalBackdrop">
-    <div class="sahm-chat-modal">
-      <div class="sahm-chat-head">
-        <div class="sahm-chat-head-info">
-          <div class="sahm-ai-badge-ico" style="width:38px;height:38px;font-size:13.5px;">AI</div>
-          <div class="sahm-chat-head-meta">
-            <div class="sahm-chat-head-top">
-              <strong>مساعد سهم الذكي (Sahm AI)</strong>
-              <span class="sahm-live-tag"><span class="d"></span> LIVE</span>
-            </div>
-            <div class="sahm-chat-head-sub" id="sahmAiModalStockSub">EGX 30 • المؤشر الرئيسي</div>
-            <div class="sahm-chat-head-price" id="sahmAiModalStockPrice">—</div>
-          </div>
-        </div>
-        <button type="button" class="icon-btn" id="closeSahmAiModalBtn">✕</button>
-      </div>
-      <div class="sahm-chat-body" id="sahmAiChatBox"></div>
-      <div class="sahm-chat-faqs">
-        <span class="sahm-faqs-lbl">أسئلة شائعة للمستثمرين:</span>
-        <div class="sahm-faqs-list" id="sahmAiFaqsList">
-          <button type="button" class="sahm-faq-btn" data-sahm-q="أشتري على كام دلوقتي وإزاي أقسم السيولة؟">أشتري على كام دلوقتي وإزاي أقسم السيولة؟</button>
-          <button type="button" class="sahm-faq-btn" data-sahm-q="أبيع على كام وإيه المستهدفات الفنية؟">أبيع على كام وإيه المستهدفات الفنية؟</button>
-          <button type="button" class="sahm-faq-btn" data-sahm-q="فين وقف الخسارة الصارم لو السوق عكس؟">فين وقف الخسارة الصارم لو السوق عكس؟</button>
-          <button type="button" class="sahm-faq-btn" data-sahm-q="إيه وضع السيولة والمؤشرات الفنية (RSI و MACD)؟">إيه وضع السيولة والمؤشرات الفنية (RSI و MACD)؟</button>
-          <button type="button" class="sahm-faq-btn" data-sahm-q="أنا شاري السهم.. أبيع ولا أعدل السعر؟">أنا شاري السهم.. أبيع ولا أعدل السعر؟</button>
-          <button type="button" class="sahm-faq-btn" data-sahm-q="لخّصلي سيناريو السهم وإدارة المخاطر في 4 نقاط">لخّصلي سيناريو السهم وإدارة المخاطر</button>
-        </div>
-      </div>
-      <div class="sahm-chat-foot">
-        <input type="text" class="sahm-chat-input" id="sahmAiInput" placeholder="اسأل عن السهم المفتوح..." autocomplete="off" />
-        <button type="button" class="sahm-chat-send" id="sahmAiSendBtn" title="إرسال">➤</button>
-      </div>
     </div>
   </div>
 
@@ -2563,8 +2437,6 @@ indicators: safeJson(LS.INDICATORS, ["MAExp@tv-basicstudies","RSI@tv-basicstudie
 localUpdatedAt: Number(localStorage.getItem(LS.UPDATED_AT) || 0),
 indUpdatedAt: Number(localStorage.getItem(LS.IND_UPDATED_AT) || 0),
 user: null,
-liveMetrics: null,
-attachedImage: null,
 chartMode: initialChartMode,
 proScripts: loadSavedProScripts(),
 activeProScripts: safeJson(LS.PRO_ACTIVE, ["user_ut_bot"]).filter(id => !REMOVED_BUILTIN_PRO_IDS.has(id)),
@@ -2582,6 +2454,7 @@ cleanSeriesPoints: [],
 cleanSeriesPeriod: "1D",
 marketIsOpen: false,
 appBooted: false,
+chatTicker: "",
 chatHistory: [],
 sending: false
 };
@@ -2807,6 +2680,9 @@ renderTechnicalWidget();
 }
 } else if (target === "stocks") {
 renderStockList();
+} else if (target === "ai") {
+syncAiTabHeader();
+ensureAiChatReadyForCurrentStock();
 } else if (target === "home") {
 if (!state.moversData && state.appBooted) fetchMarketMovers(false);
 }
@@ -5358,7 +5234,7 @@ $("activeTickerBadge").textContent = getTvSymbol(t);
 $("activeIndexBadges").innerHTML = buildIndexBadgesHtml(info, false);
 $("focusTickerBadge").textContent = getTvSymbol(t);
 $("focusNameLabel").textContent = info.name;
-$("aiTargetLabel").textContent = `متصل تلقائياً بالسهم المفتوح: EGX:${t} — ${info.name}`;
+syncAiTabHeader();
 document.querySelectorAll(".index-card").forEach(c => c.classList.toggle("active", c.dataset.indexTicker === t));
 document.querySelectorAll(".macro-card").forEach(c => c.classList.toggle("active", c.dataset.macroTicker === t));
 state.liveQuote = null;
@@ -5368,7 +5244,7 @@ if ($("activeLivePriceVal")) $("activeLivePriceVal").textContent = "—";
 if ($("activeLiveUnit")) $("activeLiveUnit").textContent = info.ticker === "GOLD" ? "$" : (info.isIndex && info.ticker !== "USDEGP" ? "نقطة" : "ج.م");
 if ($("activeLiveChgBadge")) { $("activeLiveChgBadge").className = "mover-chg flat"; $("activeLiveChgBadge").textContent = "—"; }
 renderSahmQuantCards(null);
-updateHeaderFavStar(); renderStockList(); fetchLiveQuote(t, false); fetchLiveMetrics(t);
+updateHeaderFavStar(); renderStockList(); fetchLiveQuote(t, false);
 state.chartDirty = true;
 state.taDirty = true;
 if (openChartTab) {
@@ -5505,74 +5381,6 @@ $("drawerBackdrop").classList.add("open");
 $("stockDrawer").classList.add("open");
 }
 function closeDrawer() { $("drawerBackdrop").classList.remove("open"); $("stockDrawer").classList.remove("open"); }
-function renderAutoSummary(m) {
-const sumBody = $("autoSummaryBody");
-if (!m) {
-sumBody.innerHTML = `<span style="color:var(--text-muted);">اضغط "نسخ البرومبت" أو أرفق لقطة شاشة من الشارت لتحليل فوري.</span>`;
-return;
-}
-const distSup = m.support1 ? (((m.last - m.support1) / m.last) * 100).toFixed(1) : null;
-const distRes = m.resistance1 ? (((m.resistance1 - m.last) / m.last) * 100).toFixed(1) : null;
-const rsiTxt = m.rsi == null ? "-" : m.rsi > 70 ? `تشبع شرائي (${m.rsi.toFixed(1)})` : m.rsi < 30 ? `تشبع بيعي (${m.rsi.toFixed(1)})` : `متوازن (${m.rsi.toFixed(1)})`;
-sumBody.innerHTML = `
-<span class="auto-tag">الاتجاه: <strong style="color:${m.trend.includes("صاعد") ? "var(--emerald)" : m.trend.includes("هابط") ? "var(--red)" : "var(--gold)"}">${m.trend}</strong></span>
-<span class="auto-tag">RSI: ${rsiTxt}</span>
-${m.support1 ? `<span class="auto-tag" style="color:var(--emerald);">دعم: ${m.support1.toFixed(2)} (${distSup}%)</span>` : ""}
-${m.resistance1 ? `<span class="auto-tag" style="color:var(--red);">مقاومة: ${m.resistance1.toFixed(2)} (+${distRes}%)</span>` : ""}`;
-}
-function applyMetricsUI(m) {
-state.liveMetrics = m;
-const isUp = (m.chgPct || 0) >= 0;
-$("liveMetricsRow").innerHTML = `
-<span class="metric-pill ${isUp ? "up" : "down"}"><span class="lbl">السعر:</span> ${m.last.toFixed(2)} (${isUp ? "+" : ""}${m.chgPct.toFixed(2)}%)</span>
-<span class="metric-pill"><span class="lbl">الاتجاه:</span> ${m.trend}</span>
-${m.rsi != null ? `<span class="metric-pill"><span class="lbl">RSI:</span> ${m.rsi.toFixed(1)}</span>` : ""}
-${m.support1 ? `<span class="metric-pill"><span class="lbl">دعم:</span> ${m.support1.toFixed(2)}</span>` : ""}
-${m.resistance1 ? `<span class="metric-pill"><span class="lbl">مقاومة:</span> ${m.resistance1.toFixed(2)}</span>` : ""}`;
-renderAutoSummary(m);
-}
-async function fetchLiveMetrics(ticker) {
-const row = $("liveMetricsRow");
-state.liveMetrics = null;
-row.innerHTML = `<span class="metric-pill"><span class="lbl">جاري قراءة EGX:${ticker}...</span></span>`;
-try {
-const ctrl = new AbortController();
-const t = setTimeout(() => ctrl.abort(), 5500);
-const res = await fetch(FIXED_MCP_URL, {
-method: "POST",
-headers: { "Content-Type": "application/json", "Accept": "application/json" },
-body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "get_egx_stock_analysis", arguments: { ticker } } }),
-signal: ctrl.signal
-});
-clearTimeout(t);
-if (state.ticker !== ticker) return;
-if (res.ok) {
-const json = await res.json();
-const txt = json?.result?.content?.[0]?.text;
-const d = txt ? JSON.parse(txt) : null;
-if (d && typeof d.price_egp === "number") {
-const last = d.price_egp, chgPct = Number(d.change_pct || 0);
-const ema10 = d.ema10 ?? null, ema20 = d.ema20 ?? null, ema50 = d.ema50 ?? null;
-let trend = "عرضي";
-if (ema10 && ema20 && ema50) {
-if (last > ema20 && ema10 > ema20 && ema20 > ema50) trend = "صاعد قوي";
-else if (last > ema20) trend = "صاعد";
-else if (last < ema20 && ema10 < ema20 && ema20 < ema50) trend = "هابط قوي";
-else trend = "هابط";
-}
-return applyMetricsUI({
-ticker, last, chg: (last * chgPct) / 100, chgPct,
-ema10, ema20, ema50, rsi: d.rsi14 ?? null, macd: null,
-support1: d.support_20d ?? null, resistance1: d.resistance_20d ?? null,
-support2: d.support_60d ?? null, resistance2: d.resistance_60d ?? null, trend
-});
-}
-}
-} catch {}
-if (state.ticker !== ticker) return;
-row.innerHTML = `<span class="metric-pill"><span class="lbl">EGX:${ticker} — يمكنك إرفاق صورة الشارت للتحليل</span></span>`;
-renderAutoSummary(null);
-}
 function formatTurnoverBillions(egp) {
 if (!Number.isFinite(egp) || egp <= 0) return "—";
 const isAr = state.lang === "ar";
@@ -6319,6 +6127,7 @@ w.classList.add(priceVal > prevPrice ? "flash-up" : "flash-dn");
 setTimeout(() => w.classList.remove("flash-up", "flash-dn"), 750);
 }
 renderSahmQuantCards(q);
+syncAiTabHeader();
 tickProChartLiveCandle(q, prevPrice);
 if (state.chartMode === "perf" && q.ticker === state.ticker) {
 if (state.cleanSeriesPoints && state.cleanSeriesPoints.length >= 2) {
@@ -6826,34 +6635,11 @@ if (state.marketIsOpen) runLiveRefreshCycle(false);
 }
 });
 }
-function buildStockContextString() {
-const info = getStockInfo(state.ticker), m = state.liveMetrics;
-const activeInd = state.indicators.map(s => s.split("@")[0]).join(", ") || "بدون";
-const idxList = (info.groups || []).join(" / ") || "عام";
-let ctx = `السهم: ${info.name} (EGX:${state.ticker} | التصنيف: ${idxList} | القطاع: ${info.sector} | الفريم: ${tfLabelAr(state.tf)} | المؤشرات: ${activeInd}).`;
-if (m) {
-ctx += `
-البيانات الفنية المحسوبة:
-- السعر: ${m.last.toFixed(2)} ج.م (${m.chgPct >= 0 ? "+" : ""}${m.chgPct.toFixed(2)}%) | الاتجاه: ${m.trend}
-- المتوسطات: EMA10=${m.ema10?.toFixed(2) || "-"} | EMA20=${m.ema20?.toFixed(2) || "-"} | EMA50=${m.ema50?.toFixed(2) || "-"}
-- RSI(14): ${m.rsi != null ? m.rsi.toFixed(1) : "-"} | MACD: ${m.macd ? `${m.macd.macd.toFixed(3)} / Sig ${m.macd.signal?.toFixed(3)}` : "-"}
-- دعوم ومقاومات (20/60 جلسة): دعم ${m.support1?.toFixed(2) || "-"} / ${m.support2?.toFixed(2) || "-"} | مقاومة ${m.resistance1?.toFixed(2) || "-"} / ${m.resistance2?.toFixed(2) || "-"}`;
-}
-return ctx;
-}
-async function copyAnalysisPrompt(btnEl) {
-const prompt = `حلل السهم التالي في البورصة المصرية تحليلاً فنياً عملياً ومرتباً (الاتجاه، الزخم، أهم الدعوم والمقاومات، والسيناريو الإيجابي والسلبي):
-${buildStockContextString()}`;
-await copyText(prompt);
-const old = btnEl.textContent;
-btnEl.textContent = "تم النسخ";
-setTimeout(() => { btnEl.textContent = old; }, 1800);
-}
 function getUserFirstName() {
 const raw = String(state.user?.displayName || "").trim();
 if (!raw) return "";
 const first = raw.split(/\s+/)[0].trim();
-if (/[؀-ۿ]/.test(first)) return first;
+if (/[\u0600-\u06FF]/.test(first)) return first;
 const key = first.toLowerCase().replace(/[^a-z]/g, "");
 const map = {
 abdelrahman:"عبدالرحمن", abdulrahman:"عبدالرحمن", abdelrhman:"عبدالرحمن", abdo:"عبده",
@@ -6867,62 +6653,78 @@ sara:"سارة", salma:"سلمى", mariam:"مريم", yasmine:"ياسمين", na
 };
 return map[key] || first;
 }
-function appendMessage(role, text, imgUrl = null) {
-const box = $("chatBox"), div = document.createElement("div");
+function syncAiTabHeader() {
+const info = getStockInfo(state.ticker);
+const q = state.liveQuote && state.liveQuote.ticker === state.ticker ? state.liveQuote : null;
+const isIndexPts = info.isIndex && state.ticker !== "GOLD" && state.ticker !== "USDEGP";
+const unit = state.ticker === "GOLD" ? "$" : isIndexPts ? "نقطة" : "ج.م";
+const lbl = $("aiTargetLabel");
+if (lbl) {
+if (q && q.price != null) {
+const chg = Number(q.changePct || 0);
+const pStr = isIndexPts ? Number(q.price).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : Number(q.price).toFixed(2);
+lbl.textContent = `${info.name} (${state.ticker}) • ${pStr} ${unit} (${chg > 0 ? "+" : ""}${chg.toFixed(2)}%)`;
+} else {
+lbl.textContent = `${info.name} (${state.ticker})`;
+}
+}
+if ($("chatInput")) $("chatInput").placeholder = `اسأل عن ${info.name}...`;
+}
+function appendMessage(role, text) {
+const box = $("chatBox");
+if (!box) return null;
+const div = document.createElement("div");
 div.className = `msg ${role}`;
 const avatar = role === "ai" ? "AI" : (state.user?.displayName ? state.user.displayName.split(" ")[0] : "أنت");
-const safe = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-div.innerHTML = `<div class="msg-avatar">${avatar}</div><div class="msg-bubble">${imgUrl ? `<img src="${imgUrl}" alt="">` : ""}${safe}</div>`;
+const safe = String(text || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+div.innerHTML = `<div class="msg-avatar">${avatar}</div><div class="msg-bubble">${safe}</div>`;
 box.appendChild(div); box.scrollTop = box.scrollHeight;
 return div;
 }
+function ensureAiChatReadyForCurrentStock(forceReset = false) {
+if (!forceReset && state.chatTicker === state.ticker && $("chatBox")?.children.length) return;
+state.chatTicker = state.ticker;
+state.chatHistory = [];
+if ($("chatBox")) $("chatBox").innerHTML = "";
+const info = getStockInfo(state.ticker);
+const uName = getUserFirstName();
+const greet = uName ? `أهلاً يا ${uName}!` : "أهلاً بك!";
+appendMessage("ai", `${greet} أنا معاك لتحليل **${info.name} (${state.ticker})** لحظياً — اسألني أي حاجة عن السهم.`);
+}
 function generateLocalFallbackReply() {
-const info = getStockInfo(state.ticker), m = state.liveMetrics;
+const info = getStockInfo(state.ticker);
+const q = state.liveQuote && state.liveQuote.ticker === state.ticker ? state.liveQuote : null;
+const qt = q && q.quant ? q.quant : null;
 const uName = getUserFirstName();
 const hi = uName ? `يا ${uName}، ` : "";
-if (!m) return `${hi}بيانات **${info.name} (EGX:${state.ticker})** بتتحدث حالياً — جرّب تسألني تاني بعد لحظة.`;
-const rsiNote = m.rsi > 70 ? "تشبع شرائي" : m.rsi < 30 ? "تشبع بيعي" : "نطاق متوازن";
-return `${hi}ده ملخص سريع لـ **${info.name} (EGX:${state.ticker})**:
-` +
-`• **السعر:** ${m.last.toFixed(2)} ج.م (${m.chgPct >= 0 ? "+" : ""}${m.chgPct.toFixed(2)}%) | **الاتجاه:** ${m.trend}
-` +
-`• **RSI(14):** ${m.rsi != null ? m.rsi.toFixed(1) : "-"} (${rsiNote})
-` +
-`• **نطاق 20 جلسة:** دعم ${m.support1?.toFixed(2) || "-"} | مقاومة ${m.resistance1?.toFixed(2) || "-"}`;
+if (!q || q.price == null || !qt) return `${hi}بيانات **${info.name} (${state.ticker})** بتتحدث حالياً — جرّب تسألني تاني بعد لحظة.`;
+const isIndexPts = info.isIndex && state.ticker !== "GOLD" && state.ticker !== "USDEGP";
+const unit = state.ticker === "GOLD" ? "$" : isIndexPts ? "نقطة" : "ج.م";
+return `${hi}ده ملخص سريع لـ **${info.name} (${state.ticker})**:\n` +
+`• **السعر والاتجاه:** ${q.price} ${unit} (${q.changePct >= 0 ? "+" : ""}${q.changePct}%) — ${fixMojibake(qt.trendAr || "")}\n` +
+`• **المستويات:** دعم ${qt.watchPoint} ${unit} | هدف أول ${qt.target1} ${unit} (+${qt.target1Pct}%) | وقف خسارة ${qt.stopLoss} ${unit} (${qt.stopLossPct}%)`;
 }
 async function handleSendChat(customPrompt = null) {
 if (state.sending) return;
-const inp = $("chatInput"), text = (customPrompt !== null ? customPrompt : inp.value).trim(), imgObj = state.attachedImage;
-if (!text && !imgObj) return;
-const prompt = text || `حلل صورة الشارت المرفقة لسهم EGX:${state.ticker} وحدد الاتجاه والدعوم والمقاومات.`;
-appendMessage("user", text || "تحليل صورة الشارت", imgObj ? imgObj.dataUrl : null);
+const inp = $("chatInput"), text = (customPrompt !== null ? customPrompt : inp.value).trim();
+if (!text) return;
+appendMessage("user", text);
 if (customPrompt === null) inp.value = "";
-clearAttachedImage();
 state.sending = true; $("sendChatBtn").disabled = true;
 const loading = appendMessage("ai", "⏳ جاري التحليل...");
 try {
-const cfRes = await callSahmCloudAi(prompt, state.chatHistory, imgObj ? imgObj.base64 : "");
+const cfRes = await callSahmCloudAi(text, state.chatHistory);
 const reply = cfRes.reply || generateLocalFallbackReply();
-loading.remove(); appendMessage("ai", reply);
-state.chatHistory.push({ role: "user", text: prompt }, { role: "ai", text: reply });
+if (loading) loading.remove();
+appendMessage("ai", reply);
+state.chatHistory.push({ role: "user", text }, { role: "ai", text: reply });
 } catch (err) {
-loading.remove();
+if (loading) loading.remove();
 appendMessage("ai", `تعذر الاتصال بـ Sahm AI الآن: ${err.message}`);
 } finally {
 state.sending = false; $("sendChatBtn").disabled = false;
 }
 }
-function setAttachedImageFromFile(file) {
-if (!file || !file.type.startsWith("image/")) return;
-const r = new FileReader();
-r.onload = () => {
-state.attachedImage = { dataUrl: r.result, base64: r.result.split(",")[1], mimeType: file.type };
-$("imgPreviewThumb").src = r.result;
-$("imgPreviewBar").classList.add("show");
-};
-r.readAsDataURL(file);
-}
-function clearAttachedImage() { state.attachedImage = null; $("imgPreviewBar").classList.remove("show"); $("imgFileInput").value = ""; }
 function getFullMcpUrl() {
 return state.user?.uid ? `${FIXED_MCP_URL}?uid=${state.user.uid}` : FIXED_MCP_URL;
 }
@@ -6950,8 +6752,6 @@ dot.classList.add("err"); txt.textContent = "تعذر فحص السيرفر";
 }
 
 // ==================== مساعد سهم الذكي (Cloudflare Workers AI) + مؤشر 26 مؤشر ====================
-const sahmAiModalState = { ticker: "", history: [], sending: false };
-
 function fixMojibake(str) {
   if (typeof str !== "string" || !str) return str || "";
   if (!/[ØÙÃ][-¿]|Ø§|Ù„|Ø¨|ÙŠ/.test(str)) return str;
@@ -7060,12 +6860,6 @@ function renderSahmQuantCards(q) {
   if ($("sahmLvlStop"))      $("sahmLvlStop").textContent = `${fmtP(qt.stopLoss)} ${unit}`;
   if ($("sahmLvlStopPct"))   $("sahmLvlStopPct").textContent = `${qt.stopLossPct}%`;
 
-  if ($("sahmAiModalBackdrop")?.classList.contains("open") && sahmAiModalState.ticker === state.ticker) {
-    if ($("sahmAiModalStockPrice")) {
-      const chg = Number(q.changePct || 0);
-      $("sahmAiModalStockPrice").textContent = `${fmtP(q.price)} ${unit} (${chg > 0 ? "+" : ""}${chg.toFixed(2)}%)`;
-    }
-  }
 }
 
 async function callSahmCloudAi(message, historyArr = [], imageBase64 = "") {
@@ -7094,81 +6888,6 @@ async function callSahmCloudAi(message, historyArr = [], imageBase64 = "") {
     applyLiveQuoteToHeader(data.quote);
   }
   return data;
-}
-
-function appendSahmModalMsg(role, text) {
-  const box = $("sahmAiChatBox");
-  if (!box) return null;
-  const div = document.createElement("div");
-  div.className = `msg ${role}`;
-  const avatar = role === "ai" ? "AI" : (state.user?.displayName ? state.user.displayName.split(" ")[0] : "أنت");
-  const safe = String(text || "")
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-  div.innerHTML = `<div class="msg-avatar">${avatar}</div><div class="msg-bubble">${safe}</div>`;
-  box.appendChild(div);
-  box.scrollTop = box.scrollHeight;
-  return div;
-}
-
-function openSahmAiModal() {
-  const info = getStockInfo(state.ticker);
-  const q = state.liveQuote && state.liveQuote.ticker === state.ticker ? state.liveQuote : null;
-  const isIndexPts = info.isIndex && state.ticker !== "GOLD" && state.ticker !== "USDEGP";
-  const unit = state.ticker === "GOLD" ? "$" : isIndexPts ? "نقطة" : "ج.م";
-  if ($("sahmAiModalStockSub")) $("sahmAiModalStockSub").textContent = `${info.name} (${state.ticker})`;
-  if ($("sahmAiModalStockPrice")) {
-    $("sahmAiModalStockPrice").textContent = q && q.price != null
-      ? `${q.price} ${unit} (${q.changePct > 0 ? "+" : ""}${Number(q.changePct || 0).toFixed(2)}%)`
-      : `EGX:${state.ticker}`;
-  }
-  if ($("sahmAiInput")) $("sahmAiInput").placeholder = `اسأل عن ${info.name}...`;
-
-  if (sahmAiModalState.ticker !== state.ticker) {
-    sahmAiModalState.ticker = state.ticker;
-    sahmAiModalState.history = [];
-    if ($("sahmAiChatBox")) $("sahmAiChatBox").innerHTML = "";
-    const qt = q && q.quant ? q.quant : null;
-    const uName = getUserFirstName();
-    const greet = uName ? `أهلاً يا ${uName}!` : "أهلاً بك!";
-    const summaryHint = qt
-      ? ` الاتجاه الفني حالياً **${fixMojibake(qt.trendAr || "") || getArabicSignalLabel(qt.score, qt.labelAr)}**، والدعم الأقرب عند **${qt.watchPoint} ${unit}** والهدف الأول **${qt.target1} ${unit}**.`
-      : "";
-    appendSahmModalMsg("ai", `${greet} أنا معاك لتحليل **${info.name} (${state.ticker})** لحظياً.${summaryHint}
-
-اسألني أي سؤال عن السهم — سواء الاتجاه، نقاط الدخول والخروج، أو لو عندك سيناريو معين في بالك.`);
-  }
-  $("sahmAiModalBackdrop").classList.add("open");
-  setTimeout(() => $("sahmAiInput")?.focus(), 120);
-}
-
-function closeSahmAiModal() {
-  $("sahmAiModalBackdrop")?.classList.remove("open");
-}
-
-async function sendSahmAiPrompt(customMsg = null) {
-  if (sahmAiModalState.sending) return;
-  const inp = $("sahmAiInput");
-  const msg = String(customMsg !== null ? customMsg : (inp ? inp.value : "")).trim();
-  if (!msg) return;
-  if (customMsg === null && inp) inp.value = "";
-  appendSahmModalMsg("user", msg);
-  sahmAiModalState.sending = true;
-  if ($("sahmAiSendBtn")) $("sahmAiSendBtn").disabled = true;
-  const loadingEl = appendSahmModalMsg("ai", "⏳ جاري تحليل بيانات السهم...");
-  try {
-    const res = await callSahmCloudAi(msg, sahmAiModalState.history);
-    if (loadingEl) loadingEl.remove();
-    const reply = res.reply || generateLocalFallbackReply();
-    appendSahmModalMsg("ai", reply);
-    sahmAiModalState.history.push({ role: "user", text: msg }, { role: "ai", text: reply });
-  } catch (err) {
-    if (loadingEl) loadingEl.remove();
-    appendSahmModalMsg("ai", `⚠️ ${err.message}`);
-  } finally {
-    sahmAiModalState.sending = false;
-    if ($("sahmAiSendBtn")) $("sahmAiSendBtn").disabled = false;
-  }
 }
 
 function openMcpModal() {
@@ -7365,8 +7084,7 @@ const obj = { ticker: t, name: item.n || t, en: item.n || t, sector: "البور
 STOCK_MAP[t] = obj; STOCKS.push(obj);
 }
 }
-const _uName = getUserFirstName();
-appendMessage("ai", `${_uName ? `أهلاً يا ${_uName}!` : "أهلاً بك في **سهم**."} اسألني أي سؤال عن السهم المفتوح حالياً أو أرفق صورة شارت لتحليلها مباشرة عبر **Sahm AI**.`);
+ensureAiChatReadyForCurrentStock(true);
 selectStock(state.ticker, false, false, false);
 switchTab(state.activeTab, false);
 fetchMarketMovers(false);
@@ -7438,6 +7156,7 @@ authResolved = true;
 clearTimeout(authFallbackTimer);
 state.user = u || null;
 updateAuthUI();
+if (u && !state.chatHistory.length && $("chatBox")?.children.length <= 1) ensureAiChatReadyForCurrentStock(true);
 if (u) {
 try { localStorage.setItem(LS.AUTH_HINT, u.uid); } catch {}
 setAuthGateState("unlocked");
@@ -7495,7 +7214,6 @@ fetchMarketMovers(true);
 fetchEgxIndices(true);
 fetchMacroRates(true);
 fetchLiveQuote(state.ticker, false);
-fetchLiveMetrics(state.ticker);
 };
 $("menuLogoutBtn").onclick = async () => { closeMoreMenu(); try { localStorage.removeItem(LS.AUTH_HINT); } catch {} if (fbAuth) await fbAuth.signOut(); };
 const toggleQuickSearch = (e, triggerBtn) => {
@@ -7540,14 +7258,9 @@ $("drawerBackdrop").onclick = closeDrawer;
 $("authHeaderBtn").onclick = openAccountModal;
 $("closeAccountModalBtn").onclick = closeAccountModal;
 $("accountModalBackdrop").onclick = e => { if (e.target.id === "accountModalBackdrop") closeAccountModal(); };
-if ($("openSahmAiSheetBtn")) $("openSahmAiSheetBtn").onclick = openSahmAiModal;
-if ($("closeSahmAiModalBtn")) $("closeSahmAiModalBtn").onclick = closeSahmAiModal;
-if ($("sahmAiModalBackdrop")) $("sahmAiModalBackdrop").onclick = e => { if (e.target.id === "sahmAiModalBackdrop") closeSahmAiModal(); };
-if ($("sahmAiSendBtn")) $("sahmAiSendBtn").onclick = () => sendSahmAiPrompt();
-if ($("sahmAiInput")) $("sahmAiInput").onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); sendSahmAiPrompt(); } };
-if ($("sahmAiFaqsList")) $("sahmAiFaqsList").onclick = e => {
-  const b = e.target.closest("[data-sahm-q]");
-  if (b) sendSahmAiPrompt(b.dataset.sahmQ);
+if ($("openSahmAiSheetBtn")) $("openSahmAiSheetBtn").onclick = () => {
+switchTab("ai", true);
+setTimeout(() => $("chatInput")?.focus(), 140);
 };
 $("closeMcpModalBtn").onclick = closeMcpModal;
 $("mcpModalBackdrop").onclick = e => { if (e.target.id === "mcpModalBackdrop") closeMcpModal(); };
@@ -7654,7 +7367,7 @@ $("proZoomAllBtn").onclick = () => { if (proChart) proChart.timeScale().fitConte
 window.addEventListener("resize", () => { resizeProCharts(); setTimeout(() => { resizeProCharts(); if (state.activeTab === "home") renderEgxHeatmap(); }, 140); });
 window.addEventListener("orientationchange", () => setTimeout(resizeProCharts, 250));
 document.addEventListener("keydown", e => {
-if (e.key === "Escape") { document.body.classList.remove("hm-fullscreen"); if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير"; exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeAccountModal(); closeMcpModal(); closeSahmAiModal(); }
+if (e.key === "Escape") { document.body.classList.remove("hm-fullscreen"); if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير"; exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeAccountModal(); closeMcpModal(); }
 });
 const syncSearchInputs = (val) => {
 state.search = val;
@@ -7694,21 +7407,10 @@ if (row) selectStock(row.dataset.ticker, true, true, goChart);
 };
 $("stockList").onclick = e => onStockRowClick(e, false);
 $("pageStockList").onclick = e => onStockRowClick(e, true);
-$("refreshMetricsBtn").onclick = () => fetchLiveMetrics(state.ticker);
-$("copyPromptBtn2").onclick = () => copyAnalysisPrompt($("copyPromptBtn2"));
 $("sendChatBtn").onclick = () => handleSendChat();
 $("chatInput").onkeydown = e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleSendChat(); } };
 document.querySelectorAll(".quick-chip").forEach(c => c.onclick = () => handleSendChat(c.dataset.prompt));
-$("attachImgBtn").onclick = () => $("imgFileInput").click();
-$("imgFileInput").onchange = e => { if (e.target.files?.[0]) setAttachedImageFromFile(e.target.files[0]); };
-$("removeImgBtn").onclick = clearAttachedImage;
-document.addEventListener("paste", e => {
-for (const item of (e.clipboardData?.items || [])) if (item.type.startsWith("image/")) { setAttachedImageFromFile(item.getAsFile()); break; }
-});
-$("clearChatBtn").onclick = () => {
-state.chatHistory = []; $("chatBox").innerHTML = "";
-appendMessage("ai", `تم مسح المحادثة. متصل الآن بسهم **${getStockInfo(state.ticker).name} (EGX:${state.ticker})**.`);
-};
+$("clearChatBtn").onclick = () => ensureAiChatReadyForCurrentStock(true);
 updateAuthUI();
 });
   </script>
