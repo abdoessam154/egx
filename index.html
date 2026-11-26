@@ -1191,144 +1191,11 @@
     .sector-stk-chip .up { color: var(--emerald); direction: ltr; }
     .sector-stk-chip .dn { color: var(--red); direction: ltr; }
 
-    /* سكرينر المضاربة (داخل تبويب الأسهم) */
-    .stocks-mode-tabs {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
-      padding: 6px; border-radius: 14px;
-      background: var(--bg-card); border: 1px solid var(--border); box-shadow: var(--shadow);
-    }
-    .stocks-mode-btn {
-      padding: 9px 10px; border-radius: 10px; border: 1px solid transparent;
-      background: transparent; color: var(--text-muted);
-      font-size: 12.5px; font-weight: 800; cursor: pointer; transition: 0.18s;
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-    }
-    .stocks-mode-btn.active {
-      background: linear-gradient(135deg, rgba(16, 185, 129, 0.18), rgba(245, 158, 11, 0.14));
-      border-color: rgba(16, 185, 129, 0.42); color: var(--text);
-    }
-    .scr-presets {
-      padding: 10px 12px 6px;
-      display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
-    }
-    .scr-presets::-webkit-scrollbar { display: none; }
-    .scr-preset-chip {
-      padding: 6px 11px; border-radius: 20px;
-      border: 1px solid var(--border-strong); background: var(--bg-elevated);
-      color: var(--text-muted); font-size: 11.5px; font-weight: 800;
-      white-space: nowrap; cursor: pointer; transition: 0.15s; flex-shrink: 0;
-    }
-    .scr-preset-chip:hover { border-color: var(--emerald); color: var(--text); }
-    .scr-preset-chip.active {
-      background: var(--emerald); color: #03150e; border-color: var(--emerald);
-    }
-    .scr-filters-row {
-      padding: 6px 12px 10px; border-bottom: 1px solid var(--border);
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px;
-    }
-    @media (max-width: 520px) { .scr-filters-row { grid-template-columns: 1fr 1fr; } }
     .scr-select {
       width: 100%; padding: 7px 9px; border-radius: 9px;
       border: 1px solid var(--border-strong); background: var(--bg-input);
       font-size: 11.5px; font-weight: 700; color: var(--text); outline: none;
     }
-    .scr-results-grid {
-      padding: 10px 12px 14px;
-      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
-    }
-    @media (max-width: 720px) { .scr-results-grid { grid-template-columns: 1fr; } }
-    .scr-row {
-      display: flex; flex-direction: column; gap: 7px;
-      padding: 10px 11px; border-radius: 12px;
-      background: var(--bg-elevated); border: 1px solid var(--border);
-      cursor: pointer; transition: 0.16s; min-width: 0;
-    }
-    .scr-row:hover { border-color: var(--emerald); }
-    .scr-row-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .scr-row-left { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
-    .scr-row-nums { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
-    .scr-row-price { font-size: 13.5px; font-weight: 800; direction: ltr; }
-    .scr-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-    .scr-tag {
-      padding: 2px 7px; border-radius: 7px; font-size: 10px; font-weight: 800;
-      background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);
-      white-space: nowrap;
-    }
-    .scr-tag.hot { background: var(--gold-dim); color: var(--gold); border-color: rgba(245, 158, 11, 0.35); }
-    .scr-tag.bull { background: var(--emerald-dim); color: var(--emerald); border-color: rgba(16, 185, 129, 0.35); }
-    .scr-tag.bear { background: var(--red-dim); color: var(--red); border-color: rgba(244, 63, 94, 0.35); }
-    .scr-tag.blue { background: var(--blue-dim); color: var(--blue); border-color: rgba(56, 189, 248, 0.35); }
-
-    /* بطاقة السعر العادل التقديري داخل الشارت الصافي */
-    .fv-box {
-      padding: 11px 12px; border-radius: 13px;
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.07), rgba(16, 185, 129, 0.06));
-      border: 1px solid var(--border-strong);
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .fv-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-    .fv-title { font-size: 12.5px; font-weight: 800; color: var(--text); display: inline-flex; align-items: center; gap: 5px; }
-    .fv-status-pill { padding: 2px 9px; border-radius: 20px; font-size: 10.5px; font-weight: 800; }
-    .fv-status-pill.under { background: var(--emerald-dim); color: var(--emerald); border: 1px solid rgba(16, 185, 129, 0.35); }
-    .fv-status-pill.over  { background: var(--red-dim); color: var(--red); border: 1px solid rgba(244, 63, 94, 0.35); }
-    .fv-status-pill.fair  { background: var(--gold-dim); color: var(--gold); border: 1px solid rgba(245, 158, 11, 0.35); }
-    .fv-status-pill.na    { background: var(--bg-card); color: var(--text-muted); border: 1px solid var(--border); }
-    .fv-nums-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-    .fv-val-big { font-size: 18px; font-weight: 800; color: var(--blue); direction: ltr; }
-    .fv-ratios { display: flex; flex-wrap: wrap; gap: 6px; }
-    .fv-ratio-pill { padding: 2px 8px; border-radius: 7px; background: var(--bg-card); border: 1px solid var(--border); font-size: 10.5px; font-weight: 700; color: var(--text-muted); }
-    .fv-ratio-pill strong { color: var(--text); direction: ltr; display: inline-block; }
-    .fv-bar-track { position: relative; height: 7px; border-radius: 7px; background: linear-gradient(90deg, #10b981, #f59e0b 50%, #f43f5e); opacity: 0.85; }
-    .fv-bar-marker { position: absolute; top: -4px; width: 14px; height: 14px; border-radius: 50%; background: #ffffff; border: 2.5px solid #0f172a; transform: translateX(-50%); box-shadow: 0 2px 6px rgba(0,0,0,0.45); transition: left 0.35s ease; }
-    .fv-disclaimer { font-size: 10px; color: var(--text-muted); }
-
-    /* نظام التنبيهات الذكية (زر الجرس + النافذة + الإشعارات الفورية) */
-    .bell-btn { position: relative; }
-    .bell-badge {
-      position: absolute; top: -4px; right: -4px; min-width: 17px; height: 17px; padding: 0 4px;
-      border-radius: 99px; background: var(--red); color: #ffffff;
-      font-size: 9.5px; font-weight: 800; display: none; align-items: center; justify-content: center;
-      border: 1.5px solid var(--bg);
-    }
-    .bell-badge.show { display: inline-flex; }
-    .bell-badge.ok { background: var(--emerald); color: #03150e; }
-    .alert-tabs {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;
-      background: var(--bg-input); padding: 4px; border-radius: 11px; border: 1px solid var(--border);
-    }
-    .alert-tab-btn {
-      padding: 7px 4px; border-radius: 8px; border: none; background: transparent;
-      color: var(--text-muted); font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.15s;
-    }
-    .alert-tab-btn.active { background: var(--emerald); color: #03150e; }
-    .alert-pane { display: none; flex-direction: column; gap: 10px; }
-    .alert-pane.active { display: flex; }
-    .alert-item-row {
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-      padding: 9px 10px; border-radius: 11px;
-      background: var(--bg-elevated); border: 1px solid var(--border);
-    }
-    .alert-item-row.triggered { border-color: rgba(245, 158, 11, 0.5); background: rgba(245, 158, 11, 0.08); }
-    .alert-item-main { min-width: 0; flex: 1; }
-    .alert-item-title { font-size: 12px; font-weight: 800; color: var(--text); }
-    .alert-item-sub { font-size: 10.5px; color: var(--text-muted); margin-top: 2px; }
-    .alert-toast-stack {
-      position: fixed; top: calc(68px + env(safe-area-inset-top, 0px)); left: 12px; right: 12px;
-      z-index: 420; display: flex; flex-direction: column; align-items: center; gap: 8px;
-      pointer-events: none;
-    }
-    .alert-toast {
-      pointer-events: auto; width: min(440px, 100%);
-      padding: 11px 13px; border-radius: 14px;
-      background: rgba(11, 17, 32, 0.96); backdrop-filter: blur(18px);
-      border: 1.5px solid var(--gold); box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
-      animation: menuPop 0.2s ease-out;
-    }
-    [data-theme="light"] .alert-toast { background: rgba(255,255,255,0.98); }
-    .alert-toast-body { min-width: 0; flex: 1; }
-    .alert-toast-title { font-size: 12.5px; font-weight: 800; color: var(--gold); }
-    .alert-toast-msg { font-size: 11.5px; font-weight: 700; color: var(--text); margin-top: 2px; }
     body.focus-mode #sectorsRadarSection { display: none !important; }
 
   </style>
@@ -1479,10 +1346,6 @@
     </div>
 
     <div class="header-left">
-      <button class="icon-btn bell-btn" id="alertsHeaderBtn" title="تنبيهات الأسعار (Gmail)" aria-label="التنبيهات">
-        <span>🔔</span>
-        <span class="bell-badge" id="alertsBellBadge">0</span>
-      </button>
       <button class="auth-btn" id="authHeaderBtn" title="حسابك والمزامنة"><span>👤 دخول</span></button>
     </div>
   </header>
@@ -1669,7 +1532,7 @@
       <div class="section-head">
         <div>
           <div class="section-title">🔥 رادار القطاعات المنفجرة والسيولة</div>
-          <div class="section-sub" id="sectorsSubLabel">أقوى 5 قطاعات حسب السيولة • اضغط على أي قطاع لعرض أسهمه</div>
+          <div class="section-sub" id="sectorsSubLabel">توزيع سيولة البورصة المصرية حسب القطاع • اضغط على أي قطاع لعرض أسهمه</div>
         </div>
       </div>
       <div class="sectors-grid" id="sectorsRadarGrid">
@@ -1677,7 +1540,7 @@
       </div>
     </section>
 
-    <!-- الأكثر ربحاً والأكثر خسارة (جنب بعض — 5 لكل قسم) -->
+    <!-- الأكثر ربحاً والأكثر خسارة (جنب بعض — 8 لكل قسم) -->
     <section class="movers-dual-grid" id="moversDualSection">
       <div class="mover-box">
         <div class="mover-box-head gainers">
@@ -1698,7 +1561,7 @@
       </div>
     </section>
 
-    <!-- الأكثر تداولاً (تحتهم بعناون متسنتر — 5 أسهم) -->
+    <!-- الأكثر تداولاً (تحتهم بعناون متسنتر — 8 أسهم) -->
     <section class="mover-box" id="moversActiveSection">
       <div class="mover-box-head active-head">
         <span>🔥 الأكثر تداولاً</span>
@@ -1740,7 +1603,6 @@
           <span class="badge badge-ticker" id="activeTickerBadge">EGX:EGX30</span>
           <div class="stock-badges" id="activeIndexBadges"></div>
           <button class="btn-sm" id="shareTickerBtn" title="نسخ رابط مباشر لهذا السهم">🔗 مشاركة</button>
-          <button class="btn-sm gold" id="chartQuickAlertBtn" title="ضبط تنبيه سعر وإرسال على Gmail">🔔 تنبيه</button>
         </div>
         <div class="chart-controls">
           <div class="mode-switch" id="chartModeSwitch">
@@ -1874,27 +1736,6 @@
               <div class="clean-stat-item"><span class="clean-stat-lbl">قيمة التداول</span><span class="clean-stat-val" id="csTurnover">—</span></div>
             </div>
 
-            <!-- السعر العادل التقديري والمضاعفات المالية -->
-            <div class="fv-box" id="cleanFairValueBox">
-              <div class="fv-head">
-                <span class="fv-title">⚖️ السعر العادل التقديري</span>
-                <span class="fv-status-pill na" id="fvStatusPill">—</span>
-              </div>
-              <div class="fv-nums-row">
-                <span class="fv-val-big" id="fvValueText">—</span>
-                <div class="fv-ratios" id="fvRatiosRow">
-                  <span class="fv-ratio-pill">P/E: <strong id="fvPeVal">—</strong></span>
-                  <span class="fv-ratio-pill">P/B: <strong id="fvPbVal">—</strong></span>
-                  <span class="fv-ratio-pill">EPS: <strong id="fvEpsVal">—</strong></span>
-                  <span class="fv-ratio-pill">RVOL: <strong id="fvRvolVal">—</strong></span>
-                </div>
-              </div>
-              <div class="fv-bar-track" id="fvBarTrack" style="display:none;">
-                <span class="fv-bar-marker" id="fvBarMarker" style="left:50%;"></span>
-              </div>
-              <div class="fv-disclaimer" id="fvDisclaimerText">تقدير مالي آلي (معادلة جراهام + مضاعف ربحية القطاع) — للأغراض التعليمية فقط</div>
-            </div>
-
             <div class="perf-sim-box" id="perfSimBox">
               <span id="perfSimText">💰 عائد استثمار 10,000 ج.م خلال سنة:</span>
               <span class="perf-sim-result" id="perfSimVal">—</span>
@@ -1922,8 +1763,6 @@
             <option value="">📚 قوالب جاهزة ومجربة (اختر لإدراجها)...</option>
             <option value="ut_bot">⚡ شراء او بيع (UT Bot Alerts)</option>
             <option value="ema_cross">🔀 sell and buy (EMA 10 / 20 Cross)</option>
-            <option value="macd_exit">🎯 EXIT (MACD + SMA 200 Strategy)</option>
-            <option value="rsi_buy">📊 RSI شراء (RSI Chart Bars)</option>
             <option value="supertrend">📈 SuperTrend (10, 3) + إشارات</option>
             <option value="rsi_macd">📉 MACD Classic (لوحة سفلية)</option>
           </select>
@@ -2155,10 +1994,6 @@
     <button class="menu-item" id="menuSectorsBtn">
       <span class="menu-item-left"><span>🔥</span><span>رادار القطاعات والسيولة</span></span>
     </button>
-    <button class="menu-item" id="menuAlertsBtn">
-      <span class="menu-item-left"><span>🔔</span><span>تنبيهات الأسعار (Gmail)</span></span>
-      <span class="menu-item-tag" id="menuAlertsCount">0</span>
-    </button>
     <button class="menu-item" id="menuHeatmapBtn">
       <span class="menu-item-left"><span>🗺️</span><span>الخريطة الحرارية للبورصة</span></span>
       <span class="menu-item-tag">EGX</span>
@@ -2248,81 +2083,6 @@
         <button class="icon-btn" id="closeAccountModalBtn">✕</button>
       </div>
       <div class="modal-body" id="accountModalBody"></div>
-    </div>
-  </div>
-
-  <!-- إشعارات التنبيهات العائمة -->
-  <div class="alert-toast-stack" id="alertToastStack"></div>
-
-  <!-- نافذة تنبيهات السعر فقط + إرسال على Gmail -->
-  <div class="modal-backdrop" id="alertsModalBackdrop">
-    <div class="modal">
-      <div class="modal-head">
-        <strong style="font-size:14.5px;">🔔 تنبيهات السعر (Gmail)</strong>
-        <button class="icon-btn" id="closeAlertsModalBtn">✕</button>
-      </div>
-      <div class="modal-body">
-        <div style="display:flex;flex-direction:column;gap:10px;">
-          <div class="field">
-            <div class="field-label-row">
-              <label>رمز السهم</label>
-              <span id="alPriceCurrentHint" style="font-size:11px;font-weight:800;color:var(--emerald);"></span>
-            </div>
-            <input type="text" id="alPriceTicker" dir="ltr" placeholder="مثل SWDY أو COMI" />
-          </div>
-          <div class="field">
-            <label>الشرط (زيادة أو نقصان % أو سعر محدد)</label>
-            <select id="alPriceCond">
-              <option value="pct_up_5">📈 زيادة +5% عن السعر الحالي</option>
-              <option value="pct_up_10">🚀 زيادة +10% عن السعر الحالي</option>
-              <option value="pct_up_15">🔥 زيادة +15% عن السعر الحالي</option>
-              <option value="pct_up_20">⚡ زيادة +20% عن السعر الحالي</option>
-              <option value="pct_dn_5">📉 نقصان -5% عن السعر الحالي</option>
-              <option value="pct_dn_10">⚠️ نقصان -10% عن السعر الحالي</option>
-              <option value="pct_dn_15">🔻 نقصان -15% عن السعر الحالي</option>
-              <option value="above">سعر محدد: صعود إلى أو أعلى من (&gt;=)</option>
-              <option value="below">سعر محدد: هبوط إلى أو أقل من (&lt;=)</option>
-            </select>
-          </div>
-          <div class="field">
-            <label>السعر المستهدف (ج.م)</label>
-            <input type="number" step="0.01" id="alPriceTarget" dir="ltr" placeholder="يتحسب تلقائياً من النسبة أو اكتبه يدوياً" />
-          </div>
-          <button type="button" class="btn-primary" id="addPriceAlertBtn">+ إضافة تنبيه سعر</button>
-        </div>
-
-        <div class="test-result" id="alertsFeedbackMsg"></div>
-
-        <!-- إعدادات الإرسال التلقائي على Gmail -->
-        <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:7px;">
-          <strong style="font-size:12px;color:var(--emerald);">📧 إرسال التنبيه تلقائياً على Gmail</strong>
-          <input type="email" id="gmailToInput" dir="ltr" placeholder="بريدك على Gmail (مثال: name@gmail.com)" style="padding:8px 10px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-input);font-size:12px;" />
-          <input type="url" id="gmailWebhookInput" dir="ltr" placeholder="رابط Google Apps Script للإرسال التلقائي (اختياري)" style="padding:8px 10px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-input);font-size:11.5px;" />
-          <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <button type="button" class="btn-sm emerald" id="saveGmailCfgBtn" style="flex:1;">💾 حفظ Gmail</button>
-            <button type="button" class="btn-sm blue" id="testGmailCfgBtn" style="flex:1;">✉️ اختبار إرسال</button>
-            <button type="button" class="btn-sm gold" id="copyGasCodeBtn" title="انسخ الكود وضعه في script.google.com وانشره كـ Web App">📋 كود Gmail</button>
-          </div>
-          <div class="field-hint" style="margin-top:0;">لإرسال الإيميل تلقائياً من حسابك مجاناً: اضغط <strong>📋 كود Gmail</strong> والصقه في <strong>script.google.com</strong> ثم Deploy &gt; Web app وضع الرابط هنا.</div>
-        </div>
-
-        <!-- تنبيهات الأسعار النشطة والسجل -->
-        <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:8px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;">
-            <strong style="font-size:12.5px;">📌 تنبيهات السعر النشطة (<span id="alActiveCount">0</span>)</strong>
-            <div style="display:flex;gap:5px;">
-              <button type="button" class="btn-sm" id="alReqNotifBtn">🔔 إشعارات المتصفح</button>
-              <button type="button" class="btn-sm danger" id="alClearLogBtn">🗑️ مسح السجل</button>
-            </div>
-          </div>
-          <div id="alertsListContainer" style="display:flex;flex-direction:column;gap:6px;max-height:170px;overflow-y:auto;"></div>
-
-          <div style="border-top:1px solid var(--border);padding-top:8px;">
-            <strong style="font-size:12px;display:block;margin-bottom:6px;color:var(--gold);">⚡ أحدث التنبيهات التي تحققت</strong>
-            <div id="alertsLogContainer" style="display:flex;flex-direction:column;gap:5px;max-height:120px;overflow-y:auto;"></div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -2512,12 +2272,11 @@
       THEME: "egx_term_theme_v3", LANG: "egx_term_lang_v3", INDICATORS: "egx_term_indicators_v4",
       LAST_TICKER: "egx_term_last_ticker_v4", TF: "egx_term_tf_v4",
       UPDATED_AT: "egx_term_updated_at_v5", IND_UPDATED_AT: "egx_term_ind_updated_at_v5",
-      CHART_MODE: "egx_term_chart_mode_v6", PRO_SCRIPTS: "egx_term_pro_scripts_v8", PRO_ACTIVE: "egx_term_pro_active_v8",
-      AUTH_HINT: "sahm_auth_uid_v1", LOGOS: "sahm_stock_logos_v1", ALL_STOCKS: "sahm_all_egx_stocks_v1",
-      ALERTS: "sahm_alerts_v1", ALERT_LOG: "sahm_alert_log_v1", GMAIL_CFG: "sahm_gmail_cfg_v1"
+      CHART_MODE: "egx_term_chart_mode_v6", PRO_SCRIPTS: "egx_term_pro_scripts_v9", PRO_ACTIVE: "egx_term_pro_active_v9",
+      AUTH_HINT: "sahm_auth_uid_v1", LOGOS: "sahm_stock_logos_v1", ALL_STOCKS: "sahm_all_egx_stocks_v1"
     };
 
-    const REMOVED_BUILTIN_PRO_IDS = new Set(["ut_bot", "ema_cross", "bb_rsi", "pro_macd", "pro_mfi", "pro_rsi"]);
+    const REMOVED_BUILTIN_PRO_IDS = new Set(["ut_bot", "ema_cross", "bb_rsi", "pro_macd", "pro_mfi", "pro_rsi", "user_macd_exit", "user_rsi_buy"]);
     const USER_PINE_UT_BOT = [
       "//@version=4",
       'study(title="UT Bot Alerts", overlay = true)',
@@ -2608,79 +2367,9 @@
       'plotshape(shortCondition, title = "Sell Signal", text ="SELL", textcolor = #FFFFFF, style=shape.labeldown, size = size.normal, location=location.abovebar, color = #FF5733, transp = 0)'
     ].join("\n");
 
-    const USER_PINE_EXIT = [
-      "//@version=2",
-      'strategy("MACD + SMA 200 Strategy (by ChartArt)", shorttitle="CA_-_MACD_SMA_strategy", overlay=true)',
-      "",
-      "source = input(close)",
-      'fastLength = input(12, minval=1, title="MACD fast moving average")',
-      'slowLength=input(26,minval=1, title="MACD slow moving average")',
-      'signalLength=input(9,minval=1, title="MACD signal line moving average")',
-      'veryslowLength=input(200,minval=1, title="Very slow moving average")',
-      'switch1=input(true, title="Enable Bar Color?")',
-      'switch2=input(true, title="Enable Moving Averages?")',
-      'switch3=input(true, title="Enable Background Color?")',
-      "",
-      "fastMA = sma(source, fastLength)",
-      "slowMA = sma(source, slowLength)",
-      "veryslowMA = sma(source, veryslowLength)",
-      "macd = fastMA - slowMA",
-      "signal = sma(macd, signalLength)",
-      "hist = macd - signal",
-      "",
-      "MAtrendcolor = change(veryslowMA) > 0 ? green : red",
-      "trendcolor = fastMA > slowMA and change(veryslowMA) > 0 and close > slowMA ? green : fastMA < slowMA and change(veryslowMA) < 0 and close < slowMA ? red : blue",
-      "bartrendcolor = close > fastMA and close > slowMA and close > veryslowMA and change(slowMA) > 0 ? green : close < fastMA and close < slowMA and close < veryslowMA and change(slowMA) < 0 ? red : blue",
-      "backgroundcolor = slowMA > veryslowMA and crossover(hist, 0) and macd > 0 and fastMA > slowMA and close[slowLength] > veryslowMA ? green : slowMA < veryslowMA and crossunder(hist, 0) and macd < 0 and fastMA < slowMA and close[slowLength] < veryslowMA ? red : na",
-      "bgcolor(switch3?backgroundcolor:na,transp=80)",
-      "barcolor(switch1?bartrendcolor:na)",
-      "",
-      "F=plot(switch2?fastMA:na,color=trendcolor)",
-      "S=plot(switch2?slowMA:na,color=trendcolor,linewidth=2)",
-      "V=plot(switch2?veryslowMA:na,color=MAtrendcolor,linewidth=4)",
-      "fill(F,V,color=gray)",
-      "",
-      "buyprice = low",
-      "sellprice = high",
-      "cancelLong = slowMA < veryslowMA",
-      "cancelShort = slowMA > veryslowMA",
-      "",
-      "if (cancelLong)",
-      '    strategy.cancel("MACDLE")',
-      "",
-      "if crossover(hist, 0) and macd > 0 and fastMA > slowMA and close[slowLength] > veryslowMA",
-      '    strategy.entry("MACDLE", strategy.long, stop=buyprice, comment="Bullish")',
-      "",
-      "if (cancelShort)",
-      '    strategy.cancel("MACDSE")',
-      "",
-      "if crossunder(hist, 0) and macd < 0 and fastMA < slowMA and close[slowLength] < veryslowMA",
-      '    strategy.entry("MACDSE", strategy.short, stop=sellprice, comment="Bearish")',
-      "",
-      'maxIdLossPcnt = input(50, "Max Intraday Loss(%)", type=float)',
-      "strategy.risk.max_intraday_loss(maxIdLossPcnt, strategy.percent_of_equity)"
-    ].join("\n");
-
-    const USER_PINE_RSI_BUY = [
-      "// By Glaz",
-      'study(title="RSI Chart Bars",overlay = true, shorttitle="RSI Bars")',
-      'src = close, len = input(14, minval=1, title="Length")',
-      "up = rma(max(change(src), 0), len)",
-      "down = rma(-min(change(src), 0), len)",
-      "rsi = down == 0 ? 100 : up == 0 ? 0 : 100 - (100 / (1 + up / down))",
-      "",
-      'src1 = close, len1 = input(70, minval=1, title="UpLevel")',
-      'src2 = close, len2 = input(30, minval=1, title="DownLevel")',
-      "isup() => rsi > len1",
-      "isdown() => rsi < len2",
-      "barcolor(isup() ? green : isdown() ? red : na )"
-    ].join("\n");
-
     const DEFAULT_PRO_SCRIPTS = [
       { id: "user_ut_bot",    name: "شراء او بيع",  builtin: true, code: USER_PINE_UT_BOT },
       { id: "user_ema_cross", name: "sell and buy", builtin: true, code: USER_PINE_SELL_BUY },
-      { id: "user_macd_exit", name: "EXIT",         builtin: true, code: USER_PINE_EXIT },
-      { id: "user_rsi_buy",   name: "RSI شراء",     builtin: true, code: USER_PINE_RSI_BUY },
       {
         id: "auto_sr",
         name: "دعوم ومقاومات تلقائية",
@@ -2819,10 +2508,6 @@
       cleanSeriesPeriod: "1D",
       marketIsOpen: false,
       appBooted: false,
-      alerts: safeJson(LS.ALERTS, []).filter(a => a && a.type === "price"),
-      alertLog: safeJson(LS.ALERT_LOG, []),
-      gmailCfg: safeJson(LS.GMAIL_CFG, { email: "", webhookUrl: "" }),
-      unreadAlerts: 0,
       chatHistory: [],
       sending: false
     };
@@ -2890,8 +2575,7 @@
           indicators: [...state.indicators],
           proScripts: state.proScripts,
           activeProScripts: [...state.activeProScripts],
-          proScriptsVer: 8,
-          alerts: state.alerts,
+          proScriptsVer: 9,
           chartMode: state.chartMode,
           lastTicker: state.ticker,
           tf: state.tf,
@@ -2975,7 +2659,7 @@
           shouldPushBack = true;
         }
 
-        if (Number(d.proScriptsVer || 0) >= 8) {
+        if (Number(d.proScriptsVer || 0) >= 9) {
           if (Array.isArray(d.proScripts) && d.proScripts.length && cloudIndMs > state.indUpdatedAt) {
             state.proScripts = sanitizeProScriptsList(d.proScripts);
             localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
@@ -2985,13 +2669,8 @@
             localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
           }
         } else {
-          // ترقية الحساب للنسخة الجديدة مع المؤشرات الجاهزة الأربعة
+          // ترقية الحساب للنسخة الجديدة بدون EXIT و RSI شراء
           shouldPushBack = true;
-        }
-        if (Array.isArray(d.alerts) && cloudUpdatedMs > state.localUpdatedAt) {
-          state.alerts = d.alerts.filter(a => a && a.type === "price");
-          localStorage.setItem(LS.ALERTS, JSON.stringify(state.alerts));
-          updateAlertsBadge();
         }
         syncTfButtonsUI(); syncIndicatorsUI(); syncChartModeUI(); renderProScriptsUI(); updateHeaderFavStar(); renderStockList();
         if (chartNeedsReload) selectStock(state.ticker, false, false);
@@ -5854,7 +5533,6 @@
       if ($("activeLivePriceVal")) $("activeLivePriceVal").textContent = "—";
       if ($("activeLiveUnit")) $("activeLiveUnit").textContent = info.ticker === "GOLD" ? "$" : (info.isIndex && info.ticker !== "USDEGP" ? "نقطة" : "ج.م");
       if ($("activeLiveChgBadge")) { $("activeLiveChgBadge").className = "mover-chg flat"; $("activeLiveChgBadge").textContent = "—"; }
-      renderFairValueCard();
       updateHeaderFavStar(); renderStockList(); fetchLiveQuote(t, false); fetchLiveMetrics(t);
       state.chartDirty = true;
       state.taDirty = true;
@@ -6238,7 +5916,7 @@
     function renderCompactMoverItems(containerId, rawList) {
       const el = $(containerId);
       if (!el) return;
-      const items = (Array.isArray(rawList) ? rawList : []).filter(x => isValidEgxTicker(x?.ticker)).slice(0, 5);
+      const items = (Array.isArray(rawList) ? rawList : []).filter(x => isValidEgxTicker(x?.ticker)).slice(0, 8);
       if (!items.length) {
         el.innerHTML = `<div class="movers-empty">لا توجد بيانات حالياً</div>`;
         return;
@@ -6269,7 +5947,7 @@
     function renderActiveMoverItems(rawList) {
       const el = $("activeMoversList");
       if (!el) return;
-      const items = (Array.isArray(rawList) ? rawList : []).filter(x => isValidEgxTicker(x?.ticker)).slice(0, 5);
+      const items = (Array.isArray(rawList) ? rawList : []).filter(x => isValidEgxTicker(x?.ticker)).slice(0, 8);
       if (!items.length) {
         el.innerHTML = `<div class="movers-empty">لا توجد بيانات حالياً</div>`;
         return;
@@ -6345,8 +6023,6 @@
         renderMoversList();
         renderEgxHeatmap();
         renderSectorsRadar();
-        if (state.chartMode === 'perf') renderFairValueCard();
-        evaluateAlerts();
       } catch {
         if (!silent) {
           state.moversData = null;
@@ -6582,7 +6258,7 @@
     }
 
 
-    // 8.58 رادار القطاعات المنفجرة والسيولة + سكرينر المضاربة + السعر العادل + محرك التنبيهات الذكية
+    // 8.58 رادار القطاعات المنفجرة والسيولة
     function getScreenerPool() {
       const data = state.moversData;
       if (!data) return [];
@@ -6640,7 +6316,7 @@
       }
 
       const maxShare = Math.max(...sectors.map(s => s.share), 1);
-      grid.innerHTML = sectors.slice(0, 5).map(sec => {
+      grid.innerHTML = sectors.slice(0, 8).map(sec => {
         const chgCls = sec.avgChg > 0 ? "up" : sec.avgChg < 0 ? "down" : "flat";
         const sign = sec.avgChg > 0 ? "+" : "";
         const barW = Math.max(8, Math.min(100, Math.round((sec.share / maxShare) * 100)));
@@ -6666,330 +6342,6 @@
         </div>`;
       }).join("");
     }
-
-    function renderFairValueCard() {
-      const box = $("cleanFairValueBox");
-      if (!box) return;
-      const info = getStockInfo(state.ticker);
-      if (info.isIndex) { box.style.display = "none"; return; }
-      box.style.display = "flex";
-
-      const q = (state.liveQuote && state.liveQuote.ticker === state.ticker) ? state.liveQuote : null;
-      const scrItem = getScreenerPool().find(x => x.t === state.ticker) || null;
-
-      const price = q?.price ?? scrItem?.p ?? null;
-      const fv = q?.fairValue ?? scrItem?.fv ?? null;
-      const up = q?.upsidePct ?? scrItem?.up ?? null;
-      const pe = q?.pe ?? scrItem?.pe ?? null;
-      const pb = q?.pb ?? scrItem?.pb ?? null;
-      const eps = q?.eps ?? scrItem?.eps ?? null;
-      const rvol = q?.rvol ?? scrItem?.rvol ?? null;
-
-      if ($("fvPeVal"))   $("fvPeVal").textContent   = pe != null ? Number(pe).toFixed(1) + "x" : "—";
-      if ($("fvPbVal"))   $("fvPbVal").textContent   = pb != null ? Number(pb).toFixed(2) + "x" : "—";
-      if ($("fvEpsVal"))  $("fvEpsVal").textContent  = eps != null ? Number(eps).toFixed(2) : "—";
-      if ($("fvRvolVal")) $("fvRvolVal").textContent = rvol != null ? Number(rvol).toFixed(2) + "x" : "—";
-
-      const pill = $("fvStatusPill"), valEl = $("fvValueText"), track = $("fvBarTrack"), marker = $("fvBarMarker");
-      if (fv != null && price != null && up != null) {
-        valEl.textContent = `${Number(fv).toFixed(2)} ج.م`;
-        if (up >= 10) {
-          pill.className = "fv-status-pill under";
-          pill.textContent = `🟢 أقل من العادل (+${Number(up).toFixed(1)}%)`;
-        } else if (up <= -10) {
-          pill.className = "fv-status-pill over";
-          pill.textContent = `🔴 أعلى من العادل (${Number(up).toFixed(1)}%)`;
-        } else {
-          pill.className = "fv-status-pill fair";
-          pill.textContent = `🟡 قريب من العادل (${up > 0 ? "+" : ""}${Number(up).toFixed(1)}%)`;
-        }
-        if (track && marker) {
-          track.style.display = "block";
-          // كلما كان السعر أقل من العادل يكون المؤشر ناحية الأخضر (اليسار)، وكلما زاد يكون ناحية الأحمر (اليمين)
-          const ratio = price / fv; // 0.5 -> 10%, 1.0 -> 50%, 1.5 -> 90%
-          const pctPos = Math.max(6, Math.min(94, Math.round(50 + (ratio - 1) * 80)));
-          marker.style.left = pctPos + "%";
-        }
-      } else {
-        valEl.textContent = "غير متوفر حالياً";
-        pill.className = "fv-status-pill na";
-        pill.textContent = "بيانات مالية غير مكتملة";
-        if (track) track.style.display = "none";
-      }
-    }
-
-    // 8.59 محرك تنبيهات السعر فقط (زيادة/نقصان % أو سعر محدد + إرسال على Gmail)
-    const GAS_EMAIL_SCRIPT_CODE = [
-      "function doPost(e) {",
-      "  try {",
-      "    var data = JSON.parse(e.postData.contents);",
-      "    var to = data.to || Session.getActiveUser().getEmail();",
-      "    var subject = data.subject || 'تنبيه سعر - سهم (Sahm)';",
-      "    var body = data.body || '';",
-      "    MailApp.sendEmail(to, subject, body);",
-      "    return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);",
-      "  } catch (err) {",
-      "    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: String(err) })).setMimeType(ContentService.MimeType.JSON);",
-      "  }",
-      "}"
-    ].join("\n");
-
-    const PRICE_PCT_COND_MAP = {
-      pct_up_5:  { dir: "above", pct:  5,  label: "زيادة +5%" },
-      pct_up_10: { dir: "above", pct: 10,  label: "زيادة +10%" },
-      pct_up_15: { dir: "above", pct: 15,  label: "زيادة +15%" },
-      pct_up_20: { dir: "above", pct: 20,  label: "زيادة +20%" },
-      pct_dn_5:  { dir: "below", pct: -5,  label: "نقصان -5%" },
-      pct_dn_10: { dir: "below", pct: -10, label: "نقصان -10%" },
-      pct_dn_15: { dir: "below", pct: -15, label: "نقصان -15%" }
-    };
-
-    function getKnownStockPrice(ticker) {
-      const tk = String(ticker || "").toUpperCase().trim();
-      if (!tk) return null;
-      if (state.liveQuote?.ticker === tk && Number.isFinite(Number(state.liveQuote.price)) && Number(state.liveQuote.price) > 0) {
-        return Number(state.liveQuote.price);
-      }
-      const scr = getScreenerPool().find(x => x.t === tk);
-      if (scr && Number.isFinite(Number(scr.p)) && Number(scr.p) > 0) return Number(scr.p);
-      return null;
-    }
-
-    function updatePriceAlertTargetFromCond() {
-      const tk = ($("alPriceTicker")?.value || "").trim().toUpperCase().replace(/^EGX:/i, "").replace(/[^A-Z0-9]/g, "");
-      const cond = $("alPriceCond")?.value || "pct_up_5";
-      const curP = getKnownStockPrice(tk);
-      const hint = $("alPriceCurrentHint");
-      if (hint) hint.textContent = curP ? `السعر الحالي: ${curP.toFixed(2)} ج.م` : "";
-      const pctCfg = PRICE_PCT_COND_MAP[cond];
-      const tgtInp = $("alPriceTarget");
-      if (!tgtInp) return;
-      if (pctCfg && curP) {
-        tgtInp.value = (curP * (1 + pctCfg.pct / 100)).toFixed(2);
-      } else if (!pctCfg && curP && !tgtInp.value) {
-        tgtInp.value = curP.toFixed(2);
-      }
-    }
-
-    function playAlertChime() {
-      try {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (!Ctx) return;
-        const ctx = new Ctx();
-        const now = ctx.currentTime;
-        [880, 1174.66].forEach((freq, i) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.type = "sine";
-          osc.frequency.setValueAtTime(freq, now + i * 0.14);
-          gain.gain.setValueAtTime(0.001, now + i * 0.14);
-          gain.gain.exponentialRampToValueAtTime(0.14, now + i * 0.14 + 0.02);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.14 + 0.25);
-          osc.connect(gain); gain.connect(ctx.destination);
-          osc.start(now + i * 0.14); osc.stop(now + i * 0.14 + 0.26);
-        });
-      } catch {}
-    }
-
-    function saveAlertsState() {
-      state.alerts = state.alerts.filter(a => a && a.type === "price");
-      localStorage.setItem(LS.ALERTS, JSON.stringify(state.alerts));
-      localStorage.setItem(LS.ALERT_LOG, JSON.stringify(state.alertLog.slice(0, 40)));
-      markLocalChange(false);
-      syncUserToCloud(false);
-      updateAlertsBadge();
-    }
-
-    function updateAlertsBadge() {
-      const activeCnt = state.alerts.filter(a => a.active && a.type === "price").length;
-      const badge = $("alertsBellBadge");
-      if (badge) {
-        if (state.unreadAlerts > 0) {
-          badge.textContent = String(state.unreadAlerts);
-          badge.className = "bell-badge show";
-        } else if (activeCnt > 0) {
-          badge.textContent = String(activeCnt);
-          badge.className = "bell-badge show ok";
-        } else {
-          badge.className = "bell-badge";
-        }
-      }
-      if ($("menuAlertsCount")) $("menuAlertsCount").textContent = String(activeCnt);
-      if ($("alActiveCount")) $("alActiveCount").textContent = String(activeCnt);
-    }
-
-    function describeAlert(a) {
-      const pctTxt = a.pctLabel ? ` (${a.pctLabel})` : "";
-      return `EGX:${a.ticker} • السعر ${a.cond === "above" ? "صعد إلى" : "هبط إلى"} ${Number(a.target).toFixed(2)} ج.م${pctTxt}`;
-    }
-
-    function showAlertToast(title, msg, ticker) {
-      const stack = $("alertToastStack");
-      if (!stack) return;
-      const el = document.createElement("div");
-      el.className = "alert-toast";
-      el.innerHTML = `
-        <div class="alert-toast-body">
-          <div class="alert-toast-title">${title}</div>
-          <div class="alert-toast-msg">${msg}</div>
-        </div>
-        <div style="display:flex;gap:5px;flex-shrink:0;">
-          ${ticker ? `<button type="button" class="btn-sm emerald" data-toast-open="${ticker}">فتح ↗</button>` : ""}
-          <button type="button" class="btn-sm" data-toast-close="1">✕</button>
-        </div>`;
-      el.onclick = e => {
-        const op = e.target.closest("[data-toast-open]");
-        if (op) { selectStock(op.dataset.toastOpen, true, true, true); el.remove(); return; }
-        if (e.target.closest("[data-toast-close]")) el.remove();
-      };
-      stack.prepend(el);
-      setTimeout(() => { if (el.parentElement) el.remove(); }, 10000);
-    }
-
-    async function sendGmailAlert(subject, bodyText) {
-      const to = (state.gmailCfg?.email || state.user?.email || "").trim();
-      const webhookUrl = (state.gmailCfg?.webhookUrl || "").trim();
-      if (!to && !webhookUrl) return { ok: false, reason: "no_config" };
-
-      if (webhookUrl) {
-        try {
-          await fetch(webhookUrl, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ to, subject, body: bodyText })
-          });
-          return { ok: true, via: "gas" };
-        } catch {}
-      }
-
-      if (to) {
-        try {
-          const res = await fetch(`${WORKER_ORIGIN}/notify-email`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ to, subject, body: bodyText })
-          });
-          if (res.ok) return { ok: true, via: "worker" };
-        } catch {}
-      }
-      return { ok: false, reason: "no_webhook" };
-    }
-
-    function fireAlertHit(alert, matchedTicker, detailMsg) {
-      const now = Date.now();
-      const info = getStockInfo(matchedTicker);
-      const title = `🔔 تنبيه سعر سهم - ${info.name} (${matchedTicker})`;
-      const fullMsg = detailMsg;
-
-      state.alertLog.unshift({ id: now + "_" + matchedTicker, ticker: matchedTicker, title, msg: fullMsg, at: new Date().toISOString() });
-      if (state.alertLog.length > 40) state.alertLog.length = 40;
-      state.unreadAlerts++;
-
-      alert.active = false;
-      alert.triggeredAt = now;
-
-      saveAlertsState();
-      playAlertChime();
-      showAlertToast(title, fullMsg, matchedTicker);
-
-      if (typeof Notification !== "undefined" && Notification.permission === "granted") {
-        try { new Notification(title, { body: fullMsg }); } catch {}
-      }
-      const mailBody = `${title}\n${fullMsg}\n\nرابط السهم المباشر:\n${window.location.origin}${window.location.pathname}?share=1&ticker=${matchedTicker}`;
-      sendGmailAlert(title, mailBody);
-      if ($("alertsModalBackdrop")?.classList.contains("open")) renderAlertsModal();
-    }
-
-    function checkStockMatchesAlert(alert, r) {
-      if (!alert || alert.type !== "price" || !r || !Number.isFinite(Number(r.p)) || r.p <= 0) return null;
-      const tgt = Number(alert.target);
-      if (!Number.isFinite(tgt) || tgt <= 0) return null;
-      const pctInfo = alert.pctLabel ? ` (${alert.pctLabel})` : "";
-      if (alert.cond === "above" && r.p >= tgt) return `السعر وصل ${r.p.toFixed(2)} ج.م — الهدف >= ${tgt.toFixed(2)} ج.م${pctInfo}`;
-      if (alert.cond === "below" && r.p <= tgt) return `السعر هبط إلى ${r.p.toFixed(2)} ج.م — الهدف <= ${tgt.toFixed(2)} ج.م${pctInfo}`;
-      return null;
-    }
-
-    function evaluateAlerts(singleQuote = null) {
-      const activeAlerts = state.alerts.filter(a => a && a.active && a.type === "price");
-      if (!activeAlerts.length) return;
-
-      const byTicker = new Map();
-      for (const r of getScreenerPool()) byTicker.set(r.t, r);
-      if (singleQuote && singleQuote.ticker && Number.isFinite(Number(singleQuote.price))) {
-        const prev = byTicker.get(singleQuote.ticker) || {};
-        byTicker.set(singleQuote.ticker, {
-          ...prev,
-          t: singleQuote.ticker,
-          p: Number(singleQuote.price),
-          c: Number(singleQuote.changePct || 0)
-        });
-      }
-
-      for (const al of activeAlerts) {
-        const r = byTicker.get(al.ticker);
-        if (!r) continue;
-        const msg = checkStockMatchesAlert(al, r);
-        if (msg) fireAlertHit(al, r.t, msg);
-      }
-    }
-
-    function renderAlertsModal() {
-      const listEl = $("alertsListContainer"), logEl = $("alertsLogContainer");
-      if (!listEl || !logEl) return;
-      updateAlertsBadge();
-
-      const priceAlerts = state.alerts.filter(a => a && a.type === "price");
-      if (!priceAlerts.length) {
-        listEl.innerHTML = `<div style="text-align:center;padding:12px;color:var(--text-muted);font-size:12px;">لا توجد تنبيهات سعر نشطة حالياً — اختر السهم والنسبة (+5% / +10% / -5%...) واضغط إضافة.</div>`;
-      } else {
-        listEl.innerHTML = priceAlerts.map(a => `
-          <div class="alert-item-row ${!a.active ? "triggered" : ""}">
-            <div class="alert-item-main">
-              <div class="alert-item-title">${describeAlert(a)}</div>
-              <div class="alert-item-sub">${a.active ? "🟢 نشط ويراقب السعر" : "✅ تحقق وتم إرسال التنبيه"}</div>
-            </div>
-            <div style="display:flex;gap:4px;flex-shrink:0;">
-              ${!a.active ? `<button type="button" class="btn-sm emerald" data-al-rearm="${a.id}" title="إعادة تفعيل">↻</button>` : ""}
-              <button type="button" class="btn-sm danger" data-al-del="${a.id}" title="حذف">🗑️</button>
-            </div>
-          </div>`).join("");
-      }
-
-      if (!state.alertLog.length) {
-        logEl.innerHTML = `<div style="text-align:center;padding:10px;color:var(--text-muted);font-size:11.5px;">لم يتحقق أي تنبيه بعد.</div>`;
-      } else {
-        logEl.innerHTML = state.alertLog.slice(0, 15).map(item => {
-          const tStr = new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit" }).format(new Date(item.at));
-          return `<div class="alert-item-row" style="cursor:pointer;" data-log-open="${item.ticker}">
-            <div class="alert-item-main">
-              <div class="alert-item-title">${item.title}</div>
-              <div class="alert-item-sub">${item.msg} • ${tStr}</div>
-            </div>
-            <span class="badge badge-ticker">فتح ↗</span>
-          </div>`;
-        }).join("");
-      }
-
-      if ($("gmailToInput")) $("gmailToInput").value = state.gmailCfg?.email || state.user?.email || "";
-      if ($("gmailWebhookInput")) $("gmailWebhookInput").value = state.gmailCfg?.webhookUrl || "";
-    }
-
-    function openAlertsModal(defaultTab = "price", prefillTicker = null) {
-      closeMoreMenu();
-      state.unreadAlerts = 0;
-      updateAlertsBadge();
-
-      const tk = (prefillTicker || state.ticker || "SWDY").toUpperCase();
-      if ($("alPriceTicker")) $("alPriceTicker").value = tk;
-      if ($("alertsFeedbackMsg")) { $("alertsFeedbackMsg").className = "test-result"; $("alertsFeedbackMsg").textContent = ""; }
-      updatePriceAlertTargetFromCond();
-      renderAlertsModal();
-      $("alertsModalBackdrop").classList.add("open");
-    }
-    const closeAlertsModal = () => $("alertsModalBackdrop")?.classList.remove("open");
-
 
     // 8.6 سحب أسعار الذهب (عيار 21 و 24 والأونصة) والدولار مقابل الجنيه
     function applyMacroRatesUI(data) {
@@ -7219,7 +6571,6 @@
       }
 
       tickProChartLiveCandle(q, prevPrice);
-      evaluateAlerts(q);
 
       if (state.chartMode === "perf" && q.ticker === state.ticker) {
         // على الشارت الصافي اليومي (1D): نضيف النقطة الحية الجديدة بدون مسح أو بربشة
@@ -7512,7 +6863,6 @@
         state.cleanSeriesPeriod = pKey;
         drawCleanAreaChart(state.cleanSeriesPoints, null);
         updateCleanHeaderNumbers(null);
-        renderFairValueCard();
       updatePerfSimBox();
         return;
       }
@@ -7628,7 +6978,6 @@
       state.cleanSeriesPeriod = pKey;
       drawCleanAreaChart(pts, null);
       updateCleanHeaderNumbers(null);
-      renderFairValueCard();
       updatePerfSimBox();
     }
 
@@ -7710,7 +7059,6 @@
         else { b.textContent = "⚪ محايد" + (q?.rsi14 != null ? ` • RSI ${q.rsi14}` : ""); b.style.color = "var(--text-muted)"; }
       }
 
-      renderFairValueCard();
       updatePerfSimBox();
       const tStr = new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date());
       if ($("perfUpdatedNote")) {
@@ -8119,8 +7467,6 @@ ${buildStockContextString()}
       const PINE_TEMPLATES = {
         ut_bot:    { name: "شراء او بيع",  code: USER_PINE_UT_BOT },
         ema_cross: { name: "sell and buy", code: USER_PINE_SELL_BUY },
-        macd_exit: { name: "EXIT",         code: USER_PINE_EXIT },
-        rsi_buy:   { name: "RSI شراء",     code: USER_PINE_RSI_BUY },
         supertrend: {
           name: "SuperTrend",
           code: [
@@ -8586,7 +7932,7 @@ ${buildStockContextString()}
       window.addEventListener("resize", () => { resizeProCharts(); setTimeout(() => { resizeProCharts(); if (state.activeTab === "home") renderEgxHeatmap(); }, 140); });
       window.addEventListener("orientationchange", () => setTimeout(resizeProCharts, 250));
       document.addEventListener("keydown", e => {
-        if (e.key === "Escape") { document.body.classList.remove("hm-fullscreen"); if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير"; exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeApiModal(); closeAccountModal(); closeMcpModal(); closeAlertsModal(); }
+        if (e.key === "Escape") { document.body.classList.remove("hm-fullscreen"); if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير"; exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeApiModal(); closeAccountModal(); closeMcpModal(); }
       });
 
       const syncSearchInputs = (val) => {
@@ -8697,7 +8043,7 @@ ${buildStockContextString()}
       window.addEventListener("pagehide", markUnload);
       window.addEventListener("beforeunload", markUnload);
 
-      // رادار القطاعات + تنبيهات السعر (Gmail)
+      // رادار القطاعات
       if ($("sectorsRadarGrid")) {
         $("sectorsRadarGrid").onclick = e => {
           const stk = e.target.closest("[data-sector-stock]");
@@ -8720,124 +8066,6 @@ ${buildStockContextString()}
           setTimeout(() => $("sectorsRadarSection")?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
         };
       }
-      if ($("menuAlertsBtn")) $("menuAlertsBtn").onclick = () => openAlertsModal("price");
-
-      // نافذة تنبيهات السعر (Gmail)
-      $("alertsHeaderBtn").onclick    = () => openAlertsModal("price");
-      $("chartQuickAlertBtn").onclick = () => openAlertsModal("price", state.ticker);
-      $("closeAlertsModalBtn").onclick = closeAlertsModal;
-      $("alertsModalBackdrop").onclick = e => { if (e.target.id === "alertsModalBackdrop") closeAlertsModal(); };
-
-      $("alPriceCond").onchange = updatePriceAlertTargetFromCond;
-      $("alPriceTicker").oninput = updatePriceAlertTargetFromCond;
-
-      const showAlMsg = (ok, txt) => {
-        const m = $("alertsFeedbackMsg");
-        m.className = "test-result " + (ok ? "ok" : "err");
-        m.textContent = txt;
-      };
-
-      $("addPriceAlertBtn").onclick = () => {
-        const tk = $("alPriceTicker").value.trim().toUpperCase().replace(/^EGX:/i, "").replace(/[^A-Z0-9]/g, "");
-        const rawCond = $("alPriceCond").value;
-        const pctCfg = PRICE_PCT_COND_MAP[rawCond] || null;
-        const cond = pctCfg ? pctCfg.dir : rawCond;
-        let target = Number($("alPriceTarget").value);
-        if (!tk || tk.length < 2) return showAlMsg(false, "يرجى كتابة رمز سهم صحيح (مثل SWDY).");
-        if ((!Number.isFinite(target) || target <= 0) && pctCfg) {
-          const curP = getKnownStockPrice(tk);
-          if (curP) target = Number((curP * (1 + pctCfg.pct / 100)).toFixed(2));
-        }
-        if (!Number.isFinite(target) || target <= 0) return showAlMsg(false, "يرجى إدخال سعر مستهدف صحيح (أو افتح السهم أولاً لحساب النسبة).");
-
-        const emailVal = ($("gmailToInput")?.value || "").trim();
-        const hookVal  = ($("gmailWebhookInput")?.value || "").trim();
-        if (emailVal || hookVal) {
-          state.gmailCfg = { email: emailVal, webhookUrl: hookVal };
-          localStorage.setItem(LS.GMAIL_CFG, JSON.stringify(state.gmailCfg));
-        }
-
-        state.alerts.unshift({
-          id: "al_" + Date.now(),
-          type: "price",
-          ticker: tk,
-          cond,
-          pctLabel: pctCfg ? pctCfg.label : "",
-          target: Number(target.toFixed(2)),
-          active: true,
-          createdAt: Date.now()
-        });
-        saveAlertsState();
-        showAlMsg(true, `✅ تم تفعيل تنبيه السعر لسهم ${tk} عند ${target.toFixed(2)} ج.م${pctCfg ? " (" + pctCfg.label + ")" : ""}`);
-        renderAlertsModal();
-        evaluateAlerts(state.liveQuote);
-      };
-
-      $("alertsListContainer").onclick = e => {
-        const del = e.target.closest("[data-al-del]");
-        if (del) {
-          state.alerts = state.alerts.filter(a => a.id !== del.dataset.alDel);
-          saveAlertsState(); renderAlertsModal(); return;
-        }
-        const rearm = e.target.closest("[data-al-rearm]");
-        if (rearm) {
-          const item = state.alerts.find(a => a.id === rearm.dataset.alRearm);
-          if (item) { item.active = true; saveAlertsState(); renderAlertsModal(); }
-        }
-      };
-
-      $("alertsLogContainer").onclick = e => {
-        const row = e.target.closest("[data-log-open]");
-        if (row && row.dataset.logOpen) {
-          closeAlertsModal();
-          selectStock(row.dataset.logOpen, true, true, true);
-        }
-      };
-
-      $("alClearLogBtn").onclick = () => {
-        state.alertLog = [];
-        saveAlertsState(); renderAlertsModal();
-        showAlMsg(true, "تم مسح سجل التنبيهات.");
-      };
-
-      $("alReqNotifBtn").onclick = async () => {
-        if (typeof Notification === "undefined") return showAlMsg(false, "المتصفح لا يدعم إشعارات النظام هنا — الإشعارات داخل الموقع و Gmail شغالة.");
-        const perm = await Notification.requestPermission();
-        showAlMsg(perm === "granted", perm === "granted" ? "✅ تم تفعيل إشعارات المتصفح بنجاح!" : "⚠️ لم يتم السماح بالإشعارات.");
-      };
-
-      $("saveGmailCfgBtn").onclick = () => {
-        state.gmailCfg = {
-          email: ($("gmailToInput")?.value || "").trim(),
-          webhookUrl: ($("gmailWebhookInput")?.value || "").trim()
-        };
-        localStorage.setItem(LS.GMAIL_CFG, JSON.stringify(state.gmailCfg));
-        showAlMsg(true, "✅ تم حفظ إعدادات Gmail بنجاح.");
-      };
-
-      $("copyGasCodeBtn").onclick = async () => {
-        await copyText(GAS_EMAIL_SCRIPT_CODE);
-        showAlMsg(true, "📋 تم نسخ كود Apps Script! افتح script.google.com والصقه ثم Deploy > Web app (Anyone) والصق الرابط هنا.");
-      };
-
-      $("testGmailCfgBtn").onclick = async () => {
-        state.gmailCfg = {
-          email: ($("gmailToInput")?.value || "").trim(),
-          webhookUrl: ($("gmailWebhookInput")?.value || "").trim()
-        };
-        localStorage.setItem(LS.GMAIL_CFG, JSON.stringify(state.gmailCfg));
-        if (!state.gmailCfg.email) return showAlMsg(false, "اكتب بريدك على Gmail أولاً.");
-        showAlMsg(true, "⏳ جاري إرسال رسالة اختبار إلى Gmail...");
-        const res = await sendGmailAlert("✅ اختبار تنبيه - سهم (Sahm)", "تم ربط تنبيهات الأسعار بنجاح مع بريدك على Gmail!");
-        if (res.ok) {
-          showAlMsg(true, `✅ تم إرسال رسالة الاختبار إلى ${state.gmailCfg.email} — راجع بريدك الوارد!`);
-        } else {
-          showAlMsg(false, "⚠️ عشان الإرسال التلقائي يشتغل بدون سيرفر، اضغط (📋 كود Gmail) والصقه في script.google.com وانشره كـ Web App وحط الرابط في الخانة.");
-        }
-      };
-
-      updateAlertsBadge();
-
       updateApiBadge(); updateAuthUI();
     });
   </script>
