@@ -164,14 +164,23 @@
     .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
     .indices-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     @media (max-width: 820px) { .indices-grid { grid-template-columns: repeat(2, 1fr); } }
-    .index-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 13px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; transition: 0.2s; }
+    .index-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 13px; padding: 10px 11px; display: flex; flex-direction: column; gap: 7px; cursor: pointer; transition: 0.2s; min-width: 0; }
     .index-card:hover { border-color: var(--border-strong); transform: translateY(-1px); }
     .index-card.active { border-color: var(--emerald); background: linear-gradient(135deg, var(--bg-card), rgba(16, 185, 129, 0.1)); }
     .index-card.shariah.active { border-color: var(--gold); background: linear-gradient(135deg, var(--bg-card), rgba(245, 158, 11, 0.11)); }
-    .index-info { min-width: 0; }
+    .index-card-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-width: 0; }
+    .index-card-bottom {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px;
+      direction: rtl; padding-top: 6px; border-top: 1px dashed rgba(255, 255, 255, 0.07);
+    }
+    [data-theme="light"] .index-card-bottom { border-top-color: rgba(15, 23, 42, 0.08); }
+    .index-pts-wrap { display: inline-flex; align-items: baseline; gap: 4px; min-width: 0; }
+    .index-pts-val { font-size: 13.5px; font-weight: 800; color: var(--text); direction: ltr; }
+    .index-pts-lbl { font-size: 9.5px; font-weight: 700; color: var(--text-muted); }
+    .index-info { min-width: 0; flex: 1; }
     .index-name { font-size: 13px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .index-card.shariah .index-name { color: var(--gold); }
-    .index-sub { font-size: 11px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .index-sub { font-size: 10.5px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .index-filter-btn { padding: 4px 9px; border-radius: 8px; border: 1px solid var(--border-strong); background: var(--bg-elevated); font-size: 11px; font-weight: 700; cursor: pointer; flex-shrink: 0; transition: 0.15s; }
     .index-filter-btn:hover { background: var(--emerald); color: #04130d; border-color: var(--emerald); }
     .chart-topbar { padding: 10px 12px; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg-elevated); }
@@ -770,7 +779,7 @@
     }
     .mover-c-bottom {
       display: flex; align-items: center; justify-content: space-between; gap: 4px;
-      direction: ltr; padding-top: 2px; border-top: 1px dashed rgba(255, 255, 255, 0.05);
+      direction: rtl; padding-top: 4px; border-top: 1px dashed rgba(255, 255, 255, 0.06);
     }
     [data-theme="light"] .mover-c-bottom { border-top-color: rgba(15, 23, 42, 0.07); }
     .mover-price { font-size: 11.5px; font-weight: 800; color: var(--text); }
@@ -796,7 +805,7 @@
     .mover-info { min-width: 0; flex: 1; }
     .mover-name { font-size: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .mover-code-only { font-size: 10.5px; font-weight: 800; color: var(--emerald); direction: ltr; display: inline-block; margin-top: 1px; }
-    .mover-nums { text-align: left; direction: ltr; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    .mover-nums { direction: rtl; flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px; }
     .movers-empty { grid-column: 1 / -1; text-align: center; padding: 18px 10px; color: var(--text-muted); font-size: 11.5px; }
     .movers-tv-fallback { padding: 8px; min-height: 420px; }
     body.focus-mode #moversSection, body.focus-mode #moversDualSection, body.focus-mode #moversActiveSection { display: none !important; }
@@ -902,6 +911,81 @@
       .macro-ico { width: 22px; height: 22px; font-size: 12px; }
       .macro-name { font-size: 12px; }
       .macro-sub { font-size: 9.8px; }
+    }
+
+    /* السعر اللحظي ونسبة التغير بجانب اسم السهم في رأس الشارت */
+    .chart-live-quote {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 3px 9px; border-radius: 10px;
+      background: var(--bg-card); border: 1px solid var(--border-strong);
+      transition: background 0.25s, border-color 0.25s;
+    }
+    .chart-live-quote.flash-up { background: rgba(16, 185, 129, 0.22); border-color: var(--emerald); }
+    .chart-live-quote.flash-dn { background: rgba(244, 63, 94, 0.22); border-color: var(--red); }
+    .chart-live-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0;
+    }
+    .chart-live-dot.live { background: var(--emerald); box-shadow: 0 0 8px var(--emerald); animation: pulsePing 1.8s infinite; }
+    .chart-live-price { font-size: 13.5px; font-weight: 800; color: var(--text); direction: ltr; }
+    .chart-live-unit { font-size: 10px; font-weight: 700; color: var(--text-muted); }
+
+    /* الشاشة الثالثة: الأداء والعوائد (يوم / أسبوع / شهر / 3 شهور / 6 شهور / سنة / 5 سنين) */
+    .perf-stage {
+      display: none; width: 100%; height: 100%; overflow-y: auto;
+      padding: 14px; background: var(--bg-card);
+      flex-direction: column; gap: 12px;
+    }
+    .perf-stage.show { display: flex; }
+    .perf-hero-strip {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px;
+    }
+    @media (max-width: 640px) { .perf-hero-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    .perf-stat-box {
+      padding: 9px 10px; border-radius: 12px;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 2px; min-width: 0;
+    }
+    .perf-stat-lbl { font-size: 10.5px; font-weight: 700; color: var(--text-muted); }
+    .perf-stat-val { font-size: 13.5px; font-weight: 800; color: var(--text); direction: ltr; text-align: right; }
+    .perf-cards-grid {
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px;
+    }
+    @media (max-width: 720px) { .perf-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; } }
+    .perf-card {
+      padding: 11px 11px 10px; border-radius: 13px;
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 6px; transition: 0.18s; cursor: pointer;
+    }
+    .perf-card:hover, .perf-card.selected { border-color: var(--gold); transform: translateY(-1px); }
+    .perf-card.up { border-color: rgba(16, 185, 129, 0.28); background: linear-gradient(145deg, var(--bg-elevated), rgba(16, 185, 129, 0.08)); }
+    .perf-card.down { border-color: rgba(244, 63, 94, 0.28); background: linear-gradient(145deg, var(--bg-elevated), rgba(244, 63, 94, 0.08)); }
+    .perf-card-top { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+    .perf-period-ar { font-size: 12px; font-weight: 800; color: var(--text); }
+    .perf-period-en { font-size: 10px; font-weight: 800; color: var(--text-muted); direction: ltr; padding: 1px 6px; border-radius: 6px; background: var(--bg-card); border: 1px solid var(--border); }
+    .perf-pct { font-size: 19px; font-weight: 800; direction: ltr; text-align: right; line-height: 1.2; }
+    .perf-pct.up { color: var(--emerald); }
+    .perf-pct.down { color: var(--red); }
+    .perf-pct.flat { color: var(--text-muted); }
+    .perf-bar-track { width: 100%; height: 4px; border-radius: 4px; background: rgba(148, 163, 184, 0.16); overflow: hidden; }
+    .perf-bar-fill { height: 100%; border-radius: 4px; transition: width 0.35s ease; }
+    .perf-bar-fill.up { background: var(--emerald); }
+    .perf-bar-fill.down { background: var(--red); }
+    .perf-sim-box {
+      padding: 11px 13px; border-radius: 13px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(245, 158, 11, 0.08));
+      border: 1px solid var(--border-strong);
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+      font-size: 12px; font-weight: 700;
+    }
+    .perf-sim-result { font-size: 14.5px; font-weight: 800; direction: ltr; }
+    .perf-updated-note { font-size: 10.5px; color: var(--text-muted); text-align: center; margin-top: auto; }
+    @media (max-width: 480px) {
+      .index-card { padding: 8px 9px; gap: 5px; }
+      .index-pts-val { font-size: 12.5px; }
+      .index-pts-lbl { display: none; }
+      .chart-live-price { font-size: 12.5px; }
+      .perf-stage { padding: 10px; gap: 9px; }
+      .perf-pct { font-size: 16.5px; }
     }
   </style>
 </head>
@@ -1071,23 +1155,47 @@
         </div>
       </div>
 
-    <!-- المؤشرات -->
+    <!-- المؤشرات (النقط تحت ع اليمين + نسبة التغير تحت ع الشمال) -->
     <section class="indices-grid" id="indicesGrid">
       <div class="index-card" data-index-ticker="EGX30">
-        <div class="index-info"><div class="index-name">EGX 30</div><div class="index-sub">المؤشر الرئيسي</div></div>
-        <button class="index-filter-btn" data-open-filter="EGX30">الأسهم</button>
+        <div class="index-card-top">
+          <div class="index-info"><div class="index-name">EGX 30</div><div class="index-sub">المؤشر الرئيسي</div></div>
+          <button class="index-filter-btn" data-open-filter="EGX30">الأسهم</button>
+        </div>
+        <div class="index-card-bottom">
+          <span class="index-pts-wrap"><span class="index-pts-val" id="idxPts-EGX30">—</span><span class="index-pts-lbl">نقطة</span></span>
+          <span class="mover-chg flat" id="idxChg-EGX30">—</span>
+        </div>
       </div>
       <div class="index-card" data-index-ticker="EGX70EWI">
-        <div class="index-info"><div class="index-name">EGX 70 EWI</div><div class="index-sub">المتوسطة والصغيرة</div></div>
-        <button class="index-filter-btn" data-open-filter="EGX70">الأسهم</button>
+        <div class="index-card-top">
+          <div class="index-info"><div class="index-name">EGX 70 EWI</div><div class="index-sub">المتوسطة والصغيرة</div></div>
+          <button class="index-filter-btn" data-open-filter="EGX70">الأسهم</button>
+        </div>
+        <div class="index-card-bottom">
+          <span class="index-pts-wrap"><span class="index-pts-val" id="idxPts-EGX70EWI">—</span><span class="index-pts-lbl">نقطة</span></span>
+          <span class="mover-chg flat" id="idxChg-EGX70EWI">—</span>
+        </div>
       </div>
       <div class="index-card" data-index-ticker="EGX100EWI">
-        <div class="index-info"><div class="index-name">EGX 100 EWI</div><div class="index-sub">الأوسع نطاقاً</div></div>
-        <button class="index-filter-btn" data-open-filter="EGX100">الأسهم</button>
+        <div class="index-card-top">
+          <div class="index-info"><div class="index-name">EGX 100 EWI</div><div class="index-sub">الأوسع نطاقاً</div></div>
+          <button class="index-filter-btn" data-open-filter="EGX100">الأسهم</button>
+        </div>
+        <div class="index-card-bottom">
+          <span class="index-pts-wrap"><span class="index-pts-val" id="idxPts-EGX100EWI">—</span><span class="index-pts-lbl">نقطة</span></span>
+          <span class="mover-chg flat" id="idxChg-EGX100EWI">—</span>
+        </div>
       </div>
       <div class="index-card shariah" data-index-ticker="SHARIAH">
-        <div class="index-info"><div class="index-name">EGX 33 الشريعة</div><div class="index-sub">المتوافق شرعياً</div></div>
-        <button class="index-filter-btn" data-open-filter="SHARIAH">الأسهم</button>
+        <div class="index-card-top">
+          <div class="index-info"><div class="index-name">EGX 33 الشريعة</div><div class="index-sub">المتوافق شرعياً</div></div>
+          <button class="index-filter-btn" data-open-filter="SHARIAH">الأسهم</button>
+        </div>
+        <div class="index-card-bottom">
+          <span class="index-pts-wrap"><span class="index-pts-val" id="idxPts-SHARIAH">—</span><span class="index-pts-lbl">نقطة</span></span>
+          <span class="mover-chg flat" id="idxChg-SHARIAH">—</span>
+        </div>
       </div>
     </section>
 
@@ -1226,6 +1334,12 @@
           <button class="fav-star-main" id="mainFavBtn" title="إضافة للمفضلة">☆</button>
           <span id="activeStockLogoSlot"></span>
           <div class="active-stock-name" id="activeStockName">مؤشر EGX 30 الرئيسي</div>
+          <div class="chart-live-quote" id="activeLiveQuoteWrap" title="السعر اللحظي ونسبة التغير اليومي (يتحدث تلقائياً)">
+            <span class="chart-live-dot" id="activeLiveDot"></span>
+            <span class="chart-live-price" id="activeLivePriceVal">—</span>
+            <span class="chart-live-unit" id="activeLiveUnit">ج.م</span>
+            <span class="mover-chg flat" id="activeLiveChgBadge">—</span>
+          </div>
           <span class="badge badge-ticker" id="activeTickerBadge">EGX:EGX30</span>
           <div class="stock-badges" id="activeIndexBadges"></div>
           <button class="btn-sm" id="shareTickerBtn" title="نسخ رابط مباشر لهذا السهم">🔗 مشاركة</button>
@@ -1233,7 +1347,8 @@
         <div class="chart-controls">
           <div class="mode-switch" id="chartModeSwitch">
             <button class="mode-btn active" data-mode="tv">📊 TradingView</button>
-            <button class="mode-btn" data-mode="pro">⚡ شارت مبرمج (Pro)</button>
+            <button class="mode-btn" data-mode="pro">⚡ مبرمج (Pro)</button>
+            <button class="mode-btn" data-mode="perf">🏆 الأداء والعوائد</button>
           </div>
           <div class="tf-group" id="tfGroup">
             <button class="tf-btn" data-tf="5">5m</button>
@@ -1295,6 +1410,24 @@
               <button class="btn-sm" id="proBackToTvBtn">📊 العودة لـ TradingView</button>
             </div>
           </div>
+        </div>
+
+        <!-- الشاشة الثالثة: الأداء والعوائد (يوم / أسبوع / شهر / 3 شهور / 6 شهور / سنة / 5 سنين) -->
+        <div class="perf-stage" id="perfChartStage">
+          <div class="perf-hero-strip" id="perfHeroStrip">
+            <div class="perf-stat-box"><span class="perf-stat-lbl">السعر اللحظي</span><span class="perf-stat-val" id="perfHeroPrice">—</span></div>
+            <div class="perf-stat-box"><span class="perf-stat-lbl">تغير اليوم</span><span class="perf-stat-val" id="perfHeroDayChg">—</span></div>
+            <div class="perf-stat-box"><span class="perf-stat-lbl">نطاق اليوم</span><span class="perf-stat-val" id="perfHeroDayRange">—</span></div>
+            <div class="perf-stat-box"><span class="perf-stat-lbl">نطاق 52 أسبوع</span><span class="perf-stat-val" id="perfHero52wRange">—</span></div>
+          </div>
+          <div class="perf-cards-grid" id="perfCardsGrid">
+            <div class="movers-empty">⏳ جاري حساب عوائد السهم...</div>
+          </div>
+          <div class="perf-sim-box" id="perfSimBox">
+            <span id="perfSimText">💡 اضغط على أي فترة لحساب عائد استثمار 10,000 ج.م</span>
+            <span class="perf-sim-result" id="perfSimVal">—</span>
+          </div>
+          <div class="perf-updated-note" id="perfUpdatedNote">يتحدث تلقائياً أثناء جلسة البورصة المصرية</div>
         </div>
       </div>
 
@@ -1706,28 +1839,27 @@
       ["OCDI","السادس من أكتوبر للتنمية - سوديك","SODIC","عقارات","EGX30,EGX100,SHARIAH",true], ["ADIB","مصرف أبو ظبي الإسلامي - مصر","ADIB Egypt","بنوك إسلامية","EGX30,EGX100,SHARIAH",true], ["CIEB","بنك كريدي أجريكول مصر","Credit Agricole","بنوك","EGX30,EGX100",false],
       ["HDBK","بنك التعمير والإسكان","Housing & Dev Bank","بنوك","EGX30,EGX100",false], ["QNBA","بنك قطر الوطني الأهلي","QNB Egypt","بنوك","EGX30,EGX100",false], ["FAIT","بنك فيصل الإسلامي المصري","Faisal Islamic Bank","بنوك إسلامية","EGX30,EGX100,SHARIAH",true],
       ["FAITA","بنك فيصل الإسلامي (دولار)","Faisal Islamic USD","بنوك إسلامية","EGX100,SHARIAH",true], ["ALCN","الإسكندرية لتداول الحاويات والبضائع","Alex Containers","شحن وموانئ","EGX30,EGX100,SHARIAH",true], ["AMOC","الإسكندرية للزيوت المعدنية - أموك","AMOC","طاقة وبترول","EGX30,EGX100,SHARIAH",true],
-      ["SKPC","سيدي كرير للبتروكيماويات - سيدبك","Sidi Kerir","كيماويات","EGX30,EGX100,SHARIAH",true], ["KIMA","الصناعات الكيماوية المصرية - كيما","KIMA","كيماويات وأسمدة","EGX30,EGX100,SHARIAH",true], ["ESRS","حديد عز","Ezz Steel","موارد أساسية","EGX30,EGX100",false],
-      ["EGAL","مصر للألومنيوم","Egypt Aluminum","موارد أساسية","EGX30,EGX100,SHARIAH",true], ["ORAS","أوراسكوم كونستراكشون","Orascom Construction","مقاولات","EGX30,EGX100,SHARIAH",true], ["ORHD","أوراسكوم للتنمية مصر","Orascom Development","سياحة وعقارات","EGX30,EGX100",false],
-      ["BTFH","بلتون القابضة","Beltone Holding","خدمات مالية","EGX30,EGX100",false], ["CCAP","القلعة للاستشارات المالية","Qalaa Holdings","خدمات مالية","EGX30,EGX100",false], ["EKHO","القابضة المصرية الكويتية (دولار)","Egypt Kuwait USD","استثمار","EGX30,EGX100,SHARIAH",true],
-      ["EKHOA","القابضة المصرية الكويتية (جنيه)","Egypt Kuwait EGP","استثمار","EGX30,EGX100,SHARIAH",true], ["JUFO","جهينة للصناعات الغذائية","Juhayna","أغذية ومشروبات","EGX30,EGX100,SHARIAH",true], ["EFID","إيديتا للصناعات الغذائية","Edita Food","أغذية ومشروبات","EGX30,EGX100,SHARIAH",true],
-      ["ISPH","ابن سينا فارما","Ibnsina Pharma","رعاية صحية","EGX30,EGX100,SHARIAH",true], ["RMDA","العاشر من رمضان للأدوية - راميدا","Rameda Pharma","رعاية صحية","EGX30,EGX100,SHARIAH",true], ["CLHO","مستشفى كليوباترا","Cleopatra Hospital","رعاية صحية","EGX30,EGX100,SHARIAH",true],
-      ["GBCO","جي بي كورب (غبور)","GB Corp","سيارات","EGX30,EGX100",false], ["AUTO","جي بي أوتو","GB Auto","سيارات","EGX30,EGX100",false], ["MTIE","إم إم جروب للصناعة والتجارة","MM Group","تجارة وتوزيع","EGX30,EGX100,SHARIAH",true],
-      ["TAQA","طاقة عربية","TAQA Arabia","طاقة ومرافق","EGX30,EGX100,SHARIAH",true], ["ARCC","العربية للأسمنت","Arabian Cement","مواد بناء","EGX30,EGX100,SHARIAH",true], ["ACTF","أكت فاينانشال للاستشارات","Act Financial","خدمات مالية","EGX30,EGX100",false],
-      ["VALU","فاليو للتمويل الاستهلاكي","Valu","تكنولوجيا مالية","EGX70,EGX100",false], ["AMES","المركز الطبي الجديد - الإسكندرية","Alex New Medical Center","رعاية صحية","EGX70,EGX100,SHARIAH",true], ["MCRO","ماكرو جروب للمستحضرات الطبية","Macro Group","رعاية صحية","EGX70,EGX100,SHARIAH",true],
-      ["SPMD","سبيد ميديكال","Speed Medical","رعاية صحية","EGX70,EGX100",false], ["PHAR","المصرية الدولية للصناعات الدوائية - إيبيكو","EIPICO","أدوية","EGX70,EGX100,SHARIAH",true], ["MPCI","ممفيس للأدوية والصناعات الكيماوية","Memphis Pharma","أدوية","EGX70,EGX100,SHARIAH",true],
-      ["OCPH","أكتوبر فارما","October Pharma","أدوية","EGX70,EGX100,SHARIAH",true], ["AXPH","الإسكندرية للأدوية والصناعات الكيماوية","Alexandria Pharma","أدوية","EGX70,EGX100,SHARIAH",true], ["ADCI","العربية للأدوية والصناعات الكيماوية","Arab Pharma","أدوية","EGX70,EGX100,SHARIAH",true],
-      ["CPCI","القاهرة للأدوية والصناعات الكيماوية","Cairo Pharma","أدوية","EGX70,EGX100,SHARIAH",true], ["NINH","مستشفى النزهة الدولي","Nozha International Hospital","رعاية صحية","EGX70,EGX100,SHARIAH",true], ["BIOC","جلاكسو سميثكلاين","GlaxoSmithKline","أدوية","EGX70,EGX100",false],
-      ["MIPC","مصر لصناعة الكيماويات","Misr Chemical","كيماويات","EGX70,EGX100,SHARIAH",true], ["MICH","مصر لصناعة الكيماويات (ميش)","Misr Chemical Ind","كيماويات","EGX70,EGX100,SHARIAH",true], ["MEPA","العبوات الطبية","Medical Packaging","رعاية صحية","EGX70,EGX100",false],
-      ["LUTS","لوتس للتنمية والاستثمار الزراعي","Lotus Agriculture","أغذية وزراعة","EGX70,EGX100,SHARIAH",true], ["DOMT","الصناعات الغذائية العربية - دومتي","Domty","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true], ["OLFI","عبور لاند للصناعات الغذائية","Obour Land","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true],
-      ["POUL","القاهرة للدواجن","Cairo Poultry","أغذية وزراعة","EGX70,EGX100,SHARIAH",true], ["ISMA","الإسماعيلية مصر للدواجن","Ismailia Poultry","أغذية وزراعة","EGX70,EGX100",false], ["MPCO","المنصورة للدواجن","Mansoura Poultry","أغذية وزراعة","EGX70,EGX100",false],
-      ["SUGR","الدلتا للسكر","Delta Sugar","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true], ["AJWA","أجواء للصناعات الغذائية","Ajwa Food","أغذية ومشروبات","EGX70,EGX100",false], ["IFAP","الإسماعيلية الوطنية للصناعات الغذائية - فوديكو","Foodico","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true],
-      ["AFMC","مطاحن ومخابز الإسكندرية","Alex Flour Mills","مطاحن وأغذية","EGX70,EGX100",false], ["CEFM","مطاحن وسط وغرب الدلتا","Middle & West Delta Mills","مطاحن وأغذية","EGX70,EGX100",false], ["MILS","مطاحن شمال القاهرة","North Cairo Mills","مطاحن وأغذية","EGX70,EGX100",false],
-      ["SCFM","مطاحن ومخابز جنوب القاهرة","South Cairo Mills","مطاحن وأغذية","EGX70,EGX100",false], ["UEFM","مطاحن مصر العليا","Upper Egypt Mills","مطاحن وأغذية","EGX70,EGX100",false], ["WCDF","مطاحن شرق الدلتا","East Delta Mills","مطاحن وأغذية","EGX70,EGX100",false],
-      ["ZEOT","الزيوت المستخلصة ومنتجاتها","Extracted Oils","أغذية ومشروبات","EGX70,EGX100",false], ["SNFC","الشرقية الوطنية للأمن الغذائي","Sharkia National Food","أغذية وزراعة","EGX70,EGX100",false], ["INFI","الإسماعيلية الجديدة للتطوير","New Ismailia","عقارات","EGX70,EGX100",false],
-      ["GOCO","جولدن كوست السخنة","Golden Coast","سياحة","EGX70,EGX100",false], ["EGTS","المصرية للمنتجعات السياحية","Egyptian Resorts","سياحة","EGX70,EGX100",false], ["MHOT","مصر للفنادق","Misr Hotels","سياحة","EGX70,EGX100",false],
-      ["ROTO","رواد السياحة","Rowad Tourism","سياحة","EGX70,EGX100",false], ["RTVC","رمكو لإنشاء القرى السياحية","Remco Tourism","سياحة","EGX70,EGX100",false], ["PHTV","بيراميزا للفنادق والقرى السياحية","Pyramisa Hotels","سياحة","EGX70,EGX100",false],
-      ["SDTI","شارم دريمز للاستثمار السياحي","Sharm Dreams","سياحة","EGX70,EGX100",false], ["CANA","بنك قناة السويس","Suez Canal Bank","بنوك","EGX70,EGX100",false], ["EXPA","البنك المصري لتنمية الصادرات","EBank","بنوك","EGX70,EGX100",false],
-      ["SAUD","بنك البركة مصر","Al Baraka Bank","بنوك إسلامية","EGX70,EGX100,SHARIAH",true], ["EGBE","البنك المصري الخليجي (دولار)","EG Bank","بنوك","EGX70,EGX100",false], ["NBKE","بنك الكويت الوطني مصر","NBK Egypt","بنوك","EGX100",false],
+      ["SKPC","سيدي كرير للبتروكيماويات - سيدبك","Sidi Kerir","كيماويات","EGX30,EGX100,SHARIAH",true], ["KIMA","الصناعات الكيماوية المصرية - كيما","KIMA","كيماويات وأسمدة","EGX30,EGX100,SHARIAH",true], ["EGAL","مصر للألومنيوم","Egypt Aluminum","موارد أساسية","EGX30,EGX100,SHARIAH",true],
+      ["ORAS","أوراسكوم كونستراكشون","Orascom Construction","مقاولات","EGX30,EGX100,SHARIAH",true], ["ORHD","أوراسكوم للتنمية مصر","Orascom Development","سياحة وعقارات","EGX30,EGX100",false], ["BTFH","بلتون القابضة","Beltone Holding","خدمات مالية","EGX30,EGX100",false],
+      ["CCAP","القلعة للاستشارات المالية","Qalaa Holdings","خدمات مالية","EGX30,EGX100",false], ["EKHO","القابضة المصرية الكويتية (دولار)","Egypt Kuwait USD","استثمار","EGX30,EGX100,SHARIAH",true], ["EKHOA","القابضة المصرية الكويتية (جنيه)","Egypt Kuwait EGP","استثمار","EGX30,EGX100,SHARIAH",true],
+      ["JUFO","جهينة للصناعات الغذائية","Juhayna","أغذية ومشروبات","EGX30,EGX100,SHARIAH",true], ["EFID","إيديتا للصناعات الغذائية","Edita Food","أغذية ومشروبات","EGX30,EGX100,SHARIAH",true], ["ISPH","ابن سينا فارما","Ibnsina Pharma","رعاية صحية","EGX30,EGX100,SHARIAH",true],
+      ["RMDA","العاشر من رمضان للأدوية - راميدا","Rameda Pharma","رعاية صحية","EGX30,EGX100,SHARIAH",true], ["CLHO","مستشفى كليوباترا","Cleopatra Hospital","رعاية صحية","EGX30,EGX100,SHARIAH",true], ["GBCO","جي بي كورب (غبور)","GB Corp","سيارات","EGX30,EGX100",false],
+      ["MTIE","إم إم جروب للصناعة والتجارة","MM Group","تجارة وتوزيع","EGX30,EGX100,SHARIAH",true], ["TAQA","طاقة عربية","TAQA Arabia","طاقة ومرافق","EGX30,EGX100,SHARIAH",true], ["ARCC","العربية للأسمنت","Arabian Cement","مواد بناء","EGX30,EGX100,SHARIAH",true],
+      ["ACTF","أكت فاينانشال للاستشارات","Act Financial","خدمات مالية","EGX30,EGX100",false], ["VALU","فاليو للتمويل الاستهلاكي","Valu","تكنولوجيا مالية","EGX70,EGX100",false], ["AMES","المركز الطبي الجديد - الإسكندرية","Alex New Medical Center","رعاية صحية","EGX70,EGX100,SHARIAH",true],
+      ["MCRO","ماكرو جروب للمستحضرات الطبية","Macro Group","رعاية صحية","EGX70,EGX100,SHARIAH",true], ["SPMD","سبيد ميديكال","Speed Medical","رعاية صحية","EGX70,EGX100",false], ["PHAR","المصرية الدولية للصناعات الدوائية - إيبيكو","EIPICO","أدوية","EGX70,EGX100,SHARIAH",true],
+      ["MPCI","ممفيس للأدوية والصناعات الكيماوية","Memphis Pharma","أدوية","EGX70,EGX100,SHARIAH",true], ["OCPH","أكتوبر فارما","October Pharma","أدوية","EGX70,EGX100,SHARIAH",true], ["AXPH","الإسكندرية للأدوية والصناعات الكيماوية","Alexandria Pharma","أدوية","EGX70,EGX100,SHARIAH",true],
+      ["ADCI","العربية للأدوية والصناعات الكيماوية","Arab Pharma","أدوية","EGX70,EGX100,SHARIAH",true], ["CPCI","القاهرة للأدوية والصناعات الكيماوية","Cairo Pharma","أدوية","EGX70,EGX100,SHARIAH",true], ["NINH","مستشفى النزهة الدولي","Nozha International Hospital","رعاية صحية","EGX70,EGX100,SHARIAH",true],
+      ["BIOC","جلاكسو سميثكلاين","GlaxoSmithKline","أدوية","EGX70,EGX100",false], ["MIPC","مصر لصناعة الكيماويات","Misr Chemical","كيماويات","EGX70,EGX100,SHARIAH",true], ["MICH","مصر لصناعة الكيماويات (ميش)","Misr Chemical Ind","كيماويات","EGX70,EGX100,SHARIAH",true],
+      ["MEPA","العبوات الطبية","Medical Packaging","رعاية صحية","EGX70,EGX100",false], ["LUTS","لوتس للتنمية والاستثمار الزراعي","Lotus Agriculture","أغذية وزراعة","EGX70,EGX100,SHARIAH",true], ["DOMT","الصناعات الغذائية العربية - دومتي","Domty","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true],
+      ["OLFI","عبور لاند للصناعات الغذائية","Obour Land","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true], ["POUL","القاهرة للدواجن","Cairo Poultry","أغذية وزراعة","EGX70,EGX100,SHARIAH",true], ["ISMA","الإسماعيلية مصر للدواجن","Ismailia Poultry","أغذية وزراعة","EGX70,EGX100",false],
+      ["MPCO","المنصورة للدواجن","Mansoura Poultry","أغذية وزراعة","EGX70,EGX100",false], ["SUGR","الدلتا للسكر","Delta Sugar","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true], ["AJWA","أجواء للصناعات الغذائية","Ajwa Food","أغذية ومشروبات","EGX70,EGX100",false],
+      ["IFAP","الإسماعيلية الوطنية للصناعات الغذائية - فوديكو","Foodico","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true], ["AFMC","مطاحن ومخابز الإسكندرية","Alex Flour Mills","مطاحن وأغذية","EGX70,EGX100",false], ["CEFM","مطاحن وسط وغرب الدلتا","Middle & West Delta Mills","مطاحن وأغذية","EGX70,EGX100",false],
+      ["MILS","مطاحن شمال القاهرة","North Cairo Mills","مطاحن وأغذية","EGX70,EGX100",false], ["SCFM","مطاحن ومخابز جنوب القاهرة","South Cairo Mills","مطاحن وأغذية","EGX70,EGX100",false], ["UEFM","مطاحن مصر العليا","Upper Egypt Mills","مطاحن وأغذية","EGX70,EGX100",false],
+      ["WCDF","مطاحن شرق الدلتا","East Delta Mills","مطاحن وأغذية","EGX70,EGX100",false], ["ZEOT","الزيوت المستخلصة ومنتجاتها","Extracted Oils","أغذية ومشروبات","EGX70,EGX100",false], ["SNFC","الشرقية الوطنية للأمن الغذائي","Sharkia National Food","أغذية وزراعة","EGX70,EGX100",false],
+      ["INFI","الإسماعيلية الجديدة للتطوير","New Ismailia","عقارات","EGX70,EGX100",false], ["GOCO","جولدن كوست السخنة","Golden Coast","سياحة","EGX70,EGX100",false], ["EGTS","المصرية للمنتجعات السياحية","Egyptian Resorts","سياحة","EGX70,EGX100",false],
+      ["MHOT","مصر للفنادق","Misr Hotels","سياحة","EGX70,EGX100",false], ["ROTO","رواد السياحة","Rowad Tourism","سياحة","EGX70,EGX100",false], ["RTVC","رمكو لإنشاء القرى السياحية","Remco Tourism","سياحة","EGX70,EGX100",false],
+      ["PHTV","بيراميزا للفنادق والقرى السياحية","Pyramisa Hotels","سياحة","EGX70,EGX100",false], ["SDTI","شارم دريمز للاستثمار السياحي","Sharm Dreams","سياحة","EGX70,EGX100",false], ["CANA","بنك قناة السويس","Suez Canal Bank","بنوك","EGX70,EGX100",false],
+      ["EXPA","البنك المصري لتنمية الصادرات","EBank","بنوك","EGX70,EGX100",false], ["SAUD","بنك البركة مصر","Al Baraka Bank","بنوك إسلامية","EGX70,EGX100,SHARIAH",true], ["EGBE","البنك المصري الخليجي (دولار)","EG Bank","بنوك","EGX70,EGX100",false],
       ["CNFN","كونتكت المالية القابضة","Contact Financial","خدمات مالية","EGX70,EGX100",false], ["OFH","أوراسكوم المالية القابضة","Orascom Financial","خدمات مالية","EGX70,EGX100",false], ["OIH","أوراسكوم للاستثمار القابضة","Orascom Investment","استثمار","EGX70,EGX100",false],
       ["BINV","بي إنفستمنتس القابضة","B Investments","خدمات مالية","EGX70,EGX100",false], ["AIH","أرابيا إنفستمنتس هولدنج","Arabia Investments","خدمات مالية","EGX70,EGX100",false], ["AIFI","أطلس للاستثمار والصناعات الغذائية","Atlas Investment","استثمار","EGX70,EGX100",false],
       ["AMIA","الملتقى العربي للاستثمارات","Arab Moltaqa","استثمار","EGX70,EGX100",false], ["ATLC","التوفيق للتأجير التمويلي","AT Lease","خدمات مالية","EGX70,EGX100",false], ["DEIN","الدلتا للتأمين","Delta Insurance","تأمين","EGX70,EGX100",false],
@@ -1743,28 +1875,26 @@
       ["EDBM","المصرية لتطوير صناعة البناء - ليفت سلاب","Lift Slab","مقاولات","EGX70,EGX100",false], ["MCQE","مصر للأسمنت - قنا","Misr Cement Qena","مواد بناء","EGX70,EGX100,SHARIAH",true], ["SVCE","جنوب الوادي للأسمنت","South Valley Cement","مواد بناء","EGX70,EGX100",false],
       ["SCEM","سيناء للأسمنت","Sinai Cement","مواد بناء","EGX70,EGX100",false], ["MBSC","مصر بني سويف للأسمنت","Misr Beni Suef Cement","مواد بناء","EGX70,EGX100,SHARIAH",true], ["PRCL","العامة لمنتجات الخزف والصيني - شيني","Sheeni","مواد بناء","EGX70,EGX100",false],
       ["LCSW","ليسيكو مصر","Lecico Egypt","مواد بناء","EGX70,EGX100",false], ["ECAP","العز للسيراميك والبورسلين - الجوهرة","Gemma Ceramics","مواد بناء","EGX70,EGX100",false], ["CERA","ريماس للسيراميك (العربية للخزف)","Remas Ceramics","مواد بناء","EGX70,EGX100",false],
-      ["IRON","الحديد والصلب المصرية","Egyptian Iron & Steel","موارد أساسية","EGX100",false], ["ISMQ","الحديد والصلب للمناجم والمحاجر","Iron & Steel Mines","تعدين","EGX70,EGX100,SHARIAH",true], ["ATQA","مصر الوطنية للصلب - عتاقة","Misr National Steel","موارد أساسية","EGX70,EGX100,SHARIAH",true],
-      ["ASCM","أسيك للتعدين - أسكوم","ASCOM","تعدين","EGX70,EGX100",false], ["ALUM","العربية للألومنيوم","Arab Aluminum","موارد أساسية","EGX70,EGX100,SHARIAH",true], ["EGAS","مصر للغاز الطبيعي (غاز مصر)","Egypt Gas","طاقة ومرافق","EGX70,EGX100,SHARIAH",true],
-      ["ELEC","الكابلات الكهربائية المصرية","Electro Cable","صناعة","EGX70,EGX100,SHARIAH",true], ["EFIC","المالية والصناعية المصرية","EFIC","كيماويات وأسمدة","EGX70,EGX100,SHARIAH",true], ["KZPC","كفر الزيات للمبيدات والكيماويات","Kafr El Zayat","كيماويات","EGX70,EGX100,SHARIAH",true],
-      ["FERC","فيركيم مصر للأسمدة والكيماويات","Ferchem","كيماويات وأسمدة","EGX70,EGX100,SHARIAH",true], ["EGCH","الصناعات الكيماوية - كيما (أسهم)","EGCH","كيماويات","EGX70,EGX100",false], ["PACH","البويات والصناعات الكيماوية - باكين","Pachin","كيماويات","EGX100",false],
-      ["SIPC","سبأ الدولية للأدوية والصناعات الكيماوية","Saba Pharma","أدوية","EGX70,EGX100",false], ["MOIL","ماريديف للخدمات الملاحية والبترولية","Maridive","بترول وشحن","EGX70,EGX100",false], ["CSAG","القناة للتوكيلات الملاحية","Canal Shipping","شحن وموانئ","EGX70,EGX100,SHARIAH",true],
-      ["ETRS","المصرية لخدمات النقل - إيجيترانس","Egytrans","شحن ولوجستيات","EGX70,EGX100,SHARIAH",true], ["MPRC","المصرية لمدينة الإنتاج الإعلامي","EMPC","إعلام وترفيه","EGX70,EGX100",false], ["RAYA","راية القابضة للاستثمارات المالية","Raya Holding","تكنولوجيا","EGX70,EGX100",false],
-      ["RACC","راية لخدمات مراكز الاتصالات","Raya Contact Center","تكنولوجيا","EGX70,EGX100,SHARIAH",true], ["CIRA","القاهرة للاستثمار والتنمية العقارية - سيرا","CIRA Education","تعليم","EGX70,EGX100,SHARIAH",true], ["TALM","تعليم لخدمات الإدارة","Taaleem","تعليم","EGX70,EGX100,SHARIAH",true],
-      ["MOED","المصرية لنظم التعليم الحديثة","Modern Education","تعليم","EGX70,EGX100",false], ["DSCW","دايس للملابس الجاهزة","Dice Sport","منسوجات","EGX70,EGX100,SHARIAH",true], ["KABO","النصر للملابس والمنسوجات - كابو","KABO","منسوجات","EGX70,EGX100",false],
-      ["ACGC","العربية لحليج الأقطان","Arab Cotton Ginning","منسوجات","EGX70,EGX100",false], ["SPIN","الإسكندرية للغزل والنسيج - سبينالكس","Spinalex","منسوجات","EGX70,EGX100",false], ["GTWL","جولدن تكس للأصواف","Golden Tex","منسوجات","EGX70,EGX100",false],
-      ["GDWA","جدوى للتنمية الصناعية","Gadwa Industrial","صناعة","EGX70,EGX100",false], ["UNIP","يونيباك - يونيفرسال لصناعة مواد التعبئة","Unipack","تعبئة وتغليف","EGX70,EGX100",false], ["EPPK","الأهرام للطباعة والتغليف","El Ahram Printing","تعبئة وتغليف","EGX70,EGX100",false],
-      ["RAKT","العامة لصناعة الورق - راكتا","Rakta Paper","ورق وتعبئة","EGX70,EGX100",false], ["RUBX","روبكس العالمية لتصنيع البلاستيك","Rubex","صناعة","EGX70,EGX100",false], ["DTPP","دلتا للطباعة والتغليف","Delta Printing","تعبئة وتغليف","EGX70,EGX100",false],
-      ["BINT","بيراميزا / بيلتون","BINT","خدمات","EGX100",false], ["BICY","الصناعات الهندسية المعمارية - إيكون","ICON","صناعة وهندسة","EGX70,EGX100",false], ["ENGC","إيكون للصناعات الهندسية","ENGC","صناعة وهندسة","EGX70,EGX100,SHARIAH",true],
+      ["ISMQ","الحديد والصلب للمناجم والمحاجر","Iron & Steel Mines","تعدين","EGX70,EGX100,SHARIAH",true], ["ATQA","مصر الوطنية للصلب - عتاقة","Misr National Steel","موارد أساسية","EGX70,EGX100,SHARIAH",true], ["ASCM","أسيك للتعدين - أسكوم","ASCOM","تعدين","EGX70,EGX100",false],
+      ["ALUM","العربية للألومنيوم","Arab Aluminum","موارد أساسية","EGX70,EGX100,SHARIAH",true], ["EGAS","مصر للغاز الطبيعي (غاز مصر)","Egypt Gas","طاقة ومرافق","EGX70,EGX100,SHARIAH",true], ["ELEC","الكابلات الكهربائية المصرية","Electro Cable","صناعة","EGX70,EGX100,SHARIAH",true],
+      ["EFIC","المالية والصناعية المصرية","EFIC","كيماويات وأسمدة","EGX70,EGX100,SHARIAH",true], ["KZPC","كفر الزيات للمبيدات والكيماويات","Kafr El Zayat","كيماويات","EGX70,EGX100,SHARIAH",true], ["FERC","فيركيم مصر للأسمدة والكيماويات","Ferchem","كيماويات وأسمدة","EGX70,EGX100,SHARIAH",true],
+      ["EGCH","الصناعات الكيماوية - كيما (أسهم)","EGCH","كيماويات","EGX70,EGX100",false], ["SIPC","سبأ الدولية للأدوية والصناعات الكيماوية","Saba Pharma","أدوية","EGX70,EGX100",false], ["MOIL","ماريديف للخدمات الملاحية والبترولية","Maridive","بترول وشحن","EGX70,EGX100",false],
+      ["CSAG","القناة للتوكيلات الملاحية","Canal Shipping","شحن وموانئ","EGX70,EGX100,SHARIAH",true], ["ETRS","المصرية لخدمات النقل - إيجيترانس","Egytrans","شحن ولوجستيات","EGX70,EGX100,SHARIAH",true], ["MPRC","المصرية لمدينة الإنتاج الإعلامي","EMPC","إعلام وترفيه","EGX70,EGX100",false],
+      ["RAYA","راية القابضة للاستثمارات المالية","Raya Holding","تكنولوجيا","EGX70,EGX100",false], ["RACC","راية لخدمات مراكز الاتصالات","Raya Contact Center","تكنولوجيا","EGX70,EGX100,SHARIAH",true], ["CIRA","القاهرة للاستثمار والتنمية العقارية - سيرا","CIRA Education","تعليم","EGX70,EGX100,SHARIAH",true],
+      ["TALM","تعليم لخدمات الإدارة","Taaleem","تعليم","EGX70,EGX100,SHARIAH",true], ["MOED","المصرية لنظم التعليم الحديثة","Modern Education","تعليم","EGX70,EGX100",false], ["DSCW","دايس للملابس الجاهزة","Dice Sport","منسوجات","EGX70,EGX100,SHARIAH",true],
+      ["KABO","النصر للملابس والمنسوجات - كابو","KABO","منسوجات","EGX70,EGX100",false], ["ACGC","العربية لحليج الأقطان","Arab Cotton Ginning","منسوجات","EGX70,EGX100",false], ["SPIN","الإسكندرية للغزل والنسيج - سبينالكس","Spinalex","منسوجات","EGX70,EGX100",false],
+      ["GTWL","جولدن تكس للأصواف","Golden Tex","منسوجات","EGX70,EGX100",false], ["GDWA","جدوى للتنمية الصناعية","Gadwa Industrial","صناعة","EGX70,EGX100",false], ["UNIP","يونيباك - يونيفرسال لصناعة مواد التعبئة","Unipack","تعبئة وتغليف","EGX70,EGX100",false],
+      ["EPPK","الأهرام للطباعة والتغليف","El Ahram Printing","تعبئة وتغليف","EGX70,EGX100",false], ["RAKT","العامة لصناعة الورق - راكتا","Rakta Paper","ورق وتعبئة","EGX70,EGX100",false], ["RUBX","روبكس العالمية لتصنيع البلاستيك","Rubex","صناعة","EGX70,EGX100",false],
+      ["DTPP","دلتا للطباعة والتغليف","Delta Printing","تعبئة وتغليف","EGX70,EGX100",false], ["BICY","الصناعات الهندسية المعمارية - إيكون","ICON","صناعة وهندسة","EGX70,EGX100",false], ["ENGC","إيكون للصناعات الهندسية","ENGC","صناعة وهندسة","EGX70,EGX100,SHARIAH",true],
       ["GSSC","العامة للصوامع والتخزين","General Silos","تخزين ولوجستيات","EGX70,EGX100",false], ["COSG","القاهرة للزيوت والصابون","Cairo Oils & Soap","أغذية","EGX70,EGX100",false], ["DCRC","دلتا للإنشاء والتعمير","Delta Construction","مقاولات","EGX70,EGX100",false],
       ["EGSA","المصرية للأقمار الصناعية - نايل سات","Nilesat","اتصالات","EGX70,EGX100",false], ["ELNA","النصر لتصنيع الحاصلات الزراعية","El Nasr Agri","زراعة","EGX100",false], ["ELWA","الوادي العالمية للاستثمار والتنمية","El Wadi","سياحة وعقارات","EGX70,EGX100",false],
       ["EPCO","المصرية للدواجن","Egyptian Poultry","أغذية","EGX70,EGX100",false], ["FNAR","الفنار للمقاولات والإنشاءات","El Fanar","مقاولات","EGX70,EGX100",false], ["GRCA","جراند القابضة للاستثمارات المالية","Grand Holding","خدمات مالية","EGX70,EGX100",false],
       ["ICMI","الدولية للصناعات الطبية - إيكمي","ICMI","رعاية صحية","EGX70,EGX100",false], ["IEEC","المشروعات الصناعية والهندسية","Industrial & Eng","مقاولات","EGX70,EGX100",false], ["KWIN","القاهرة الوطنية للاستثمار","Cairo National Inv","خدمات مالية","EGX100",false],
       ["MIND","مينا فارم للأدوية","Minapharm","أدوية","EGX70,EGX100,SHARIAH",true], ["MMAT","مرسى علم للتنمية السياحية","Marsa Alam","سياحة","EGX70,EGX100",false], ["MOSC","مصر للزيوت والصابون","Misr Oils & Soap","أغذية","EGX70,EGX100",false],
-      ["MRCE","مصر للأسواق الحرة","Misr Duty Free","تجارة","EGX70,EGX100",false], ["NDRL","الوطنية للطباعة / الحفر","NDRL","صناعة","EGX100",false], ["REAC","إعادة التأمين / العقارية للبنوك","REAC","عقارات","EGX100",false],
-      ["SCTS","قناة السويس لتوطين التكنولوجيا","Suez Canal Tech","تعليم وتكنولوجيا","EGX70,EGX100",false], ["SEIG","السعودية المصرية للاستثمار والتمويل","Saudi Egyptian Inv","استثمار","EGX70,EGX100",false], ["SMPP","الشروق الحديثة للطباعة والتغليف","Modern Shorouk","تعبئة وتغليف","EGX70,EGX100",false],
-      ["SMFR","سماد مصر - إيجيفرت","Samad Misr","أسمدة","EGX70,EGX100,SHARIAH",true], ["TANM","تنمية للاستثمار العقاري","Tanmiya Real Estate","عقارات","EGX70,EGX100",false], ["TRTO","ترانس أوشيان تورز","TransOceans","سياحة","EGX100",false],
-      ["UPMS","يونيون فارما","Union Pharma","أدوية","EGX100",false], ["VERT","فيرتيكا للصناعة والتجارة","Vertika","تكنولوجيا","EGX100",false], ["WATP","وادي كوم أمبو لاستصلاح الأراضي","Wadi Kom Ombo","زراعة","EGX70,EGX100",false],
-      ["APSW","العربية بولفارا للغزل والنسيج","Arab Polvara","منسوجات","EGX70,EGX100",false], ["ARPI","العربية لاستصلاح الأراضي","Arab Land Reclamation","زراعة","EGX70,EGX100",false],
+      ["MRCE","مصر للأسواق الحرة","Misr Duty Free","تجارة","EGX70,EGX100",false], ["SCTS","قناة السويس لتوطين التكنولوجيا","Suez Canal Tech","تعليم وتكنولوجيا","EGX70,EGX100",false], ["SEIG","السعودية المصرية للاستثمار والتمويل","Saudi Egyptian Inv","استثمار","EGX70,EGX100",false],
+      ["SMPP","الشروق الحديثة للطباعة والتغليف","Modern Shorouk","تعبئة وتغليف","EGX70,EGX100",false], ["SMFR","سماد مصر - إيجيفرت","Samad Misr","أسمدة","EGX70,EGX100,SHARIAH",true], ["TANM","تنمية للاستثمار العقاري","Tanmiya Real Estate","عقارات","EGX70,EGX100",false],
+      ["TRTO","ترانس أوشيان تورز","TransOceans","سياحة","EGX100",false], ["UPMS","يونيون فارما","Union Pharma","أدوية","EGX100",false], ["VERT","فيرتيكا للصناعة والتجارة","Vertika","تكنولوجيا","EGX100",false],
+      ["WATP","وادي كوم أمبو لاستصلاح الأراضي","Wadi Kom Ombo","زراعة","EGX70,EGX100",false], ["APSW","العربية بولفارا للغزل والنسيج","Arab Polvara","منسوجات","EGX70,EGX100",false], ["ARPI","العربية لاستصلاح الأراضي","Arab Land Reclamation","زراعة","EGX70,EGX100",false],
       ["HBCO","هيبكو للاستثمارات التجارية والتنمية العقارية","HEPCO","عقارات وتجارة","EGX100",false], ["CPME","كاتليست بارتنرز ميديل إيست","Catalyst Partners ME","خدمات مالية","EGX100",false], ["IBCT","انترناشيونال بزنيس كوربوريشن للتجارة والتوكيلات","IBC Trade","تجارة وتوزيع","EGX100",false],
       ["ACAMD","العربية لإدارة وتطوير الأصول","Arab Asset Mgmt","عقارات","EGX70,EGX100",false], ["AFDI","الأهلي للتنمية والاستثمار","Al Ahly Dev & Inv","خدمات مالية","EGX70,EGX100",false], ["AIDC","العربية للاستثمارات والتنمية القابضة","Arabia Investments","خدمات مالية","EGX70,EGX100",false],
       ["ARVA","العربية للمحابس","Arab Valves","صناعة","EGX70,EGX100",false], ["ASPI","أسباير كابيتال القابضة للاستثمارات المالية","Aspire Capital","خدمات مالية","EGX70,EGX100",false], ["BIDI","البدر للاستثمار والتنمية","El Badr Investment","صناعة","EGX100",false],
@@ -1774,32 +1904,30 @@
       ["FTNS","فيتنس برايم للأندية الصحية","Fitness Prime","خدمات","EGX100",false], ["IDHC","انتجريتد دياجنوستكس هولدنجز (IDH)","IDH Diagnostics","رعاية صحية","EGX70,EGX100",false], ["INEG","المؤشر للبرمجيات ونشر المعلومات","El Moasher","تكنولوجيا","EGX100",false],
       ["MBEN","أم بي للهندسة","MB Engineering","صناعة وهندسة","EGX70,EGX100",false], ["NAHO","نعيم القابضة للاستثمارات","Naim Holding","خدمات مالية","EGX70,EGX100",false], ["NCGC","النيل لحليج الأقطان","Nile Cotton Ginning","منسوجات","EGX70,EGX100",false],
       ["NEDA","شمال الصعيد للتنمية والإنتاج الزراعي - نيوداب","NEDA Agri","أغذية وزراعة","EGX70,EGX100",false], ["NIPH","النيل للأدوية والصناعات الكيماوية","Nile Pharma","أدوية","EGX70,EGX100,SHARIAH",true], ["SAIB","بنك الشركة المصرفية العربية الدولية","SAIB Bank","بنوك","EGX100",false],
-      ["UBEE","المصرف المتحد","The United Bank","بنوك","EGX30,EGX100",false], ["UTOP","يوتوبيا للاستثمار العقاري والسياحي","Utopia Real Estate","عقارات","EGX70,EGX100",false],
-      ["MKIT","مصر الكويت للاستثمار والتجارة","Misr Kuwait Inv","استثمار","EGX100",false], ["GMCI","جي إم سي للاستثمارات الصناعية والتجارية والمالية","GMC Group","استثمار","EGX100",false], ["ALRA","الرواد لتداول الأوراق المالية","Al Rowad","خدمات مالية","EGX100",false],
-      ["AMPI","المتحدة للطباعة والتغليف","United Printing","تعبئة وتغليف","EGX100",false], ["AREH","المصرية للاستثمار العقاري","Egyptian Real Estate","عقارات","EGX70,EGX100",false], ["AALR","العامة لاستصلاح الأراضي والتنمية والتعمير","General Land Rec","زراعة","EGX70,EGX100",false],
-      ["ACRO","أكرو مصر للشدات والسقالات المعدنية","Acrow Misr","مواد بناء","EGX70,EGX100",false], ["AIVC","العربية للاستثمارات","Arabia Inv Venture","خدمات مالية","EGX100",false], ["ALEX","الإسكندرية الوطنية للاستثمارات المالية","Alex National","خدمات مالية","EGX100",false],
-      ["AXEG","الإسكندرية للخدمات الطبية","Alex Medical","رعاية صحية","EGX70,EGX100",false], ["BCAP","بيلتون كابيتال","Beltone Cap","خدمات مالية","EGX100",false], ["CFGH","سي إف جي القابضة","CFG Holding","خدمات مالية","EGX100",false],
-      ["DEVE","التعمير السياحي","Tourism Dev","سياحة","EGX100",false], ["DIFC","الدولية للتأجير التمويلي - إنكوليس","Incolease","خدمات مالية","EGX100",false], ["EALR","العربية لاستصلاح الأراضي (EALR)","Arab Land","زراعة","EGX100",false],
-      ["ECGS","المصرية لخدمات الغاز","Egypt Gas Serv","طاقة","EGX100",false], ["EGCO","المصرية للتعدين","Egyptian Mining","تعدين","EGX100",false], ["EGEX","إيجيكس للخدمات","EGEX","خدمات","EGX100",false],
-      ["EITP","المصرية للمشروعات السياحية العالمية - أمريكانا","Egyptian Int Tourism","سياحة وأغذية","EGX70,EGX100",false], ["ELCO","إلكترو مصر","Electro Misr","صناعة","EGX100",false], ["FIRE","فيرست للاستثمار والتنمية العقارية","First Real Estate","عقارات","EGX100",false],
-      ["GEMA","الجوهرة للسيراميك","Gemma","مواد بناء","EGX100",false], ["GTHE","جلوبال تليكوم القابضة","Global Telecom","اتصالات","EGX100",false], ["ICAG","الدولية للمحاصيل الزراعية","Int Agricultural","أغذية وزراعة","EGX70,EGX100,SHARIAH",true],
-      ["IRAX","العز الدخيلة للصلب - الإسكندرية","EZDK Steel","موارد أساسية","EGX100",false], ["KRDI","كرداسة للاستثمار والتنمية","Kerdasa Inv","استثمار","EGX100",false], ["MARE","مصر للتأمين العقاري","Misr Real Estate","عقارات","EGX100",false],
-      ["MDFC","مصر للأسواق الحرة (MDFC)","Misr Duty Free","تجارة","EGX100",false], ["MISR","مصر للكيماويات","Misr Chem","كيماويات","EGX100",false], ["NCIN","النيل سيتي للاستثمار","Nile City Inv","عقارات وسياحة","EGX100",false],
-      ["NCMP","الوطنية لمنتجات الذرة","National Maize","أغذية","EGX100",false], ["NFDI","الوطنية للتنمية الزراعية","National Agri","زراعة","EGX100",false], ["OCEG","أوراسكوم للإنشاءات","Orascom Const","مقاولات","EGX100",false],
-      ["PTCC","بريميوم هيلثكير جروب / سيتي للتحاليل","Premium Healthcare","رعاية صحية","EGX70,EGX100",false], ["RGHM","رواد السياحة والتنمية","Rowad Dev","سياحة","EGX100",false], ["SEGA","سيدى كرير / سيجا","SEGA","كيماويات","EGX100",false],
-      ["SUES","السويس للأسمنت","Suez Cement","مواد بناء","EGX100",false], ["TOUR","المصرية للسياحة","Egyptian Tourism","سياحة","EGX100",false], ["UNBE","الاتحاد الصيدلي للخدمات الطبية","Union Medical","رعاية صحية","EGX100",false],
-      ["WKOL","وادي كوم أمبو (WKOL)","Wadi Kom Ombo","زراعة","EGX100",false], ["ZECI","الزيوت والمستخلصات","ZECI Oils","أغذية","EGX100",false],
-      ["ADPC","العربية لمنتجات الألبان - آراب ديري (باندا)","Arab Dairy Panda","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true], ["AMEC","أصول للاستثمار والتنمية","AMEC","استثمار","EGX100",false], ["EKRG","ايكو / كارجو للخدمات","EKRG","خدمات","EGX100",false],
-      ["ELPC","المصرية لخدمات البترول / البلاستيك","ELPC","صناعة","EGX100",false], ["GENM","المصرية العامة للمطاحن","GENM","مطاحن وأغذية","EGX100",false], ["GGRN","جرين لاند للاستثمار","Green Land","أغذية","EGX100",false],
-      ["INTM","انتجريتد للخدمات الطبية","INTM","رعاية صحية","EGX100",false], ["LIVA","ليفا للاستثمار","LIVA","استثمار","EGX100",false], ["MASH","مشروعات التطوير العمراني","MASH","عقارات","EGX100",false],
-      ["MEGM","ميجا للإنشاءات","MEGM","مقاولات","EGX100",false], ["MOIN","مهندس للتأمين","Mohandes Insurance","تأمين","EGX70,EGX100",false], ["NILE","النيل للسكر / النيل للاستثمار","Nile Co","أغذية","EGX100",false],
-      ["RIVA","ريفا للاستثمار","RIVA","عقارات","EGX100",false], ["UCOM","يونيفرسال للاتصالات","UCOM","اتصالات","EGX100",false], ["UNFO","يونيفرسال للأغذية","UNFO","أغذية","EGX100",false],
-      ["ABRD","أبيكو / البريد للاستثمار","ABRD","خدمات مالية","EGX100",false], ["ADRI","العربية للتنمية العقارية - أركو","Arab Dev Real Estate","عقارات","EGX70,EGX100",false], ["BAPA","البنك الأهلي / باركليز","BAPA","بنوك","EGX100",false],
-      ["CAIR","بنك القاهرة","Banque du Caire","بنوك","EGX100",false], ["EGPR","المصرية للمشروعات","EGPR","عقارات","EGX100",false], ["GCRI","جولدن كوست العقارية","GCRI","عقارات","EGX100",false],
+      ["UBEE","المصرف المتحد","The United Bank","بنوك","EGX30,EGX100",false], ["UTOP","يوتوبيا للاستثمار العقاري والسياحي","Utopia Real Estate","عقارات","EGX70,EGX100",false], ["MKIT","مصر الكويت للاستثمار والتجارة","Misr Kuwait Inv","استثمار","EGX100",false],
+      ["GMCI","جي إم سي للاستثمارات الصناعية والتجارية والمالية","GMC Group","استثمار","EGX100",false], ["ALRA","الرواد لتداول الأوراق المالية","Al Rowad","خدمات مالية","EGX100",false], ["AMPI","المتحدة للطباعة والتغليف","United Printing","تعبئة وتغليف","EGX100",false],
+      ["AREH","المصرية للاستثمار العقاري","Egyptian Real Estate","عقارات","EGX70,EGX100",false], ["AALR","العامة لاستصلاح الأراضي والتنمية والتعمير","General Land Rec","زراعة","EGX70,EGX100",false], ["ACRO","أكرو مصر للشدات والسقالات المعدنية","Acrow Misr","مواد بناء","EGX70,EGX100",false],
+      ["AIVC","العربية للاستثمارات","Arabia Inv Venture","خدمات مالية","EGX100",false], ["ALEX","الإسكندرية الوطنية للاستثمارات المالية","Alex National","خدمات مالية","EGX100",false], ["AXEG","الإسكندرية للخدمات الطبية","Alex Medical","رعاية صحية","EGX70,EGX100",false],
+      ["BCAP","بيلتون كابيتال","Beltone Cap","خدمات مالية","EGX100",false], ["CFGH","سي إف جي القابضة","CFG Holding","خدمات مالية","EGX100",false], ["DEVE","التعمير السياحي","Tourism Dev","سياحة","EGX100",false],
+      ["DIFC","الدولية للتأجير التمويلي - إنكوليس","Incolease","خدمات مالية","EGX100",false], ["EALR","العربية لاستصلاح الأراضي (EALR)","Arab Land","زراعة","EGX100",false], ["ECGS","المصرية لخدمات الغاز","Egypt Gas Serv","طاقة","EGX100",false],
+      ["EGCO","المصرية للتعدين","Egyptian Mining","تعدين","EGX100",false], ["EGEX","إيجيكس للخدمات","EGEX","خدمات","EGX100",false], ["EITP","المصرية للمشروعات السياحية العالمية - أمريكانا","Egyptian Int Tourism","سياحة وأغذية","EGX70,EGX100",false],
+      ["ELCO","إلكترو مصر","Electro Misr","صناعة","EGX100",false], ["FIRE","فيرست للاستثمار والتنمية العقارية","First Real Estate","عقارات","EGX100",false], ["GEMA","الجوهرة للسيراميك","Gemma","مواد بناء","EGX100",false],
+      ["ICAG","الدولية للمحاصيل الزراعية","Int Agricultural","أغذية وزراعة","EGX70,EGX100,SHARIAH",true], ["IRAX","العز الدخيلة للصلب - الإسكندرية","EZDK Steel","موارد أساسية","EGX100",false], ["KRDI","كرداسة للاستثمار والتنمية","Kerdasa Inv","استثمار","EGX100",false],
+      ["MARE","مصر للتأمين العقاري","Misr Real Estate","عقارات","EGX100",false], ["MDFC","مصر للأسواق الحرة (MDFC)","Misr Duty Free","تجارة","EGX100",false], ["MISR","مصر للكيماويات","Misr Chem","كيماويات","EGX100",false],
+      ["NCIN","النيل سيتي للاستثمار","Nile City Inv","عقارات وسياحة","EGX100",false], ["NCMP","الوطنية لمنتجات الذرة","National Maize","أغذية","EGX100",false], ["NFDI","الوطنية للتنمية الزراعية","National Agri","زراعة","EGX100",false],
+      ["OCEG","أوراسكوم للإنشاءات","Orascom Const","مقاولات","EGX100",false], ["PTCC","بريميوم هيلثكير جروب / سيتي للتحاليل","Premium Healthcare","رعاية صحية","EGX70,EGX100",false], ["RGHM","رواد السياحة والتنمية","Rowad Dev","سياحة","EGX100",false],
+      ["SEGA","سيدى كرير / سيجا","SEGA","كيماويات","EGX100",false], ["TOUR","المصرية للسياحة","Egyptian Tourism","سياحة","EGX100",false], ["UNBE","الاتحاد الصيدلي للخدمات الطبية","Union Medical","رعاية صحية","EGX100",false],
+      ["WKOL","وادي كوم أمبو (WKOL)","Wadi Kom Ombo","زراعة","EGX100",false], ["ZECI","الزيوت والمستخلصات","ZECI Oils","أغذية","EGX100",false], ["ADPC","العربية لمنتجات الألبان - آراب ديري (باندا)","Arab Dairy Panda","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true],
+      ["AMEC","أصول للاستثمار والتنمية","AMEC","استثمار","EGX100",false], ["EKRG","ايكو / كارجو للخدمات","EKRG","خدمات","EGX100",false], ["ELPC","المصرية لخدمات البترول / البلاستيك","ELPC","صناعة","EGX100",false],
+      ["GENM","المصرية العامة للمطاحن","GENM","مطاحن وأغذية","EGX100",false], ["GGRN","جرين لاند للاستثمار","Green Land","أغذية","EGX100",false], ["INTM","انتجريتد للخدمات الطبية","INTM","رعاية صحية","EGX100",false],
+      ["LIVA","ليفا للاستثمار","LIVA","استثمار","EGX100",false], ["MASH","مشروعات التطوير العمراني","MASH","عقارات","EGX100",false], ["MEGM","ميجا للإنشاءات","MEGM","مقاولات","EGX100",false],
+      ["MOIN","مهندس للتأمين","Mohandes Insurance","تأمين","EGX70,EGX100",false], ["NILE","النيل للسكر / النيل للاستثمار","Nile Co","أغذية","EGX100",false], ["RIVA","ريفا للاستثمار","RIVA","عقارات","EGX100",false],
+      ["UCOM","يونيفرسال للاتصالات","UCOM","اتصالات","EGX100",false], ["UNFO","يونيفرسال للأغذية","UNFO","أغذية","EGX100",false], ["ABRD","أبيكو / البريد للاستثمار","ABRD","خدمات مالية","EGX100",false],
+      ["ADRI","العربية للتنمية العقارية - أركو","Arab Dev Real Estate","عقارات","EGX70,EGX100",false], ["EGPR","المصرية للمشروعات","EGPR","عقارات","EGX100",false], ["GCRI","جولدن كوست العقارية","GCRI","عقارات","EGX100",false],
       ["MISB","مصر للأسواق / البنوك","MISB","خدمات","EGX100",false], ["NBEG","بنك التمويل المصري","NBEG","بنوك","EGX100",false], ["ORSC","أوراسكوم للإعلام","Orascom Media","إعلام","EGX100",false],
       ["PHNX","فينيكس للاستثمار","Phoenix Inv","استثمار","EGX100",false], ["RAMS","رمسيس للسياحة","Ramses Tourism","سياحة","EGX100",false], ["SCIB","بنك قناة السويس (أسهم)","SCIB","بنوك","EGX100",false],
-      ["SICO","سيكو للإلكترونيات","SICO Tech","تكنولوجيا","EGX100",false], ["SMCS","سماد مصر للكيماويات","SMCS","كيماويات","EGX100",false], ["TORA","أسمنت طرة","Tourah Cement","مواد بناء","EGX100",false],
-      ["UDIC","المتحدة للتنمية الصناعية","UDIC","صناعة","EGX100",false]
+      ["SICO","سيكو للإلكترونيات","SICO Tech","تكنولوجيا","EGX100",false], ["SMCS","سماد مصر للكيماويات","SMCS","كيماويات","EGX100",false], ["UDIC","المتحدة للتنمية الصناعية","UDIC","صناعة","EGX100",false],
+      ["ACAP","أيه كابيتال القابضة","A Capital Holding","خدمات مالية","EGX70,EGX100",false]
     ];
 
     const INDICES_META = {
@@ -2004,6 +2132,10 @@
       taDirty: true,
       stockLogos: safeJson(LS.LOGOS, {}),
       moversData: null,
+      indicesData: null,
+      liveQuote: null,
+      perfSelectedKey: "1M",
+      marketIsOpen: false,
       appBooted: false,
       chatHistory: [],
       sending: false
@@ -2051,9 +2183,11 @@
         const left = 600 - mins;
         timerLabel = `• يفتح خلال ${Math.floor(left / 60)}س ${left % 60}د`;
       }
+      state.marketIsOpen = isOpen;
       pills.forEach(p => p.classList.toggle("open", isOpen));
       txts.forEach(el => { el.textContent = statusLabel; });
       timers.forEach(el => { el.textContent = timerLabel; });
+      if ($("activeLiveDot")) $("activeLiveDot").classList.toggle("live", isOpen);
     }
 
     // 4. المزامنة السحابية وحساب Google (حفظ فوري للمؤشرات مع مقارنة التوقيت لمنع المسح)
@@ -2366,9 +2500,13 @@
       return out.join("");
     }
 
+    const DELISTED_EGX = new Set([
+      "GTHE","SUCE","SUES","APPC","IRON","PACH","TORA","NBKE","ESRS",
+      "AUTO","MNHD","OCIC","PIOH","BINT","NDRL","REAC","BAPA","CAIR"
+    ]);
     function isValidEgxTicker(ticker) {
       const t = String(ticker || "").toUpperCase().trim();
-      if (!t || /^EGS\d/i.test(t) || t.length < 2 || t.length > 7) return false;
+      if (!t || DELISTED_EGX.has(t) || /^EGS\d/i.test(t) || t.length < 2 || t.length > 7) return false;
       return /^[A-Z][A-Z0-9]{1,6}$/.test(t);
     }
 
@@ -2453,16 +2591,22 @@
     let currentProMeta = { fallbackDaily: false, label: "" };
 
     function syncChartModeUI() {
-      const isPro = state.chartMode === "pro";
+      const mode = state.chartMode;
+      const isTv = mode === "tv";
+      const isPro = mode === "pro";
+      const isPerf = mode === "perf";
       document.querySelectorAll("#chartModeSwitch .mode-btn").forEach(b => {
-        b.classList.toggle("active", b.dataset.mode === state.chartMode);
+        b.classList.toggle("active", b.dataset.mode === mode);
       });
-      $("indicatorsBar").style.display = isPro ? "none" : "flex";
+      $("indicatorsBar").style.display = isTv ? "flex" : "none";
       $("proScriptsBar").classList.toggle("show", isPro);
-      $("tvChartContainer").style.display = isPro ? "none" : "block";
+      $("tvChartContainer").style.display = isTv ? "block" : "none";
       $("proChartStage").classList.toggle("show", isPro);
+      if ($("perfChartStage")) $("perfChartStage").classList.toggle("show", isPerf);
       $("proEditorPanel").classList.toggle("open", isPro && state.proEditorOpen);
       $("toggleProEditorBtn").classList.toggle("open", isPro && state.proEditorOpen);
+      if ($("tfGroup")) $("tfGroup").style.display = isPerf ? "none" : "inline-flex";
+      if ($("enterFocusBtn")) $("enterFocusBtn").style.display = isPerf ? "none" : "inline-flex";
     }
 
     function renderProScriptsUI() {
@@ -2629,7 +2773,7 @@
     async function fetchOhlcBars(ticker, tf, forceRefresh = false) {
       const cacheKey = `${ticker}_${tf}`;
       const cached = ohlcCache.get(cacheKey);
-      if (!forceRefresh && cached && Date.now() - cached.at < 180000) return cached;
+      if (!forceRefresh && cached && Date.now() - cached.at < 45000) return cached;
 
       const cfgMap = {
         "5":   { interval: "5m",  range: "5d",  intraday: true,  agg4h: false },
@@ -3188,6 +3332,7 @@
 
       runActiveProScripts();
       applyProDefaultZoom();
+      if (state.liveQuote && state.liveQuote.ticker === ticker) tickProChartLiveCandle(state.liveQuote);
 
       if (typeof ResizeObserver !== "undefined") {
         proResizeObs = new ResizeObserver(() => resizeProCharts());
@@ -3198,6 +3343,11 @@
 
     function renderChart() {
       syncChartModeUI();
+      if (state.chartMode === "perf") {
+        renderPerfStage();
+        fetchLiveQuote(state.ticker, false);
+        return;
+      }
       if (state.chartMode === "pro") {
         renderProChart(false);
         return;
@@ -3263,7 +3413,11 @@
       document.querySelectorAll(".index-card").forEach(c => c.classList.toggle("active", c.dataset.indexTicker === t));
       document.querySelectorAll(".macro-card").forEach(c => c.classList.toggle("active", c.dataset.macroTicker === t));
 
-      updateHeaderFavStar(); renderStockList(); fetchLiveMetrics(t);
+      state.liveQuote = null;
+      if ($("activeLivePriceVal")) $("activeLivePriceVal").textContent = "—";
+      if ($("activeLiveUnit")) $("activeLiveUnit").textContent = info.ticker === "GOLD" ? "$" : (info.isIndex && info.ticker !== "USDEGP" ? "نقطة" : "ج.م");
+      if ($("activeLiveChgBadge")) { $("activeLiveChgBadge").className = "mover-chg flat"; $("activeLiveChgBadge").textContent = "—"; }
+      updateHeaderFavStar(); renderStockList(); fetchLiveQuote(t, false); fetchLiveMetrics(t);
       state.chartDirty = true;
       state.taDirty = true;
 
@@ -3768,7 +3922,7 @@
               </div>
             </div>
             <div class="mover-c-bottom">
-              <span class="mover-price">${Number(item.price).toFixed(2)}</span>
+              <span class="mover-price">${Number(item.price).toFixed(2)} <span style="font-size:9px;color:var(--text-muted);font-weight:700;">ج.م</span></span>
               <span class="mover-chg ${cls}">${sign}${chg.toFixed(2)}%</span>
             </div>
           </div>`;
@@ -3799,7 +3953,7 @@
               </div>
             </div>
             <div class="mover-nums">
-              <span class="mover-price">${Number(item.price).toFixed(2)}</span>
+              <span class="mover-price">${Number(item.price).toFixed(2)} <span style="font-size:9.5px;color:var(--text-muted);font-weight:700;">ج.م</span></span>
               <span class="mover-chg ${cls}">${sign}${chg.toFixed(2)}%</span>
             </div>
           </div>`;
@@ -3818,22 +3972,25 @@
       renderActiveMoverItems(data.active);
     }
 
-    async function fetchMarketMovers(force = false) {
-      if (!force && state.moversData && Date.now() - (state.moversFetchedAt || 0) < 60000) {
+    async function fetchMarketMovers(force = false, silent = false) {
+      if (!force && state.moversData && Date.now() - (state.moversFetchedAt || 0) < 30000) {
         renderMarketPulse(state.moversData);
+        if (state.moversData.indices) renderIndicesLive(state.moversData.indices);
         return renderMoversList();
       }
-      $("moversDualSection").style.display = "grid";
-      $("moversActiveSection").style.display = "flex";
-      $("moversTvFallback").style.display = "none";
-      $("gainersList").innerHTML = `<div class="movers-empty">⏳ جاري التحميل...</div>`;
-      $("losersList").innerHTML = `<div class="movers-empty">⏳ جاري التحميل...</div>`;
-      $("activeMoversList").innerHTML = `<div class="movers-empty">⏳ جاري التحميل...</div>`;
+      if (!silent) {
+        $("moversDualSection").style.display = "grid";
+        $("moversActiveSection").style.display = "flex";
+        $("moversTvFallback").style.display = "none";
+        $("gainersList").innerHTML = `<div class="movers-empty">⏳ جاري التحميل...</div>`;
+        $("losersList").innerHTML = `<div class="movers-empty">⏳ جاري التحميل...</div>`;
+        $("activeMoversList").innerHTML = `<div class="movers-empty">⏳ جاري التحميل...</div>`;
+      }
 
       try {
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 7500);
-        const res = await fetch(`${WORKER_ORIGIN}/movers`, { signal: ctrl.signal });
+        const res = await fetch(`${WORKER_ORIGIN}/movers?t=${Date.now()}`, { signal: ctrl.signal });
         clearTimeout(t);
         if (!res.ok) throw new Error("Worker /movers not available");
         const data = await res.json();
@@ -3845,11 +4002,14 @@
         const timeStr = new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit" }).format(new Date());
         $("moversSubLabel").textContent = `آخر تحديث ${timeStr} • اضغط على أي سهم لفتحه`;
         syncStocksAndLogosFromMovers(data);
+        if (data.indices) renderIndicesLive(data.indices);
         renderMarketPulse(data);
         renderMoversList();
       } catch {
-        state.moversData = null;
-        renderMoversTvFallback();
+        if (!silent) {
+          state.moversData = null;
+          renderMoversTvFallback();
+        }
       }
     }
 
@@ -3928,6 +4088,295 @@
           });
         }
       } catch {}
+    }
+
+    // 8.7 المؤشرات الحية (النقط + النسبة) + السعر اللحظي + تحديث الشارت المبرمج تلقائياً + شاشة الأداء (1D..5Y)
+    function renderIndicesLive(indicesMap) {
+      if (!indicesMap || typeof indicesMap !== "object") return;
+      state.indicesData = { ...(state.indicesData || {}), ...indicesMap };
+      ["EGX30", "EGX70EWI", "EGX100EWI", "SHARIAH"].forEach(key => {
+        const item = state.indicesData[key];
+        const ptsEl = $("idxPts-" + key);
+        const chgEl = $("idxChg-" + key);
+        if (!item || !ptsEl || !chgEl) return;
+        if (Number.isFinite(Number(item.points))) {
+          ptsEl.textContent = Number(item.points).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+        const chg = Number(item.changePct || 0);
+        chgEl.className = "mover-chg " + (chg > 0 ? "up" : chg < 0 ? "down" : "flat");
+        chgEl.textContent = `${chg > 0 ? "+" : ""}${chg.toFixed(2)}%`;
+      });
+    }
+
+    async function fetchEgxIndices(force = false) {
+      if (!force && state.indicesData && Date.now() - (state.indicesFetchedAt || 0) < 25000) {
+        return renderIndicesLive(state.indicesData);
+      }
+      try {
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 6000);
+        const res = await fetch(`${WORKER_ORIGIN}/indices?t=${Date.now()}`, { signal: ctrl.signal });
+        clearTimeout(t);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.indices && Object.keys(data.indices).length) {
+            state.indicesFetchedAt = Date.now();
+            return renderIndicesLive(data.indices);
+          }
+        }
+      } catch {}
+    }
+
+    function tickProChartLiveCandle(q) {
+      if (!proCandleSeries || !currentProBars.length || !q || !Number.isFinite(Number(q.price))) return;
+      if (state.chartMode !== "pro" || q.ticker !== state.ticker) return;
+      const liveP = Number(q.price);
+      const last = currentProBars[currentProBars.length - 1];
+      if (!last) return;
+      // حماية من أي قفزة خاطئة بأكثر من 25% عن آخر شمعة
+      if (last.close > 0 && Math.abs(liveP - last.close) / last.close > 0.25) return;
+
+      const updatedBar = {
+        time: last.time,
+        open: last.open,
+        high: Math.max(last.high, liveP),
+        low: Math.min(last.low, liveP),
+        close: liveP
+      };
+      last.high = updatedBar.high;
+      last.low = updatedBar.low;
+      last.close = updatedBar.close;
+      try { proCandleSeries.update(updatedBar); } catch {}
+    }
+
+    function applyLiveQuoteToHeader(q) {
+      if (!q || !Number.isFinite(Number(q.price))) return;
+      const prevPrice = state.liveQuote && state.liveQuote.ticker === q.ticker ? Number(state.liveQuote.price) : null;
+      state.liveQuote = q;
+
+      const info = getStockInfo(q.ticker);
+      const isIndexPts = info.isIndex && q.ticker !== "GOLD" && q.ticker !== "USDEGP";
+      const unitTxt = q.ticker === "GOLD" ? "$" : isIndexPts ? "نقطة" : "ج.م";
+      const priceVal = Number(q.price);
+      const chg = Number(q.changePct || 0);
+
+      if ($("activeLivePriceVal")) {
+        $("activeLivePriceVal").textContent = isIndexPts
+          ? priceVal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+          : priceVal.toFixed(2);
+      }
+      if ($("activeLiveUnit")) $("activeLiveUnit").textContent = unitTxt;
+      if ($("activeLiveDot")) $("activeLiveDot").classList.toggle("live", !!state.marketIsOpen);
+      if ($("activeLiveChgBadge")) {
+        const badge = $("activeLiveChgBadge");
+        badge.className = "mover-chg " + (chg > 0 ? "up" : chg < 0 ? "down" : "flat");
+        badge.textContent = `${chg > 0 ? "+" : ""}${chg.toFixed(2)}%`;
+      }
+      if (prevPrice != null && prevPrice !== priceVal && $("activeLiveQuoteWrap")) {
+        const w = $("activeLiveQuoteWrap");
+        w.classList.remove("flash-up", "flash-dn");
+        void w.offsetWidth;
+        w.classList.add(priceVal > prevPrice ? "flash-up" : "flash-dn");
+        setTimeout(() => w.classList.remove("flash-up", "flash-dn"), 900);
+      }
+
+      tickProChartLiveCandle(q);
+      if (state.chartMode === "perf") renderPerfStage();
+    }
+
+    const PERF_PERIODS = [
+      { key: "1D",  ar: "اليوم",      en: "1D"  },
+      { key: "1W",  ar: "آخر أسبوع",  en: "1W"  },
+      { key: "1M",  ar: "آخر شهر",    en: "1M"  },
+      { key: "3M",  ar: "آخر 3 شهور", en: "3M"  },
+      { key: "6M",  ar: "آخر 6 شهور", en: "6M"  },
+      { key: "YTD", ar: "بداية السنة", en: "YTD" },
+      { key: "1Y",  ar: "آخر سنة",    en: "1Y"  },
+      { key: "5Y",  ar: "آخر 5 سنين", en: "5Y"  }
+    ];
+
+    function updatePerfSimBox() {
+      const q = state.liveQuote;
+      const perf = q?.perf || {};
+      const sel = PERF_PERIODS.find(p => p.key === state.perfSelectedKey) || PERF_PERIODS[2];
+      const val = perf[sel.key];
+      const txtEl = $("perfSimText"), resEl = $("perfSimVal");
+      if (!txtEl || !resEl) return;
+      if (val == null || !Number.isFinite(Number(val))) {
+        txtEl.textContent = `💡 لا تتوفر بيانات كافية لحساب فترة (${sel.ar})`;
+        resEl.textContent = "—";
+        resEl.style.color = "var(--text-muted)";
+        return;
+      }
+      const pct = Number(val);
+      const finalAmt = Math.round(10000 * (1 + pct / 100));
+      const diff = finalAmt - 10000;
+      const sign = diff >= 0 ? "+" : "";
+      txtEl.textContent = `💰 لو استثمرت 10,000 ج.م في (${sel.ar}) كان رصيدك الآن:`;
+      resEl.textContent = `${finalAmt.toLocaleString("en-US")} ج.م (${sign}${diff.toLocaleString("en-US")})`;
+      resEl.style.color = diff >= 0 ? "var(--emerald)" : "var(--red)";
+    }
+
+    function renderPerfStage() {
+      const q = state.liveQuote;
+      const grid = $("perfCardsGrid");
+      if (!grid) return;
+
+      if (!q || q.ticker !== state.ticker) {
+        $("perfHeroPrice").textContent = "—";
+        $("perfHeroDayChg").textContent = "—";
+        $("perfHeroDayRange").textContent = "—";
+        $("perfHero52wRange").textContent = "—";
+        grid.innerHTML = `<div class="movers-empty">⏳ جاري جلب أداء وعوائد ${state.ticker}...</div>`;
+        return;
+      }
+
+      const info = getStockInfo(q.ticker);
+      const unit = q.ticker === "GOLD" ? "$" : (info.isIndex && q.ticker !== "USDEGP" ? "" : " ج.م");
+      const chg = Number(q.changePct || 0);
+      $("perfHeroPrice").textContent = q.price != null ? `${Number(q.price).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${unit}` : "—";
+      $("perfHeroDayChg").innerHTML = `<span style="color:${chg > 0 ? "var(--emerald)" : chg < 0 ? "var(--red)" : "var(--text-muted)"}">${chg > 0 ? "+" : ""}${chg.toFixed(2)}%${q.changeAbs != null ? ` (${q.changeAbs > 0 ? "+" : ""}${Number(q.changeAbs).toFixed(2)})` : ""}</span>`;
+      $("perfHeroDayRange").textContent = (q.low != null && q.high != null) ? `${Number(q.low).toFixed(2)} – ${Number(q.high).toFixed(2)}` : "—";
+      $("perfHero52wRange").textContent = (q.low52w != null && q.high52w != null) ? `${Number(q.low52w).toFixed(2)} – ${Number(q.high52w).toFixed(2)}` : "—";
+
+      const perf = q.perf || {};
+      const absVals = PERF_PERIODS.map(p => Math.abs(Number(perf[p.key] || 0))).filter(v => Number.isFinite(v) && v > 0);
+      const maxAbs = Math.max(10, ...absVals);
+
+      grid.innerHTML = PERF_PERIODS.map(p => {
+        const raw = perf[p.key];
+        const has = raw != null && Number.isFinite(Number(raw));
+        const num = has ? Number(raw) : 0;
+        const cls = !has ? "flat" : num > 0 ? "up" : num < 0 ? "down" : "flat";
+        const sign = num > 0 ? "+" : "";
+        const widthPct = has ? Math.max(8, Math.min(100, Math.round((Math.abs(num) / maxAbs) * 100))) : 0;
+        const selCls = state.perfSelectedKey === p.key ? " selected" : "";
+        return `
+          <div class="perf-card ${cls}${selCls}" data-perf-key="${p.key}">
+            <div class="perf-card-top">
+              <span class="perf-period-ar">${p.ar}</span>
+              <span class="perf-period-en">${p.en}</span>
+            </div>
+            <div class="perf-pct ${cls}">${has ? `${sign}${num.toFixed(2)}%` : "—"}</div>
+            <div class="perf-bar-track"><div class="perf-bar-fill ${cls}" style="width:${widthPct}%;"></div></div>
+          </div>`;
+      }).join("");
+
+      updatePerfSimBox();
+      const tStr = new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date());
+      $("perfUpdatedNote").textContent = state.marketIsOpen
+        ? `🟢 مباشر — آخر تحديث ${tStr} (يتحدث تلقائياً كل 15 ثانية)`
+        : `آخر تحديث ${tStr} • يتحدث تلقائياً أثناء جلسة البورصة (10:00 ص – 2:30 م)`;
+    }
+
+    async function fetchLiveQuote(ticker, silent = false) {
+      const t = String(ticker || state.ticker).toUpperCase().trim();
+      try {
+        const ctrl = new AbortController();
+        const tm = setTimeout(() => ctrl.abort(), 6500);
+        const res = await fetch(`${WORKER_ORIGIN}/quote?ticker=${encodeURIComponent(t)}&t=${Date.now()}`, { signal: ctrl.signal });
+        clearTimeout(tm);
+        if (res.ok) {
+          const data = await res.json();
+          if (state.ticker !== t) return null;
+          if (data && data.price != null) {
+            applyLiveQuoteToHeader(data);
+            return data;
+          }
+        }
+      } catch {}
+
+      // احتياطي سريع لو لم يتم تحديث /quote على Cloudflare بعد (يحسب السعر والعوائد 1D..5Y من /chart)
+      if (!silent) {
+        try {
+          const r = await fetchYahooChartRaw(t, "1wk", "5y");
+          if (state.ticker !== t || !r) return null;
+          const ts = r.timestamp || [];
+          const q = r.indicators?.quote?.[0] || {};
+          const pts = [];
+          for (let i = 0; i < ts.length; i++) {
+            const c = q.close?.[i];
+            if (Number.isFinite(c) && c > 0) pts.push({ ts: ts[i], c, h: q.high?.[i] ?? c, l: q.low?.[i] ?? c });
+          }
+          if (pts.length >= 2) {
+            const last = pts[pts.length - 1];
+            const prev = pts[pts.length - 2];
+            const pctDays = (days) => {
+              const tgt = last.ts - days * 86400;
+              if (pts[0].ts > tgt + 25 * 86400) return null;
+              let best = pts[0];
+              for (let i = pts.length - 1; i >= 0; i--) { if (pts[i].ts <= tgt) { best = pts[i]; break; } }
+              return best.c > 0 ? Number((((last.c - best.c) / best.c) * 100).toFixed(2)) : null;
+            };
+            const yStart = Math.floor(Date.UTC(new Date(last.ts * 1000).getUTCFullYear(), 0, 1) / 1000);
+            let yRef = null;
+            for (let i = pts.length - 1; i >= 0; i--) { if (pts[i].ts < yStart) { yRef = pts[i]; break; } }
+            const dayChg = state.liveMetrics ? state.liveMetrics.chgPct : Number((((last.c - prev.c) / prev.c) * 100).toFixed(2));
+            const fallbackQ = {
+              ticker: t,
+              price: state.liveMetrics ? state.liveMetrics.last : Number(last.c.toFixed(2)),
+              changePct: dayChg,
+              changeAbs: Number((last.c - prev.c).toFixed(2)),
+              high: Number(last.h.toFixed(2)),
+              low: Number(last.l.toFixed(2)),
+              high52w: Number(Math.max(...pts.slice(-52).map(x => x.h)).toFixed(2)),
+              low52w: Number(Math.min(...pts.slice(-52).map(x => x.l)).toFixed(2)),
+              perf: {
+                "1D": dayChg, "1W": pctDays(7), "1M": pctDays(30), "3M": pctDays(90),
+                "6M": pctDays(180), "YTD": yRef ? Number((((last.c - yRef.c) / yRef.c) * 100).toFixed(2)) : null,
+                "1Y": pctDays(365), "5Y": pctDays(365 * 5)
+              }
+            };
+            applyLiveQuoteToHeader(fallbackQ);
+            return fallbackQ;
+          }
+        } catch {}
+      }
+      return null;
+    }
+
+    let livePollTick = 0;
+    let livePollTimer = null;
+    function startLiveAutoRefresh() {
+      if (livePollTimer) return;
+      livePollTimer = setInterval(async () => {
+        if (document.hidden || document.body.classList.contains("auth-locked") || !state.appBooted) return;
+        livePollTick++;
+        const isOpen = !!state.marketIsOpen;
+        // أثناء السوق المفتوح: تحديث كل 15 ثانية للشارت والسعر وكل 30 ثانية للرئيسية
+        // بعد الإغلاق: تحديث خفيف كل 60 ثانية
+        if (!isOpen && livePollTick % 4 !== 0) return;
+
+        if (state.activeTab === "chart" || state.activeTab === "ai") {
+          await fetchLiveQuote(state.ticker, true);
+          // كل دقيقة نحدّث شموع الشارت المبرمج بالكامل بدون إغلاق أو قفز للزووم
+          if (state.chartMode === "pro" && livePollTick % 4 === 0 && proCandleSeries && currentProBars.length) {
+            try {
+              const res = await fetchOhlcBars(state.ticker, state.tf, true);
+              if (res && res.bars && res.bars.length && state.chartMode === "pro") {
+                const prevRange = proChart ? proChart.timeScale().getVisibleLogicalRange() : null;
+                currentProBars = res.bars;
+                proCandleSeries.setData(currentProBars.map(b => ({ time: b.time, open: b.open, high: b.high, low: b.low, close: b.close })));
+                if (proVolumeSeries) {
+                  proVolumeSeries.setData(currentProBars.map(b => ({
+                    time: b.time, value: b.volume,
+                    color: b.close >= b.open ? "rgba(16, 185, 129, 0.26)" : "rgba(244, 63, 94, 0.26)"
+                  })));
+                }
+                runActiveProScripts();
+                if (state.liveQuote && state.liveQuote.ticker === state.ticker) tickProChartLiveCandle(state.liveQuote);
+                if (prevRange && proChart) proChart.timeScale().setVisibleLogicalRange(prevRange);
+              }
+            } catch {}
+          }
+        } else if (state.activeTab === "home") {
+          if (livePollTick % 2 === 0) {
+            fetchMarketMovers(true, true);
+            fetchEgxIndices(true);
+            fetchMacroRates(true);
+          }
+        }
+      }, 15000);
     }
 
     // 9. المحلل الذكي + نسخ البرومبت + جلب موديلات Gemini
@@ -4194,7 +4643,15 @@ ${buildStockContextString()}
         renderChart();
       };
       $("proRetryBtn").onclick = () => renderProChart(true);
-      $("proReloadDataBtn").onclick = () => renderProChart(true);
+      $("proReloadDataBtn").onclick = () => { renderProChart(true); fetchLiveQuote(state.ticker, false); };
+      if ($("perfCardsGrid")) {
+        $("perfCardsGrid").onclick = e => {
+          const card = e.target.closest("[data-perf-key]");
+          if (!card) return;
+          state.perfSelectedKey = card.dataset.perfKey;
+          renderPerfStage();
+        };
+      }
 
       $("toggleProEditorBtn").onclick = () => {
         state.proEditorOpen = !state.proEditorOpen;
@@ -4337,13 +4794,15 @@ ${buildStockContextString()}
         selectStock(state.ticker, false, false, false);
         switchTab(state.activeTab, false);
         fetchMarketMovers(false);
+        fetchEgxIndices(false);
         fetchMacroRates(false);
+        startLiveAutoRefresh();
       }
 
       $("gateGoogleSignInBtn").onclick = signInWithGoogle;
 
       // Movers controls (الأكثر ربحاً + الأكثر خسارة + الأكثر تداولاً)
-      $("refreshMoversBtn").onclick = () => { fetchMarketMovers(true); fetchMacroRates(true); };
+      $("refreshMoversBtn").onclick = () => { fetchMarketMovers(true); fetchEgxIndices(true); fetchMacroRates(true); };
       const onMoverClick = e => {
         const row = e.target.closest("[data-mover-ticker]");
         if (!row) return;
@@ -4436,7 +4895,9 @@ ${buildStockContextString()}
       $("menuRefreshBtn").onclick = () => {
         closeMoreMenu();
         fetchMarketMovers(true);
+        fetchEgxIndices(true);
         fetchMacroRates(true);
+        fetchLiveQuote(state.ticker, false);
         fetchLiveMetrics(state.ticker);
       };
       $("menuLogoutBtn").onclick = async () => { closeMoreMenu(); try { localStorage.removeItem(LS.AUTH_HINT); } catch {} if (fbAuth) await fbAuth.signOut(); };
