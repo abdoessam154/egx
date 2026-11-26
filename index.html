@@ -1198,7 +1198,21 @@
     .sahm-sig-score.up { color: var(--emerald); }
     .sahm-sig-score.down { color: var(--red); }
     .sahm-sig-score.flat { color: var(--gold); }
-    .sahm-sig-conf { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-top: 2px; }
+    .sahm-sig-conf { font-size: 11px; font-weight: 800; color: var(--text-muted); margin-top: 2px; }
+    .sahm-sig-meta-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+    .sahm-sig-pill {
+      padding: 4px 9px; border-radius: 9px; font-size: 11px; font-weight: 700;
+      background: var(--bg-elevated); border: 1px solid var(--border-strong);
+      color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px;
+    }
+    .sahm-sig-pill strong { color: var(--text); font-weight: 800; }
+    .sahm-sig-pill.up strong { color: var(--emerald); }
+    .sahm-sig-pill.down strong { color: var(--red); }
+    .sahm-sig-pill.gold strong { color: var(--gold); }
+    .sahm-sig-conf.high { color: var(--emerald); }
+    .sahm-sig-conf.low { color: var(--red); }
+    .sahm-sig-conf.mid { color: var(--gold); }
+
     .sahm-gauge-wrap { position: relative; padding-top: 32px; padding-bottom: 4px; }
     .sahm-gauge-pill {
       position: absolute; top: 0; left: 50%; transform: translateX(-50%);
@@ -1878,7 +1892,7 @@
             <strong>مساعد سهم الذكي (Sahm AI)</strong>
             <span class="sahm-live-tag"><span class="d"></span> تحليل لحظي 0s</span>
           </div>
-          <div class="sahm-ai-desc">تحدث مباشرة مع مساعد سهم حول خطة الدخول والبيع، وقف الخسارة، وإدارة مركزك بالعامية البسيطة (مجاناً بدون API Key).</div>
+          <div class="sahm-ai-desc">تحدث مباشرة مع مساعد سهم (Cloudflare AI) حول الاتجاه، نقاط الدخول والبيع، وقف الخسارة، وإدارة مركزك.</div>
         </div>
         <div class="sahm-ai-badge-ico">AI</div>
       </div>
@@ -1894,13 +1908,18 @@
     <section class="card sahm-signal-card" id="sahmSignalCard">
       <div class="sahm-sig-head">
         <div>
-          <div class="sahm-sig-title">📊 مؤشر الإشارة الفنية • سهم</div>
-          <div class="sahm-sig-sub">تقييم كمي محدث حياً بناءً على 26 مؤشراً فنياً (متوسطات ومؤشرات تذبذب)</div>
+          <div class="sahm-sig-title">📊 محصلة الإشارة الفنية (26 مؤشر)</div>
+          <div class="sahm-sig-sub">مجموع 15 متوسط متحرك + 11 مؤشر زخم وتذبذب (من -100 بيع قوي إلى +100 شراء قوي)</div>
         </div>
         <div class="sahm-sig-score-box">
           <div class="sahm-sig-score flat" id="sahmSigScore">—</div>
-          <div class="sahm-sig-conf" id="sahmSigConf">ثقة النموذج —%</div>
+          <div class="sahm-sig-conf" id="sahmSigConf">جاري الفحص...</div>
         </div>
+      </div>
+      <div class="sahm-sig-meta-pills" id="sahmSigMetaPills">
+        <span class="sahm-sig-pill" id="sahmTrendPill">الاتجاه: <strong>—</strong></span>
+        <span class="sahm-sig-pill" id="sahmMaOscPill">المتوسطات / الزخم: <strong>—</strong></span>
+        <span class="sahm-sig-pill gold" id="sahmRrPill">العائد للمخاطرة: <strong>—</strong></span>
       </div>
       <div class="sahm-gauge-wrap">
         <div class="sahm-gauge-pill" id="sahmGaugePill">احتفاظ (0)</div>
@@ -2006,7 +2025,7 @@
       <!-- ملخص فني فوري بدون API + نسخ برومبت -->
       <div class="auto-summary-card" id="autoSummaryCard">
         <div class="auto-summary-head">
-          <strong>⚡ القراءة الفنية الفورية (بدون API)</strong>
+          <strong>⚡ ملخص فني لحظي (Cloudflare AI)</strong>
         </div>
         <div class="auto-summary-grid" id="autoSummaryBody">
           <span style="color:var(--text-muted);">جاري تجهيز القراءة الفنية للسهم المفتوح...</span>
@@ -2129,9 +2148,6 @@
     </button>
     <div class="menu-divider"></div>
 
-    <button class="menu-item" id="menuSectorsBtn">
-      <span class="menu-item-left"><span>🔥</span><span>رادار القطاعات والسيولة</span></span>
-    </button>
     <button class="menu-item" id="menuHeatmapBtn">
       <span class="menu-item-left"><span>🗺️</span><span>الخريطة الحرارية للبورصة</span></span>
       <span class="menu-item-tag">EGX</span>
@@ -2139,9 +2155,6 @@
     <button class="menu-item" id="menuFavBtn">
       <span class="menu-item-left"><span>★</span><span>الأسهم المفضلة</span></span>
       <span class="menu-item-tag" id="menuFavCount">0</span>
-    </button>
-    <button class="menu-item" id="menuApiBtn">
-      <span class="menu-item-left"><span>⚙️</span><span>إعدادات الذكاء الاصطناعي (API)</span></span>
     </button>
     <button class="menu-item" id="menuMcpBtn">
       <span class="menu-item-left"><span>🔌</span><span>ربط سيرفر MCP</span></span>
@@ -2163,54 +2176,6 @@
       <button class="search-clear" id="closeQuickSearchBtn" style="display:block;">✕</button>
     </div>
     <div class="quick-search-results" id="topQuickSearchResults"></div>
-  </div>
-
-  <!-- نافذة إعدادات API -->
-  <div class="modal-backdrop" id="apiModalBackdrop">
-    <div class="modal">
-      <div class="modal-head">
-        <strong style="font-size:14.5px;">⚙️ إعدادات ربط الذكاء الاصطناعي (API)</strong>
-        <button class="icon-btn" id="closeApiModalBtn">✕</button>
-      </div>
-      <div class="modal-body">
-        <div class="field">
-          <label>مزود الذكاء الاصطناعي</label>
-          <select id="apiProviderSelect">
-            <option value="gemini">Google Gemini</option>
-            <option value="claude">Anthropic Claude</option>
-            <option value="openrouter">OpenRouter</option>
-            <option value="groq">Groq</option>
-            <option value="openai">OpenAI</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>مفتاح الـ API (يُحفظ محلياً على جهازك فقط)</label>
-          <div class="input-with-btn">
-            <input type="text" id="apiKeyInput" placeholder="AIza... أو sk-..." dir="ltr" autocomplete="off" spellcheck="false" />
-            <button type="button" class="icon-btn" id="toggleApiKeyVisBtn" title="إخفاء / إظهار المفتاح">👁️</button>
-          </div>
-          <div class="field-hint" id="apiProviderHint"></div>
-        </div>
-
-        <div class="field">
-          <div class="field-label-row">
-            <label>النموذج (Model)</label>
-            <button type="button" class="btn-sm gold" id="btnFetchModels" style="display:none;">🔄 جلب الموديلات</button>
-          </div>
-          <select id="apiModelSelect" dir="ltr" style="display:none; margin-bottom:8px;"></select>
-          <input type="text" id="apiModelInput" dir="ltr" placeholder="اسم النموذج..." />
-          <div class="field-hint" id="modelFetchStatus"></div>
-        </div>
-
-        <div class="test-result" id="apiTestResult"></div>
-
-        <div class="modal-actions">
-          <button class="btn-primary" id="saveTestApiBtn">حفظ واختبار الاتصال ✓</button>
-          <button class="btn-secondary" id="clearApiBtn">مسح المفتاح</button>
-        </div>
-      </div>
-    </div>
   </div>
 
   <!-- نافذة حساب Google -->
@@ -2435,7 +2400,7 @@ ticker, name, en, sector, groups: groups.split(","), shariah
 const STOCK_MAP = Object.fromEntries(STOCKS.map(s => [s.ticker, s]));
 const FIXED_MCP_URL = "https://egx-mcp.boodyessam1542004.workers.dev/mcp";
 const LS = {
-FAVS: "egx_term_favs_v3", CUSTOM: "egx_term_custom_v3", API: "egx_term_api_v3",
+FAVS: "egx_term_favs_v3", CUSTOM: "egx_term_custom_v3",
 THEME: "egx_term_theme_v3", LANG: "egx_term_lang_v3", INDICATORS: "egx_term_indicators_v4",
 LAST_TICKER: "egx_term_last_ticker_v4", TF: "egx_term_tf_v4",
 UPDATED_AT: "egx_term_updated_at_v5", IND_UPDATED_AT: "egx_term_ind_updated_at_v5",
@@ -2568,13 +2533,6 @@ return merged;
 function loadSavedProScripts() {
 return sanitizeProScriptsList(safeJson(LS.PRO_SCRIPTS, null));
 }
-const PROVIDER_DEFAULTS = {
-gemini:     { model:"gemini-2.5-flash", hint:"aistudio.google.com/apikey — عند لصق المفتاح تظهر الموديلات المتاحة تلقائياً." },
-claude:     { model:"claude-sonnet-4-20250514", hint:"console.anthropic.com" },
-openrouter: { model:"anthropic/claude-sonnet-4", hint:"openrouter.ai/keys" },
-groq:       { model:"meta-llama/llama-4-scout-17b-16e-instruct", hint:"console.groq.com/keys" },
-openai:     { model:"gpt-4o-mini", hint:"platform.openai.com/api-keys" }
-};
 const urlParams = new URLSearchParams(window.location.search);
 const urlTicker = urlParams.get("ticker");
 const urlShare = urlParams.get("share") === "1";
@@ -2583,50 +2541,15 @@ function safeJson(key, fallback) {
 try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : fallback; }
 catch { return fallback; }
 }
-const SESS_NAV_KEY = "sahm_session_nav_v1";
-const SESS_UNLOAD_KEY = "sahm_last_unload_ms_v1";
-function detectIsPageReload() {
+function saveSessionNav() {}
 try {
-const nav = performance.getEntriesByType && performance.getEntriesByType("navigation")?.[0];
-if (nav && nav.type) {
-if (nav.type === "reload") return true;
-} else if (performance.navigation && performance.navigation.type === 1) {
-return true;
-}
-const lastUnload = Number(sessionStorage.getItem(SESS_UNLOAD_KEY) || 0);
-if (lastUnload > 0 && (Date.now() - lastUnload) < 4000) return true;
+sessionStorage.removeItem("sahm_session_nav_v1");
+sessionStorage.removeItem("sahm_last_unload_ms_v1");
 } catch {}
-return false;
-}
-const isPageReload = detectIsPageReload();
-let restoredSess = null;
-try {
-if (isPageReload) {
-const raw = sessionStorage.getItem(SESS_NAV_KEY);
-if (raw) restoredSess = JSON.parse(raw);
-} else {
-sessionStorage.removeItem(SESS_NAV_KEY);
-}
-sessionStorage.removeItem(SESS_UNLOAD_KEY);
-} catch {}
-function saveSessionNav() {
-try {
-sessionStorage.setItem(SESS_NAV_KEY, JSON.stringify({
-tab: state.activeTab,
-ticker: state.ticker,
-chartMode: state.chartMode,
-perfSelectedKey: state.perfSelectedKey
-}));
-} catch {}
-}
 const cleanUrlTicker = urlTicker ? urlTicker.toUpperCase().replace(/^EGX:/i, "").replace(/[^A-Z0-9]/g, "") : "";
-const initialTicker = (urlShare && cleanUrlTicker)
-? cleanUrlTicker
-: (restoredSess?.ticker || cleanUrlTicker || "EGX30");
-const initialTab = (urlShare && cleanUrlTicker)
-? "chart"
-: (restoredSess?.tab || "home");
-const initialChartMode = restoredSess?.chartMode || "perf";
+const initialTicker = (urlShare && cleanUrlTicker) ? cleanUrlTicker : (cleanUrlTicker || "EGX30");
+const initialTab = (urlShare && cleanUrlTicker) ? "chart" : "home";
+const initialChartMode = "perf";
 const state = {
 ticker: initialTicker,
 tf: localStorage.getItem(LS.TF) || "D",
@@ -2637,7 +2560,6 @@ search: "",
 favs: safeJson(LS.FAVS, ["SWDY","COMI","TMGH","AMES"]),
 customStocks: safeJson(LS.CUSTOM, {}),
 indicators: safeJson(LS.INDICATORS, ["MAExp@tv-basicstudies","RSI@tv-basicstudies"]),
-api: safeJson(LS.API, { provider:"gemini", key:"", model:"gemini-2.5-flash" }),
 localUpdatedAt: Number(localStorage.getItem(LS.UPDATED_AT) || 0),
 indUpdatedAt: Number(localStorage.getItem(LS.IND_UPDATED_AT) || 0),
 user: null,
@@ -6927,39 +6849,23 @@ const old = btnEl.textContent;
 btnEl.textContent = "تم النسخ";
 setTimeout(() => { btnEl.textContent = old; }, 1800);
 }
-async function fetchGeminiModels(apiKey) {
-const sel = $("apiModelSelect"), inp = $("apiModelInput"), st = $("modelFetchStatus");
-if ($("apiProviderSelect").value !== "gemini") { sel.style.display = "none"; st.textContent = ""; return; }
-const key = (apiKey || "").trim();
-if (!key.startsWith("AIza") || key.length < 30) {
-sel.style.display = "none";
-st.textContent = "الصق مفتاح Google AI Studio (يبدأ بـ AIza) لجلب الموديلات تلقائياً.";
-return;
-}
-st.textContent = "جاري جلب الموديلات...";
-try {
-const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}`);
-const data = await res.json();
-if (!res.ok) throw new Error(data.error?.message || "فشل جلب الموديلات");
-const models = (data.models || [])
-.filter(m => m.supportedGenerationMethods?.includes("generateContent") && /gemini/i.test(m.name) && !/embedding|tts|imagen/i.test(m.name))
-.map(m => ({ id: m.name.replace(/^models\//, ""), label: m.displayName || m.name.replace(/^models\//, "") }))
-.sort((a, b) => b.id.localeCompare(a.id, undefined, { numeric: true }));
-if (!models.length) { sel.style.display = "none"; st.textContent = "لا توجد موديلات متاحة."; return; }
-sel.innerHTML = models.map(m => `<option value="${m.id}">${m.label} (${m.id})</option>`).join("");
-sel.style.display = "block";
-const cur = inp.value.trim();
-const best = models.find(m => m.id === cur) || models.find(m => m.id.includes("flash") && !m.id.includes("lite")) || models[0];
-sel.value = best.id; inp.value = best.id;
-st.textContent = `تم جلب ${models.length} موديل — المختار: ${best.id}`;
-} catch (err) { sel.style.display = "none"; st.textContent = `${err.message}`; }
-}
-function updateApiBadge() {
-const names = { gemini:"Gemini", claude:"Claude", openrouter:"OpenRouter", groq:"Groq", openai:"OpenAI" };
-const has = state.api.key && state.api.key.trim().length > 6;
-if ($("apiStatusDot")) $("apiStatusDot").classList.add("connected");
-if ($("apiStatusText")) $("apiStatusText").textContent = has ? `متصل: ${names[state.api.provider] || "API"} ⚙️` : "☁️ Sahm AI مجاني";
-if ($("sahmAiLivePill")) $("sahmAiLivePill").innerHTML = has ? `<span class="d"></span> ${names[state.api.provider] || "API"} • LIVE` : `<span class="d"></span> Sahm AI • LIVE`;
+function getUserFirstName() {
+const raw = String(state.user?.displayName || "").trim();
+if (!raw) return "";
+const first = raw.split(/\s+/)[0].trim();
+if (/[؀-ۿ]/.test(first)) return first;
+const key = first.toLowerCase().replace(/[^a-z]/g, "");
+const map = {
+abdelrahman:"عبدالرحمن", abdulrahman:"عبدالرحمن", abdelrhman:"عبدالرحمن", abdo:"عبده",
+ahmed:"أحمد", ahmad:"أحمد", mohamed:"محمد", mohammed:"محمد", muhammad:"محمد",
+mahmoud:"محمود", mostafa:"مصطفى", mustafa:"مصطفى", youssef:"يوسف", yousef:"يوسف",
+omar:"عمر", ali:"علي", khaled:"خالد", khalid:"خالد", tarek:"طارق", karim:"كريم", kareem:"كريم",
+hassan:"حسن", hossam:"حسام", amr:"عمرو", islam:"إسلام", eslam:"إسلام", ibrahim:"إبراهيم",
+mina:"مينا", ziad:"زياد", zeyad:"زياد", seif:"سيف", nour:"نور", yasser:"ياسر", waleed:"وليد",
+walid:"وليد", sherif:"شريف", hazem:"حازم", hatem:"حاتم", bilal:"بلال", moaz:"معاذ",
+sara:"سارة", salma:"سلمى", mariam:"مريم", yasmine:"ياسمين", nada:"ندى", aya:"آية", malak:"ملك"
+};
+return map[key] || first;
 }
 function appendMessage(role, text, imgUrl = null) {
 const box = $("chatBox"), div = document.createElement("div");
@@ -6972,74 +6878,17 @@ return div;
 }
 function generateLocalFallbackReply() {
 const info = getStockInfo(state.ticker), m = state.liveMetrics;
-if (!m) return `**لم يتم ربط مفتاح API بعد.**
-السهم المفتوح هو **${info.name} (EGX:${state.ticker})**.
-اضغط **API** لربط مفتاحك، أو اضغط **نسخ البرومبت** للصق الأرقام في أي تطبيق ذكاء اصطناعي.`;
+const uName = getUserFirstName();
+const hi = uName ? `يا ${uName}، ` : "";
+if (!m) return `${hi}بيانات **${info.name} (EGX:${state.ticker})** بتتحدث حالياً — جرّب تسألني تاني بعد لحظة.`;
 const rsiNote = m.rsi > 70 ? "تشبع شرائي" : m.rsi < 30 ? "تشبع بيعي" : "نطاق متوازن";
-return `**ملخص فني فوري — ${info.name} (EGX:${state.ticker})**
+return `${hi}ده ملخص سريع لـ **${info.name} (EGX:${state.ticker})**:
 ` +
 `• **السعر:** ${m.last.toFixed(2)} ج.م (${m.chgPct >= 0 ? "+" : ""}${m.chgPct.toFixed(2)}%) | **الاتجاه:** ${m.trend}
 ` +
 `• **RSI(14):** ${m.rsi != null ? m.rsi.toFixed(1) : "-"} (${rsiNote})
 ` +
-`• **نطاق 20 جلسة:** دعم ${m.support1?.toFixed(2) || "-"} | مقاومة ${m.resistance1?.toFixed(2) || "-"}
-` +
-`لتحليل تفصيلي مفتوح: اضغط **نسخ البرومبت** أو اربط مفتاحك من **API**.`;
-}
-async function callExternalAI(userPrompt, imgObj) {
-const { provider, key, model } = state.api;
-const sys = `أنت محلل فني محترف ومبرمج مؤشرات متخصص في البورصة المصرية (EGX). أجب بالعربية بأسلوب واضح ومنظم ومباشر. إذا طلب المستخدم برمجة مؤشر للشارت المبرمج (Pro) فاكتب كود JavaScript نظيفاً ومباشراً يستخدم فقط الدوال الجاهزة في الموقع: open, high, low, close, volume, len, ema(src,p), sma(src,p), rsi(src,p), mfi(p), atr(p), macd(src,f,s,sig), bb(src,p,m), supertrend(p,m), vwap(p), pivots(l,r), highest(src,p), lowest(src,p), crossover(a,b,i), crossunder(a,b,i), plot(arr,{title,color,width,style}), hline(price,{title,color,style}), plotPane(arr,opts), histPane(arr,opts), hlinePane(val,opts), buy(i,text), sell(i,text), log(msg).
-${buildStockContextString()}
-إذا أرفق المستخدم صورة شارت فاقرأ الشموع والمؤشرات الظاهرة بدقة.`;
-const hist = state.chatHistory.slice(-8);
-if (provider === "claude") {
-const messages = hist.map(h => ({ role: h.role === "ai" ? "assistant" : "user", content: h.text }));
-const content = [];
-if (imgObj) content.push({ type: "image", source: { type: "base64", media_type: imgObj.mimeType, data: imgObj.base64 } });
-content.push({ type: "text", text: userPrompt });
-messages.push({ role: "user", content });
-const res = await fetch("https://api.anthropic.com/v1/messages", {
-method: "POST",
-headers: { "content-type": "application/json", "x-api-key": key.trim(), "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
-body: JSON.stringify({ model: model || PROVIDER_DEFAULTS.claude.model, max_tokens: 1400, system: sys, messages })
-});
-const data = await res.json();
-if (!res.ok) throw new Error(data?.error?.message || `Claude (${res.status})`);
-return data.content?.[0]?.text || "لم يتم استلام رد.";
-}
-if (provider === "gemini") {
-const mdl = (model || PROVIDER_DEFAULTS.gemini.model).replace(/^models\//, "");
-const contents = hist.map(h => ({ role: h.role === "ai" ? "model" : "user", parts: [{ text: h.text }] }));
-const parts = [{ text: userPrompt }];
-if (imgObj) parts.push({ inline_data: { mime_type: imgObj.mimeType, data: imgObj.base64 } });
-contents.push({ role: "user", parts });
-const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(mdl)}:generateContent?key=${encodeURIComponent(key.trim())}`, {
-method: "POST", headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ system_instruction: { parts: [{ text: sys }] }, contents })
-});
-const data = await res.json();
-if (!res.ok) throw new Error(data?.error?.message || `Gemini (${res.status})`);
-return data.candidates?.[0]?.content?.parts?.[0]?.text || "لم يتم استلام رد.";
-}
-const endpoints = {
-openrouter: "https://openrouter.ai/api/v1/chat/completions",
-groq: "https://api.groq.com/openai/v1/chat/completions",
-openai: "https://api.openai.com/v1/chat/completions"
-};
-const messages = [{ role: "system", content: sys }, ...hist.map(h => ({ role: h.role === "ai" ? "assistant" : "user", content: h.text }))];
-messages.push({
-role: "user",
-content: imgObj ? [{ type: "text", text: userPrompt }, { type: "image_url", image_url: { url: imgObj.dataUrl } }] : userPrompt
-});
-const headers = { "Content-Type": "application/json", "Authorization": `Bearer ${key.trim()}` };
-if (provider === "openrouter") { headers["HTTP-Referer"] = window.location.href; headers["X-Title"] = "Sahm"; }
-const res = await fetch(endpoints[provider], {
-method: "POST", headers,
-body: JSON.stringify({ model: model || PROVIDER_DEFAULTS[provider].model, messages, max_tokens: 1400 })
-});
-const data = await res.json();
-if (!res.ok) throw new Error(data?.error?.message || `خطأ (${res.status})`);
-return data.choices?.[0]?.message?.content || "لم يتم استلام رد.";
+`• **نطاق 20 جلسة:** دعم ${m.support1?.toFixed(2) || "-"} | مقاومة ${m.resistance1?.toFixed(2) || "-"}`;
 }
 async function handleSendChat(customPrompt = null) {
 if (state.sending) return;
@@ -7049,25 +6898,16 @@ const prompt = text || `حلل صورة الشارت المرفقة لسهم EGX
 appendMessage("user", text || "تحليل صورة الشارت", imgObj ? imgObj.dataUrl : null);
 if (customPrompt === null) inp.value = "";
 clearAttachedImage();
-const hasPersonalKey = state.api.key && state.api.key.trim().length > 6;
-if (imgObj && !hasPersonalKey) {
-return appendMessage("ai", "📷 لتحليل صور الشارت اربط مفتاح Gemini مجاني من زر **⚙️ API** — أما الأسئلة النصية عن السهم فبتشتغل مباشرة مجاناً عبر **Sahm AI (Cloudflare)**.");
-}
 state.sending = true; $("sendChatBtn").disabled = true;
 const loading = appendMessage("ai", "⏳ جاري التحليل...");
 try {
-let reply;
-if (hasPersonalKey) {
-reply = await callExternalAI(prompt, imgObj);
-} else {
-const cfRes = await callSahmCloudAi(prompt, state.chatHistory);
-reply = cfRes.reply || generateLocalFallbackReply();
-}
+const cfRes = await callSahmCloudAi(prompt, state.chatHistory, imgObj ? imgObj.base64 : "");
+const reply = cfRes.reply || generateLocalFallbackReply();
 loading.remove(); appendMessage("ai", reply);
 state.chatHistory.push({ role: "user", text: prompt }, { role: "ai", text: reply });
 } catch (err) {
 loading.remove();
-appendMessage("ai", `تعذر الاتصال: ${err.message}`);
+appendMessage("ai", `تعذر الاتصال بـ Sahm AI الآن: ${err.message}`);
 } finally {
 state.sending = false; $("sendChatBtn").disabled = false;
 }
@@ -7083,24 +6923,6 @@ $("imgPreviewBar").classList.add("show");
 r.readAsDataURL(file);
 }
 function clearAttachedImage() { state.attachedImage = null; $("imgPreviewBar").classList.remove("show"); $("imgFileInput").value = ""; }
-function toggleGeminiTools(p) {
-$("btnFetchModels").style.display = p === "gemini" ? "inline-flex" : "none";
-if (p !== "gemini") { $("apiModelSelect").style.display = "none"; $("modelFetchStatus").textContent = ""; }
-}
-function openApiModal() {
-const p = state.api.provider || "gemini";
-$("apiProviderSelect").value = p;
-$("apiKeyInput").type = "text";
-$("apiKeyInput").value = state.api.key || "";
-$("toggleApiKeyVisBtn").innerHTML = `<svg class="ui-ic sm" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
-$("apiModelInput").value = state.api.model || PROVIDER_DEFAULTS[p].model;
-$("apiProviderHint").textContent = PROVIDER_DEFAULTS[p].hint;
-$("apiTestResult").className = "test-result"; $("apiTestResult").textContent = "";
-toggleGeminiTools(p);
-if (p === "gemini" && $("apiKeyInput").value.trim().startsWith("AIza")) fetchGeminiModels($("apiKeyInput").value);
-$("apiModalBackdrop").classList.add("open");
-}
-const closeApiModal = () => $("apiModalBackdrop").classList.remove("open");
 function getFullMcpUrl() {
 return state.user?.uid ? `${FIXED_MCP_URL}?uid=${state.user.uid}` : FIXED_MCP_URL;
 }
@@ -7184,9 +7006,12 @@ function renderSahmQuantCards(q) {
   const pillEl = $("sahmGaugePill"), knobEl = $("sahmGaugeKnob");
   if (!qt) {
     if (scoreEl) { scoreEl.textContent = "—"; scoreEl.className = "sahm-sig-score flat"; }
-    if (confEl) confEl.textContent = "ثقة النموذج —%";
+    if (confEl) { confEl.textContent = "جاري الفحص..."; confEl.className = "sahm-sig-conf"; }
     if (pillEl) { pillEl.textContent = "جاري الحساب..."; pillEl.className = "sahm-gauge-pill"; pillEl.style.left = "50%"; }
     if (knobEl) { knobEl.className = "sahm-gauge-knob"; knobEl.style.left = "50%"; }
+    if ($("sahmTrendPill")) $("sahmTrendPill").innerHTML = `الاتجاه: <strong>—</strong>`;
+    if ($("sahmMaOscPill")) $("sahmMaOscPill").innerHTML = `المتوسطات / الزخم: <strong>—</strong>`;
+    if ($("sahmRrPill"))    $("sahmRrPill").innerHTML    = `العائد للمخاطرة: <strong>—</strong>`;
     ["sahmLvlWatch", "sahmLvlTarget", "sahmLvlStop", "sahmLvlWatchPct", "sahmLvlTargetPct", "sahmLvlStopPct"].forEach(id => {
       if ($(id)) $(id).textContent = "—";
     });
@@ -7198,8 +7023,27 @@ function renderSahmQuantCards(q) {
   const pctPos = Math.max(6, Math.min(94, 50 + sc * 0.44));
   const scTxt = `${sc > 0 ? "+" : ""}${sc}`;
 
-  if (scoreEl) { scoreEl.textContent = scTxt; scoreEl.className = "sahm-sig-score " + cls; }
-  if (confEl) confEl.textContent = `${qt.confidence}% ثقة النموذج`;
+  const trendAr = fixMojibake(qt.trendAr || "") || (sc >= 15 ? "صاعد" : sc <= -15 ? "هابط" : "عرضي");
+  const agreeAr = fixMojibake(qt.agreementAr || "") || (Math.abs(sc) >= 35 ? "إجماع قوي" : "توافق جزئي");
+  const maBias  = fixMojibake(qt.maBiasAr || "") || "—";
+  const oscBias = fixMojibake(qt.oscBiasAr || "") || "—";
+  const rrTxt   = qt.riskReward || "—";
+
+  if (scoreEl) { scoreEl.textContent = `${scTxt}/100`; scoreEl.className = "sahm-sig-score " + cls; }
+  if (confEl) {
+    confEl.textContent = agreeAr;
+    confEl.className = "sahm-sig-conf " + (qt.agreementLevel || (Math.abs(sc) >= 35 ? "high" : "mid"));
+  }
+  if ($("sahmTrendPill")) {
+    $("sahmTrendPill").className = "sahm-sig-pill " + (trendAr.includes("صاعد") ? "up" : trendAr.includes("هابط") ? "down" : "");
+    $("sahmTrendPill").innerHTML = `الاتجاه: <strong>${trendAr}</strong>`;
+  }
+  if ($("sahmMaOscPill")) {
+    $("sahmMaOscPill").innerHTML = `المتوسطات / الزخم: <strong>${maBias} | ${oscBias}</strong>`;
+  }
+  if ($("sahmRrPill")) {
+    $("sahmRrPill").innerHTML = `العائد للمخاطرة: <strong dir="ltr">${rrTxt}</strong>`;
+  }
   if (pillEl) {
     pillEl.textContent = `${getArabicSignalLabel(sc, qt.labelAr)} (${scTxt})`;
     pillEl.className = "sahm-gauge-pill" + (cls !== "flat" ? " " + cls : "");
@@ -7224,19 +7068,22 @@ function renderSahmQuantCards(q) {
   }
 }
 
-async function callSahmCloudAi(message, historyArr = []) {
+async function callSahmCloudAi(message, historyArr = [], imageBase64 = "") {
   const info = getStockInfo(state.ticker);
   const ctrl = new AbortController();
-  const tm = setTimeout(() => ctrl.abort(), 25000);
+  const tm = setTimeout(() => ctrl.abort(), 28000);
+  const payload = {
+    ticker: state.ticker,
+    stockName: info.name,
+    userName: getUserFirstName(),
+    message,
+    history: (historyArr || []).slice(-10)
+  };
+  if (imageBase64) payload.imageBase64 = imageBase64;
   const res = await fetch(`${WORKER_ORIGIN}/ai-chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json", "Accept": "application/json" },
-    body: JSON.stringify({
-      ticker: state.ticker,
-      stockName: info.name,
-      message,
-      history: (historyArr || []).slice(-6)
-    }),
+    body: JSON.stringify(payload),
     signal: ctrl.signal
   });
   clearTimeout(tm);
@@ -7282,12 +7129,14 @@ function openSahmAiModal() {
     sahmAiModalState.history = [];
     if ($("sahmAiChatBox")) $("sahmAiChatBox").innerHTML = "";
     const qt = q && q.quant ? q.quant : null;
+    const uName = getUserFirstName();
+    const greet = uName ? `أهلاً يا ${uName}!` : "أهلاً بك!";
     const summaryHint = qt
-      ? ` التقييم الفني الحالي هو **${getArabicSignalLabel(qt.score, qt.labelAr)} (${qt.score > 0 ? "+" : ""}${qt.score})**، ونقطة المراقبة عند **${qt.watchPoint} ${unit}** والهدف الأول **${qt.target1} ${unit}**.`
+      ? ` الاتجاه الفني حالياً **${fixMojibake(qt.trendAr || "") || getArabicSignalLabel(qt.score, qt.labelAr)}**، والدعم الأقرب عند **${qt.watchPoint} ${unit}** والهدف الأول **${qt.target1} ${unit}**.`
       : "";
-    appendSahmModalMsg("ai", `أهلاً بك يا غالي! أنا **مساعد سهم الذكي (Sahm AI)** لمتابعة **${info.name} (${state.ticker})**.${summaryHint}
+    appendSahmModalMsg("ai", `${greet} أنا معاك لتحليل **${info.name} (${state.ticker})** لحظياً.${summaryHint}
 
-قولي تحب نركز في إيه دلوقتي: خطة الشراء وتقسيم السيولة، المستهدفات ووقف الخسارة، ولا قراءة المؤشرات الفنية؟`);
+اسألني أي سؤال عن السهم — سواء الاتجاه، نقاط الدخول والخروج، أو لو عندك سيناريو معين في بالك.`);
   }
   $("sahmAiModalBackdrop").classList.add("open");
   setTimeout(() => $("sahmAiInput")?.focus(), 120);
@@ -7516,8 +7365,8 @@ const obj = { ticker: t, name: item.n || t, en: item.n || t, sector: "البور
 STOCK_MAP[t] = obj; STOCKS.push(obj);
 }
 }
-updateApiBadge();
-appendMessage("ai", "أهلاً بك في **سهم**. يمكنك السؤال عن السهم المفتوح حالياً أو إرفاق لقطة شاشة من الشارت لتحليلها.");
+const _uName = getUserFirstName();
+appendMessage("ai", `${_uName ? `أهلاً يا ${_uName}!` : "أهلاً بك في **سهم**."} اسألني أي سؤال عن السهم المفتوح حالياً أو أرفق صورة شارت لتحليلها مباشرة عبر **Sahm AI**.`);
 selectStock(state.ticker, false, false, false);
 switchTab(state.activeTab, false);
 fetchMarketMovers(false);
@@ -7639,7 +7488,6 @@ state.filter = "FAV";
 document.querySelectorAll(".filter-pill").forEach(x => x.classList.toggle("active", x.dataset.filter === "FAV"));
 switchTab("stocks", true);
 };
-$("menuApiBtn").onclick = () => { closeMoreMenu(); openApiModal(); };
 $("menuMcpBtn").onclick = () => { closeMoreMenu(); openMcpModal(); };
 $("menuRefreshBtn").onclick = () => {
 closeMoreMenu();
@@ -7701,7 +7549,6 @@ if ($("sahmAiFaqsList")) $("sahmAiFaqsList").onclick = e => {
   const b = e.target.closest("[data-sahm-q]");
   if (b) sendSahmAiPrompt(b.dataset.sahmQ);
 };
-if ($("openMcpAiBtn")) $("openMcpAiBtn").onclick = openMcpModal;
 $("closeMcpModalBtn").onclick = closeMcpModal;
 $("mcpModalBackdrop").onclick = e => { if (e.target.id === "mcpModalBackdrop") closeMcpModal(); };
 $("copyMcpRemoteBtn").onclick = async () => {
@@ -7807,7 +7654,7 @@ $("proZoomAllBtn").onclick = () => { if (proChart) proChart.timeScale().fitConte
 window.addEventListener("resize", () => { resizeProCharts(); setTimeout(() => { resizeProCharts(); if (state.activeTab === "home") renderEgxHeatmap(); }, 140); });
 window.addEventListener("orientationchange", () => setTimeout(resizeProCharts, 250));
 document.addEventListener("keydown", e => {
-if (e.key === "Escape") { document.body.classList.remove("hm-fullscreen"); if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير"; exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeApiModal(); closeAccountModal(); closeMcpModal(); closeSahmAiModal(); }
+if (e.key === "Escape") { document.body.classList.remove("hm-fullscreen"); if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير"; exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeAccountModal(); closeMcpModal(); closeSahmAiModal(); }
 });
 const syncSearchInputs = (val) => {
 state.search = val;
@@ -7862,56 +7709,7 @@ $("clearChatBtn").onclick = () => {
 state.chatHistory = []; $("chatBox").innerHTML = "";
 appendMessage("ai", `تم مسح المحادثة. متصل الآن بسهم **${getStockInfo(state.ticker).name} (EGX:${state.ticker})**.`);
 };
-if ($("openApiModalBtn")) $("openApiModalBtn").onclick = openApiModal;
-if ($("openApiModalBtn2")) $("openApiModalBtn2").onclick = openApiModal;
-$("closeApiModalBtn").onclick = closeApiModal;
-$("apiModalBackdrop").onclick = e => { if (e.target.id === "apiModalBackdrop") closeApiModal(); };
-$("toggleApiKeyVisBtn").onclick = () => {
-const inp = $("apiKeyInput");
-const isText = inp.type === "text";
-inp.type = isText ? "password" : "text";
-$("toggleApiKeyVisBtn").innerHTML = isText ? `<svg class="ui-ic sm" viewBox="0 0 24 24"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-6.5 0-10-7-10-7a18.5 18.5 0 0 1 5.06-5.94M1 1l22 22"/></svg>` : `<svg class="ui-ic sm" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`;
-};
-$("apiProviderSelect").onchange = e => {
-const p = e.target.value;
-$("apiModelInput").value = PROVIDER_DEFAULTS[p].model;
-$("apiProviderHint").textContent = PROVIDER_DEFAULTS[p].hint;
-toggleGeminiTools(p);
-if (p === "gemini") fetchGeminiModels($("apiKeyInput").value);
-};
-let gemTimer = null;
-$("apiKeyInput").oninput = e => {
-if ($("apiProviderSelect").value !== "gemini") return;
-clearTimeout(gemTimer);
-gemTimer = setTimeout(() => fetchGeminiModels(e.target.value), 500);
-};
-$("btnFetchModels").onclick = () => fetchGeminiModels($("apiKeyInput").value);
-$("apiModelSelect").onchange = e => { $("apiModelInput").value = e.target.value; };
-$("saveTestApiBtn").onclick = async () => {
-const provider = $("apiProviderSelect").value, key = $("apiKeyInput").value.trim();
-const model = $("apiModelInput").value.trim() || PROVIDER_DEFAULTS[provider].model, resEl = $("apiTestResult");
-if (!key) { resEl.className = "test-result err"; resEl.textContent = "يرجى إدخال مفتاح الـ API أولاً."; return; }
-state.api = { provider, key, model }; localStorage.setItem(LS.API, JSON.stringify(state.api)); updateApiBadge();
-resEl.className = "test-result ok"; resEl.textContent = "جاري اختبار الاتصال...";
-try {
-await callExternalAI("رد بكلمة واحدة: متصل", null);
-resEl.className = "test-result ok"; resEl.textContent = "تم الاتصال والحفظ بنجاح";
-} catch (err) {
-resEl.className = "test-result err"; resEl.textContent = `فشل الاتصال: ${err.message}`;
-}
-};
-$("clearApiBtn").onclick = () => {
-state.api.key = ""; localStorage.setItem(LS.API, JSON.stringify(state.api));
-$("apiKeyInput").value = ""; $("apiModelSelect").style.display = "none"; $("modelFetchStatus").textContent = "";
-updateApiBadge(); $("apiTestResult").className = "test-result ok"; $("apiTestResult").textContent = "تم مسح المفتاح.";
-};
-const markUnload = () => {
-saveSessionNav();
-try { sessionStorage.setItem(SESS_UNLOAD_KEY, String(Date.now())); } catch {}
-};
-window.addEventListener("pagehide", markUnload);
-window.addEventListener("beforeunload", markUnload);
-updateApiBadge(); updateAuthUI();
+updateAuthUI();
 });
   </script>
 </body>
