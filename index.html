@@ -43,7 +43,7 @@
     /* قائمة الثلاث نقط المنسدلة (فوق يمين) */
     .more-menu-wrap { position: relative; }
     .more-menu-dropdown {
-      position: fixed; top: calc(58px + env(safe-area-inset-top, 0px)); right: 12px; z-index: 115;
+      position: fixed; top: calc(64px + env(safe-area-inset-top, 0px)); right: 12px; z-index: 325;
       width: min(260px, calc(100vw - 24px));
       background: rgba(11, 17, 32, 0.96); backdrop-filter: blur(22px);
       border: 1px solid var(--border-strong); border-radius: 16px;
@@ -68,7 +68,7 @@
 
     /* شريط البحث السريع المنسدل من الأعلى */
     .quick-search-bar {
-      position: fixed; top: calc(55px + env(safe-area-inset-top, 0px)); left: 0; right: 0; z-index: 94;
+      position: fixed; top: calc(62px + env(safe-area-inset-top, 0px)); left: 0; right: 0; z-index: 320;
       display: none; flex-direction: column; gap: 8px;
       padding: 10px 12px 12px;
       background: rgba(11, 17, 32, 0.96); backdrop-filter: blur(18px);
@@ -302,7 +302,7 @@
     .row-ticker { font-weight: 800; color: var(--emerald); direction: ltr; }
     .row-star { width: 32px; height: 32px; border-radius: 9px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-muted); font-size: 16px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .row-star.active { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
-    .modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(6px); z-index: 120; display: none; align-items: center; justify-content: center; padding: 14px; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.72); backdrop-filter: blur(6px); z-index: 340; display: none; align-items: center; justify-content: center; padding: 14px; }
     .modal-backdrop.open { display: flex; }
     .modal { width: min(500px, 100%); max-height: 90vh; overflow-y: auto; background: var(--bg-card); border: 1px solid var(--border-strong); border-radius: 16px; box-shadow: var(--shadow); }
     .modal-head { padding: 13px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
@@ -454,6 +454,33 @@
       15%  { opacity: 0.42; }
       75%  { opacity: 0.25; }
       100% { transform: translateY(-108vh) translateX(36px) scale(1.15); opacity: 0; }
+    }
+
+    /* الشريط العلوي داخل شاشة الدخول (يمين: 3 نقط + بحث | يسار: دخول — بدون خلفية خارجية) */
+    .gate-top-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0; z-index: 310;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: calc(env(safe-area-inset-top, 0px) + 12px) 14px 10px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+    .gate-top-bar .icon-btn {
+      width: 42px; height: 42px; border-radius: 13px; font-size: 19px;
+      background: rgba(16, 24, 43, 0.72); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    [data-theme="light"] .gate-top-bar .icon-btn { background: rgba(255, 255, 255, 0.85); }
+    .gate-top-bar .auth-btn {
+      height: 42px; padding: 0 13px; border-radius: 13px; font-size: 13.5px; max-width: 150px;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    }
+    @media (max-width: 480px) {
+      .gate-top-bar { padding: calc(env(safe-area-inset-top, 0px) + 10px) 11px 8px; gap: 6px; }
+      .gate-top-bar .icon-btn { width: 40px; height: 40px; font-size: 18px; }
+      .gate-top-bar .auth-btn { height: 40px; padding: 0 11px; font-size: 12.5px; }
     }
 
     /* Full-Height Minimalist Foreground Content */
@@ -918,6 +945,22 @@
       </div>
     </div>
 
+    <!-- الشريط العلوي داخل شاشة الدخول (يمين: 3 نقط + بحث | يسار: دخول) بدون خلفية -->
+    <div class="gate-top-bar" id="gateTopBar">
+      <div class="header-right">
+        <div class="more-menu-wrap">
+          <button type="button" class="icon-btn" id="gateMoreMenuBtn" title="القائمة والخيارات" aria-label="القائمة">⋮</button>
+        </div>
+        <button type="button" class="icon-btn" id="gateQuickSearchBtn" title="بحث سريع عن سهم" aria-label="بحث">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+      </div>
+
+      <div class="header-left">
+        <button type="button" class="auth-btn" id="gateAuthHeaderBtn" title="تسجيل الدخول بحساب Google"><span>👤 دخول</span></button>
+      </div>
+    </div>
+
     <!-- الشعار والاسم مع أسهم متحركة عليه -->
     <div class="gate-hero">
       <div class="gate-emblem">
@@ -1012,50 +1055,6 @@
     </div>
   </header>
 
-  <!-- قائمة الثلاث نقط المنسدلة -->
-  <div class="more-menu-dropdown" id="moreMenuDropdown" role="menu">
-    <button class="menu-item" id="menuAccountBtn">
-      <span class="menu-item-left"><span>👤</span><span>حسابي والمزامنة</span></span>
-      <span class="menu-item-tag" id="menuAccountTag">Google</span>
-    </button>
-    <button class="menu-item" id="menuThemeBtn">
-      <span class="menu-item-left"><span id="menuThemeIcon">🌙</span><span>الإضاءة (الوضع)</span></span>
-      <span class="menu-item-tag" id="menuThemeTag">ليلي</span>
-    </button>
-    <button class="menu-item" id="menuLangBtn">
-      <span class="menu-item-left"><span>🌐</span><span>اللغة</span></span>
-      <span class="menu-item-tag" id="menuLangTag">عربي AR</span>
-    </button>
-    <div class="menu-divider"></div>
-    <button class="menu-item" id="menuFavBtn">
-      <span class="menu-item-left"><span>★</span><span>الأسهم المفضلة</span></span>
-      <span class="menu-item-tag" id="menuFavCount">0</span>
-    </button>
-    <button class="menu-item" id="menuApiBtn">
-      <span class="menu-item-left"><span>⚙️</span><span>إعدادات الذكاء الاصطناعي (API)</span></span>
-    </button>
-    <button class="menu-item" id="menuMcpBtn">
-      <span class="menu-item-left"><span>🔌</span><span>ربط سيرفر MCP</span></span>
-    </button>
-    <button class="menu-item" id="menuRefreshBtn">
-      <span class="menu-item-left"><span>↻</span><span>تحديث بيانات السوق</span></span>
-    </button>
-    <div class="menu-divider" id="menuLogoutDivider" style="display:none;"></div>
-    <button class="menu-item danger" id="menuLogoutBtn" style="display:none;">
-      <span class="menu-item-left"><span>🚪</span><span>تسجيل الخروج</span></span>
-    </button>
-  </div>
-
-  <!-- شريط البحث السريع المنسدل (من أيقونة البحث فوق يمين) -->
-  <div class="quick-search-bar" id="quickSearchBar">
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" class="search-input" id="topQuickSearchInput" placeholder="ابحث عن أي سهم بالاسم أو الرمز (مثل SWDY أو السويدي)..." autocomplete="off" />
-      <button class="search-clear" id="closeQuickSearchBtn" style="display:block;">✕</button>
-    </div>
-    <div class="quick-search-results" id="topQuickSearchResults"></div>
-  </div>
-
   <main class="container">
     <!-- ==================== 1. القسم الأول: الصفحة الرئيسية ==================== -->
     <div class="tab-view active" id="tab-home" data-tab-view="home">
@@ -1098,15 +1097,15 @@
         <div class="macro-top">
           <div class="macro-title-wrap">
             <span class="macro-ico">🪙</span>
-            <span class="macro-name">الذهب (عيار 21)</span>
+            <span class="macro-name">الذهب (عيار 24)</span>
           </div>
           <span class="mover-chg flat" id="goldChgBadge">—</span>
         </div>
         <div class="macro-price-row">
-          <span class="macro-price" id="gold21PriceVal">—</span>
+          <span class="macro-price" id="gold24PriceVal">—</span>
           <span class="macro-unit">ج.م / جرام</span>
         </div>
-        <div class="macro-sub" id="goldSubMeta">عيار 24: — • الأونصة: —</div>
+        <div class="macro-sub" id="goldSubMeta">عيار 21: — • الأونصة: —</div>
       </div>
 
       <div class="macro-card usd-card" data-macro-ticker="USDEGP" title="اضغط لفتح شارت الدولار مقابل الجنيه">
@@ -1147,8 +1146,8 @@
         </div>
         <div class="pulse-stat">
           <div class="pulse-val" id="pulseTurnoverVal">—</div>
-          <div class="pulse-lbl-ar">ج.م قيم التداول (الجلسة)</div>
-          <div class="pulse-lbl-en">EGP traded (session)</div>
+          <div class="pulse-lbl-ar">قيم التداول (مليار ج.م)</div>
+          <div class="pulse-lbl-en">EGP traded (billions)</div>
           <div class="pulse-bar"></div>
         </div>
         <div class="pulse-stat">
@@ -1475,13 +1474,13 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
         <span>الرئيسية</span>
       </button>
-      <button class="bnav-item" data-tab-target="chart">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/><path d="M16 7h4v4"/></svg>
-        <span>الرسمة</span>
-      </button>
       <button class="bnav-item" data-tab-target="stocks">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
         <span>الأسهم</span>
+      </button>
+      <button class="bnav-item" data-tab-target="chart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 6-7"/><path d="M16 7h4v4"/></svg>
+        <span>الرسمة</span>
       </button>
       <button class="bnav-item" data-tab-target="ai">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9L12 3z"/><path d="M19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8L19 16z"/></svg>
@@ -1526,6 +1525,52 @@
 
     <div class="stock-list" id="stockList"></div>
   </aside>
+
+  </div><!-- /#appShell -->
+
+  <!-- قائمة الثلاث نقط المنسدلة -->
+  <div class="more-menu-dropdown" id="moreMenuDropdown" role="menu">
+    <button class="menu-item" id="menuAccountBtn">
+      <span class="menu-item-left"><span>👤</span><span>حسابي والمزامنة</span></span>
+      <span class="menu-item-tag" id="menuAccountTag">Google</span>
+    </button>
+    <button class="menu-item" id="menuThemeBtn">
+      <span class="menu-item-left"><span id="menuThemeIcon">🌙</span><span>الإضاءة (الوضع)</span></span>
+      <span class="menu-item-tag" id="menuThemeTag">ليلي</span>
+    </button>
+    <button class="menu-item" id="menuLangBtn">
+      <span class="menu-item-left"><span>🌐</span><span>اللغة</span></span>
+      <span class="menu-item-tag" id="menuLangTag">عربي AR</span>
+    </button>
+    <div class="menu-divider"></div>
+    <button class="menu-item" id="menuFavBtn">
+      <span class="menu-item-left"><span>★</span><span>الأسهم المفضلة</span></span>
+      <span class="menu-item-tag" id="menuFavCount">0</span>
+    </button>
+    <button class="menu-item" id="menuApiBtn">
+      <span class="menu-item-left"><span>⚙️</span><span>إعدادات الذكاء الاصطناعي (API)</span></span>
+    </button>
+    <button class="menu-item" id="menuMcpBtn">
+      <span class="menu-item-left"><span>🔌</span><span>ربط سيرفر MCP</span></span>
+    </button>
+    <button class="menu-item" id="menuRefreshBtn">
+      <span class="menu-item-left"><span>↻</span><span>تحديث بيانات السوق</span></span>
+    </button>
+    <div class="menu-divider" id="menuLogoutDivider" style="display:none;"></div>
+    <button class="menu-item danger" id="menuLogoutBtn" style="display:none;">
+      <span class="menu-item-left"><span>🚪</span><span>تسجيل الخروج</span></span>
+    </button>
+  </div>
+
+  <!-- شريط البحث السريع المنسدل (من أيقونة البحث فوق يمين) -->
+  <div class="quick-search-bar" id="quickSearchBar">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="search-input" id="topQuickSearchInput" placeholder="ابحث عن أي سهم بالاسم أو الرمز (مثل SWDY أو السويدي)..." autocomplete="off" />
+      <button class="search-clear" id="closeQuickSearchBtn" style="display:block;">✕</button>
+    </div>
+    <div class="quick-search-results" id="topQuickSearchResults"></div>
+  </div>
 
   <!-- نافذة إعدادات API -->
   <div class="modal-backdrop" id="apiModalBackdrop">
@@ -1623,7 +1668,6 @@
     </div>
   </div>
 
-  </div><!-- /#appShell -->
 
   <!-- Firebase + TradingView -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
@@ -1744,7 +1788,18 @@
       ["NCMP","الوطنية لمنتجات الذرة","National Maize","أغذية","EGX100",false], ["NFDI","الوطنية للتنمية الزراعية","National Agri","زراعة","EGX100",false], ["OCEG","أوراسكوم للإنشاءات","Orascom Const","مقاولات","EGX100",false],
       ["PTCC","بريميوم هيلثكير جروب / سيتي للتحاليل","Premium Healthcare","رعاية صحية","EGX70,EGX100",false], ["RGHM","رواد السياحة والتنمية","Rowad Dev","سياحة","EGX100",false], ["SEGA","سيدى كرير / سيجا","SEGA","كيماويات","EGX100",false],
       ["SUES","السويس للأسمنت","Suez Cement","مواد بناء","EGX100",false], ["TOUR","المصرية للسياحة","Egyptian Tourism","سياحة","EGX100",false], ["UNBE","الاتحاد الصيدلي للخدمات الطبية","Union Medical","رعاية صحية","EGX100",false],
-      ["WKOL","وادي كوم أمبو (WKOL)","Wadi Kom Ombo","زراعة","EGX100",false], ["ZECI","الزيوت والمستخلصات","ZECI Oils","أغذية","EGX100",false]
+      ["WKOL","وادي كوم أمبو (WKOL)","Wadi Kom Ombo","زراعة","EGX100",false], ["ZECI","الزيوت والمستخلصات","ZECI Oils","أغذية","EGX100",false],
+      ["ADPC","العربية لمنتجات الألبان - آراب ديري (باندا)","Arab Dairy Panda","أغذية ومشروبات","EGX70,EGX100,SHARIAH",true], ["AMEC","أصول للاستثمار والتنمية","AMEC","استثمار","EGX100",false], ["EKRG","ايكو / كارجو للخدمات","EKRG","خدمات","EGX100",false],
+      ["ELPC","المصرية لخدمات البترول / البلاستيك","ELPC","صناعة","EGX100",false], ["GENM","المصرية العامة للمطاحن","GENM","مطاحن وأغذية","EGX100",false], ["GGRN","جرين لاند للاستثمار","Green Land","أغذية","EGX100",false],
+      ["INTM","انتجريتد للخدمات الطبية","INTM","رعاية صحية","EGX100",false], ["LIVA","ليفا للاستثمار","LIVA","استثمار","EGX100",false], ["MASH","مشروعات التطوير العمراني","MASH","عقارات","EGX100",false],
+      ["MEGM","ميجا للإنشاءات","MEGM","مقاولات","EGX100",false], ["MOIN","مهندس للتأمين","Mohandes Insurance","تأمين","EGX70,EGX100",false], ["NILE","النيل للسكر / النيل للاستثمار","Nile Co","أغذية","EGX100",false],
+      ["RIVA","ريفا للاستثمار","RIVA","عقارات","EGX100",false], ["UCOM","يونيفرسال للاتصالات","UCOM","اتصالات","EGX100",false], ["UNFO","يونيفرسال للأغذية","UNFO","أغذية","EGX100",false],
+      ["ABRD","أبيكو / البريد للاستثمار","ABRD","خدمات مالية","EGX100",false], ["ADRI","العربية للتنمية العقارية - أركو","Arab Dev Real Estate","عقارات","EGX70,EGX100",false], ["BAPA","البنك الأهلي / باركليز","BAPA","بنوك","EGX100",false],
+      ["CAIR","بنك القاهرة","Banque du Caire","بنوك","EGX100",false], ["EGPR","المصرية للمشروعات","EGPR","عقارات","EGX100",false], ["GCRI","جولدن كوست العقارية","GCRI","عقارات","EGX100",false],
+      ["MISB","مصر للأسواق / البنوك","MISB","خدمات","EGX100",false], ["NBEG","بنك التمويل المصري","NBEG","بنوك","EGX100",false], ["ORSC","أوراسكوم للإعلام","Orascom Media","إعلام","EGX100",false],
+      ["PHNX","فينيكس للاستثمار","Phoenix Inv","استثمار","EGX100",false], ["RAMS","رمسيس للسياحة","Ramses Tourism","سياحة","EGX100",false], ["SCIB","بنك قناة السويس (أسهم)","SCIB","بنوك","EGX100",false],
+      ["SICO","سيكو للإلكترونيات","SICO Tech","تكنولوجيا","EGX100",false], ["SMCS","سماد مصر للكيماويات","SMCS","كيماويات","EGX100",false], ["TORA","أسمنت طرة","Tourah Cement","مواد بناء","EGX100",false],
+      ["UDIC","المتحدة للتنمية الصناعية","UDIC","صناعة","EGX100",false]
     ];
 
     const INDICES_META = {
@@ -1769,7 +1824,7 @@
       LAST_TICKER: "egx_term_last_ticker_v4", TF: "egx_term_tf_v4",
       UPDATED_AT: "egx_term_updated_at_v5", IND_UPDATED_AT: "egx_term_ind_updated_at_v5",
       CHART_MODE: "egx_term_chart_mode_v6", PRO_SCRIPTS: "egx_term_pro_scripts_v6", PRO_ACTIVE: "egx_term_pro_active_v6",
-      AUTH_HINT: "sahm_auth_uid_v1", LOGOS: "sahm_stock_logos_v1"
+      AUTH_HINT: "sahm_auth_uid_v1", LOGOS: "sahm_stock_logos_v1", ALL_STOCKS: "sahm_all_egx_stocks_v1"
     };
 
     const DEFAULT_PRO_SCRIPTS = [
@@ -1913,7 +1968,9 @@
       openai:     { model:"gpt-4o-mini", hint:"platform.openai.com/api-keys" }
     };
 
-    const urlTicker = new URLSearchParams(window.location.search).get("ticker");
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlTicker = urlParams.get("ticker");
+    const urlShare = urlParams.get("share") === "1";
     const $ = id => document.getElementById(id);
 
     function safeJson(key, fallback) {
@@ -1942,7 +1999,7 @@
       activeProScripts: safeJson(LS.PRO_ACTIVE, ["ut_bot", "auto_sr"]),
       editingScriptId: "ut_bot",
       proEditorOpen: false,
-      activeTab: urlTicker ? "chart" : "home",
+      activeTab: (urlShare && urlTicker) ? "chart" : "home",
       chartDirty: true,
       taDirty: true,
       stockLogos: safeJson(LS.LOGOS, {}),
@@ -1975,31 +2032,28 @@
 
     // 3. حالة جلسة البورصة المصرية (توقيت القاهرة)
     function updateMarketStatus() {
-      const pill = $("marketStatusPill"), txt = $("marketStatusText"), timer = $("marketStatusTimer");
+      const pills = [$("marketStatusPill")].filter(Boolean);
+      const txts  = [$("marketStatusText")].filter(Boolean);
+      const timers = [$("marketStatusTimer")].filter(Boolean);
       const parts = new Intl.DateTimeFormat("en-US", {
         timeZone: "Africa/Cairo", weekday: "short", hour: "2-digit", minute: "2-digit", hour12: false
       }).formatToParts(new Date());
       const get = t => parts.find(p => p.type === t)?.value;
       const day = get("weekday"), h = parseInt(get("hour"), 10) % 24, m = parseInt(get("minute"), 10);
       const mins = h * 60 + m, isWorkday = ["Sun", "Mon", "Tue", "Wed", "Thu"].includes(day);
-      let gateLabel = "";
       const isOpen = isWorkday && mins >= 600 && mins < 870;
+      let statusLabel = "السوق مغلق", timerLabel = "• 10:00 ص – 2:30 م";
       if (isOpen) {
         const left = 870 - mins;
-        pill.classList.add("open"); txt.textContent = "السوق مفتوح";
-        timer.textContent = `• يغلق خلال ${Math.floor(left / 60)}س ${left % 60}د`;
-        gateLabel = `السوق مفتوح الآن • يغلق خلال ${Math.floor(left / 60)}س ${left % 60}د`;
-      } else {
-        pill.classList.remove("open"); txt.textContent = "السوق مغلق";
-        if (isWorkday && mins < 600) {
-          const left = 600 - mins;
-          timer.textContent = `• يفتح خلال ${Math.floor(left / 60)}س ${left % 60}د`;
-          gateLabel = `السوق مغلق • يفتح خلال ${Math.floor(left / 60)}س ${left % 60}د`;
-        } else {
-          timer.textContent = "• 10:00 ص – 2:30 م";
-          gateLabel = "السوق مغلق • الجلسة 10:00 ص – 2:30 م";
-        }
+        statusLabel = "السوق مفتوح";
+        timerLabel = `• يغلق خلال ${Math.floor(left / 60)}س ${left % 60}د`;
+      } else if (isWorkday && mins < 600) {
+        const left = 600 - mins;
+        timerLabel = `• يفتح خلال ${Math.floor(left / 60)}س ${left % 60}د`;
       }
+      pills.forEach(p => p.classList.toggle("open", isOpen));
+      txts.forEach(el => { el.textContent = statusLabel; });
+      timers.forEach(el => { el.textContent = timerLabel; });
     }
 
     // 4. المزامنة السحابية وحساب Google (حفظ فوري للمؤشرات مع مقارنة التوقيت لمنع المسح)
@@ -2141,8 +2195,8 @@
       const isDark = state.theme === "dark";
       const isAr = state.lang === "ar";
       document.documentElement.setAttribute("data-theme", state.theme);
-      if ($("themeToggleBtn")) $("themeToggleBtn").textContent = isDark ? "🌙 ليلي" : "☀️ نهاري";
-      if ($("langToggleBtn"))  $("langToggleBtn").textContent  = isAr ? "🌐 عربي" : "🌐 EN";
+      if ($("themeToggleBtn"))     $("themeToggleBtn").textContent     = isDark ? "🌙 ليلي" : "☀️ نهاري";
+      if ($("langToggleBtn"))      $("langToggleBtn").textContent      = isAr ? "🌐 عربي" : "🌐 EN";
       if ($("menuThemeIcon"))  $("menuThemeIcon").textContent  = isDark ? "🌙" : "☀️";
       if ($("menuThemeTag"))   $("menuThemeTag").textContent   = isDark ? "ليلي" : "نهاري";
       if ($("menuLangTag"))    $("menuLangTag").textContent    = isAr ? "عربي AR" : "English EN";
@@ -2152,11 +2206,13 @@
     function closeMoreMenu() {
       $("moreMenuDropdown")?.classList.remove("open");
       $("moreMenuBtn")?.classList.remove("active");
+      $("gateMoreMenuBtn")?.classList.remove("active");
     }
 
     function closeQuickSearch() {
       $("quickSearchBar")?.classList.remove("open");
       $("quickSearchBtn")?.classList.remove("active");
+      $("gateQuickSearchBtn")?.classList.remove("active");
     }
 
     function switchTab(tabName, scrollTop = true) {
@@ -2312,8 +2368,8 @@
 
     function isValidEgxTicker(ticker) {
       const t = String(ticker || "").toUpperCase().trim();
-      if (!t || /^EGS\d/i.test(t) || t.length < 2 || t.length > 6) return false;
-      return /^[A-Z]{2,6}$/.test(t);
+      if (!t || /^EGS\d/i.test(t) || t.length < 2 || t.length > 7) return false;
+      return /^[A-Z][A-Z0-9]{1,6}$/.test(t);
     }
 
     function logoFallbackColors(ticker) {
@@ -3193,11 +3249,7 @@
       if (!t) return;
       state.ticker = t;
       localStorage.setItem(LS.LAST_TICKER, t);
-      try {
-        const u = new URL(window.location.href);
-        u.searchParams.set("ticker", t);
-        window.history.replaceState({}, "", u.toString());
-      } catch {}
+
       if (saveCloud) { markLocalChange(false); syncUserToCloud(false); }
 
       const info = getStockInfo(t);
@@ -3537,11 +3589,20 @@
     }
 
     // 8.5 نبض السوق المباشر + الأكثر ربحاً وخسارة (جنب بعض - 8) + الأكثر تداولاً (تحتهم - 8) + الشعارات
-    function formatTurnoverMillions(egp) {
+    function formatTurnoverBillions(egp) {
       if (!Number.isFinite(egp) || egp <= 0) return "—";
+      const isAr = state.lang === "ar";
+      if (egp >= 1e9) {
+        const b = (egp / 1e9).toFixed(2);
+        return isAr
+          ? `<span dir="rtl" style="display:inline-flex;align-items:baseline;gap:5px;"><span dir="ltr">${b}</span><span style="font-size:0.58em;color:var(--emerald);font-weight:800;">مليار</span></span>`
+          : `${b}B`;
+      }
       if (egp >= 1e6) {
-        const m = Math.round(egp / 1e6);
-        return m.toLocaleString("en-US") + "M";
+        const m = Math.round(egp / 1e6).toLocaleString("en-US");
+        return isAr
+          ? `<span dir="rtl" style="display:inline-flex;align-items:baseline;gap:5px;"><span dir="ltr">${m}</span><span style="font-size:0.58em;color:var(--text-muted);font-weight:800;">مليون</span></span>`
+          : `${m}M`;
       }
       if (egp >= 1e3) return Math.round(egp / 1e3).toLocaleString("en-US") + "K";
       return Math.round(egp).toLocaleString("en-US");
@@ -3571,7 +3632,7 @@
       if (!p) return;
 
       $("pulseAnalysedVal").textContent = p.totalAnalysed ? Number(p.totalAnalysed).toLocaleString("en-US") : "—";
-      $("pulseTurnoverVal").textContent = formatTurnoverMillions(Number(p.totalTurnoverEgp || 0));
+      $("pulseTurnoverVal").innerHTML = formatTurnoverBillions(Number(p.totalTurnoverEgp || 0));
 
       const rising = Number(p.rising ?? 0);
       const falling = Number(p.falling ?? 0);
@@ -3673,6 +3734,9 @@
         }
       }
 
+      if (Array.isArray(data.allStocks) && data.allStocks.length) {
+        try { localStorage.setItem(LS.ALL_STOCKS, JSON.stringify(data.allStocks)); } catch {}
+      }
       if (updatedLogo) {
         try { localStorage.setItem(LS.LOGOS, JSON.stringify(state.stockLogos)); } catch {}
         if ($("activeStockLogoSlot")) $("activeStockLogoSlot").innerHTML = buildStockLogoHtml(state.ticker, "lg");
@@ -3796,18 +3860,18 @@
       const g = data.gold, u = data.usdEgp;
 
       if (g) {
-        if (g.gram21Egp) {
-          $("gold21PriceVal").textContent = Number(g.gram21Egp).toLocaleString("en-US");
+        if (g.gram24Egp) {
+          $("gold24PriceVal").textContent = Number(g.gram24Egp).toLocaleString("en-US");
         } else if (g.usdOz) {
-          $("gold21PriceVal").textContent = "$" + Number(g.usdOz).toLocaleString("en-US");
+          $("gold24PriceVal").textContent = "$" + Number(g.usdOz).toLocaleString("en-US");
         }
         const gChg = Number(g.changePct || 0);
         const gEl = $("goldChgBadge");
         gEl.className = "mover-chg " + (gChg > 0 ? "up" : gChg < 0 ? "down" : "flat");
         gEl.textContent = `${gChg > 0 ? "+" : ""}${gChg.toFixed(2)}%`;
-        const g24Txt = g.gram24Egp ? `عيار 24: ${Number(g.gram24Egp).toLocaleString("en-US")} ج` : "";
+        const g21Txt = g.gram21Egp ? `عيار 21: ${Number(g.gram21Egp).toLocaleString("en-US")} ج` : "";
         const ozTxt = g.usdOz ? `الأونصة: $${Number(g.usdOz).toLocaleString("en-US")}` : "";
-        $("goldSubMeta").textContent = [g24Txt, ozTxt].filter(Boolean).join(" • ") || "اضغط لفتح شارت الذهب";
+        $("goldSubMeta").textContent = [g21Txt, ozTxt].filter(Boolean).join(" • ") || "اضغط لفتح شارت الذهب";
       }
 
       if (u && Number.isFinite(u.price)) {
@@ -4255,6 +4319,19 @@ ${buildStockContextString()}
       function bootTerminalOnce() {
         if (state.appBooted) return;
         state.appBooted = true;
+        if (!urlShare && urlTicker) {
+          try { window.history.replaceState({}, "", window.location.pathname); } catch {}
+        }
+        // استرجاع أي أسهم مصرية إضافية تم سحبها مسبقاً من السيرفر
+        const cachedAll = safeJson(LS.ALL_STOCKS, []);
+        if (Array.isArray(cachedAll) && cachedAll.length) {
+          for (const item of cachedAll) {
+            const t = String(item?.t || "").toUpperCase().trim();
+            if (!isValidEgxTicker(t) || STOCK_MAP[t] || INDICES_META[t]) continue;
+            const obj = { ticker: t, name: item.n || t, en: item.n || t, sector: "البورصة المصرية", groups: ["EGX100"], shariah: false };
+            STOCK_MAP[t] = obj; STOCKS.push(obj);
+          }
+        }
         updateApiBadge();
         appendMessage("ai", "أهلاً بك في **سهم - Sahm** 👋\nالمؤشر الافتراضي هو **EGX 30**. تنقّل من الشريط السفلي بين **الرئيسية**، **الرسمة**، **الأسهم**، و **AI**.");
         selectStock(state.ticker, false, false, false);
@@ -4328,17 +4405,23 @@ ${buildStockContextString()}
       $("chartGoAiLink").onclick = e => { e.preventDefault(); switchTab("ai", true); };
       $("stocksOpenEgx30Btn").onclick = () => selectStock("EGX30", false, true, true);
 
-      // قائمة الثلاث نقط (فوق يمين)
-      $("moreMenuBtn").onclick = e => {
+      // قائمة الثلاث نقط (فوق يمين — في شاشة الدخول وداخل التطبيق)
+      const toggleMoreMenu = (e, triggerBtn) => {
         e.stopPropagation();
         closeQuickSearch();
         const open = !$("moreMenuDropdown").classList.contains("open");
         $("moreMenuDropdown").classList.toggle("open", open);
-        $("moreMenuBtn").classList.toggle("active", open);
+        if (triggerBtn) triggerBtn.classList.toggle("active", open);
+      };
+      $("moreMenuBtn").onclick = e => toggleMoreMenu(e, $("moreMenuBtn"));
+      if ($("gateMoreMenuBtn")) $("gateMoreMenuBtn").onclick = e => toggleMoreMenu(e, $("gateMoreMenuBtn"));
+      if ($("gateAuthHeaderBtn")) $("gateAuthHeaderBtn").onclick = () => {
+        if (state.user) openAccountModal();
+        else signInWithGoogle();
       };
       document.addEventListener("click", e => {
-        if (!e.target.closest("#moreMenuDropdown") && !e.target.closest("#moreMenuBtn")) closeMoreMenu();
-        if (!e.target.closest("#quickSearchBar") && !e.target.closest("#quickSearchBtn")) closeQuickSearch();
+        if (!e.target.closest("#moreMenuDropdown") && !e.target.closest("#moreMenuBtn") && !e.target.closest("#gateMoreMenuBtn")) closeMoreMenu();
+        if (!e.target.closest("#quickSearchBar") && !e.target.closest("#quickSearchBtn") && !e.target.closest("#gateQuickSearchBtn")) closeQuickSearch();
       });
 
       $("menuAccountBtn").onclick = () => { closeMoreMenu(); openAccountModal(); };
@@ -4358,14 +4441,14 @@ ${buildStockContextString()}
       };
       $("menuLogoutBtn").onclick = async () => { closeMoreMenu(); try { localStorage.removeItem(LS.AUTH_HINT); } catch {} if (fbAuth) await fbAuth.signOut(); };
 
-      // البحث السريع فوق يمين
-      $("quickSearchBtn").onclick = e => {
+      // البحث السريع فوق يمين (في شاشة الدخول وداخل التطبيق)
+      const toggleQuickSearch = (e, triggerBtn) => {
         e.stopPropagation();
         closeMoreMenu();
         const bar = $("quickSearchBar");
         const willOpen = !bar.classList.contains("open");
         bar.classList.toggle("open", willOpen);
-        $("quickSearchBtn").classList.toggle("active", willOpen);
+        if (triggerBtn) triggerBtn.classList.toggle("active", willOpen);
         if (willOpen) {
           const inp = $("topQuickSearchInput");
           inp.value = "";
@@ -4373,6 +4456,8 @@ ${buildStockContextString()}
           setTimeout(() => inp.focus(), 50);
         }
       };
+      $("quickSearchBtn").onclick = e => toggleQuickSearch(e, $("quickSearchBtn"));
+      if ($("gateQuickSearchBtn")) $("gateQuickSearchBtn").onclick = e => toggleQuickSearch(e, $("gateQuickSearchBtn"));
       $("closeQuickSearchBtn").onclick = closeQuickSearch;
       $("topQuickSearchInput").oninput = e => renderQuickSearchResults(e.target.value);
       $("topQuickSearchInput").onkeydown = e => {
@@ -4385,6 +4470,12 @@ ${buildStockContextString()}
         const el = e.target.closest("[data-qsearch-ticker]");
         if (!el) return;
         closeQuickSearch();
+        if (document.body.classList.contains("auth-locked")) {
+          state.ticker = el.dataset.qsearchTicker;
+          state.activeTab = "chart";
+          signInWithGoogle();
+          return;
+        }
         selectStock(el.dataset.qsearchTicker, true, true, true);
       };
 
@@ -4411,7 +4502,7 @@ ${buildStockContextString()}
       };
 
       $("shareTickerBtn").onclick = async () => {
-        const u = new URL(window.location.href); u.searchParams.set("ticker", state.ticker);
+        const u = new URL(window.location.origin + window.location.pathname); u.searchParams.set("share", "1"); u.searchParams.set("ticker", state.ticker);
         await copyText(u.toString());
         const b = $("shareTickerBtn"); b.textContent = "✅ تم النسخ";
         setTimeout(() => { b.textContent = "🔗 مشاركة"; }, 1600);
@@ -4434,7 +4525,8 @@ ${buildStockContextString()}
         markLocalChange(false);
         state.chartDirty = true; state.taDirty = true;
         if (state.activeTab === "chart") { state.chartDirty = false; state.taDirty = false; renderChart(); renderTechnicalWidget(); }
-        if (!state.moversData && state.appBooted) renderMoversTvFallback();
+        if (state.moversData) renderMarketPulse(state.moversData);
+        else if (state.appBooted) renderMoversTvFallback();
         syncUserToCloud(true);
       };
       $("themeToggleBtn").onclick = toggleTheme;
