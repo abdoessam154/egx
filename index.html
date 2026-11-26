@@ -1479,7 +1479,7 @@
     </div>
 
     <div class="header-left">
-      <button class="icon-btn bell-btn" id="alertsHeaderBtn" title="التنبيهات الذكية (أسعار، اختراقات، مؤشرات)" aria-label="التنبيهات">
+      <button class="icon-btn bell-btn" id="alertsHeaderBtn" title="تنبيهات الأسعار (Gmail)" aria-label="التنبيهات">
         <span>🔔</span>
         <span class="bell-badge" id="alertsBellBadge">0</span>
       </button>
@@ -1669,16 +1669,15 @@
       <div class="section-head">
         <div>
           <div class="section-title">🔥 رادار القطاعات المنفجرة والسيولة</div>
-          <div class="section-sub" id="sectorsSubLabel">توزيع سيولة البورصة المصرية حسب القطاع • اضغط على أي قطاع لفلترته</div>
+          <div class="section-sub" id="sectorsSubLabel">أقوى 5 قطاعات حسب السيولة • اضغط على أي قطاع لعرض أسهمه</div>
         </div>
-        <button type="button" class="btn-sm emerald" id="openScreenerFromHomeBtn">🔍 السكرينر</button>
       </div>
       <div class="sectors-grid" id="sectorsRadarGrid">
         <div class="movers-empty">⏳ جاري رصد سيولة القطاعات...</div>
       </div>
     </section>
 
-    <!-- الأكثر ربحاً والأكثر خسارة (جنب بعض — 8 لكل قسم) -->
+    <!-- الأكثر ربحاً والأكثر خسارة (جنب بعض — 5 لكل قسم) -->
     <section class="movers-dual-grid" id="moversDualSection">
       <div class="mover-box">
         <div class="mover-box-head gainers">
@@ -1699,7 +1698,7 @@
       </div>
     </section>
 
-    <!-- الأكثر تداولاً (تحتهم بعناون متسنتر — 8 أسهم) -->
+    <!-- الأكثر تداولاً (تحتهم بعناون متسنتر — 5 أسهم) -->
     <section class="mover-box" id="moversActiveSection">
       <div class="mover-box-head active-head">
         <span>🔥 الأكثر تداولاً</span>
@@ -1741,7 +1740,7 @@
           <span class="badge badge-ticker" id="activeTickerBadge">EGX:EGX30</span>
           <div class="stock-badges" id="activeIndexBadges"></div>
           <button class="btn-sm" id="shareTickerBtn" title="نسخ رابط مباشر لهذا السهم">🔗 مشاركة</button>
-          <button class="btn-sm gold" id="chartQuickAlertBtn" title="ضبط تنبيه سعر أو اختراق لهذا السهم">🔔 تنبيه</button>
+          <button class="btn-sm gold" id="chartQuickAlertBtn" title="ضبط تنبيه سعر وإرسال على Gmail">🔔 تنبيه</button>
         </div>
         <div class="chart-controls">
           <div class="mode-switch" id="chartModeSwitch">
@@ -1921,10 +1920,12 @@
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
           <select id="proTemplatePicker" class="scr-select" style="flex:1;min-width:150px;" title="أدخل مؤشر Pine Script سليم ومجرب بضغطة زر">
             <option value="">📚 قوالب جاهزة ومجربة (اختر لإدراجها)...</option>
-            <option value="ut_bot">⚡ UT Bot Alerts (النسخة الأصلية السليمة)</option>
+            <option value="ut_bot">⚡ شراء او بيع (UT Bot Alerts)</option>
+            <option value="ema_cross">🔀 sell and buy (EMA 10 / 20 Cross)</option>
+            <option value="macd_exit">🎯 EXIT (MACD + SMA 200 Strategy)</option>
+            <option value="rsi_buy">📊 RSI شراء (RSI Chart Bars)</option>
             <option value="supertrend">📈 SuperTrend (10, 3) + إشارات</option>
-            <option value="ema_cross">🔀 تقاطع EMA 9 / 21 + إشارات</option>
-            <option value="rsi_macd">📊 RSI + MACD (لوحة سفلية)</option>
+            <option value="rsi_macd">📉 MACD Classic (لوحة سفلية)</option>
           </select>
           <button type="button" class="btn-sm blue" id="proPasteCleanBtn" title="يمسح القديم ويلصق الكود الجديد نظيف بدون تداخل">📋 مسح ولصق</button>
           <button type="button" class="btn-sm" id="proClearCodeBtn" title="مسح نص الكود فقط">🧹 مسح</button>
@@ -1959,57 +1960,8 @@
     </section>
     </div>
 
-    <!-- ==================== 3. القسم الثالث: الأسهم وسكرينر المضاربة ==================== -->
+    <!-- ==================== 3. القسم الثالث: الأسهم ==================== -->
     <div class="tab-view" id="tab-stocks" data-tab-view="stocks">
-      <div class="stocks-mode-tabs" id="stocksModeTabs">
-        <button type="button" class="stocks-mode-btn active" data-stocks-view="list">📋 قائمة الأسهم</button>
-        <button type="button" class="stocks-mode-btn" data-stocks-view="screener">🔍 سكرينر المضاربة</button>
-      </div>
-
-      <!-- سكرينر المضاربة الفوري -->
-      <section class="card" id="screenerCard" style="display:none;">
-        <div class="section-head">
-          <div class="section-title">
-            <span>🔍 سكرينر المضاربة (EGX)</span>
-            <span class="count-pill" id="scrCountPill">0</span>
-          </div>
-          <button type="button" class="btn-sm emerald" id="scrRefreshBtn">↻ تحديث</button>
-        </div>
-
-        <div class="scr-presets" id="scrPresetsBar">
-          <button type="button" class="scr-preset-chip active" data-scr-preset="surge">🔥 انفجار سيولة</button>
-          <button type="button" class="scr-preset-chip" data-scr-preset="breakout">🚀 اختراق مقاومة</button>
-          <button type="button" class="scr-preset-chip" data-scr-preset="oversold">💎 تشبع بيعي (RSI)</button>
-          <button type="button" class="scr-preset-chip" data-scr-preset="macd">⚡ زخم MACD إيجابي</button>
-          <button type="button" class="scr-preset-chip" data-scr-preset="uptrend">📈 فوق المتوسطات</button>
-          <button type="button" class="scr-preset-chip" data-scr-preset="undervalued">🏷️ أقل من السعر العادل</button>
-          <button type="button" class="scr-preset-chip" data-scr-preset="shariah">☪️ مضاربة شريعة</button>
-          <button type="button" class="scr-preset-chip" data-scr-preset="all">📊 الكل</button>
-        </div>
-
-        <div class="scr-filters-row">
-          <select class="scr-select" id="scrSectorSelect" title="تصفية حسب القطاع">
-            <option value="ALL">كل القطاعات</option>
-          </select>
-          <select class="scr-select" id="scrIndexSelect" title="تصفية حسب المؤشر">
-            <option value="ALL">كل المؤشرات</option>
-            <option value="EGX30">EGX 30</option>
-            <option value="EGX70">EGX 70</option>
-            <option value="SHARIAH">الشريعة 33</option>
-          </select>
-          <select class="scr-select" id="scrSortSelect" title="ترتيب النتائج">
-            <option value="turnover">ترتيب: الأعلى سيولة</option>
-            <option value="rvol">ترتيب: انفجار الفوليوم</option>
-            <option value="change_desc">ترتيب: الأعلى صعوداً</option>
-            <option value="rsi_asc">ترتيب: أقل RSI</option>
-            <option value="upside">ترتيب: أعلى خصم عادل</option>
-          </select>
-        </div>
-
-        <div class="scr-results-grid" id="scrResultsGrid">
-          <div class="movers-empty">⏳ جاري مسح أسهم البورصة المصرية...</div>
-        </div>
-      </section>
 
       <section class="card" id="stocksPageCard">
         <div class="section-head">
@@ -2199,15 +2151,12 @@
       <span class="menu-item-tag" id="menuLangTag">عربي AR</span>
     </button>
     <div class="menu-divider"></div>
-    <button class="menu-item" id="menuScreenerBtn">
-      <span class="menu-item-left"><span>🔍</span><span>سكرينر المضاربة</span></span>
-      <span class="menu-item-tag">PRO</span>
-    </button>
+
     <button class="menu-item" id="menuSectorsBtn">
       <span class="menu-item-left"><span>🔥</span><span>رادار القطاعات والسيولة</span></span>
     </button>
     <button class="menu-item" id="menuAlertsBtn">
-      <span class="menu-item-left"><span>🔔</span><span>التنبيهات الذكية</span></span>
+      <span class="menu-item-left"><span>🔔</span><span>تنبيهات الأسعار (Gmail)</span></span>
       <span class="menu-item-tag" id="menuAlertsCount">0</span>
     </button>
     <button class="menu-item" id="menuHeatmapBtn">
@@ -2305,109 +2254,74 @@
   <!-- إشعارات التنبيهات العائمة -->
   <div class="alert-toast-stack" id="alertToastStack"></div>
 
-  <!-- نافذة التنبيهات الذكية (أسعار + اختراقات + مؤشرات + تليجرام) -->
+  <!-- نافذة تنبيهات السعر فقط + إرسال على Gmail -->
   <div class="modal-backdrop" id="alertsModalBackdrop">
     <div class="modal">
       <div class="modal-head">
-        <strong style="font-size:14.5px;">🔔 التنبيهات الذكية (أسعار • اختراقات • مؤشرات)</strong>
+        <strong style="font-size:14.5px;">🔔 تنبيهات السعر (Gmail)</strong>
         <button class="icon-btn" id="closeAlertsModalBtn">✕</button>
       </div>
       <div class="modal-body">
-        <div class="alert-tabs" id="alertModalTabs">
-          <button type="button" class="alert-tab-btn active" data-atab="price">💰 سعر</button>
-          <button type="button" class="alert-tab-btn" data-atab="breakout">🚀 اختراق</button>
-          <button type="button" class="alert-tab-btn" data-atab="indicator">📐 مؤشر</button>
-          <button type="button" class="alert-tab-btn" data-atab="list">📋 القائمة</button>
-        </div>
-
-        <!-- 1. تنبيه سعر -->
-        <div class="alert-pane active" data-apane="price">
+        <div style="display:flex;flex-direction:column;gap:10px;">
           <div class="field">
-            <label>رمز السهم</label>
+            <div class="field-label-row">
+              <label>رمز السهم</label>
+              <span id="alPriceCurrentHint" style="font-size:11px;font-weight:800;color:var(--emerald);"></span>
+            </div>
             <input type="text" id="alPriceTicker" dir="ltr" placeholder="مثل SWDY أو COMI" />
           </div>
           <div class="field">
-            <label>الشرط</label>
+            <label>الشرط (زيادة أو نقصان % أو سعر محدد)</label>
             <select id="alPriceCond">
-              <option value="above">صعود السعر إلى أو أعلى من (&gt;=)</option>
-              <option value="below">هبوط السعر إلى أو أقل من (&lt;=)</option>
+              <option value="pct_up_5">📈 زيادة +5% عن السعر الحالي</option>
+              <option value="pct_up_10">🚀 زيادة +10% عن السعر الحالي</option>
+              <option value="pct_up_15">🔥 زيادة +15% عن السعر الحالي</option>
+              <option value="pct_up_20">⚡ زيادة +20% عن السعر الحالي</option>
+              <option value="pct_dn_5">📉 نقصان -5% عن السعر الحالي</option>
+              <option value="pct_dn_10">⚠️ نقصان -10% عن السعر الحالي</option>
+              <option value="pct_dn_15">🔻 نقصان -15% عن السعر الحالي</option>
+              <option value="above">سعر محدد: صعود إلى أو أعلى من (&gt;=)</option>
+              <option value="below">سعر محدد: هبوط إلى أو أقل من (&lt;=)</option>
             </select>
           </div>
           <div class="field">
             <label>السعر المستهدف (ج.م)</label>
-            <input type="number" step="0.01" id="alPriceTarget" dir="ltr" placeholder="مثال: 85.50" />
+            <input type="number" step="0.01" id="alPriceTarget" dir="ltr" placeholder="يتحسب تلقائياً من النسبة أو اكتبه يدوياً" />
           </div>
           <button type="button" class="btn-primary" id="addPriceAlertBtn">+ إضافة تنبيه سعر</button>
         </div>
 
-        <!-- 2. تنبيه اختراق -->
-        <div class="alert-pane" data-apane="breakout">
-          <div class="field">
-            <label>نطاق المتابعة (رمز سهم أو اكتب ALL لكل السوق)</label>
-            <input type="text" id="alBreakTicker" dir="ltr" placeholder="SWDY أو ALL لكل السوق" />
+        <div class="test-result" id="alertsFeedbackMsg"></div>
+
+        <!-- إعدادات الإرسال التلقائي على Gmail -->
+        <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:7px;">
+          <strong style="font-size:12px;color:var(--emerald);">📧 إرسال التنبيه تلقائياً على Gmail</strong>
+          <input type="email" id="gmailToInput" dir="ltr" placeholder="بريدك على Gmail (مثال: name@gmail.com)" style="padding:8px 10px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-input);font-size:12px;" />
+          <input type="url" id="gmailWebhookInput" dir="ltr" placeholder="رابط Google Apps Script للإرسال التلقائي (اختياري)" style="padding:8px 10px;border-radius:9px;border:1px solid var(--border-strong);background:var(--bg-input);font-size:11.5px;" />
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" class="btn-sm emerald" id="saveGmailCfgBtn" style="flex:1;">💾 حفظ Gmail</button>
+            <button type="button" class="btn-sm blue" id="testGmailCfgBtn" style="flex:1;">✉️ اختبار إرسال</button>
+            <button type="button" class="btn-sm gold" id="copyGasCodeBtn" title="انسخ الكود وضعه في script.google.com وانشره كـ Web App">📋 كود Gmail</button>
           </div>
-          <div class="field">
-            <label>نوع الاختراق / الكسر</label>
-            <select id="alBreakCond">
-              <option value="high1m">🚀 اختراق قمة شهر (High 1M)</option>
-              <option value="low1m">⚠️ كسر قاع شهر (Low 1M)</option>
-              <option value="high52w">🏆 اختراق قمة 52 أسبوع</option>
-              <option value="vol2x">🔥 انفجار فوليوم (أكبر من 2x المتوسط + صعود)</option>
-              <option value="vol3x">💥 انفجار فوليوم عنيف (أكبر من 3x المتوسط)</option>
-            </select>
-          </div>
-          <button type="button" class="btn-primary" id="addBreakAlertBtn">+ إضافة تنبيه اختراق</button>
+          <div class="field-hint" style="margin-top:0;">لإرسال الإيميل تلقائياً من حسابك مجاناً: اضغط <strong>📋 كود Gmail</strong> والصقه في <strong>script.google.com</strong> ثم Deploy &gt; Web app وضع الرابط هنا.</div>
         </div>
 
-        <!-- 3. تنبيه مؤشر -->
-        <div class="alert-pane" data-apane="indicator">
-          <div class="field">
-            <label>نطاق المتابعة (رمز سهم أو اكتب ALL لكل السوق)</label>
-            <input type="text" id="alIndTicker" dir="ltr" placeholder="SWDY أو ALL لكل السوق" />
-          </div>
-          <div class="field">
-            <label>شرط المؤشر الفني / السعر العادل</label>
-            <select id="alIndCond">
-              <option value="rsi_low">💎 RSI(14) نزل تحت 30 (تشبع بيعي)</option>
-              <option value="rsi_high">🔥 RSI(14) طلع فوق 70 (تشبع شرائي)</option>
-              <option value="macd_bull">⚡ MACD إيجابي فوق خط الإشارة + فوق EMA20</option>
-              <option value="ema_bull">📈 السعر اخترق EMA20 و EMA50 صعوداً</option>
-              <option value="fv_disc">🏷️ السهم أقل من السعر العادل بنسبة 20%+</option>
-            </select>
-          </div>
-          <button type="button" class="btn-primary" id="addIndAlertBtn">+ إضافة تنبيه مؤشر</button>
-        </div>
-
-        <!-- 4. قائمة التنبيهات والسجل وإعدادات التليجرام -->
-        <div class="alert-pane" data-apane="list">
+        <!-- تنبيهات الأسعار النشطة والسجل -->
+        <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:8px;">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;flex-wrap:wrap;">
-            <strong style="font-size:12.5px;">📌 التنبيهات النشطة (<span id="alActiveCount">0</span>)</strong>
+            <strong style="font-size:12.5px;">📌 تنبيهات السعر النشطة (<span id="alActiveCount">0</span>)</strong>
             <div style="display:flex;gap:5px;">
               <button type="button" class="btn-sm" id="alReqNotifBtn">🔔 إشعارات المتصفح</button>
               <button type="button" class="btn-sm danger" id="alClearLogBtn">🗑️ مسح السجل</button>
             </div>
           </div>
-          <div id="alertsListContainer" style="display:flex;flex-direction:column;gap:6px;max-height:190px;overflow-y:auto;"></div>
+          <div id="alertsListContainer" style="display:flex;flex-direction:column;gap:6px;max-height:170px;overflow-y:auto;"></div>
 
-          <div style="border-top:1px solid var(--border);padding-top:9px;">
+          <div style="border-top:1px solid var(--border);padding-top:8px;">
             <strong style="font-size:12px;display:block;margin-bottom:6px;color:var(--gold);">⚡ أحدث التنبيهات التي تحققت</strong>
-            <div id="alertsLogContainer" style="display:flex;flex-direction:column;gap:5px;max-height:140px;overflow-y:auto;"></div>
-          </div>
-
-          <div style="border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:7px;">
-            <strong style="font-size:12px;color:var(--blue);">✈️ إرسال فوري على تليجرام (اختياري ومجاني)</strong>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
-              <input type="text" id="tgBotTokenInput" dir="ltr" placeholder="Bot Token (من BotFather)" style="padding:7px 9px;border-radius:8px;border:1px solid var(--border-strong);background:var(--bg-input);font-size:11.5px;" />
-              <input type="text" id="tgChatIdInput" dir="ltr" placeholder="Chat ID (رقم حسابك)" style="padding:7px 9px;border-radius:8px;border:1px solid var(--border-strong);background:var(--bg-input);font-size:11.5px;" />
-            </div>
-            <div style="display:flex;gap:6px;">
-              <button type="button" class="btn-sm blue" id="saveTgCfgBtn" style="flex:1;">💾 حفظ تليجرام</button>
-              <button type="button" class="btn-sm emerald" id="testTgCfgBtn" style="flex:1;">✉️ اختبار إرسال</button>
-            </div>
+            <div id="alertsLogContainer" style="display:flex;flex-direction:column;gap:5px;max-height:120px;overflow-y:auto;"></div>
           </div>
         </div>
-
-        <div class="test-result" id="alertsFeedbackMsg"></div>
       </div>
     </div>
   </div>
@@ -2598,13 +2512,175 @@
       THEME: "egx_term_theme_v3", LANG: "egx_term_lang_v3", INDICATORS: "egx_term_indicators_v4",
       LAST_TICKER: "egx_term_last_ticker_v4", TF: "egx_term_tf_v4",
       UPDATED_AT: "egx_term_updated_at_v5", IND_UPDATED_AT: "egx_term_ind_updated_at_v5",
-      CHART_MODE: "egx_term_chart_mode_v6", PRO_SCRIPTS: "egx_term_pro_scripts_v7", PRO_ACTIVE: "egx_term_pro_active_v7",
+      CHART_MODE: "egx_term_chart_mode_v6", PRO_SCRIPTS: "egx_term_pro_scripts_v8", PRO_ACTIVE: "egx_term_pro_active_v8",
       AUTH_HINT: "sahm_auth_uid_v1", LOGOS: "sahm_stock_logos_v1", ALL_STOCKS: "sahm_all_egx_stocks_v1",
-      ALERTS: "sahm_alerts_v1", ALERT_LOG: "sahm_alert_log_v1", TG_CFG: "sahm_tg_cfg_v1"
+      ALERTS: "sahm_alerts_v1", ALERT_LOG: "sahm_alert_log_v1", GMAIL_CFG: "sahm_gmail_cfg_v1"
     };
 
     const REMOVED_BUILTIN_PRO_IDS = new Set(["ut_bot", "ema_cross", "bb_rsi", "pro_macd", "pro_mfi", "pro_rsi"]);
+    const USER_PINE_UT_BOT = [
+      "//@version=4",
+      'study(title="UT Bot Alerts", overlay = true)',
+      "",
+      "// Inputs",
+      'a = input(1,     title = "Key Vaule. 'This changes the sensitivity'")',
+      'c = input(10,    title = "ATR Period")',
+      'h = input(false, title = "Signals from Heikin Ashi Candles")',
+      "",
+      "xATR  = atr(c)",
+      "nLoss = a * xATR",
+      "",
+      "src = h ? security(heikinashi(syminfo.tickerid), timeframe.period, close, lookahead = false) : close",
+      "",
+      "xATRTrailingStop = 0.0",
+      "xATRTrailingStop := iff(src > nz(xATRTrailingStop[1], 0) and src[1] > nz(xATRTrailingStop[1], 0), max(nz(xATRTrailingStop[1]), src - nLoss),",
+      "   iff(src < nz(xATRTrailingStop[1], 0) and src[1] < nz(xATRTrailingStop[1], 0), min(nz(xATRTrailingStop[1]), src + nLoss),",
+      "   iff(src > nz(xATRTrailingStop[1], 0), src - nLoss, src + nLoss)))",
+      "",
+      "pos = 0",
+      "pos := iff(src[1] < nz(xATRTrailingStop[1], 0) and src > nz(xATRTrailingStop[1], 0), 1,",
+      "   iff(src[1] > nz(xATRTrailingStop[1], 0) and src < nz(xATRTrailingStop[1], 0), -1, nz(pos[1], 0)))",
+      "",
+      "xcolor = pos == -1 ? color.red: pos == 1 ? color.green : color.blue",
+      "",
+      "ema   = ema(src,1)",
+      "above = crossover(ema, xATRTrailingStop)",
+      "below = crossover(xATRTrailingStop, ema)",
+      "",
+      "buy  = src > xATRTrailingStop and above",
+      "sell = src < xATRTrailingStop and below",
+      "",
+      "barbuy  = src > xATRTrailingStop",
+      "barsell = src < xATRTrailingStop",
+      "",
+      'plotshape(buy,  title = "Buy",  text = 'Buy',  style = shape.labelup,   location = location.belowbar, color= color.green, textcolor = color.white, transp = 0, size = size.tiny)',
+      'plotshape(sell, title = "Sell", text = 'Sell', style = shape.labeldown, location = location.abovebar, color= color.red,   textcolor = color.white, transp = 0, size = size.tiny)',
+      "",
+      "barcolor(barbuy  ? color.green : na)",
+      "barcolor(barsell ? color.red   : na)",
+      "",
+      'alertcondition(buy,  "UT Long",  "UT Long")',
+      'alertcondition(sell, "UT Short", "UT Short")'
+    ].join("\n");
+
+    const USER_PINE_SELL_BUY = [
+      "//@version=4",
+      'strategy("Backtest single EMA cross", overlay=true)',
+      "",
+      'qty = input(100000, "Buy quantity")',
+      "",
+      'testStartYear = input(2019, "Backtest Start Year")',
+      'testStartMonth = input(1, "Backtest Start Month")',
+      'testStartDay = input(1, "Backtest Start Day")',
+      'testStartHour = input(0, "Backtest Start Hour")',
+      'testStartMin = input(0, "Backtest Start Minute")',
+      "testPeriodStart = timestamp(testStartYear, testStartMonth, testStartDay, testStartHour, testStartMin)",
+      'testStopYear = input(2099, "Backtest Stop Year")',
+      'testStopMonth = input(1, "Backtest Stop Month")',
+      'testStopDay = input(30, "Backtest Stop Day")',
+      "testPeriodStop = timestamp(testStopYear, testStopMonth, testStopDay, 0, 0)",
+      'testPeriodBackground = input(title="Color Background?", type=input.bool, defval=true)',
+      "testPeriodBackgroundColor = testPeriodBackground and time >= testPeriodStart and time <= testPeriodStop ? #00FF00 : na",
+      "testPeriod() =>",
+      "    time >= testPeriodStart and time <= testPeriodStop ? true : false",
+      "",
+      'ema1 = input(10, title="Select EMA 1")',
+      'ema2 = input(20, title="Select EMA 2")',
+      "",
+      "expo = ema(close, ema1)",
+      "ma = ema(close, ema2)",
+      "",
+      "avg_1 = avg(expo, ma)",
+      "s2 = cross(expo, ma) ? avg_1 : na",
+      "",
+      "p1 = plot(expo, color=#00FFFF, linewidth=2, transp=0)",
+      "p2 = plot(ma, color=color.orange, linewidth=2, transp=0)",
+      "fill(p1, p2, color=color.white, transp=80)",
+      "",
+      "longCondition = crossover(expo, ma)",
+      "shortCondition = crossunder(expo, ma)",
+      "",
+      "if testPeriod()",
+      '    strategy.entry("Long", strategy.long, when=longCondition)',
+      '    strategy.entry("Short", strategy.short, when=shortCondition)',
+      "",
+      'plotshape(longCondition, title = "Buy Signal", text ="BUY", textcolor =#FFFFFF , style=shape.labelup, size = size.normal, location=location.belowbar, color = #1B8112, transp = 0)',
+      'plotshape(shortCondition, title = "Sell Signal", text ="SELL", textcolor = #FFFFFF, style=shape.labeldown, size = size.normal, location=location.abovebar, color = #FF5733, transp = 0)'
+    ].join("\n");
+
+    const USER_PINE_EXIT = [
+      "//@version=2",
+      'strategy("MACD + SMA 200 Strategy (by ChartArt)", shorttitle="CA_-_MACD_SMA_strategy", overlay=true)',
+      "",
+      "source = input(close)",
+      'fastLength = input(12, minval=1, title="MACD fast moving average")',
+      'slowLength=input(26,minval=1, title="MACD slow moving average")',
+      'signalLength=input(9,minval=1, title="MACD signal line moving average")',
+      'veryslowLength=input(200,minval=1, title="Very slow moving average")',
+      'switch1=input(true, title="Enable Bar Color?")',
+      'switch2=input(true, title="Enable Moving Averages?")',
+      'switch3=input(true, title="Enable Background Color?")',
+      "",
+      "fastMA = sma(source, fastLength)",
+      "slowMA = sma(source, slowLength)",
+      "veryslowMA = sma(source, veryslowLength)",
+      "macd = fastMA - slowMA",
+      "signal = sma(macd, signalLength)",
+      "hist = macd - signal",
+      "",
+      "MAtrendcolor = change(veryslowMA) > 0 ? green : red",
+      "trendcolor = fastMA > slowMA and change(veryslowMA) > 0 and close > slowMA ? green : fastMA < slowMA and change(veryslowMA) < 0 and close < slowMA ? red : blue",
+      "bartrendcolor = close > fastMA and close > slowMA and close > veryslowMA and change(slowMA) > 0 ? green : close < fastMA and close < slowMA and close < veryslowMA and change(slowMA) < 0 ? red : blue",
+      "backgroundcolor = slowMA > veryslowMA and crossover(hist, 0) and macd > 0 and fastMA > slowMA and close[slowLength] > veryslowMA ? green : slowMA < veryslowMA and crossunder(hist, 0) and macd < 0 and fastMA < slowMA and close[slowLength] < veryslowMA ? red : na",
+      "bgcolor(switch3?backgroundcolor:na,transp=80)",
+      "barcolor(switch1?bartrendcolor:na)",
+      "",
+      "F=plot(switch2?fastMA:na,color=trendcolor)",
+      "S=plot(switch2?slowMA:na,color=trendcolor,linewidth=2)",
+      "V=plot(switch2?veryslowMA:na,color=MAtrendcolor,linewidth=4)",
+      "fill(F,V,color=gray)",
+      "",
+      "buyprice = low",
+      "sellprice = high",
+      "cancelLong = slowMA < veryslowMA",
+      "cancelShort = slowMA > veryslowMA",
+      "",
+      "if (cancelLong)",
+      '    strategy.cancel("MACDLE")',
+      "",
+      "if crossover(hist, 0) and macd > 0 and fastMA > slowMA and close[slowLength] > veryslowMA",
+      '    strategy.entry("MACDLE", strategy.long, stop=buyprice, comment="Bullish")',
+      "",
+      "if (cancelShort)",
+      '    strategy.cancel("MACDSE")',
+      "",
+      "if crossunder(hist, 0) and macd < 0 and fastMA < slowMA and close[slowLength] < veryslowMA",
+      '    strategy.entry("MACDSE", strategy.short, stop=sellprice, comment="Bearish")',
+      "",
+      'maxIdLossPcnt = input(50, "Max Intraday Loss(%)", type=float)',
+      "strategy.risk.max_intraday_loss(maxIdLossPcnt, strategy.percent_of_equity)"
+    ].join("\n");
+
+    const USER_PINE_RSI_BUY = [
+      "// By Glaz",
+      'study(title="RSI Chart Bars",overlay = true, shorttitle="RSI Bars")',
+      'src = close, len = input(14, minval=1, title="Length")',
+      "up = rma(max(change(src), 0), len)",
+      "down = rma(-min(change(src), 0), len)",
+      "rsi = down == 0 ? 100 : up == 0 ? 0 : 100 - (100 / (1 + up / down))",
+      "",
+      'src1 = close, len1 = input(70, minval=1, title="UpLevel")',
+      'src2 = close, len2 = input(30, minval=1, title="DownLevel")',
+      "isup() => rsi > len1",
+      "isdown() => rsi < len2",
+      "barcolor(isup() ? green : isdown() ? red : na )"
+    ].join("\n");
+
     const DEFAULT_PRO_SCRIPTS = [
+      { id: "user_ut_bot",    name: "شراء او بيع",  builtin: true, code: USER_PINE_UT_BOT },
+      { id: "user_ema_cross", name: "sell and buy", builtin: true, code: USER_PINE_SELL_BUY },
+      { id: "user_macd_exit", name: "EXIT",         builtin: true, code: USER_PINE_EXIT },
+      { id: "user_rsi_buy",   name: "RSI شراء",     builtin: true, code: USER_PINE_RSI_BUY },
       {
         id: "auto_sr",
         name: "دعوم ومقاومات تلقائية",
@@ -2728,8 +2804,8 @@
       attachedImage: null,
       chartMode: initialChartMode,
       proScripts: loadSavedProScripts(),
-      activeProScripts: safeJson(LS.PRO_ACTIVE, ["auto_sr"]).filter(id => !REMOVED_BUILTIN_PRO_IDS.has(id)),
-      editingScriptId: "auto_sr",
+      activeProScripts: safeJson(LS.PRO_ACTIVE, ["user_ut_bot"]).filter(id => !REMOVED_BUILTIN_PRO_IDS.has(id)),
+      editingScriptId: "user_ut_bot",
       proEditorOpen: false,
       activeTab: initialTab,
       chartDirty: true,
@@ -2743,14 +2819,9 @@
       cleanSeriesPeriod: "1D",
       marketIsOpen: false,
       appBooted: false,
-      stocksView: "list",
-      scrPreset: "surge",
-      scrSector: "ALL",
-      scrIndex: "ALL",
-      scrSort: "turnover",
-      alerts: safeJson(LS.ALERTS, []),
+      alerts: safeJson(LS.ALERTS, []).filter(a => a && a.type === "price"),
       alertLog: safeJson(LS.ALERT_LOG, []),
-      tgCfg: safeJson(LS.TG_CFG, { botToken: "", chatId: "" }),
+      gmailCfg: safeJson(LS.GMAIL_CFG, { email: "", webhookUrl: "" }),
       unreadAlerts: 0,
       chatHistory: [],
       sending: false
@@ -2819,7 +2890,7 @@
           indicators: [...state.indicators],
           proScripts: state.proScripts,
           activeProScripts: [...state.activeProScripts],
-          proScriptsVer: 7,
+          proScriptsVer: 8,
           alerts: state.alerts,
           chartMode: state.chartMode,
           lastTicker: state.ticker,
@@ -2904,7 +2975,7 @@
           shouldPushBack = true;
         }
 
-        if (Number(d.proScriptsVer || 0) >= 7) {
+        if (Number(d.proScriptsVer || 0) >= 8) {
           if (Array.isArray(d.proScripts) && d.proScripts.length && cloudIndMs > state.indUpdatedAt) {
             state.proScripts = sanitizeProScriptsList(d.proScripts);
             localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
@@ -2914,11 +2985,11 @@
             localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
           }
         } else {
-          // ترقية الحساب من النسخة القديمة: مسح المؤشرات القديمة والإبقاء على الدعوم والمقاومات فقط
+          // ترقية الحساب للنسخة الجديدة مع المؤشرات الجاهزة الأربعة
           shouldPushBack = true;
         }
         if (Array.isArray(d.alerts) && cloudUpdatedMs > state.localUpdatedAt) {
-          state.alerts = d.alerts;
+          state.alerts = d.alerts.filter(a => a && a.type === "price");
           localStorage.setItem(LS.ALERTS, JSON.stringify(state.alerts));
           updateAlertsBadge();
         }
@@ -3004,7 +3075,6 @@
         }
       } else if (target === "stocks") {
         renderStockList();
-        if (state.stocksView === "screener") { if (!state.moversData) fetchMarketMovers(true, false); else renderScreener(); }
       } else if (target === "home") {
         if (!state.moversData && state.appBooted) fetchMarketMovers(false);
       }
@@ -3497,13 +3567,14 @@
         const { src, period } = resolveSrc(s, p, 20);
         const out = new Array(len).fill(null);
         if (period <= 0) return out;
-        let sum = 0;
-        for (let i = 0; i < len; i++) {
-          const v = src[i];
-          if (v == null) { sum = 0; continue; }
-          sum += v;
-          if (i >= period && src[i - period] != null) sum -= src[i - period];
-          if (i >= period - 1) out[i] = sum / period;
+        for (let i = period - 1; i < len; i++) {
+          let sum = 0, ok = true;
+          for (let j = i - period + 1; j <= i; j++) {
+            const v = src[j];
+            if (v == null || !Number.isFinite(v)) { ok = false; break; }
+            sum += v;
+          }
+          if (ok) out[i] = sum / period;
         }
         return out;
       };
@@ -3724,7 +3795,7 @@
       const buy = (i, text = "شراء") => { if (i >= 0 && i < len) markers.push({ index: i, position: "belowBar", color: "#10b981", shape: "arrowUp", text: String(text) }); };
       const sell = (i, text = "بيع") => { if (i >= 0 && i < len) markers.push({ index: i, position: "aboveBar", color: "#f43f5e", shape: "arrowDown", text: String(text) }); };
       const mark = (i, opts = {}) => {
-        if (i >= 0 && i < len) markers.push({ index: i, position: opts.position || "aboveBar", color: opts.color || "#f59e0b", shape: opts.shape || "circle", text: String(opts.text || "") });
+        if (i >= 0 && i < len) markers.push({ index: i, position: opts.position || "aboveBar", color: opts.color || "#f59e0b", shape: opts.shape || "circle", text: String(opts.text || ""), _fromStrategy: !!opts._fromStrategy });
       };
       const log = (msg) => { logs.push(String(msg)); };
 
@@ -3771,13 +3842,43 @@
       const env = api.env;
       const len = env.len;
 
-      // تطبيع علامات التنصيص الذكية والمسافات الخفية الناتجة عن النسخ من الموبايل
-      const code = String(rawCode || "")
+      // تطبيع وتنظيف الكود تلقائياً من مشاكل النسخ واللصق على الموبايل (مثل لصق //@version في السطر اللي بعده أو كسر سطر داخل علامة تنصيص)
+      let code = String(rawCode || "")
         .replace(/[\u200B-\u200D\uFEFF]/g, "")
         .replace(/\u00A0/g, " ")
         .replace(/[\u201C\u201D\u201E\u00AB\u00BB]/g, '"')
         .replace(/[\u2018\u2019\u201A]/g, "'")
-        .replace(/[\u2212\u2013\u2014]/g, "-");
+        .replace(/[\u2212\u2013\u2014]/g, "-")
+        .replace(/(\/\/@version\s*=\s*\d+)([^\r\n]+)/g, "$1\n$2");
+
+      // إصلاح تلقائي للسطور المكسورة خطأً داخل علامات التنصيص أثناء النسخ من الموبايل
+      {
+        const fixedLines = [];
+        const preLines = code.replace(/\r\n?/g, "\n").split("\n");
+        let openQ = null;
+        for (let li = 0; li < preLines.length; li++) {
+          const ln = preLines[li];
+          if (openQ && fixedLines.length) {
+            fixedLines[fixedLines.length - 1] += ln;
+          } else {
+            fixedLines.push(ln);
+          }
+          const cur = fixedLines[fixedLines.length - 1];
+          let q = null;
+          for (let ci = 0; ci < cur.length; ci++) {
+            const ch = cur[ci];
+            if (q) {
+              if (ch === "\\") { ci++; continue; }
+              if (ch === q) q = null;
+            } else {
+              if (ch === "/" && cur[ci + 1] === "/") break;
+              if (ch === '"' || ch === "'") q = ch;
+            }
+          }
+          openQ = q;
+        }
+        code = fixedLines.join("\n");
+      }
 
       const isSer = (v) => Array.isArray(v) && v.__pineSeries === true;
       const mkSer = (arr) => { arr.__pineSeries = true; return arr; };
@@ -4184,6 +4285,7 @@
       let plotsAdded = 0;
       let linesAdded = 0;
       let barColorsCount = 0;
+      let drawCallsCount = 0;
 
       const taNS = {
         sma: (s, p) => mkSer(env.sma(toSer(s), Math.max(1, Math.round(Number(valAt(p, len - 1)) || 20)))),
@@ -4395,7 +4497,7 @@
           }
         }
 
-        plotsAdded++;
+        plotsAdded++; drawCallsCount++;
         const opts = { title, color: col, width, style: lineStyle, dots: isDots, step: isStep, colors: colorsArr };
         if (useSubPane) {
           if (isHist) env.histPane(series, { title, upColor: "rgba(16,185,129,0.55)", downColor: "rgba(244,63,94,0.55)", colors: colorsArr });
@@ -4407,6 +4509,7 @@
       };
 
       const handlePlotShape = (pos, kw) => {
+        drawCallsCount++;
         const rawCond = pos[0] !== undefined ? pos[0] : kw.series;
         if (rawCond === undefined || rawCond === null) return null;
         const cond = toSer(rawCond);
@@ -4528,19 +4631,37 @@
         percent_of_equity: "percent_of_equity", cash: "cash", fixed: "fixed",
         entry: {
           __pineSpecial: (pos, kw) => {
+            drawCallsCount++;
             const id = String(pos[0] || kw.id || "");
             const dir = String(pos[1] || kw.direction || "long").toLowerCase();
-            const cond = kw.when !== undefined ? toSer(kw.when) : activeCondMask;
-            if (!cond) return null;
+            const label = String(kw.comment || id || (dir === "short" ? "SELL" : "BUY"));
+            const whenSer = kw.when !== undefined ? toSer(kw.when) : null;
+            if (!whenSer && !activeCondMask) return null;
             const isShort = dir === "short";
             for (let i = 0; i < len; i++) {
-              if (cond[i]) { if (isShort) env.sell(i, id || "SELL"); else env.buy(i, id || "BUY"); signalsAdded++; }
+              const ok = (whenSer ? !!whenSer[i] : true) && (activeCondMask ? !!activeCondMask[i] : true);
+              if (ok) {
+                env.mark(i, {
+                  position: isShort ? "aboveBar" : "belowBar",
+                  color: isShort ? "#f43f5e" : "#10b981",
+                  shape: isShort ? "arrowDown" : "arrowUp",
+                  text: label,
+                  _fromStrategy: true
+                });
+                signalsAdded++;
+              }
             }
             return null;
           }
         },
         close: noopSpecial, close_all: noopSpecial, exit: noopSpecial, order: noopSpecial, cancel: noopSpecial,
-        risk: { allow_entry_in: noopSpecial, max_drawdown: noopSpecial }
+        risk: {
+          allow_entry_in: noopSpecial,
+          max_drawdown: noopSpecial,
+          max_intraday_loss: noopSpecial,
+          max_position_size: noopSpecial,
+          max_intraday_filled_orders: noopSpecial
+        }
       };
 
       // دعم دوال المصفوفات في Pine v5/v6 سواء عبر array.push(a, v) أو a.push(v)
@@ -4593,6 +4714,7 @@
         return exprVal;
       };
       const handleBarcolor = (pos, kw) => {
+        drawCallsCount++;
         const rawCol = pos[0] !== undefined ? pos[0] : kw.color;
         if (rawCol === undefined || rawCol === null) return null;
         if (isSer(rawCol)) {
@@ -4617,7 +4739,11 @@
       scope.low    = mkSer(env.low.slice());
       scope.close  = mkSer(env.close.slice());
       scope.volume = mkSer(env.volume.slice());
-      scope.time   = mkSer(env.time.slice());
+      scope.time   = mkSer(env.time.map(t => typeof t === "number" ? t * 1000 : Date.parse(String(t) + "T00:00:00Z")));
+      scope.timestamp = (y, m = 1, d = 1, h = 0, mn = 0, s = 0) => {
+        if (typeof y === "string") { const p = Date.parse(y); return Number.isFinite(p) ? p : 0; }
+        return Date.UTC(Number(y) || 2000, (Number(m) || 1) - 1, Number(d) || 1, Number(h) || 0, Number(mn) || 0, Number(s) || 0);
+      };
       scope.hl2    = mkSer(env.high.map((h, i) => (h + env.low[i]) / 2));
       scope.hlc3   = mkSer(env.high.map((h, i) => (h + env.low[i] + env.close[i]) / 3));
       scope.ohlc4  = mkSer(env.high.map((h, i) => (env.open[i] + h + env.low[i] + env.close[i]) / 4));
@@ -5300,7 +5426,7 @@
       execBlock(logicalLines, scope);
 
       const totalDrawn = plotsAdded + signalsAdded + linesAdded + barColorsCount;
-      if (totalDrawn === 0 && syntaxHint) {
+      if (totalDrawn === 0 && drawCallsCount === 0 && syntaxHint) {
         throw new Error(syntaxHint);
       }
 
@@ -5308,10 +5434,11 @@
       if (plotsAdded) parts.push(`${plotsAdded} خطوط`);
       if (signalsAdded) parts.push(`${signalsAdded} إشارة`);
       if (linesAdded) parts.push(`${linesAdded} مستويات`);
-      if (barColorsCount) parts.push("تلوين الشموع");
-      if (totalDrawn === 0) {
+      if (barColorsCount) parts.push(`تلوين ${barColorsCount} شمعة`);
+      if (totalDrawn === 0 && drawCallsCount === 0) {
         throw new Error("لم يتم رسم أي إشارة أو خط — تأكد أن الكود منسوخ سليم بدون تداخل سطور (جرّب زر 🧹 مسح ثم 📋 مسح ولصق أو اختر من 📚 قوالب جاهزة)");
       }
+      if (!parts.length) parts.push("نشط (لا توجد إشارات مطابقة حالياً)");
       env.log(`Pine${pineTitle ? " (" + pineTitle + ")" : ""}: ${parts.join(" • ")}`);
       return { pineTitle, plotsAdded, signalsAdded, linesAdded, barColorsCount };
     }
@@ -5517,8 +5644,14 @@
       }
 
       if (allMarkers.length) {
-        allMarkers.sort((a, b) => a.index - b.index);
-        proCandleSeries.setMarkers(allMarkers.map(m => ({
+        const dedupMap = new Map();
+        for (const m of allMarkers) {
+          const key = `${m.index}_${m.position}`;
+          const prev = dedupMap.get(key);
+          if (!prev || (prev._fromStrategy && !m._fromStrategy)) dedupMap.set(key, m);
+        }
+        const finalMarkers = Array.from(dedupMap.values()).sort((a, b) => a.index - b.index);
+        proCandleSeries.setMarkers(finalMarkers.map(m => ({
           time: currentProBars[m.index].time,
           position: m.position,
           color: m.color,
@@ -5721,6 +5854,7 @@
       if ($("activeLivePriceVal")) $("activeLivePriceVal").textContent = "—";
       if ($("activeLiveUnit")) $("activeLiveUnit").textContent = info.ticker === "GOLD" ? "$" : (info.isIndex && info.ticker !== "USDEGP" ? "نقطة" : "ج.م");
       if ($("activeLiveChgBadge")) { $("activeLiveChgBadge").className = "mover-chg flat"; $("activeLiveChgBadge").textContent = "—"; }
+      renderFairValueCard();
       updateHeaderFavStar(); renderStockList(); fetchLiveQuote(t, false); fetchLiveMetrics(t);
       state.chartDirty = true;
       state.taDirty = true;
@@ -6104,7 +6238,7 @@
     function renderCompactMoverItems(containerId, rawList) {
       const el = $(containerId);
       if (!el) return;
-      const items = (Array.isArray(rawList) ? rawList : []).filter(x => isValidEgxTicker(x?.ticker)).slice(0, 8);
+      const items = (Array.isArray(rawList) ? rawList : []).filter(x => isValidEgxTicker(x?.ticker)).slice(0, 5);
       if (!items.length) {
         el.innerHTML = `<div class="movers-empty">لا توجد بيانات حالياً</div>`;
         return;
@@ -6135,7 +6269,7 @@
     function renderActiveMoverItems(rawList) {
       const el = $("activeMoversList");
       if (!el) return;
-      const items = (Array.isArray(rawList) ? rawList : []).filter(x => isValidEgxTicker(x?.ticker)).slice(0, 8);
+      const items = (Array.isArray(rawList) ? rawList : []).filter(x => isValidEgxTicker(x?.ticker)).slice(0, 5);
       if (!items.length) {
         el.innerHTML = `<div class="movers-empty">لا توجد بيانات حالياً</div>`;
         return;
@@ -6211,7 +6345,6 @@
         renderMoversList();
         renderEgxHeatmap();
         renderSectorsRadar();
-        if (state.stocksView === 'screener') renderScreener();
         if (state.chartMode === 'perf') renderFairValueCard();
         evaluateAlerts();
       } catch {
@@ -6506,18 +6639,8 @@
         return;
       }
 
-      // تحديث قائمة القطاعات داخل السكرينر تلقائياً
-      const secSel = $("scrSectorSelect");
-      if (secSel) {
-        const curVal = state.scrSector || "ALL";
-        const opts = [`<option value="ALL">كل القطاعات (${sectors.length})</option>`]
-          .concat(sectors.map(s => `<option value="${s.name}">${s.name} (${s.cnt})</option>`));
-        secSel.innerHTML = opts.join("");
-        secSel.value = sectors.some(s => s.name === curVal) ? curVal : "ALL";
-      }
-
       const maxShare = Math.max(...sectors.map(s => s.share), 1);
-      grid.innerHTML = sectors.slice(0, 8).map(sec => {
+      grid.innerHTML = sectors.slice(0, 5).map(sec => {
         const chgCls = sec.avgChg > 0 ? "up" : sec.avgChg < 0 ? "down" : "flat";
         const sign = sec.avgChg > 0 ? "+" : "";
         const barW = Math.max(8, Math.min(100, Math.round((sec.share / maxShare) * 100)));
@@ -6542,121 +6665,6 @@
           <div class="sector-top-chips">${topHtml}</div>
         </div>`;
       }).join("");
-    }
-
-    function setStocksView(mode) {
-      state.stocksView = mode === "screener" ? "screener" : "list";
-      document.querySelectorAll("#stocksModeTabs .stocks-mode-btn").forEach(b => {
-        b.classList.toggle("active", b.dataset.stocksView === state.stocksView);
-      });
-      if ($("screenerCard")) $("screenerCard").style.display = state.stocksView === "screener" ? "block" : "none";
-      if ($("stocksPageCard")) $("stocksPageCard").style.display = state.stocksView === "list" ? "block" : "none";
-      if (state.stocksView === "screener") {
-        if (!state.moversData) fetchMarketMovers(true, false);
-        else renderScreener();
-      }
-    }
-
-    function renderScreener() {
-      const grid = $("scrResultsGrid");
-      if (!grid) return;
-      const pool = getScreenerPool().filter(r => isValidEgxTicker(r.t));
-      if (!pool.length) {
-        grid.innerHTML = `<div class="movers-empty">⏳ جاري تحميل بيانات السكرينر...</div>`;
-        return;
-      }
-
-      let rows = pool.filter(r => {
-        const info = STOCK_MAP[r.t];
-        if (state.scrIndex === "EGX30"   && !(info && info.groups.includes("EGX30"))) return false;
-        if (state.scrIndex === "EGX70"   && !(info && info.groups.includes("EGX70"))) return false;
-        if (state.scrIndex === "SHARIAH" && !(info && info.shariah)) return false;
-        if (state.scrSector !== "ALL" && getHeatmapSectorAr(r.t, r.s || "") !== state.scrSector) return false;
-
-        switch (state.scrPreset) {
-          case "surge":
-            return (r.rvol != null ? r.rvol >= 1.5 : r.tv >= 10000000) && r.c > 0 && r.tv >= 300000;
-          case "breakout":
-            return r.c > 0 && r.tv >= 300000 && (
-              (r.hi1m && r.p >= r.hi1m * 0.985) ||
-              (r.hi52 && r.p >= r.hi52 * 0.98)
-            );
-          case "oversold":
-            return r.rsi != null && r.rsi <= 36 && r.tv >= 100000;
-          case "macd":
-            return r.macd != null && r.msig != null && r.macd > r.msig && (!r.e20 || r.p >= r.e20 * 0.995) && r.tv >= 200000;
-          case "uptrend":
-            return r.e20 != null && r.e50 != null && r.p > r.e20 && r.e20 > r.e50 && r.tv >= 200000;
-          case "undervalued":
-            return r.up != null && r.up >= 12 && r.fv != null && r.tv >= 100000;
-          case "shariah":
-            return !!(info && info.shariah) && r.c > 0 && r.tv >= 200000;
-          default:
-            return r.tv > 0 || r.v > 0;
-        }
-      });
-
-      // لو الفلتر الصارم مرجعش نتائج أثناء هدوء السوق، نخففه بذكاء لـ surge/breakout عشان المستخدم يشوف أقرب الفرص
-      let relaxedNote = "";
-      if (!rows.length && state.scrPreset === "surge") {
-        rows = pool.filter(r => r.c > 0 && r.tv >= 500000).sort((a, b) => (Number(b.rvol || 0) - Number(a.rvol || 0)) || (b.tv - a.tv)).slice(0, 15);
-        relaxedNote = "أقرب الأسهم نشاطاً بالسيولة الآن";
-      }
-
-      const sortKey = state.scrSort || "turnover";
-      rows.sort((a, b) => {
-        if (sortKey === "rvol") return (Number(b.rvol || 0) - Number(a.rvol || 0)) || (b.tv - a.tv);
-        if (sortKey === "change_desc") return (b.c - a.c) || (b.tv - a.tv);
-        if (sortKey === "rsi_asc") return (Number(a.rsi ?? 99) - Number(b.rsi ?? 99));
-        if (sortKey === "upside") return (Number(b.up ?? -999) - Number(a.up ?? -999));
-        return (b.tv - a.tv);
-      });
-
-      if ($("scrCountPill")) $("scrCountPill").textContent = rows.length;
-      if (!rows.length) {
-        grid.innerHTML = `<div class="movers-empty">لا توجد أسهم مطابقة لهذا الفلتر حالياً — جرّب تغيير القطاع أو الفلتر.</div>`;
-        return;
-      }
-
-      grid.innerHTML = (relaxedNote ? `<div class="movers-empty" style="padding:6px;color:var(--gold);">${relaxedNote}</div>` : "") +
-        rows.slice(0, 50).map(r => {
-          const info = STOCK_MAP[r.t];
-          const name = info ? info.name : r.n;
-          const chgCls = r.c > 0 ? "up" : r.c < 0 ? "down" : "flat";
-          const sign = r.c > 0 ? "+" : "";
-          const tags = [];
-          if (r.rvol != null && r.rvol >= 1.5) tags.push(`<span class="scr-tag hot">🔥 فوليوم ${r.rvol}x</span>`);
-          if (r.hi52 && r.p >= r.hi52 * 0.985) tags.push(`<span class="scr-tag bull">🏆 قمة سنوية</span>`);
-          else if (r.hi1m && r.p >= r.hi1m * 0.985) tags.push(`<span class="scr-tag bull">🚀 اختراق شهري</span>`);
-          if (r.rsi != null) {
-            const rCls = r.rsi <= 32 ? "bull" : r.rsi >= 70 ? "bear" : "";
-            tags.push(`<span class="scr-tag ${rCls}">RSI ${r.rsi}</span>`);
-          }
-          if (r.macd != null && r.msig != null && r.macd > r.msig) tags.push(`<span class="scr-tag blue">MACD+</span>`);
-          if (r.fv != null && r.up != null) {
-            const fvCls = r.up >= 10 ? "bull" : r.up <= -10 ? "bear" : "";
-            tags.push(`<span class="scr-tag ${fvCls}">عادل ${r.fv} (${r.up > 0 ? "+" : ""}${r.up}%)</span>`);
-          }
-          tags.push(`<span class="scr-tag">سيولة ${formatCompactNum(r.tv)}</span>`);
-          if (info?.shariah) tags.push(`<span class="scr-tag hot">☪ شريعة</span>`);
-
-          return `<div class="scr-row" data-scr-ticker="${r.t}">
-            <div class="scr-row-top">
-              <div class="scr-row-left">
-                ${buildStockLogoHtml(r.t, "", r.l)}
-                <div class="mover-info">
-                  <div class="mover-name">${name}</div>
-                  <span class="mover-code-only">${r.t} • ${getHeatmapSectorAr(r.t, r.s || "")}</span>
-                </div>
-              </div>
-              <div class="scr-row-nums">
-                <span class="scr-row-price">${Number(r.p).toFixed(2)} ج.م</span>
-                <span class="mover-chg ${chgCls}">${sign}${Number(r.c).toFixed(2)}%</span>
-              </div>
-            </div>
-            <div class="scr-tags">${tags.join("")}</div>
-          </div>`;
-        }).join("");
     }
 
     function renderFairValueCard() {
@@ -6710,7 +6718,59 @@
       }
     }
 
-    // 8.59 محرك التنبيهات الذكية (أسعار + اختراقات + مؤشرات + صوت + إشعار متصفح + تليجرام)
+    // 8.59 محرك تنبيهات السعر فقط (زيادة/نقصان % أو سعر محدد + إرسال على Gmail)
+    const GAS_EMAIL_SCRIPT_CODE = [
+      "function doPost(e) {",
+      "  try {",
+      "    var data = JSON.parse(e.postData.contents);",
+      "    var to = data.to || Session.getActiveUser().getEmail();",
+      "    var subject = data.subject || 'تنبيه سعر - سهم (Sahm)';",
+      "    var body = data.body || '';",
+      "    MailApp.sendEmail(to, subject, body);",
+      "    return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);",
+      "  } catch (err) {",
+      "    return ContentService.createTextOutput(JSON.stringify({ ok: false, error: String(err) })).setMimeType(ContentService.MimeType.JSON);",
+      "  }",
+      "}"
+    ].join("\n");
+
+    const PRICE_PCT_COND_MAP = {
+      pct_up_5:  { dir: "above", pct:  5,  label: "زيادة +5%" },
+      pct_up_10: { dir: "above", pct: 10,  label: "زيادة +10%" },
+      pct_up_15: { dir: "above", pct: 15,  label: "زيادة +15%" },
+      pct_up_20: { dir: "above", pct: 20,  label: "زيادة +20%" },
+      pct_dn_5:  { dir: "below", pct: -5,  label: "نقصان -5%" },
+      pct_dn_10: { dir: "below", pct: -10, label: "نقصان -10%" },
+      pct_dn_15: { dir: "below", pct: -15, label: "نقصان -15%" }
+    };
+
+    function getKnownStockPrice(ticker) {
+      const tk = String(ticker || "").toUpperCase().trim();
+      if (!tk) return null;
+      if (state.liveQuote?.ticker === tk && Number.isFinite(Number(state.liveQuote.price)) && Number(state.liveQuote.price) > 0) {
+        return Number(state.liveQuote.price);
+      }
+      const scr = getScreenerPool().find(x => x.t === tk);
+      if (scr && Number.isFinite(Number(scr.p)) && Number(scr.p) > 0) return Number(scr.p);
+      return null;
+    }
+
+    function updatePriceAlertTargetFromCond() {
+      const tk = ($("alPriceTicker")?.value || "").trim().toUpperCase().replace(/^EGX:/i, "").replace(/[^A-Z0-9]/g, "");
+      const cond = $("alPriceCond")?.value || "pct_up_5";
+      const curP = getKnownStockPrice(tk);
+      const hint = $("alPriceCurrentHint");
+      if (hint) hint.textContent = curP ? `السعر الحالي: ${curP.toFixed(2)} ج.م` : "";
+      const pctCfg = PRICE_PCT_COND_MAP[cond];
+      const tgtInp = $("alPriceTarget");
+      if (!tgtInp) return;
+      if (pctCfg && curP) {
+        tgtInp.value = (curP * (1 + pctCfg.pct / 100)).toFixed(2);
+      } else if (!pctCfg && curP && !tgtInp.value) {
+        tgtInp.value = curP.toFixed(2);
+      }
+    }
+
     function playAlertChime() {
       try {
         const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -6732,6 +6792,7 @@
     }
 
     function saveAlertsState() {
+      state.alerts = state.alerts.filter(a => a && a.type === "price");
       localStorage.setItem(LS.ALERTS, JSON.stringify(state.alerts));
       localStorage.setItem(LS.ALERT_LOG, JSON.stringify(state.alertLog.slice(0, 40)));
       markLocalChange(false);
@@ -6740,7 +6801,7 @@
     }
 
     function updateAlertsBadge() {
-      const activeCnt = state.alerts.filter(a => a.active).length;
+      const activeCnt = state.alerts.filter(a => a.active && a.type === "price").length;
       const badge = $("alertsBellBadge");
       if (badge) {
         if (state.unreadAlerts > 0) {
@@ -6758,16 +6819,8 @@
     }
 
     function describeAlert(a) {
-      const tkLabel = a.ticker === "ALL" ? "كل السوق (EGX)" : `EGX:${a.ticker}`;
-      if (a.type === "price") {
-        return `${tkLabel} • السعر ${a.cond === "above" ? "وصل/تجاوز" : "هبط إلى/تحت"} ${Number(a.target).toFixed(2)} ج.م`;
-      }
-      if (a.type === "breakout") {
-        const map = { high1m: "اختراق قمة شهر", low1m: "كسر قاع شهر", high52w: "اختراق قمة 52 أسبوع", vol2x: "انفجار فوليوم 2x+", vol3x: "انفجار فوليوم 3x+" };
-        return `${tkLabel} • ${map[a.cond] || a.cond}`;
-      }
-      const imap = { rsi_low: "RSI تحت 30 (تشبع بيعي)", rsi_high: "RSI فوق 70 (تشبع شرائي)", macd_bull: "MACD إيجابي + فوق EMA20", ema_bull: "فوق EMA20 و EMA50", fv_disc: "خصم سعر عادل 20%+" };
-      return `${tkLabel} • ${imap[a.cond] || a.cond}`;
+      const pctTxt = a.pctLabel ? ` (${a.pctLabel})` : "";
+      return `EGX:${a.ticker} • السعر ${a.cond === "above" ? "صعد إلى" : "هبط إلى"} ${Number(a.target).toFixed(2)} ج.م${pctTxt}`;
     }
 
     function showAlertToast(title, msg, ticker) {
@@ -6781,7 +6834,7 @@
           <div class="alert-toast-msg">${msg}</div>
         </div>
         <div style="display:flex;gap:5px;flex-shrink:0;">
-          ${ticker && ticker !== "ALL" ? `<button type="button" class="btn-sm emerald" data-toast-open="${ticker}">فتح ↗</button>` : ""}
+          ${ticker ? `<button type="button" class="btn-sm emerald" data-toast-open="${ticker}">فتح ↗</button>` : ""}
           <button type="button" class="btn-sm" data-toast-close="1">✕</button>
         </div>`;
       el.onclick = e => {
@@ -6793,37 +6846,48 @@
       setTimeout(() => { if (el.parentElement) el.remove(); }, 10000);
     }
 
-    async function sendTelegramAlert(text) {
-      const { botToken, chatId } = state.tgCfg || {};
-      if (!botToken || !chatId) return false;
-      try {
-        const res = await fetch(`${WORKER_ORIGIN}/notify-telegram`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ botToken, chatId, text })
-        });
-        return res.ok;
-      } catch { return false; }
+    async function sendGmailAlert(subject, bodyText) {
+      const to = (state.gmailCfg?.email || state.user?.email || "").trim();
+      const webhookUrl = (state.gmailCfg?.webhookUrl || "").trim();
+      if (!to && !webhookUrl) return { ok: false, reason: "no_config" };
+
+      if (webhookUrl) {
+        try {
+          await fetch(webhookUrl, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ to, subject, body: bodyText })
+          });
+          return { ok: true, via: "gas" };
+        } catch {}
+      }
+
+      if (to) {
+        try {
+          const res = await fetch(`${WORKER_ORIGIN}/notify-email`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ to, subject, body: bodyText })
+          });
+          if (res.ok) return { ok: true, via: "worker" };
+        } catch {}
+      }
+      return { ok: false, reason: "no_webhook" };
     }
 
     function fireAlertHit(alert, matchedTicker, detailMsg) {
       const now = Date.now();
       const info = getStockInfo(matchedTicker);
-      const title = `🔔 تنبيه سهم - ${info.name} (${matchedTicker})`;
+      const title = `🔔 تنبيه سعر سهم - ${info.name} (${matchedTicker})`;
       const fullMsg = detailMsg;
 
       state.alertLog.unshift({ id: now + "_" + matchedTicker, ticker: matchedTicker, title, msg: fullMsg, at: new Date().toISOString() });
       if (state.alertLog.length > 40) state.alertLog.length = 40;
       state.unreadAlerts++;
 
-      // تنبيه السعر يُغلق بعد التحقق؛ تنبيهات الاختراق والمؤشرات لها تهدئة 30 دقيقة لمنع التكرار المزعج
-      if (alert.type === "price") {
-        alert.active = false;
-        alert.triggeredAt = now;
-      } else {
-        if (!alert.cooldowns) alert.cooldowns = {};
-        alert.cooldowns[matchedTicker] = now;
-      }
+      alert.active = false;
+      alert.triggeredAt = now;
 
       saveAlertsState();
       playAlertChime();
@@ -6832,43 +6896,24 @@
       if (typeof Notification !== "undefined" && Notification.permission === "granted") {
         try { new Notification(title, { body: fullMsg }); } catch {}
       }
-      sendTelegramAlert(`<b>${title}</b>\n${fullMsg}`);
+      const mailBody = `${title}\n${fullMsg}\n\nرابط السهم المباشر:\n${window.location.origin}${window.location.pathname}?share=1&ticker=${matchedTicker}`;
+      sendGmailAlert(title, mailBody);
       if ($("alertsModalBackdrop")?.classList.contains("open")) renderAlertsModal();
     }
 
     function checkStockMatchesAlert(alert, r) {
-      if (!r || !Number.isFinite(Number(r.p)) || r.p <= 0) return null;
-      if (alert.type === "price") {
-        const tgt = Number(alert.target);
-        if (!Number.isFinite(tgt) || tgt <= 0) return null;
-        if (alert.cond === "above" && r.p >= tgt) return `السعر وصل ${r.p.toFixed(2)} ج.م (الهدف >= ${tgt.toFixed(2)})`;
-        if (alert.cond === "below" && r.p <= tgt) return `السعر هبط إلى ${r.p.toFixed(2)} ج.م (الهدف <= ${tgt.toFixed(2)})`;
-        return null;
-      }
-      if (alert.type === "breakout") {
-        if (alert.cond === "high1m" && r.hi1m && r.p >= r.hi1m && r.c > 0) return `🚀 اختراق قمة شهر (${r.hi1m}) عند سعر ${r.p.toFixed(2)} ج.م (+${r.c}%)`;
-        if (alert.cond === "low1m"  && r.lo1m && r.p <= r.lo1m && r.c < 0) return `⚠️ كسر قاع شهر (${r.lo1m}) عند سعر ${r.p.toFixed(2)} ج.م (${r.c}%)`;
-        if (alert.cond === "high52w" && r.hi52 && r.p >= r.hi52 * 0.995 && r.c > 0) return `🏆 اختراق قمة 52 أسبوع (${r.hi52}) عند ${r.p.toFixed(2)} ج.م`;
-        if (alert.cond === "vol2x" && r.rvol != null && r.rvol >= 2.0 && r.c > 0 && r.tv >= 500000) return `🔥 انفجار فوليوم ${r.rvol}x عند ${r.p.toFixed(2)} ج.م (+${r.c}%)`;
-        if (alert.cond === "vol3x" && r.rvol != null && r.rvol >= 3.0 && r.tv >= 500000) return `💥 انفجار فوليوم عنيف ${r.rvol}x عند ${r.p.toFixed(2)} ج.م (${r.c > 0 ? "+" : ""}${r.c}%)`;
-        return null;
-      }
-      if (alert.type === "indicator") {
-        if (alert.cond === "rsi_low"   && r.rsi != null && r.rsi < 30 && r.tv >= 100000) return `💎 تشبع بيعي RSI = ${r.rsi} عند سعر ${r.p.toFixed(2)} ج.م`;
-        if (alert.cond === "rsi_high"  && r.rsi != null && r.rsi > 70 && r.tv >= 100000) return `🔥 تشبع شرائي RSI = ${r.rsi} عند سعر ${r.p.toFixed(2)} ج.م`;
-        if (alert.cond === "macd_bull" && r.macd != null && r.msig != null && r.macd > r.msig && r.e20 && r.p > r.e20 && r.c > 0) return `⚡ تقاطع MACD إيجابي وفوق EMA20 عند ${r.p.toFixed(2)} ج.م`;
-        if (alert.cond === "ema_bull"  && r.e20 && r.e50 && r.p > r.e20 && r.e20 > r.e50 && r.c > 0) return `📈 اتجاه صاعد فوق EMA20 و EMA50 عند ${r.p.toFixed(2)} ج.م`;
-        if (alert.cond === "fv_disc"   && r.up != null && r.up >= 20 && r.fv) return `🏷️ خصم ${r.up}% عن السعر العادل (${r.fv}) — السعر ${r.p.toFixed(2)} ج.م`;
-        return null;
-      }
+      if (!alert || alert.type !== "price" || !r || !Number.isFinite(Number(r.p)) || r.p <= 0) return null;
+      const tgt = Number(alert.target);
+      if (!Number.isFinite(tgt) || tgt <= 0) return null;
+      const pctInfo = alert.pctLabel ? ` (${alert.pctLabel})` : "";
+      if (alert.cond === "above" && r.p >= tgt) return `السعر وصل ${r.p.toFixed(2)} ج.م — الهدف >= ${tgt.toFixed(2)} ج.م${pctInfo}`;
+      if (alert.cond === "below" && r.p <= tgt) return `السعر هبط إلى ${r.p.toFixed(2)} ج.م — الهدف <= ${tgt.toFixed(2)} ج.م${pctInfo}`;
       return null;
     }
 
     function evaluateAlerts(singleQuote = null) {
-      const activeAlerts = state.alerts.filter(a => a.active);
+      const activeAlerts = state.alerts.filter(a => a && a.active && a.type === "price");
       if (!activeAlerts.length) return;
-      const now = Date.now();
-      const cooldownMs = 30 * 60 * 1000;
 
       const byTicker = new Map();
       for (const r of getScreenerPool()) byTicker.set(r.t, r);
@@ -6878,36 +6923,15 @@
           ...prev,
           t: singleQuote.ticker,
           p: Number(singleQuote.price),
-          c: Number(singleQuote.changePct || 0),
-          tv: Number(singleQuote.turnover || prev.tv || 0),
-          rsi: singleQuote.rsi14 ?? prev.rsi,
-          macd: singleQuote.macd ?? prev.macd,
-          msig: singleQuote.macdSignal ?? prev.msig,
-          e20: singleQuote.ema20 ?? prev.e20,
-          e50: singleQuote.ema50 ?? prev.e50,
-          rvol: singleQuote.rvol ?? prev.rvol,
-          hi1m: singleQuote.high1m ?? prev.hi1m,
-          lo1m: singleQuote.low1m ?? prev.lo1m,
-          hi52: singleQuote.high52w ?? prev.hi52,
-          fv: singleQuote.fairValue ?? prev.fv,
-          up: singleQuote.upsidePct ?? prev.up
+          c: Number(singleQuote.changePct || 0)
         });
       }
 
-      const allRows = Array.from(byTicker.values());
       for (const al of activeAlerts) {
-        const targets = al.ticker === "ALL" ? allRows : (byTicker.has(al.ticker) ? [byTicker.get(al.ticker)] : []);
-        let hitsForThisAlert = 0;
-        for (const r of targets) {
-          if (hitsForThisAlert >= 2) break; // حد أقصى إشعارين في الدورة لتنبيهات "كل السوق" منعاً للإزعاج
-          const lastCool = al.cooldowns?.[r.t] || 0;
-          if (now - lastCool < cooldownMs) continue;
-          const msg = checkStockMatchesAlert(al, r);
-          if (msg) {
-            fireAlertHit(al, r.t, msg);
-            hitsForThisAlert++;
-          }
-        }
+        const r = byTicker.get(al.ticker);
+        if (!r) continue;
+        const msg = checkStockMatchesAlert(al, r);
+        if (msg) fireAlertHit(al, r.t, msg);
       }
     }
 
@@ -6916,14 +6940,15 @@
       if (!listEl || !logEl) return;
       updateAlertsBadge();
 
-      if (!state.alerts.length) {
-        listEl.innerHTML = `<div style="text-align:center;padding:14px;color:var(--text-muted);font-size:12px;">لا توجد تنبيهات بعد — أضف تنبيه سعر أو اختراق أو مؤشر من التبويبات بالأعلى.</div>`;
+      const priceAlerts = state.alerts.filter(a => a && a.type === "price");
+      if (!priceAlerts.length) {
+        listEl.innerHTML = `<div style="text-align:center;padding:12px;color:var(--text-muted);font-size:12px;">لا توجد تنبيهات سعر نشطة حالياً — اختر السهم والنسبة (+5% / +10% / -5%...) واضغط إضافة.</div>`;
       } else {
-        listEl.innerHTML = state.alerts.map(a => `
+        listEl.innerHTML = priceAlerts.map(a => `
           <div class="alert-item-row ${!a.active ? "triggered" : ""}">
             <div class="alert-item-main">
               <div class="alert-item-title">${describeAlert(a)}</div>
-              <div class="alert-item-sub">${a.active ? "🟢 نشط ويراقب السوق" : "✅ تحقق وتم إيقافه"}</div>
+              <div class="alert-item-sub">${a.active ? "🟢 نشط ويراقب السعر" : "✅ تحقق وتم إرسال التنبيه"}</div>
             </div>
             <div style="display:flex;gap:4px;flex-shrink:0;">
               ${!a.active ? `<button type="button" class="btn-sm emerald" data-al-rearm="${a.id}" title="إعادة تفعيل">↻</button>` : ""}
@@ -6947,8 +6972,8 @@
         }).join("");
       }
 
-      if ($("tgBotTokenInput")) $("tgBotTokenInput").value = state.tgCfg?.botToken || "";
-      if ($("tgChatIdInput"))   $("tgChatIdInput").value   = state.tgCfg?.chatId || "";
+      if ($("gmailToInput")) $("gmailToInput").value = state.gmailCfg?.email || state.user?.email || "";
+      if ($("gmailWebhookInput")) $("gmailWebhookInput").value = state.gmailCfg?.webhookUrl || "";
     }
 
     function openAlertsModal(defaultTab = "price", prefillTicker = null) {
@@ -6958,14 +6983,8 @@
 
       const tk = (prefillTicker || state.ticker || "SWDY").toUpperCase();
       if ($("alPriceTicker")) $("alPriceTicker").value = tk;
-      if ($("alBreakTicker")) $("alBreakTicker").value = tk;
-      if ($("alIndTicker"))   $("alIndTicker").value   = tk;
-      const curP = state.liveQuote?.ticker === tk ? state.liveQuote.price : (getScreenerPool().find(x => x.t === tk)?.p ?? null);
-      if ($("alPriceTarget") && curP) $("alPriceTarget").value = Number(curP).toFixed(2);
       if ($("alertsFeedbackMsg")) { $("alertsFeedbackMsg").className = "test-result"; $("alertsFeedbackMsg").textContent = ""; }
-
-      document.querySelectorAll("#alertModalTabs .alert-tab-btn").forEach(b => b.classList.toggle("active", b.dataset.atab === defaultTab));
-      document.querySelectorAll("#alertsModalBackdrop .alert-pane").forEach(p => p.classList.toggle("active", p.dataset.apane === defaultTab));
+      updatePriceAlertTargetFromCond();
       renderAlertsModal();
       $("alertsModalBackdrop").classList.add("open");
     }
@@ -7609,6 +7628,7 @@
       state.cleanSeriesPeriod = pKey;
       drawCleanAreaChart(pts, null);
       updateCleanHeaderNumbers(null);
+      renderFairValueCard();
       updatePerfSimBox();
     }
 
@@ -7690,6 +7710,7 @@
         else { b.textContent = "⚪ محايد" + (q?.rsi14 != null ? ` • RSI ${q.rsi14}` : ""); b.style.color = "var(--text-muted)"; }
       }
 
+      renderFairValueCard();
       updatePerfSimBox();
       const tStr = new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date());
       if ($("perfUpdatedNote")) {
@@ -8096,47 +8117,10 @@ ${buildStockContextString()}
       });
 
       const PINE_TEMPLATES = {
-        ut_bot: {
-          name: "UT Bot Alerts",
-          code: [
-            "//@version=4",
-            'study(title="UT Bot Alerts", overlay = true)',
-            "",
-            "a = input(1,     title = 'Key Value. Sensitivity')",
-            "c = input(10,    title = 'ATR Period')",
-            "h = input(false, title = 'Signals from Heikin Ashi Candles')",
-            "",
-            "xATR  = atr(c)",
-            "nLoss = a * xATR",
-            "",
-            "src = h ? security(heikinashi(syminfo.tickerid), timeframe.period, close, lookahead = false) : close",
-            "",
-            "xATRTrailingStop = 0.0",
-            "xATRTrailingStop := iff(src > nz(xATRTrailingStop[1], 0) and src[1] > nz(xATRTrailingStop[1], 0), max(nz(xATRTrailingStop[1]), src - nLoss),",
-            "   iff(src < nz(xATRTrailingStop[1], 0) and src[1] < nz(xATRTrailingStop[1], 0), min(nz(xATRTrailingStop[1]), src + nLoss),",
-            "   iff(src > nz(xATRTrailingStop[1], 0), src - nLoss, src + nLoss)))",
-            "",
-            "pos = 0",
-            "pos := iff(src[1] < nz(xATRTrailingStop[1], 0) and src > nz(xATRTrailingStop[1], 0), 1,",
-            "   iff(src[1] > nz(xATRTrailingStop[1], 0) and src < nz(xATRTrailingStop[1], 0), -1, nz(pos[1], 0)))",
-            "",
-            "ema   = ema(src, 1)",
-            "above = crossover(ema, xATRTrailingStop)",
-            "below = crossover(xATRTrailingStop, ema)",
-            "",
-            "buy  = src > xATRTrailingStop and above",
-            "sell = src < xATRTrailingStop and below",
-            "",
-            "barbuy  = src > xATRTrailingStop",
-            "barsell = src < xATRTrailingStop",
-            "",
-            'plotshape(buy,  title = "Buy",  text = "Buy",  style = shape.labelup,   location = location.belowbar, color = color.green, textcolor = color.white, size = size.tiny)',
-            'plotshape(sell, title = "Sell", text = "Sell", style = shape.labeldown, location = location.abovebar, color = color.red,   textcolor = color.white, size = size.tiny)',
-            "",
-            "barcolor(barbuy  ? color.green : na)",
-            "barcolor(barsell ? color.red   : na)"
-          ].join("\n")
-        },
+        ut_bot:    { name: "شراء او بيع",  code: USER_PINE_UT_BOT },
+        ema_cross: { name: "sell and buy", code: USER_PINE_SELL_BUY },
+        macd_exit: { name: "EXIT",         code: USER_PINE_EXIT },
+        rsi_buy:   { name: "RSI شراء",     code: USER_PINE_RSI_BUY },
         supertrend: {
           name: "SuperTrend",
           code: [
@@ -8153,19 +8137,6 @@ ${buildStockContextString()}
             "sellSig = ta.crossover(direction, 0)",
             'plotshape(buySig, title="Buy", text="Buy", style=shape.labelup, location=location.belowbar, color=color.green)',
             'plotshape(sellSig, title="Sell", text="Sell", style=shape.labeldown, location=location.abovebar, color=color.red)'
-          ].join("\n")
-        },
-        ema_cross: {
-          name: "EMA 9 / 21 Cross",
-          code: [
-            "//@version=5",
-            'indicator("EMA 9 / 21 Cross", overlay = true)',
-            "fast = ta.ema(close, 9)",
-            "slow = ta.ema(close, 21)",
-            'plot(fast, "EMA 9", color = color.lime, linewidth = 2)',
-            'plot(slow, "EMA 21", color = color.orange, linewidth = 2)',
-            'plotshape(ta.crossover(fast, slow),  title="Buy",  text="Buy",  style=shape.labelup,   location=location.belowbar, color=color.green)',
-            'plotshape(ta.crossunder(fast, slow), title="Sell", text="Sell", style=shape.labeldown, location=location.abovebar, color=color.red)'
           ].join("\n")
         },
         rsi_macd: {
@@ -8615,7 +8586,7 @@ ${buildStockContextString()}
       window.addEventListener("resize", () => { resizeProCharts(); setTimeout(() => { resizeProCharts(); if (state.activeTab === "home") renderEgxHeatmap(); }, 140); });
       window.addEventListener("orientationchange", () => setTimeout(resizeProCharts, 250));
       document.addEventListener("keydown", e => {
-        if (e.key === "Escape") { document.body.classList.remove("hm-fullscreen"); if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير"; exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeApiModal(); closeAccountModal(); closeMcpModal(); }
+        if (e.key === "Escape") { document.body.classList.remove("hm-fullscreen"); if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير"; exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeApiModal(); closeAccountModal(); closeMcpModal(); closeAlertsModal(); }
       });
 
       const syncSearchInputs = (val) => {
@@ -8726,67 +8697,39 @@ ${buildStockContextString()}
       window.addEventListener("pagehide", markUnload);
       window.addEventListener("beforeunload", markUnload);
 
-      // رادار القطاعات + السكرينر + التنبيهات الذكية
-      $("openScreenerFromHomeBtn").onclick = () => {
-        state.scrSector = "ALL";
-        switchTab("stocks", true);
-        setStocksView("screener");
-      };
-      $("sectorsRadarGrid").onclick = e => {
-        const stk = e.target.closest("[data-sector-stock]");
-        if (stk) { e.stopPropagation(); selectStock(stk.dataset.sectorStock, true, true, true); return; }
-        const sec = e.target.closest("[data-sector-open]");
-        if (sec) {
-          state.scrSector = sec.dataset.sectorOpen;
-          state.scrPreset = "all";
-          document.querySelectorAll("#scrPresetsBar .scr-preset-chip").forEach(c => c.classList.toggle("active", c.dataset.scrPreset === "all"));
-          switchTab("stocks", true);
-          setStocksView("screener");
-        }
-      };
-
-      $("stocksModeTabs").onclick = e => {
-        const btn = e.target.closest("[data-stocks-view]");
-        if (btn) setStocksView(btn.dataset.stocksView);
-      };
-      $("scrPresetsBar").onclick = e => {
-        const ch = e.target.closest("[data-scr-preset]");
-        if (!ch) return;
-        state.scrPreset = ch.dataset.scrPreset;
-        document.querySelectorAll("#scrPresetsBar .scr-preset-chip").forEach(c => c.classList.toggle("active", c.dataset.scrPreset === state.scrPreset));
-        renderScreener();
-      };
-      $("scrSectorSelect").onchange = e => { state.scrSector = e.target.value; renderScreener(); };
-      $("scrIndexSelect").onchange  = e => { state.scrIndex  = e.target.value; renderScreener(); };
-      $("scrSortSelect").onchange   = e => { state.scrSort   = e.target.value; renderScreener(); };
-      $("scrRefreshBtn").onclick    = () => fetchMarketMovers(true, false);
-      $("scrResultsGrid").onclick   = e => {
-        const row = e.target.closest("[data-scr-ticker]");
-        if (row) selectStock(row.dataset.scrTicker, true, true, true);
-      };
+      // رادار القطاعات + تنبيهات السعر (Gmail)
+      if ($("sectorsRadarGrid")) {
+        $("sectorsRadarGrid").onclick = e => {
+          const stk = e.target.closest("[data-sector-stock]");
+          if (stk) { e.stopPropagation(); selectStock(stk.dataset.sectorStock, true, true, true); return; }
+          const sec = e.target.closest("[data-sector-open]");
+          if (sec) {
+            state.filter = "ALL";
+            document.querySelectorAll(".filter-pill").forEach(x => x.classList.toggle("active", x.dataset.filter === "ALL"));
+            syncSearchInputs(sec.dataset.sectorOpen || "");
+            switchTab("stocks", true);
+          }
+        };
+      }
 
       // اختصارات القائمة الثلاثية
-      $("menuScreenerBtn").onclick = () => { closeMoreMenu(); switchTab("stocks", true); setStocksView("screener"); };
-      $("menuSectorsBtn").onclick  = () => {
-        closeMoreMenu();
-        switchTab("home", false);
-        setTimeout(() => $("sectorsRadarSection")?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
-      };
-      $("menuAlertsBtn").onclick   = () => openAlertsModal("list");
+      if ($("menuSectorsBtn")) {
+        $("menuSectorsBtn").onclick = () => {
+          closeMoreMenu();
+          switchTab("home", false);
+          setTimeout(() => $("sectorsRadarSection")?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+        };
+      }
+      if ($("menuAlertsBtn")) $("menuAlertsBtn").onclick = () => openAlertsModal("price");
 
-      // نافذة التنبيهات الذكية
-      $("alertsHeaderBtn").onclick    = () => openAlertsModal(state.alerts.length ? "list" : "price");
+      // نافذة تنبيهات السعر (Gmail)
+      $("alertsHeaderBtn").onclick    = () => openAlertsModal("price");
       $("chartQuickAlertBtn").onclick = () => openAlertsModal("price", state.ticker);
       $("closeAlertsModalBtn").onclick = closeAlertsModal;
       $("alertsModalBackdrop").onclick = e => { if (e.target.id === "alertsModalBackdrop") closeAlertsModal(); };
-      $("alertModalTabs").onclick = e => {
-        const b = e.target.closest("[data-atab]");
-        if (!b) return;
-        const tab = b.dataset.atab;
-        document.querySelectorAll("#alertModalTabs .alert-tab-btn").forEach(x => x.classList.toggle("active", x.dataset.atab === tab));
-        document.querySelectorAll("#alertsModalBackdrop .alert-pane").forEach(p => p.classList.toggle("active", p.dataset.apane === tab));
-        if (tab === "list") renderAlertsModal();
-      };
+
+      $("alPriceCond").onchange = updatePriceAlertTargetFromCond;
+      $("alPriceTicker").oninput = updatePriceAlertTargetFromCond;
 
       const showAlMsg = (ok, txt) => {
         const m = $("alertsFeedbackMsg");
@@ -8796,35 +8739,36 @@ ${buildStockContextString()}
 
       $("addPriceAlertBtn").onclick = () => {
         const tk = $("alPriceTicker").value.trim().toUpperCase().replace(/^EGX:/i, "").replace(/[^A-Z0-9]/g, "");
-        const cond = $("alPriceCond").value;
-        const target = Number($("alPriceTarget").value);
+        const rawCond = $("alPriceCond").value;
+        const pctCfg = PRICE_PCT_COND_MAP[rawCond] || null;
+        const cond = pctCfg ? pctCfg.dir : rawCond;
+        let target = Number($("alPriceTarget").value);
         if (!tk || tk.length < 2) return showAlMsg(false, "يرجى كتابة رمز سهم صحيح (مثل SWDY).");
-        if (!Number.isFinite(target) || target <= 0) return showAlMsg(false, "يرجى إدخال سعر مستهدف صحيح.");
-        state.alerts.unshift({ id: "al_" + Date.now(), type: "price", ticker: tk, cond, target, active: true, createdAt: Date.now() });
-        saveAlertsState();
-        showAlMsg(true, `✅ تم تفعيل تنبيه السعر لسهم ${tk} عند ${target.toFixed(2)} ج.م`);
-        renderAlertsModal();
-        evaluateAlerts(state.liveQuote);
-      };
+        if ((!Number.isFinite(target) || target <= 0) && pctCfg) {
+          const curP = getKnownStockPrice(tk);
+          if (curP) target = Number((curP * (1 + pctCfg.pct / 100)).toFixed(2));
+        }
+        if (!Number.isFinite(target) || target <= 0) return showAlMsg(false, "يرجى إدخال سعر مستهدف صحيح (أو افتح السهم أولاً لحساب النسبة).");
 
-      $("addBreakAlertBtn").onclick = () => {
-        const raw = $("alBreakTicker").value.trim().toUpperCase().replace(/^EGX:/i, "").replace(/[^A-Z0-9]/g, "");
-        const tk = raw || "ALL";
-        const cond = $("alBreakCond").value;
-        state.alerts.unshift({ id: "al_" + Date.now(), type: "breakout", ticker: tk, cond, active: true, cooldowns: {}, createdAt: Date.now() });
-        saveAlertsState();
-        showAlMsg(true, `✅ تم تفعيل تنبيه الاختراق (${tk === "ALL" ? "كل السوق" : tk})`);
-        renderAlertsModal();
-        evaluateAlerts(state.liveQuote);
-      };
+        const emailVal = ($("gmailToInput")?.value || "").trim();
+        const hookVal  = ($("gmailWebhookInput")?.value || "").trim();
+        if (emailVal || hookVal) {
+          state.gmailCfg = { email: emailVal, webhookUrl: hookVal };
+          localStorage.setItem(LS.GMAIL_CFG, JSON.stringify(state.gmailCfg));
+        }
 
-      $("addIndAlertBtn").onclick = () => {
-        const raw = $("alIndTicker").value.trim().toUpperCase().replace(/^EGX:/i, "").replace(/[^A-Z0-9]/g, "");
-        const tk = raw || "ALL";
-        const cond = $("alIndCond").value;
-        state.alerts.unshift({ id: "al_" + Date.now(), type: "indicator", ticker: tk, cond, active: true, cooldowns: {}, createdAt: Date.now() });
+        state.alerts.unshift({
+          id: "al_" + Date.now(),
+          type: "price",
+          ticker: tk,
+          cond,
+          pctLabel: pctCfg ? pctCfg.label : "",
+          target: Number(target.toFixed(2)),
+          active: true,
+          createdAt: Date.now()
+        });
         saveAlertsState();
-        showAlMsg(true, `✅ تم تفعيل تنبيه المؤشر (${tk === "ALL" ? "كل السوق" : tk})`);
+        showAlMsg(true, `✅ تم تفعيل تنبيه السعر لسهم ${tk} عند ${target.toFixed(2)} ج.م${pctCfg ? " (" + pctCfg.label + ")" : ""}`);
         renderAlertsModal();
         evaluateAlerts(state.liveQuote);
       };
@@ -8838,13 +8782,13 @@ ${buildStockContextString()}
         const rearm = e.target.closest("[data-al-rearm]");
         if (rearm) {
           const item = state.alerts.find(a => a.id === rearm.dataset.alRearm);
-          if (item) { item.active = true; item.cooldowns = {}; saveAlertsState(); renderAlertsModal(); }
+          if (item) { item.active = true; saveAlertsState(); renderAlertsModal(); }
         }
       };
 
       $("alertsLogContainer").onclick = e => {
         const row = e.target.closest("[data-log-open]");
-        if (row && row.dataset.logOpen && row.dataset.logOpen !== "ALL") {
+        if (row && row.dataset.logOpen) {
           closeAlertsModal();
           selectStock(row.dataset.logOpen, true, true, true);
         }
@@ -8857,24 +8801,39 @@ ${buildStockContextString()}
       };
 
       $("alReqNotifBtn").onclick = async () => {
-        if (typeof Notification === "undefined") return showAlMsg(false, "المتصفح لا يدعم إشعارات النظام هنا — الإشعارات داخل الموقع وتليجرام شغالة.");
+        if (typeof Notification === "undefined") return showAlMsg(false, "المتصفح لا يدعم إشعارات النظام هنا — الإشعارات داخل الموقع و Gmail شغالة.");
         const perm = await Notification.requestPermission();
         showAlMsg(perm === "granted", perm === "granted" ? "✅ تم تفعيل إشعارات المتصفح بنجاح!" : "⚠️ لم يتم السماح بالإشعارات.");
       };
 
-      $("saveTgCfgBtn").onclick = () => {
-        state.tgCfg = { botToken: $("tgBotTokenInput").value.trim(), chatId: $("tgChatIdInput").value.trim() };
-        localStorage.setItem(LS.TG_CFG, JSON.stringify(state.tgCfg));
-        showAlMsg(true, "✅ تم حفظ إعدادات بوت تليجرام محلياً على جهازك.");
+      $("saveGmailCfgBtn").onclick = () => {
+        state.gmailCfg = {
+          email: ($("gmailToInput")?.value || "").trim(),
+          webhookUrl: ($("gmailWebhookInput")?.value || "").trim()
+        };
+        localStorage.setItem(LS.GMAIL_CFG, JSON.stringify(state.gmailCfg));
+        showAlMsg(true, "✅ تم حفظ إعدادات Gmail بنجاح.");
       };
 
-      $("testTgCfgBtn").onclick = async () => {
-        state.tgCfg = { botToken: $("tgBotTokenInput").value.trim(), chatId: $("tgChatIdInput").value.trim() };
-        localStorage.setItem(LS.TG_CFG, JSON.stringify(state.tgCfg));
-        if (!state.tgCfg.botToken || !state.tgCfg.chatId) return showAlMsg(false, "أدخل Bot Token و Chat ID أولاً.");
-        showAlMsg(true, "⏳ جاري إرسال رسالة اختبار لتليجرام...");
-        const ok = await sendTelegramAlert("✅ <b>سهم - Sahm</b>\nتم ربط التنبيهات بحسابك على تليجرام بنجاح!");
-        showAlMsg(ok, ok ? "✅ وصلت رسالة الاختبار على تليجرام!" : "❌ تعذر الإرسال — تأكد من صحة Bot Token و Chat ID واضغط Start في البوت أولاً.");
+      $("copyGasCodeBtn").onclick = async () => {
+        await copyText(GAS_EMAIL_SCRIPT_CODE);
+        showAlMsg(true, "📋 تم نسخ كود Apps Script! افتح script.google.com والصقه ثم Deploy > Web app (Anyone) والصق الرابط هنا.");
+      };
+
+      $("testGmailCfgBtn").onclick = async () => {
+        state.gmailCfg = {
+          email: ($("gmailToInput")?.value || "").trim(),
+          webhookUrl: ($("gmailWebhookInput")?.value || "").trim()
+        };
+        localStorage.setItem(LS.GMAIL_CFG, JSON.stringify(state.gmailCfg));
+        if (!state.gmailCfg.email) return showAlMsg(false, "اكتب بريدك على Gmail أولاً.");
+        showAlMsg(true, "⏳ جاري إرسال رسالة اختبار إلى Gmail...");
+        const res = await sendGmailAlert("✅ اختبار تنبيه - سهم (Sahm)", "تم ربط تنبيهات الأسعار بنجاح مع بريدك على Gmail!");
+        if (res.ok) {
+          showAlMsg(true, `✅ تم إرسال رسالة الاختبار إلى ${state.gmailCfg.email} — راجع بريدك الوارد!`);
+        } else {
+          showAlMsg(false, "⚠️ عشان الإرسال التلقائي يشتغل بدون سيرفر، اضغط (📋 كود Gmail) والصقه في script.google.com وانشره كـ Web App وحط الرابط في الخانة.");
+        }
       };
 
       updateAlertsBadge();
