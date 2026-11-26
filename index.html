@@ -1027,6 +1027,81 @@
     .pulse-auto-spin { display: inline-block; transition: transform 0.4s ease; }
     .pulse-auto-spin.spinning { animation: spin 0.7s linear infinite; }
 
+    /* الخريطة الحرارية للبورصة المصرية (EGX Squarified Treemap Heatmap) */
+    .hm-head {
+      padding: 11px 12px 9px;
+      background: var(--bg-elevated); border-bottom: 1px solid var(--border);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .hm-top-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+    }
+    .hm-controls-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 6px; flex-wrap: wrap;
+    }
+    .hm-pills { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+    .hm-pill {
+      padding: 4px 9px; border-radius: 8px; border: 1px solid var(--border-strong);
+      background: var(--bg-card); color: var(--text-muted);
+      font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.15s;
+    }
+    .hm-pill.active { background: var(--emerald); color: #03150e; border-color: var(--emerald); }
+    .hm-size-select {
+      padding: 4px 8px; border-radius: 8px; border: 1px solid var(--border-strong);
+      background: var(--bg-input); color: var(--text); font-size: 11px; font-weight: 700; outline: none;
+    }
+    .hm-stage {
+      position: relative; width: 100%; height: 430px;
+      background: #070b14; overflow: hidden; direction: ltr;
+    }
+    [data-theme="light"] .hm-stage { background: #e2e8f0; }
+    .hm-sector {
+      position: absolute; overflow: hidden;
+      border: 1.5px solid #050811; background: #0c1220;
+    }
+    [data-theme="light"] .hm-sector { border-color: #cbd5e1; background: #f1f5f9; }
+    .hm-sector-lbl {
+      position: absolute; top: 0; left: 0; right: 0; height: 19px; z-index: 3;
+      padding: 0 6px; background: rgba(5, 8, 17, 0.88);
+      color: #cbd5e1; font-size: 10px; font-weight: 800; line-height: 19px;
+      text-align: right; direction: rtl; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      pointer-events: none; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    [data-theme="light"] .hm-sector-lbl { background: rgba(248, 250, 252, 0.94); color: #1e293b; }
+    .hm-tile {
+      position: absolute; overflow: hidden; cursor: pointer;
+      border: 1px solid rgba(5, 8, 17, 0.72);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+      padding: 2px; text-align: center; color: #ffffff;
+      transition: filter 0.14s, transform 0.14s;
+      user-select: none; -webkit-user-select: none;
+    }
+    .hm-tile:hover { filter: brightness(1.16); z-index: 5; border-color: #ffffff; }
+    .hm-tile-logo {
+      width: 22px; height: 22px; border-radius: 50%; background: #ffffff;
+      overflow: hidden; flex-shrink: 0; margin-bottom: 2px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+    }
+    .hm-tile-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .hm-tile-tk { font-weight: 800; line-height: 1.1; letter-spacing: 0.2px; text-shadow: 0 1px 3px rgba(0,0,0,0.55); white-space: nowrap; }
+    .hm-tile-chg { font-weight: 800; line-height: 1.1; opacity: 0.95; text-shadow: 0 1px 3px rgba(0,0,0,0.55); white-space: nowrap; }
+    .hm-legend {
+      padding: 7px 12px; background: var(--bg-elevated); border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+      font-size: 10.5px; font-weight: 700; color: var(--text-muted);
+    }
+    .hm-scale { display: inline-flex; align-items: center; gap: 3px; direction: ltr; }
+    .hm-swatch { padding: 1px 6px; border-radius: 5px; font-size: 9.5px; font-weight: 800; color: #fff; }
+    body.hm-fullscreen { overflow: hidden !important; }
+    body.hm-fullscreen #heatmapSection {
+      position: fixed !important; inset: 0 !important; z-index: 260 !important;
+      border-radius: 0 !important; border: none !important; margin: 0 !important;
+      display: flex !important; flex-direction: column !important;
+      padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    body.hm-fullscreen #heatmapSection .hm-stage { flex: 1 !important; height: auto !important; min-height: 0 !important; }
+    body.focus-mode #heatmapSection { display: none !important; }
+
     @media (max-width: 480px) {
       .container { padding: calc(61px + env(safe-area-inset-top, 0px)) 9px calc(88px + env(safe-area-inset-bottom, 0px)); gap: 10px; }
       .header { padding: calc(env(safe-area-inset-top, 0px) + 8px) 9px 8px; }
@@ -1364,6 +1439,42 @@
       <div class="movers-tv-fallback" id="moversTvFallback" style="display:none;"></div>
     </section>
 
+    <!-- الخريطة الحرارية للبورصة المصرية (EGX Heatmap) -->
+    <section class="card" id="heatmapSection">
+      <div class="hm-head">
+        <div class="hm-top-row">
+          <div class="section-title">🗺️ الخريطة الحرارية للبورصة المصرية</div>
+          <button type="button" class="btn-sm gold" id="hmExpandBtn">⛶ تكبير</button>
+        </div>
+        <div class="hm-controls-row">
+          <div class="hm-pills" id="hmFilterPills">
+            <button type="button" class="hm-pill active" data-hm-filter="ALL">كل السوق</button>
+            <button type="button" class="hm-pill" data-hm-filter="EGX30">EGX 30</button>
+            <button type="button" class="hm-pill" data-hm-filter="EGX70">EGX 70</button>
+            <button type="button" class="hm-pill" data-hm-filter="SHARIAH">الشريعة 33</button>
+          </div>
+          <select class="hm-size-select" id="hmSizeSelect" title="حجم المربعات حسب">
+            <option value="turnover">حسب السيولة</option>
+            <option value="mcap">حسب القيمة السوقية</option>
+            <option value="equal">أحجام متساوية</option>
+          </select>
+        </div>
+      </div>
+      <div class="hm-stage" id="egxHeatmapStage">
+        <div class="movers-empty" style="padding-top:180px;">⏳ جاري بناء الخريطة الحرارية...</div>
+      </div>
+      <div class="hm-legend">
+        <span id="hmCountMeta">اضغط على أي سهم لفتح الشارت مباشرة</span>
+        <div class="hm-scale">
+          <span class="hm-swatch" style="background:#ef4444;">-5%</span>
+          <span class="hm-swatch" style="background:#b91c1c;">-2%</span>
+          <span class="hm-swatch" style="background:#334155;">0%</span>
+          <span class="hm-swatch" style="background:#15803d;">+2%</span>
+          <span class="hm-swatch" style="background:#16a34a;">+5%</span>
+        </div>
+      </div>
+    </section>
+
     <!-- الأكثر ربحاً والأكثر خسارة (جنب بعض — 8 لكل قسم) -->
     <section class="movers-dual-grid" id="moversDualSection">
       <div class="mover-box">
@@ -1579,6 +1690,7 @@
           </div>
           <div class="pro-editor-btns">
             <button class="btn-sm emerald" id="proNewScriptBtn">+ مؤشر جديد</button>
+            <button class="btn-sm blue" id="proPasteCodeBtn" title="لصق كود Pine Script من الحافظة">📋 لصق Pine</button>
             <button class="btn-sm danger" id="proDeleteScriptBtn" title="حذف المؤشر">🗑️ حذف</button>
             <button class="btn-sm" id="proToggleDocsBtn">📘 الدوال</button>
           </div>
@@ -1815,6 +1927,10 @@
       <span class="menu-item-tag" id="menuLangTag">عربي AR</span>
     </button>
     <div class="menu-divider"></div>
+    <button class="menu-item" id="menuHeatmapBtn">
+      <span class="menu-item-left"><span>🗺️</span><span>الخريطة الحرارية للبورصة</span></span>
+      <span class="menu-item-tag">EGX</span>
+    </button>
     <button class="menu-item" id="menuFavBtn">
       <span class="menu-item-left"><span>★</span><span>الأسهم المفضلة</span></span>
       <span class="menu-item-tag" id="menuFavCount">0</span>
@@ -2970,10 +3086,10 @@
       if (!forceRefresh && cached && Date.now() - cached.at < 35000) return cached;
 
       const cfgMap = {
-        "5":   { interval: "5m",  range: "60d", intraday: true,  agg4h: false },
-        "15":  { interval: "15m", range: "60d", intraday: true,  agg4h: false },
+        "5":   { interval: "5m",  range: "1y",  intraday: true,  agg4h: false },
+        "15":  { interval: "15m", range: "1y",  intraday: true,  agg4h: false },
         "60":  { interval: "60m", range: "1y",  intraday: true,  agg4h: false },
-        "240": { interval: "60m", range: "1y",  intraday: true,  agg4h: true  },
+        "240": { interval: "60m", range: "2y",  intraday: true,  agg4h: true  },
         "D":   { interval: "1d",  range: "2y",  intraday: false, agg4h: false },
         "W":   { interval: "1wk", range: "5y",  intraday: false, agg4h: false }
       };
@@ -3304,18 +3420,18 @@
       destroyProSubChart();
     }
 
-    // 6.2 محرك تشغيل أكواد TradingView Pine Script (v3 / v4 / v5) مباشرة داخل الشارت المبرمج
+    // 6.2 محرك متطور لتشغيل أكواد TradingView Pine Script (v4 / v5 / v6) مباشرة على الشارت المبرمج
     function isPineScriptCode(code) {
       const stripped = String(code || "")
         .replace(/\/\/[^\n]*/g, "")
         .replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g, '""');
       if (/\/\/@version\s*=/.test(code)) return true;
-      if (/\b(study|indicator|strategy|plotshape|plotchar|alertcondition|bgcolor|barcolor|fill)\s*\(/.test(stripped)) return true;
-      if (/\b(ta|math|input|color|shape|location|size|strategy|barstate|syminfo|timeframe)\.[a-zA-Z_]/.test(stripped)) return true;
+      if (/\b(study|indicator|strategy|plotshape|plotchar|alertcondition|bgcolor|barcolor|fill|plotcandle)\s*\(/.test(stripped)) return true;
+      if (/\b(ta|math|input|color|shape|location|size|strategy|barstate|syminfo|timeframe|label|line|box|table|array|request|str)\.[a-zA-Z_]/.test(stripped)) return true;
       if (/\binput\s*\(/.test(stripped)) return true;
       if (/:=/.test(stripped)) return true;
       if (/=\s*#[0-9a-fA-F]{6,8}\b/.test(stripped)) return true;
-      const hasJsDecl = /\b(const|let|var\s+\w+\s*=\s*function|function\s+\w+\s*\()/.test(stripped);
+      const hasJsDecl = /\b(const|let|function\s+\w+\s*\()/.test(stripped);
       if (!hasJsDecl && /\b(and|or|not)\b/.test(stripped)) return true;
       return false;
     }
@@ -3328,11 +3444,11 @@
       const toSer = (v) => {
         if (isSer(v)) return v;
         if (Array.isArray(v) && v.length === len) return mkSer(v.slice());
-        const out = new Array(len).fill(v === undefined ? null : v);
-        return mkSer(out);
+        return mkSer(new Array(len).fill(v === undefined ? null : v));
       };
       const valAt = (v, i) => isSer(v) ? v[i] : (Array.isArray(v) && v.length === len ? v[i] : v);
       const isNa = (v) => v === null || v === undefined || (typeof v === "number" && !Number.isFinite(v));
+      const toNum = (x) => (x === true ? 1 : x === false ? 0 : x);
 
       const mapBin = (a, b, fn) => {
         if (!isSer(a) && !isSer(b)) return fn(a, b);
@@ -3346,8 +3462,8 @@
         for (let i = 0; i < len; i++) out[i] = fn(a[i]);
         return mkSer(out);
       };
-      const toNum = (x) => (x === true ? 1 : x === false ? 0 : x);
 
+      // --- Built-in Pine TA Helpers ---
       const pineShift = (src, off) => {
         const n = Math.max(0, Math.floor(Number(valAt(off, len - 1)) || 0));
         if (!isSer(src) && !Array.isArray(src)) return src;
@@ -3358,9 +3474,8 @@
       };
 
       const pineWma = (s, p) => {
-        const src = toSer(s), period = Math.max(1, Math.round(Number(p) || 14));
-        const out = new Array(len).fill(null);
-        const denom = (period * (period + 1)) / 2;
+        const src = toSer(s), period = Math.max(1, Math.round(Number(valAt(p, len - 1)) || 14));
+        const out = new Array(len).fill(null), denom = (period * (period + 1)) / 2;
         for (let i = period - 1; i < len; i++) {
           let sum = 0, ok = true;
           for (let j = 0; j < period; j++) {
@@ -3374,7 +3489,7 @@
       };
 
       const pineVwma = (s, p) => {
-        const src = toSer(s), period = Math.max(1, Math.round(Number(p) || 20));
+        const src = toSer(s), period = Math.max(1, Math.round(Number(valAt(p, len - 1)) || 20));
         const out = new Array(len).fill(null);
         for (let i = period - 1; i < len; i++) {
           let pv = 0, vv = 0;
@@ -3388,24 +3503,54 @@
       };
 
       const pineHma = (s, p) => {
-        const period = Math.max(2, Math.round(Number(p) || 16));
+        const period = Math.max(2, Math.round(Number(valAt(p, len - 1)) || 16));
         const w1 = pineWma(s, Math.max(1, Math.floor(period / 2)));
         const w2 = pineWma(s, period);
         const diff = mapBin(w1, w2, (a, b) => (isNa(a) || isNa(b)) ? null : 2 * a - b);
         return pineWma(diff, Math.max(1, Math.round(Math.sqrt(period))));
       };
 
+      const pineAlma = (s, p = 9, offset = 0.85, sigma = 6) => {
+        const src = toSer(s), period = Math.max(2, Math.round(Number(valAt(p, len - 1)) || 9));
+        const m = (Number(offset) || 0.85) * (period - 1), sd = period / (Number(sigma) || 6);
+        const w = [], out = new Array(len).fill(null);
+        let wSum = 0;
+        for (let j = 0; j < period; j++) { const wt = Math.exp(-Math.pow(j - m, 2) / (2 * sd * sd)); w.push(wt); wSum += wt; }
+        for (let i = period - 1; i < len; i++) {
+          let sum = 0, ok = true;
+          for (let j = 0; j < period; j++) { const v = src[i - period + 1 + j]; if (isNa(v)) { ok = false; break; } sum += v * w[j]; }
+          if (ok && wSum > 0) out[i] = sum / wSum;
+        }
+        return mkSer(out);
+      };
+
+      const pineLinreg = (s, p = 14, offset = 0) => {
+        const src = toSer(s), period = Math.max(2, Math.round(Number(valAt(p, len - 1)) || 14));
+        const off = Math.round(Number(offset) || 0), out = new Array(len).fill(null);
+        for (let i = period - 1; i < len; i++) {
+          let sx = 0, sy = 0, sxy = 0, sx2 = 0, ok = true;
+          for (let j = 0; j < period; j++) {
+            const y = src[i - period + 1 + j];
+            if (isNa(y)) { ok = false; break; }
+            sx += j; sy += y; sxy += j * y; sx2 += j * j;
+          }
+          if (!ok) continue;
+          const denom = period * sx2 - sx * sx;
+          if (denom === 0) continue;
+          const slope = (period * sxy - sx * sy) / denom;
+          const intercept = (sy - slope * sx) / period;
+          out[i] = intercept + slope * (period - 1 - off);
+        }
+        return mkSer(out);
+      };
+
       const pineStdev = (s, p) => {
-        const src = toSer(s), period = Math.max(1, Math.round(Number(p) || 20));
-        const mean = mkSer(env.sma(src, period));
-        const out = new Array(len).fill(null);
+        const src = toSer(s), period = Math.max(1, Math.round(Number(valAt(p, len - 1)) || 20));
+        const mean = mkSer(env.sma(src, period)), out = new Array(len).fill(null);
         for (let i = period - 1; i < len; i++) {
           if (isNa(mean[i])) continue;
           let sq = 0;
-          for (let j = i - period + 1; j <= i; j++) {
-            const v = isNa(src[j]) ? mean[i] : src[j];
-            sq += (v - mean[i]) * (v - mean[i]);
-          }
+          for (let j = i - period + 1; j <= i; j++) { const v = isNa(src[j]) ? mean[i] : src[j]; sq += (v - mean[i]) ** 2; }
           out[i] = Math.sqrt(sq / period);
         }
         return mkSer(out);
@@ -3414,17 +3559,35 @@
       const pineTr = () => {
         const out = new Array(len).fill(null);
         for (let i = 0; i < len; i++) {
-          out[i] = i === 0
-            ? (env.high[i] - env.low[i])
-            : Math.max(env.high[i] - env.low[i], Math.abs(env.high[i] - env.close[i - 1]), Math.abs(env.low[i] - env.close[i - 1]));
+          out[i] = i === 0 ? (env.high[i] - env.low[i]) : Math.max(env.high[i] - env.low[i], Math.abs(env.high[i] - env.close[i - 1]), Math.abs(env.low[i] - env.close[i - 1]));
+        }
+        return mkSer(out);
+      };
+
+      const pineSar = (start = 0.02, inc = 0.02, maxAf = 0.2) => {
+        const out = new Array(len).fill(null);
+        if (len < 2) return mkSer(out);
+        let isUp = env.close[1] >= env.close[0];
+        let af = Number(start) || 0.02, step = Number(inc) || 0.02, maxA = Number(maxAf) || 0.2;
+        let ep = isUp ? env.high[0] : env.low[0];
+        let sar = isUp ? env.low[0] : env.high[0];
+        for (let i = 1; i < len; i++) {
+          sar = sar + af * (ep - sar);
+          if (isUp) {
+            if (env.low[i] < sar) { isUp = false; sar = ep; ep = env.low[i]; af = Number(start) || 0.02; }
+            else { if (env.high[i] > ep) { ep = env.high[i]; af = Math.min(maxA, af + step); } sar = Math.min(sar, env.low[i - 1]); }
+          } else {
+            if (env.high[i] > sar) { isUp = true; sar = ep; ep = env.high[i]; af = Number(start) || 0.02; }
+            else { if (env.low[i] < ep) { ep = env.low[i]; af = Math.min(maxA, af + step); } sar = Math.max(sar, env.high[i - 1]); }
+          }
+          out[i] = sar;
         }
         return mkSer(out);
       };
 
       const pineStoch = (src, hi, lo, p) => {
-        const s = toSer(src), h = toSer(hi), l = toSer(lo), period = Math.max(1, Math.round(Number(p) || 14));
-        const hh = env.highest(h, period), ll = env.lowest(l, period);
-        const out = new Array(len).fill(null);
+        const s = toSer(src), h = toSer(hi), l = toSer(lo), period = Math.max(1, Math.round(Number(valAt(p, len - 1)) || 14));
+        const hh = env.highest(h, period), ll = env.lowest(l, period), out = new Array(len).fill(null);
         for (let i = 0; i < len; i++) {
           if (isNa(s[i]) || isNa(hh[i]) || isNa(ll[i])) continue;
           const denom = hh[i] - ll[i];
@@ -3433,10 +3596,28 @@
         return mkSer(out);
       };
 
+      const pineWpr = (p = 14) => {
+        const period = Math.max(1, Math.round(Number(valAt(p, len - 1)) || 14));
+        const hh = env.highest(env.high, period), ll = env.lowest(env.low, period), out = new Array(len).fill(null);
+        for (let i = 0; i < len; i++) {
+          if (isNa(hh[i]) || isNa(ll[i]) || hh[i] === ll[i]) continue;
+          out[i] = ((hh[i] - env.close[i]) / (hh[i] - ll[i])) * -100;
+        }
+        return mkSer(out);
+      };
+
+      const pineObv = () => {
+        const out = new Array(len).fill(0);
+        for (let i = 1; i < len; i++) {
+          const v = env.volume[i] || 0;
+          out[i] = out[i - 1] + (env.close[i] > env.close[i - 1] ? v : env.close[i] < env.close[i - 1] ? -v : 0);
+        }
+        return mkSer(out);
+      };
+
       const pineCci = (src, p) => {
-        const s = toSer(src), period = Math.max(1, Math.round(Number(p) || 20));
-        const mean = env.sma(s, period);
-        const out = new Array(len).fill(null);
+        const s = toSer(src), period = Math.max(1, Math.round(Number(valAt(p, len - 1)) || 20));
+        const mean = env.sma(s, period), out = new Array(len).fill(null);
         for (let i = period - 1; i < len; i++) {
           if (isNa(mean[i]) || isNa(s[i])) continue;
           let devSum = 0;
@@ -3454,8 +3635,7 @@
           upMove[i] = (up > dn && up > 0) ? up : 0;
           dnMove[i] = (dn > up && dn > 0) ? dn : 0;
         }
-        const trS = env.rma(pineTr(), diLen);
-        const pS = env.rma(upMove, diLen), mS = env.rma(dnMove, diLen);
+        const trS = env.rma(pineTr(), diLen), pS = env.rma(upMove, diLen), mS = env.rma(dnMove, diLen);
         const plus = new Array(len).fill(null), minus = new Array(len).fill(null), dx = new Array(len).fill(null);
         for (let i = 0; i < len; i++) {
           if (isNa(trS[i]) || trS[i] === 0) continue;
@@ -3464,8 +3644,7 @@
           const sum = plus[i] + minus[i];
           dx[i] = sum === 0 ? 0 : (100 * Math.abs(plus[i] - minus[i])) / sum;
         }
-        const adx = env.rma(dx, adxSmooth);
-        return [mkSer(plus), mkSer(minus), mkSer(adx)];
+        return [mkSer(plus), mkSer(minus), mkSer(env.rma(dx, adxSmooth))];
       };
 
       const pineCrossover = (a, b) => {
@@ -3489,37 +3668,26 @@
       const pineBarssince = (cond) => {
         const c = toSer(cond), out = new Array(len).fill(null);
         let cnt = null;
-        for (let i = 0; i < len; i++) {
-          if (c[i]) cnt = 0;
-          else if (cnt !== null) cnt++;
-          out[i] = cnt;
-        }
+        for (let i = 0; i < len; i++) { if (c[i]) cnt = 0; else if (cnt !== null) cnt++; out[i] = cnt; }
         return mkSer(out);
       };
 
       const pineValuewhen = (cond, src, occ = 0) => {
         const c = toSer(cond), s = toSer(src), k = Math.max(0, Math.round(Number(occ) || 0));
         const out = new Array(len).fill(null), hits = [];
-        for (let i = 0; i < len; i++) {
-          if (c[i]) hits.unshift(s[i]);
-          out[i] = hits[k] !== undefined ? hits[k] : null;
-        }
+        for (let i = 0; i < len; i++) { if (c[i]) hits.unshift(s[i]); out[i] = hits[k] !== undefined ? hits[k] : null; }
         return mkSer(out);
       };
 
       const pineFixnan = (src) => {
         const s = toSer(src), out = new Array(len).fill(null);
         let last = null;
-        for (let i = 0; i < len; i++) {
-          if (!isNa(s[i])) last = s[i];
-          out[i] = last;
-        }
+        for (let i = 0; i < len; i++) { if (!isNa(s[i])) last = s[i]; out[i] = last; }
         return mkSer(out);
       };
 
       const pineRising = (src, p) => {
-        const s = toSer(src), period = Math.max(1, Math.round(Number(p) || 1));
-        const out = new Array(len).fill(false);
+        const s = toSer(src), period = Math.max(1, Math.round(Number(p) || 1)), out = new Array(len).fill(false);
         for (let i = period; i < len; i++) {
           let ok = !isNa(s[i]);
           for (let j = 1; j <= period && ok; j++) if (isNa(s[i - j]) || s[i] <= s[i - j]) ok = false;
@@ -3529,8 +3697,7 @@
       };
 
       const pineFalling = (src, p) => {
-        const s = toSer(src), period = Math.max(1, Math.round(Number(p) || 1));
-        const out = new Array(len).fill(false);
+        const s = toSer(src), period = Math.max(1, Math.round(Number(p) || 1)), out = new Array(len).fill(false);
         for (let i = period; i < len; i++) {
           let ok = !isNa(s[i]);
           for (let j = 1; j <= period && ok; j++) if (isNa(s[i - j]) || s[i] >= s[i - j]) ok = false;
@@ -3579,24 +3746,42 @@
       let pineTitle = "";
       let activeCondMask = null;
       let signalsAdded = 0;
+      let plotsAdded = 0;
+      let linesAdded = 0;
 
       const taNS = {
-        sma: (s, p) => mkSer(env.sma(toSer(s), Math.max(1, Math.round(Number(p) || 20)))),
-        ema: (s, p) => mkSer(env.ema(toSer(s), Math.max(1, Math.round(Number(p) || 20)))),
-        rma: (s, p) => mkSer(env.rma(toSer(s), Math.max(1, Math.round(Number(p) || 14)))),
-        wma: pineWma,
-        vwma: pineVwma,
-        hma: pineHma,
-        rsi: (s, p) => mkSer(env.rsi(toSer(s), Math.max(1, Math.round(Number(p) || 14)))),
-        mfi: (s, p) => mkSer(env.mfi(Math.max(1, Math.round(Number(p !== undefined ? p : s) || 14)))),
-        atr: (p) => mkSer(env.atr(Math.max(1, Math.round(Number(p) || 14)))),
+        sma: (s, p) => mkSer(env.sma(toSer(s), Math.max(1, Math.round(Number(valAt(p, len - 1)) || 20)))),
+        ema: (s, p) => mkSer(env.ema(toSer(s), Math.max(1, Math.round(Number(valAt(p, len - 1)) || 20)))),
+        rma: (s, p) => mkSer(env.rma(toSer(s), Math.max(1, Math.round(Number(valAt(p, len - 1)) || 14)))),
+        wma: pineWma, vwma: pineVwma, hma: pineHma, alma: pineAlma, linreg: pineLinreg,
+        rsi: (s, p) => mkSer(env.rsi(toSer(s), Math.max(1, Math.round(Number(valAt(p, len - 1)) || 14)))),
+        mfi: (s, p) => mkSer(env.mfi(Math.max(1, Math.round(Number(valAt(p !== undefined ? p : s, len - 1)) || 14)))),
+        atr: (p) => mkSer(env.atr(Math.max(1, Math.round(Number(valAt(p, len - 1)) || 14)))),
         tr: () => pineTr(),
-        cci: pineCci,
-        stoch: pineStoch,
-        stdev: pineStdev,
-        highest: (s, p) => mkSer(env.highest(p === undefined ? env.high : toSer(s), Math.max(1, Math.round(Number(p === undefined ? s : p) || 20)))),
-        lowest:  (s, p) => mkSer(env.lowest(p === undefined ? env.low  : toSer(s), Math.max(1, Math.round(Number(p === undefined ? s : p) || 20)))),
-        vwap: (s) => mkSer(env.vwap(20)),
+        sar: pineSar, cci: pineCci, stoch: pineStoch, stdev: pineStdev, wpr: pineWpr, obv: pineObv(),
+        highest: (s, p) => mkSer(env.highest(p === undefined ? env.high : toSer(s), Math.max(1, Math.round(Number(valAt(p === undefined ? s : p, len - 1)) || 20)))),
+        lowest:  (s, p) => mkSer(env.lowest(p === undefined ? env.low  : toSer(s), Math.max(1, Math.round(Number(valAt(p === undefined ? s : p, len - 1)) || 20)))),
+        highestbars: (s, p) => {
+          const src = p === undefined ? env.high : toSer(s), period = Math.max(1, Math.round(Number(p === undefined ? s : p) || 20));
+          const out = new Array(len).fill(null);
+          for (let i = period - 1; i < len; i++) {
+            let mx = -Infinity, off = 0;
+            for (let j = 0; j < period; j++) { const v = src[i - j]; if (!isNa(v) && v > mx) { mx = v; off = -j; } }
+            out[i] = off;
+          }
+          return mkSer(out);
+        },
+        lowestbars: (s, p) => {
+          const src = p === undefined ? env.low : toSer(s), period = Math.max(1, Math.round(Number(p === undefined ? s : p) || 20));
+          const out = new Array(len).fill(null);
+          for (let i = period - 1; i < len; i++) {
+            let mn = Infinity, off = 0;
+            for (let j = 0; j < period; j++) { const v = src[i - j]; if (!isNa(v) && v < mn) { mn = v; off = -j; } }
+            out[i] = off;
+          }
+          return mkSer(out);
+        },
+        vwap: () => mkSer(env.vwap(20)),
         macd: (s, f = 12, sl = 26, sg = 9) => {
           const m = env.macd(toSer(s), Math.round(Number(f) || 12), Math.round(Number(sl) || 26), Math.round(Number(sg) || 9));
           return [mkSer(m.macd), mkSer(m.signal), mkSer(m.hist)];
@@ -3605,25 +3790,24 @@
           const b = env.bb(toSer(s), Math.round(Number(p) || 20), Number(mult) || 2);
           return [mkSer(b.middle), mkSer(b.upper), mkSer(b.lower)];
         },
-        supertrend: (factor = 3, atrPeriod = 10) => {
-          // Pine ta.supertrend(factor, atrPeriod) -> direction: -1 uptrend, +1 downtrend
-          const st = env.supertrend(Math.max(1, Math.round(Number(atrPeriod) || 10)), Number(factor) || 3);
-          const pineDir = st.dir.map(d => d === 1 ? -1 : 1);
-          return [mkSer(st.line), mkSer(pineDir)];
+        kc: (s, p = 20, mult = 1.5) => {
+          const mid = mkSer(env.ema(toSer(s), Math.round(Number(p) || 20)));
+          const a = mkSer(env.atr(Math.round(Number(p) || 20)));
+          const m = Number(mult) || 1.5;
+          return [mid, mapBin(mid, a, (x, y) => (isNa(x)||isNa(y)) ? null : x + m * y), mapBin(mid, a, (x, y) => (isNa(x)||isNa(y)) ? null : x - m * y)];
         },
-        dmi: pineDmi,
-        crossover: pineCrossover,
-        crossunder: pineCrossunder,
+        supertrend: (factor = 3, atrPeriod = 10) => {
+          const st = env.supertrend(Math.max(1, Math.round(Number(atrPeriod) || 10)), Number(factor) || 3);
+          return [mkSer(st.line), mkSer(st.dir.map(d => d === 1 ? -1 : 1))];
+        },
+        dmi: pineDmi, crossover: pineCrossover, crossunder: pineCrossunder,
         cross: (a, b) => mapBin(pineCrossover(a, b), pineCrossunder(a, b), (x, y) => !!(x || y)),
         change: (s, p = 1) => mapBin(toSer(s), pineShift(toSer(s), p), (a, b) => (isNa(a) || isNa(b)) ? null : a - b),
         mom: (s, p = 10) => mapBin(toSer(s), pineShift(toSer(s), p), (a, b) => (isNa(a) || isNa(b)) ? null : a - b),
         roc: (s, p = 9) => mapBin(toSer(s), pineShift(toSer(s), p), (a, b) => (isNa(a) || isNa(b) || b === 0) ? null : ((a - b) / b) * 100),
-        rising: pineRising,
-        falling: pineFalling,
-        barssince: pineBarssince,
-        valuewhen: pineValuewhen,
-        pivothigh: pinePivotHigh,
-        pivotlow: pinePivotLow,
+        rising: pineRising, falling: pineFalling, barssince: pineBarssince, valuewhen: pineValuewhen,
+        pivothigh: pinePivotHigh, pivotlow: pinePivotLow,
+        variance: (s, p = 20) => mapUn(pineStdev(s, p), v => isNa(v) ? null : v * v),
         cum: (s) => {
           const a = toSer(s), out = new Array(len).fill(0);
           let acc = 0;
@@ -3650,11 +3834,9 @@
           return mapUn(sum, v => isNa(v) ? null : v / args.length);
         },
         sum: (s, p) => {
-          const src = toSer(s), period = Math.max(1, Math.round(Number(p) || 14));
-          const out = new Array(len).fill(null);
+          const src = toSer(s), period = Math.max(1, Math.round(Number(p) || 14)), out = new Array(len).fill(null);
           for (let i = period - 1; i < len; i++) {
-            let sm = 0;
-            for (let j = i - period + 1; j <= i; j++) sm += isNa(src[j]) ? 0 : src[j];
+            let sm = 0; for (let j = i - period + 1; j <= i; j++) sm += isNa(src[j]) ? 0 : src[j];
             out[i] = sm;
           }
           return mkSer(out);
@@ -3666,40 +3848,52 @@
         orange: "#f59e0b", yellow: "#eab308", purple: "#a78bfa", fuchsia: "#d946ef",
         white: "#ffffff", black: "#000000", gray: "#94a3b8", silver: "#cbd5e1",
         aqua: "#06b6d4", teal: "#14b8a6", maroon: "#991b1b", navy: "#1e3a8a", olive: "#65a30d",
-        new: (c) => pineNormColor(c, "#38bdf8"),
-        rgb: (r, g, b) => `rgb(${Math.round(r||0)},${Math.round(g||0)},${Math.round(b||0)})`
+        new: (c, tr = 0) => (Number(tr) >= 100 ? null : pineNormColor(c, "#38bdf8")),
+        rgb: (r, g, b) => `rgb(${Math.round(r||0)},${Math.round(g||0)},${Math.round(b||0)})`,
+        from_gradient: (v, lo, hi, c1, c2) => mapUn(v, x => (isNa(x) || x >= ((lo + hi) / 2)) ? pineNormColor(c2, "#10b981") : pineNormColor(c1, "#f43f5e"))
       };
 
-      const inputFn = (pos, kw) => {
-        if (kw && kw.defval !== undefined) return kw.defval;
-        return pos.length ? pos[0] : 14;
-      };
-      const inputNS = Object.assign((...a) => a[0], {
-        int: inputFn, float: inputFn, bool: inputFn, string: inputFn,
-        source: inputFn, color: inputFn, timeframe: inputFn, symbol: inputFn, session: inputFn
+      const inputFn = (pos, kw) => (kw && kw.defval !== undefined) ? kw.defval : (pos.length ? pos[0] : 14);
+      const inputNS = Object.assign({ __pineSpecial: inputFn }, {
+        int: { __pineSpecial: inputFn }, float: { __pineSpecial: inputFn }, bool: { __pineSpecial: inputFn },
+        string: { __pineSpecial: inputFn }, source: { __pineSpecial: inputFn }, color: { __pineSpecial: inputFn },
+        timeframe: { __pineSpecial: inputFn }, symbol: { __pineSpecial: inputFn }, session: { __pineSpecial: inputFn },
+        price: { __pineSpecial: inputFn }, time: { __pineSpecial: inputFn }
       });
 
       const handleMeta = (pos, kw) => {
         if (pos[0] && typeof pos[0] === "string") pineTitle = pos[0];
         if (kw && kw.title) pineTitle = String(kw.title);
+        if (kw && kw.shorttitle && !pineTitle) pineTitle = String(kw.shorttitle);
         if (kw && kw.overlay !== undefined) overlayMode = !!kw.overlay;
         return null;
       };
 
       const handlePlot = (pos, kw) => {
-        const series = toSer(pos[0]);
-        const title = kw.title ?? pos[1] ?? "";
-        const col = pineNormColor(kw.color ?? pos[2], "#38bdf8");
+        const rawSrc = pos[0] !== undefined ? pos[0] : kw.series;
+        if (rawSrc === undefined || rawSrc === null) return null;
+        let series = toSer(rawSrc);
+        const title = String(kw.title ?? pos[1] ?? "");
+        const rawCol = kw.color !== undefined ? kw.color : pos[2];
         const width = Math.max(1, Math.min(4, Math.round(Number(kw.linewidth ?? pos[3] ?? 2) || 2)));
         const styleVal = kw.style ?? pos[4] ?? "solid";
         const isHist = styleVal === "histogram" || styleVal === "columns";
-        const lineStyle = styleVal === "dashed" ? "dashed" : styleVal === "dotted" || styleVal === "circles" ? "dotted" : "solid";
+        const lineStyle = styleVal === "dashed" ? "dashed" : (styleVal === "dotted" || styleVal === "circles") ? "dotted" : "solid";
 
-        // كشف ذكي: لو المؤشر غير محدد overlay وكان خارج نطاق السعر تماماً (مثل RSI/MACD) ارسمه في النافذة السفلية
+        // دعم إخفاء النقاط لما يكون اللون na + دعم الألوان الديناميكية لكل شمعة!
+        let colorsArr = null;
+        if (isSer(rawCol)) {
+          colorsArr = rawCol.map(c => (typeof c === "string" && c.trim()) ? pineNormColor(c, null) : null);
+          series = mkSer(series.map((v, i) => colorsArr[i] === null ? null : v));
+        }
+        const col = pineNormColor(rawCol, "#38bdf8");
+
+        const validVals = series.filter(v => typeof v === "number" && Number.isFinite(v));
+        if (!validVals.length) return series;
+
         let useSubPane = !overlayMode;
         if (overlayMode) {
           const lastC = env.close[len - 1] || 1;
-          const validVals = series.filter(v => typeof v === "number" && Number.isFinite(v));
           if (validVals.length > 5 && lastC > 15) {
             const mx = Math.max(...validVals.map(Math.abs));
             const mn = Math.min(...validVals);
@@ -3707,23 +3901,27 @@
           }
         }
 
+        plotsAdded++;
         if (useSubPane) {
-          if (isHist) env.histPane(series, { title, upColor: "rgba(16,185,129,0.55)", downColor: "rgba(244,63,94,0.55)" });
-          else env.plotPane(series, { title, color: col, width, style: lineStyle });
+          if (isHist) env.histPane(series, { title, upColor: "rgba(16,185,129,0.55)", downColor: "rgba(244,63,94,0.55)", colors: colorsArr });
+          else env.plotPane(series, { title, color: col, width, style: lineStyle, colors: colorsArr });
         } else {
-          env.plot(series, { title, color: col, width, style: lineStyle });
+          env.plot(series, { title, color: col, width, style: lineStyle, colors: colorsArr });
         }
         return series;
       };
 
       const handlePlotShape = (pos, kw) => {
-        const cond = toSer(pos[0]);
+        const rawCond = pos[0] !== undefined ? pos[0] : kw.series;
+        if (rawCond === undefined || rawCond === null) return null;
+        const cond = toSer(rawCond);
         const title = String(kw.title ?? pos[1] ?? "");
         const style = String(kw.style ?? pos[2] ?? "labelup").toLowerCase();
         const loc = String(kw.location ?? pos[3] ?? "").toLowerCase();
         const text = String(kw.text ?? kw.char ?? title ?? "");
-        const isDown = loc.includes("above") || loc.includes("top") || style.includes("down") || /sell|short|بيع/i.test(text + " " + title);
-        const col = pineNormColor(kw.color ?? pos[4], isDown ? "#f43f5e" : "#10b981");
+        const isDown = loc.includes("above") || loc.includes("top") || style.includes("down") || /sell|short|bear|بيع/i.test(text + " " + title);
+        const rawCol = kw.color !== undefined ? kw.color : pos[4];
+        const fallbackCol = isDown ? "#f43f5e" : "#10b981";
         const position = isDown ? "aboveBar" : "belowBar";
         const shape = isDown ? "arrowDown" : "arrowUp";
         const label = text || (isDown ? "SELL" : "BUY");
@@ -3731,6 +3929,7 @@
         for (let i = 0; i < len; i++) {
           const ok = cond[i] && (!activeCondMask || activeCondMask[i]);
           if (ok) {
+            const col = pineNormColor(isSer(rawCol) ? rawCol[i] : rawCol, fallbackCol);
             env.mark(i, { position, color: col, shape, text: label });
             signalsAdded++;
           }
@@ -3739,44 +3938,135 @@
       };
 
       const handleHline = (pos, kw) => {
-        const price = Number(valAt(pos[0], len - 1));
+        const rawP = pos[0] !== undefined ? pos[0] : kw.price;
+        const price = Number(valAt(rawP, len - 1));
         if (!Number.isFinite(price)) return null;
         const title = String(kw.title ?? pos[1] ?? "");
         const col = pineNormColor(kw.color ?? pos[2], "#94a3b8");
         const st = String(kw.linestyle ?? pos[3] ?? "dashed");
         const style = st.includes("dot") ? "dotted" : st.includes("solid") ? "solid" : "dashed";
+        linesAdded++;
         if (overlayMode) env.hline(price, { title, color: col, style, width: 1 });
         else env.hlinePane(price, { title, color: col, style });
         return null;
       };
 
-      const strategyNS = {
-        long: "long",
-        short: "short",
-        entry: (pos, kw) => {
-          const id = String(pos[0] || kw.id || "");
-          const dir = String(pos[1] || kw.direction || "long").toLowerCase();
-          const cond = kw.when !== undefined ? toSer(kw.when) : activeCondMask;
-          if (!cond) return null;
-          const isShort = dir === "short";
+      // دعم label.new و line.new و box.new لمؤشرات SMC / LuxAlgo / Pivots!
+      const handleLabelNew = (pos, kw) => {
+        const xVal = kw.x !== undefined ? kw.x : pos[0];
+        const yVal = kw.y !== undefined ? kw.y : pos[1];
+        const txtVal = kw.text !== undefined ? kw.text : pos[2];
+        const colVal = kw.color !== undefined ? kw.color : (kw.textcolor ?? pos[5]);
+        const styleVal = String(kw.style ?? pos[4] ?? "").toLowerCase();
+
+        const emitAt = (barIdx, y, txt, c) => {
+          const i = Math.round(Number(barIdx));
+          if (!Number.isFinite(i) || i < 0 || i >= len) return;
+          const tStr = String(txt ?? "").trim();
+          const isDown = styleVal.includes("down") || (Number.isFinite(Number(y)) && Number(y) >= env.high[i]) || /sell|short|bear|bos|choch|بيع/i.test(tStr);
+          const col = pineNormColor(c, isDown ? "#f43f5e" : "#10b981");
+          env.mark(i, { position: isDown ? "aboveBar" : "belowBar", color: col, shape: isDown ? "arrowDown" : "arrowUp", text: tStr || (isDown ? "▼" : "▲") });
+          signalsAdded++;
+        };
+
+        if (activeCondMask) {
           for (let i = 0; i < len; i++) {
-            if (cond[i]) {
-              if (isShort) env.sell(i, id || "SELL");
-              else env.buy(i, id || "BUY");
-              signalsAdded++;
-            }
+            if (activeCondMask[i]) emitAt(valAt(xVal, i) ?? i, valAt(yVal, i), valAt(txtVal, i), valAt(colVal, i));
           }
-          return null;
-        },
-        close: () => null,
-        close_all: () => null,
-        exit: () => null,
-        percent_of_equity: "percent_of_equity",
-        cash: "cash",
-        fixed: "fixed"
+        } else {
+          const i = valAt(xVal, len - 1);
+          emitAt(i ?? (len - 1), valAt(yVal, len - 1), valAt(txtVal, len - 1), valAt(colVal, len - 1));
+        }
+        return {};
       };
 
-      // بناء بيئة المتغيرات الافتراضية لـ Pine Script
+      const handleLineNew = (pos, kw) => {
+        const y1Val = kw.y1 !== undefined ? kw.y1 : pos[1];
+        const y2Val = kw.y2 !== undefined ? kw.y2 : pos[3];
+        const colVal = kw.color !== undefined ? kw.color : pos[6];
+        const stVal = String(kw.style ?? pos[7] ?? "dashed");
+        const style = stVal.includes("dot") ? "dotted" : stVal.includes("solid") ? "solid" : "dashed";
+
+        const emitLine = (y, c) => {
+          const price = Number(y);
+          if (!Number.isFinite(price) || price <= 0 || linesAdded >= 12) return;
+          linesAdded++;
+          env.hline(price, { title: "", color: pineNormColor(c, "#f59e0b"), style, width: 1 });
+        };
+
+        if (activeCondMask) {
+          // ارسم آخر 4 مستويات فقط عشان الشارت ميتزحمش
+          const hits = [];
+          for (let i = 0; i < len; i++) {
+            if (activeCondMask[i]) hits.push({ y: valAt(y1Val, i) ?? valAt(y2Val, i), c: valAt(colVal, i) });
+          }
+          hits.slice(-4).forEach(h => emitLine(h.y, h.c));
+        } else {
+          emitLine(valAt(y1Val, len - 1) ?? valAt(y2Val, len - 1), valAt(colVal, len - 1));
+        }
+        return {};
+      };
+
+      const handleBoxNew = (pos, kw) => {
+        const topV = kw.top !== undefined ? kw.top : pos[1];
+        const botV = kw.bottom !== undefined ? kw.bottom : pos[3];
+        const colV = kw.border_color ?? kw.bgcolor ?? "#38bdf8";
+        const emitBox = (hi, lo, c) => {
+          if (linesAdded >= 12) return;
+          const col = pineNormColor(c, "#38bdf8");
+          if (Number.isFinite(Number(hi)) && Number(hi) > 0) { linesAdded++; env.hline(Number(hi), { title: "Zone", color: col, style: "dotted", width: 1 }); }
+          if (Number.isFinite(Number(lo)) && Number(lo) > 0) { linesAdded++; env.hline(Number(lo), { title: "", color: col, style: "dotted", width: 1 }); }
+        };
+        if (activeCondMask) {
+          const hits = [];
+          for (let i = 0; i < len; i++) if (activeCondMask[i]) hits.push({ hi: valAt(topV, i), lo: valAt(botV, i), c: valAt(colV, i) });
+          hits.slice(-2).forEach(h => emitBox(h.hi, h.lo, h.c));
+        } else {
+          emitBox(valAt(topV, len - 1), valAt(botV, len - 1), valAt(colV, len - 1));
+        }
+        return {};
+      };
+
+      const noopSpecial = { __pineSpecial: () => null };
+      const strategyNS = {
+        long: "long", short: "short", position_size: mkSer(new Array(len).fill(0)),
+        percent_of_equity: "percent_of_equity", cash: "cash", fixed: "fixed",
+        entry: {
+          __pineSpecial: (pos, kw) => {
+            const id = String(pos[0] || kw.id || "");
+            const dir = String(pos[1] || kw.direction || "long").toLowerCase();
+            const cond = kw.when !== undefined ? toSer(kw.when) : activeCondMask;
+            if (!cond) return null;
+            const isShort = dir === "short";
+            for (let i = 0; i < len; i++) {
+              if (cond[i]) { if (isShort) env.sell(i, id || "SELL"); else env.buy(i, id || "BUY"); signalsAdded++; }
+            }
+            return null;
+          }
+        },
+        close: noopSpecial, close_all: noopSpecial, exit: noopSpecial, order: noopSpecial, cancel: noopSpecial
+      };
+
+      const arrayNS = {
+        new_float: (sz = 0, v = null) => new Array(Math.max(0, Math.round(Number(sz) || 0))).fill(v),
+        new_int: (sz = 0, v = 0) => new Array(Math.max(0, Math.round(Number(sz) || 0))).fill(v),
+        new_bool: (sz = 0, v = false) => new Array(Math.max(0, Math.round(Number(sz) || 0))).fill(v),
+        new_string: (sz = 0, v = "") => new Array(Math.max(0, Math.round(Number(sz) || 0))).fill(v),
+        new_line: () => [], new_label: () => [], new_box: () => [],
+        push: (a, v) => { if (Array.isArray(a)) a.push(v); return null; },
+        unshift: (a, v) => { if (Array.isArray(a)) a.unshift(v); return null; },
+        pop: (a) => (Array.isArray(a) ? a.pop() : null),
+        shift: (a) => (Array.isArray(a) ? a.shift() : null),
+        get: (a, idx) => (Array.isArray(a) ? a[Math.round(Number(idx) || 0)] ?? null : null),
+        set: (a, idx, v) => { if (Array.isArray(a)) a[Math.round(Number(idx) || 0)] = v; return null; },
+        size: (a) => (Array.isArray(a) ? a.length : 0),
+        clear: (a) => { if (Array.isArray(a)) a.length = 0; return null; },
+        sum: (a) => (Array.isArray(a) ? a.reduce((s, x) => s + (Number(x) || 0), 0) : 0),
+        avg: (a) => (Array.isArray(a) && a.length ? a.reduce((s, x) => s + (Number(x) || 0), 0) / a.length : null),
+        max: (a) => (Array.isArray(a) && a.length ? Math.max(...a.filter(x => Number.isFinite(x))) : null),
+        min: (a) => (Array.isArray(a) && a.length ? Math.min(...a.filter(x => Number.isFinite(x))) : null)
+      };
+
       const scope = Object.create(null);
       scope.open   = mkSer(env.open.slice());
       scope.high   = mkSer(env.high.slice());
@@ -3798,6 +4088,25 @@
       scope.color  = colorNS;
       scope.input  = inputNS;
       scope.strategy = strategyNS;
+      scope.array  = arrayNS;
+      scope.label  = {
+        new: { __pineSpecial: handleLabelNew },
+        delete: noopSpecial, set_xy: noopSpecial, set_text: noopSpecial, set_color: noopSpecial,
+        style_label_up: "label_up", style_label_down: "label_down", style_triangleup: "triangleup", style_triangledown: "triangledown",
+        style_none: "none", style_circle: "circle", style_diamond: "diamond"
+      };
+      scope.line   = {
+        new: { __pineSpecial: handleLineNew },
+        delete: noopSpecial, set_x2: noopSpecial, set_y2: noopSpecial, set_xy1: noopSpecial, set_xy2: noopSpecial, set_color: noopSpecial,
+        style_solid: "solid", style_dashed: "dashed", style_dotted: "dotted", style_arrow_left: "solid", style_arrow_right: "solid"
+      };
+      scope.box    = { new: { __pineSpecial: handleBoxNew }, delete: noopSpecial, set_right: noopSpecial, set_top: noopSpecial, set_bottom: noopSpecial };
+      scope.table  = { new: noopSpecial, cell: noopSpecial, delete: noopSpecial, clear: noopSpecial };
+      scope.xloc   = { bar_index: "bar_index", bar_time: "bar_time" };
+      scope.yloc   = { price: "price", abovebar: "abovebar", belowbar: "belowbar" };
+      scope.extend = { none: "none", left: "left", right: "right", both: "both" };
+      scope.display = { all: "all", none: "none", pane: "pane", data_window: "data_window", status_line: "status_line" };
+      scope.position = { top_right: "tr", top_left: "tl", bottom_right: "br", bottom_left: "bl", middle_right: "mr", middle_left: "ml" };
       scope.shape  = {
         labelup: "labelup", labeldown: "labeldown", triangleup: "triangleup", triangledown: "triangledown",
         arrowup: "arrowup", arrowdown: "arrowdown", circle: "circle", cross: "cross", xcross: "xcross",
@@ -3806,7 +4115,7 @@
       scope.location = { belowbar: "belowbar", abovebar: "abovebar", top: "top", bottom: "bottom", absolute: "absolute" };
       scope.size   = { auto: "auto", tiny: "tiny", small: "small", normal: "normal", large: "large", huge: "huge" };
       scope.plot   = Object.assign({ __pineSpecial: handlePlot }, {
-        style_line: "solid", style_linebr: "solid", style_stepline: "solid",
+        style_line: "solid", style_linebr: "solid", style_stepline: "solid", style_stepline_diamond: "solid",
         style_histogram: "histogram", style_columns: "columns", style_area: "solid",
         style_circles: "circles", style_cross: "dotted"
       });
@@ -3814,28 +4123,19 @@
       scope.barstate = { islast: true, isconfirmed: true, isrealtime: true, isfirst: false, ishistory: false };
       scope.syminfo  = { ticker: state.ticker, tickerid: "EGX:" + state.ticker, mintick: 0.01 };
       scope.timeframe = { period: state.tf, isdaily: state.tf === "D", isweekly: state.tf === "W", isintraday: ["5","15","60","240"].includes(state.tf) };
-      scope.str = { tostring: (x) => String(x ?? ""), format: (f, ...a) => String(f || "") };
+      scope.str = { tostring: (x) => String(valAt(x, len - 1) ?? ""), format: (f) => String(f || "") };
       scope.request = { security: { __pineSpecial: (pos) => pos[2] !== undefined ? pos[2] : scope.close } };
 
-      // دوال Pine v4 المباشرة (بدون ta. / math.)
-      const directFns = {
-        study: { __pineSpecial: handleMeta },
-        indicator: { __pineSpecial: handleMeta },
-        strategy: { __pineSpecial: handleMeta },
-        plotshape: { __pineSpecial: handlePlotShape },
-        plotchar: { __pineSpecial: handlePlotShape },
-        bgcolor: { __pineSpecial: () => null },
-        barcolor: { __pineSpecial: () => null },
-        fill: { __pineSpecial: () => null },
-        alertcondition: { __pineSpecial: () => null },
-        alert: { __pineSpecial: () => null },
-        plotcandle: { __pineSpecial: () => null },
-        plotbar: { __pineSpecial: () => null },
+      Object.assign(scope, {
+        study: { __pineSpecial: handleMeta }, indicator: { __pineSpecial: handleMeta }, strategy: Object.assign({ __pineSpecial: handleMeta }, strategyNS),
+        plotshape: { __pineSpecial: handlePlotShape }, plotchar: { __pineSpecial: handlePlotShape },
+        bgcolor: noopSpecial, barcolor: noopSpecial, fill: noopSpecial, alertcondition: noopSpecial, alert: noopSpecial, plotcandle: noopSpecial, plotbar: noopSpecial,
         security: { __pineSpecial: (pos) => pos[2] !== undefined ? pos[2] : scope.close },
         nz: (x, rep = 0) => mapBin(x, rep, (a, b) => isNa(a) ? b : a),
         na: (x) => mapUn(x, v => isNa(v)),
         fixnan: pineFixnan,
         iff: (cond, a, b) => {
+          if (!isSer(cond) && !isSer(a) && !isSer(b)) return cond ? a : b;
           const out = new Array(len);
           for (let i = 0; i < len; i++) out[i] = valAt(cond, i) ? valAt(a, i) : valAt(b, i);
           return mkSer(out);
@@ -3843,30 +4143,20 @@
         float: (x) => mapUn(x, v => isNa(v) ? null : Number(v)),
         int: (x) => mapUn(x, v => isNa(v) ? null : Math.trunc(Number(v))),
         bool: (x) => mapUn(x, v => !!v),
-        tostring: (x) => String(x ?? ""),
-        // Pine v4 aliases for ta.* & math.*
-        sma: taNS.sma, ema: taNS.ema, rma: taNS.rma, wma: taNS.wma, vwma: taNS.vwma, hma: taNS.hma,
-        rsi: taNS.rsi, mfi: taNS.mfi, atr: taNS.atr, cci: taNS.cci, stoch: taNS.stoch, stdev: taNS.stdev,
-        highest: taNS.highest, lowest: taNS.lowest, vwap: taNS.vwap, macd: taNS.macd, bb: taNS.bb,
-        supertrend: taNS.supertrend, dmi: taNS.dmi, crossover: taNS.crossover, crossunder: taNS.crossunder,
-        cross: taNS.cross, change: taNS.change, mom: taNS.mom, roc: taNS.roc, rising: taNS.rising,
-        falling: taNS.falling, barssince: taNS.barssince, valuewhen: taNS.valuewhen,
+        tostring: (x) => String(valAt(x, len - 1) ?? ""),
+        // Pine v4 direct aliases
+        sma: taNS.sma, ema: taNS.ema, rma: taNS.rma, wma: taNS.wma, vwma: taNS.vwma, hma: taNS.hma, alma: taNS.alma, linreg: taNS.linreg,
+        rsi: taNS.rsi, mfi: taNS.mfi, atr: taNS.atr, sar: taNS.sar, cci: taNS.cci, stoch: taNS.stoch, stdev: taNS.stdev, wpr: taNS.wpr,
+        highest: taNS.highest, lowest: taNS.lowest, highestbars: taNS.highestbars, lowestbars: taNS.lowestbars,
+        vwap: taNS.vwap, macd: taNS.macd, bb: taNS.bb, kc: taNS.kc, supertrend: taNS.supertrend, dmi: taNS.dmi,
+        crossover: taNS.crossover, crossunder: taNS.crossunder, cross: taNS.cross, change: taNS.change, mom: taNS.mom, roc: taNS.roc,
+        rising: taNS.rising, falling: taNS.falling, barssince: taNS.barssince, valuewhen: taNS.valuewhen,
         pivothigh: taNS.pivothigh, pivotlow: taNS.pivotlow, cum: taNS.cum,
         abs: mathNS.abs, round: mathNS.round, floor: mathNS.floor, ceil: mathNS.ceil,
         sqrt: mathNS.sqrt, pow: mathNS.pow, max: mathNS.max, min: mathNS.min, avg: mathNS.avg, sum: mathNS.sum
-      };
-      Object.assign(scope, directFns);
-      scope.input = Object.assign({ __pineSpecial: inputFn }, inputNS);
-      scope.input.int = { __pineSpecial: inputFn };
-      scope.input.float = { __pineSpecial: inputFn };
-      scope.input.bool = { __pineSpecial: inputFn };
-      scope.input.string = { __pineSpecial: inputFn };
-      scope.input.source = { __pineSpecial: inputFn };
-      scope.input.color = { __pineSpecial: inputFn };
-      scope.input.timeframe = { __pineSpecial: inputFn };
-      scope.strategy.entry = { __pineSpecial: strategyNS.entry };
+      });
 
-      // 1) تقطيع الكود إلى سطور منطقية (دمج السطور المقسمة بين الأقواس مثل plotshape متعدد السطور)
+      // 1) تقطيع ذكي للسطور المنطقية (يدعم السطور المستمرة بعد and / or / ? / : / , / = والأقواس المفتوحة)
       const stripLineComment = (line) => {
         let inS = null;
         for (let i = 0; i < line.length; i++) {
@@ -3877,10 +4167,6 @@
         }
         return line;
       };
-
-      const rawLines = String(code || "").replace(/\r\n?/g, "\n").split("\n");
-      const logicalLines = [];
-      let curBuf = "", curIndent = 0, parenDepth = 0, brackDepth = 0;
 
       const countDelims = (s) => {
         let inS = null, p = 0, b = 0;
@@ -3894,14 +4180,19 @@
         return { p, b };
       };
 
+      const rawLines = String(code || "").replace(/\r\n?/g, "\n").split("\n");
+      const logicalLines = [];
+      let curBuf = "", curIndent = 0, parenDepth = 0, brackDepth = 0;
+
       for (const raw of rawLines) {
         const clean = stripLineComment(raw);
         const trimmed = clean.trim();
         if (!trimmed) continue;
         const indent = clean.match(/^[\t ]*/)[0].replace(/\t/g, "    ").length;
-        const isContStart = /^(?:(?:and|or)\b|[?:+\-*/,\)\]])/.test(trimmed);
+        const prevEndsCont = /(?:(?:\band|\bor)\b|[?:+\-*/,]|:=|==|!=|<=|>=|(?<![!<>=])=(?![=>]))\s*$/.test(curBuf);
+        const curStartsCont = /^(?:(?:and|or)\b|[?:+\-*/,\)\]])/.test(trimmed);
 
-        if (curBuf && (parenDepth > 0 || brackDepth > 0 || isContStart)) {
+        if (curBuf && (parenDepth > 0 || brackDepth > 0 || curStartsCont || prevEndsCont)) {
           curBuf += " " + trimmed;
           const d = countDelims(trimmed);
           parenDepth += d.p; brackDepth += d.b;
@@ -3946,35 +4237,32 @@
           }
           const two = src.slice(i, i + 2);
           if ([":=", "==", "!=", "<=", ">=", "&&", "||", "=>"].includes(two)) {
-            toks.push({ t: "op", v: two });
-            i += 2;
-            continue;
+            toks.push({ t: "op", v: two }); i += 2; continue;
           }
-          if ("+-*/%<>=?!:,.()[]".includes(c)) {
-            toks.push({ t: "op", v: c });
-            i++;
-            continue;
-          }
+          if ("+-*/%<>=?!:,.()[]".includes(c)) { toks.push({ t: "op", v: c }); i++; continue; }
           if (/[a-zA-Z_]/.test(c)) {
             const m = src.slice(i).match(/^[a-zA-Z_][a-zA-Z0-9_]*/);
             const w = m[0];
             if (w === "and" || w === "or" || w === "not") toks.push({ t: "kw", v: w });
             else toks.push({ t: "id", v: w });
-            i += w.length;
-            continue;
+            i += w.length; continue;
           }
           i++;
         }
         return toks;
       };
 
-      // 3) Recursive-Descent Expression Evaluator
-      const evalExpr = (exprText, localScope) => {
-        const toks = tokenizePine(exprText);
+      // 3) Expression Evaluator (supports both vectorized series mode AND bar-by-bar scalar mode for recursion!)
+      const evalExprAtBar = (toks, localScope, barIdx) => {
+        // When barIdx === null -> vectorized full series; when barIdx >= 0 -> evaluate at exact bar index barIdx!
+        const scalar = barIdx !== null;
         let pos = 0;
         const peek = (k = 0) => toks[pos + k] || null;
         const next = () => toks[pos++] || null;
         const matchOp = (v) => { if (peek() && (peek().t === "op" || peek().t === "kw") && peek().v === v) { pos++; return true; } return false; };
+
+        const bin = (a, b, fn) => scalar ? fn(a, b) : mapBin(a, b, fn);
+        const un  = (a, fn)    => scalar ? fn(a)    : mapUn(a, fn);
 
         const parseTernary = () => {
           let left = parseOr();
@@ -3982,96 +4270,68 @@
             const tVal = parseTernary();
             matchOp(":");
             const fVal = parseTernary();
-            if (!isSer(left)) return left ? tVal : fVal;
+            if (scalar || !isSer(left)) return left ? tVal : fVal;
             const out = new Array(len);
             for (let i = 0; i < len; i++) out[i] = left[i] ? valAt(tVal, i) : valAt(fVal, i);
             return mkSer(out);
           }
           return left;
         };
-
         const parseOr = () => {
           let left = parseAnd();
-          while (matchOp("or") || matchOp("||")) {
-            const right = parseAnd();
-            left = mapBin(left, right, (a, b) => !!(a || b));
-          }
+          while (matchOp("or") || matchOp("||")) { const r = parseAnd(); left = bin(left, r, (a, b) => !!(a || b)); }
           return left;
         };
-
         const parseAnd = () => {
           let left = parseEq();
-          while (matchOp("and") || matchOp("&&")) {
-            const right = parseEq();
-            left = mapBin(left, right, (a, b) => !!(a && b));
-          }
+          while (matchOp("and") || matchOp("&&")) { const r = parseEq(); left = bin(left, r, (a, b) => !!(a && b)); }
           return left;
         };
-
         const parseEq = () => {
           let left = parseCmp();
           while (true) {
-            if (matchOp("==")) {
-              const r = parseCmp();
-              left = mapBin(left, r, (a, b) => a === b);
-            } else if (matchOp("!=")) {
-              const r = parseCmp();
-              left = mapBin(left, r, (a, b) => a !== b);
-            } else break;
-          }
-          return left;
-        };
-
-        const parseCmp = () => {
-          let left = parseAdd();
-          while (true) {
-            if (matchOp("<"))       { const r = parseAdd(); left = mapBin(left, r, (a, b) => !isNa(a) && !isNa(b) && a < b); }
-            else if (matchOp("<=")) { const r = parseAdd(); left = mapBin(left, r, (a, b) => !isNa(a) && !isNa(b) && a <= b); }
-            else if (matchOp(">"))  { const r = parseAdd(); left = mapBin(left, r, (a, b) => !isNa(a) && !isNa(b) && a > b); }
-            else if (matchOp(">=")) { const r = parseAdd(); left = mapBin(left, r, (a, b) => !isNa(a) && !isNa(b) && a >= b); }
+            if (matchOp("==")) { const r = parseCmp(); left = bin(left, r, (a, b) => a === b); }
+            else if (matchOp("!=")) { const r = parseCmp(); left = bin(left, r, (a, b) => a !== b); }
             else break;
           }
           return left;
         };
-
+        const parseCmp = () => {
+          let left = parseAdd();
+          while (true) {
+            if (matchOp("<"))       { const r = parseAdd(); left = bin(left, r, (a, b) => !isNa(a) && !isNa(b) && a < b); }
+            else if (matchOp("<=")) { const r = parseAdd(); left = bin(left, r, (a, b) => !isNa(a) && !isNa(b) && a <= b); }
+            else if (matchOp(">"))  { const r = parseAdd(); left = bin(left, r, (a, b) => !isNa(a) && !isNa(b) && a > b); }
+            else if (matchOp(">=")) { const r = parseAdd(); left = bin(left, r, (a, b) => !isNa(a) && !isNa(b) && a >= b); }
+            else break;
+          }
+          return left;
+        };
         const parseAdd = () => {
           let left = parseMul();
           while (true) {
-            if (matchOp("+")) {
-              const r = parseMul();
-              left = mapBin(left, r, (a, b) => (typeof a === "string" || typeof b === "string") ? String(a ?? "") + String(b ?? "") : (isNa(a) || isNa(b)) ? null : toNum(a) + toNum(b));
-            } else if (matchOp("-")) {
-              const r = parseMul();
-              left = mapBin(left, r, (a, b) => (isNa(a) || isNa(b)) ? null : toNum(a) - toNum(b));
-            } else break;
+            if (matchOp("+")) { const r = parseMul(); left = bin(left, r, (a, b) => (typeof a === "string" || typeof b === "string") ? String(a ?? "") + String(b ?? "") : (isNa(a) || isNa(b)) ? null : toNum(a) + toNum(b)); }
+            else if (matchOp("-")) { const r = parseMul(); left = bin(left, r, (a, b) => (isNa(a) || isNa(b)) ? null : toNum(a) - toNum(b)); }
+            else break;
           }
           return left;
         };
-
         const parseMul = () => {
           let left = parseUnary();
           while (true) {
-            if (matchOp("*")) {
-              const r = parseUnary();
-              left = mapBin(left, r, (a, b) => (isNa(a) || isNa(b)) ? null : toNum(a) * toNum(b));
-            } else if (matchOp("/")) {
-              const r = parseUnary();
-              left = mapBin(left, r, (a, b) => (isNa(a) || isNa(b) || toNum(b) === 0) ? null : toNum(a) / toNum(b));
-            } else if (matchOp("%")) {
-              const r = parseUnary();
-              left = mapBin(left, r, (a, b) => (isNa(a) || isNa(b) || toNum(b) === 0) ? null : toNum(a) % toNum(b));
-            } else break;
+            if (matchOp("*")) { const r = parseUnary(); left = bin(left, r, (a, b) => (isNa(a) || isNa(b)) ? null : toNum(a) * toNum(b)); }
+            else if (matchOp("/")) { const r = parseUnary(); left = bin(left, r, (a, b) => (isNa(a) || isNa(b) || toNum(b) === 0) ? null : toNum(a) / toNum(b)); }
+            else if (matchOp("%")) { const r = parseUnary(); left = bin(left, r, (a, b) => (isNa(a) || isNa(b) || toNum(b) === 0) ? null : toNum(a) % toNum(b)); }
+            else break;
           }
           return left;
         };
-
         const parseUnary = () => {
-          if (matchOp("not") || matchOp("!")) return mapUn(parseUnary(), a => !a);
-          if (matchOp("-")) return mapUn(parseUnary(), a => isNa(a) ? null : -toNum(a));
+          if (matchOp("not") || matchOp("!")) return un(parseUnary(), a => !a);
+          if (matchOp("-")) return un(parseUnary(), a => isNa(a) ? null : -toNum(a));
           if (matchOp("+")) return parseUnary();
           return parsePostfix();
         };
-
         const parsePostfix = () => {
           let val = parsePrimary();
           while (peek()) {
@@ -4083,39 +4343,51 @@
               if (!matchOp(")")) {
                 while (peek()) {
                   if (peek().t === "id" && peek(1) && peek(1).t === "op" && peek(1).v === "=") {
-                    const kName = next().v;
-                    next(); // "="
+                    const kName = next().v; next();
                     kwArgs[kName] = parseTernary();
                   } else {
                     posArgs.push(parseTernary());
                   }
                   if (matchOp(",")) continue;
-                  matchOp(")");
-                  break;
+                  matchOp(")"); break;
                 }
               }
               if (val && typeof val === "object" && typeof val.__pineSpecial === "function") {
                 val = val.__pineSpecial(posArgs, kwArgs);
               } else if (val && typeof val === "object" && val.__pineUserFn) {
                 const sub = Object.create(localScope);
-                val.params.forEach((pn, idx) => { sub[pn] = posArgs[idx] !== undefined ? posArgs[idx] : kwArgs[pn]; });
-                val = evalExpr(val.body, sub);
+                val.params.forEach((pn, idx) => { sub[pn] = posArgs[idx] !== undefined ? posArgs[idx] : (kwArgs[pn] !== undefined ? kwArgs[pn] : val.defaults[idx]); });
+                if (val.bodyLines) {
+                  val = execBlock(val.bodyLines, sub);
+                } else {
+                  val = evalExprAtBar(tokenizePine(val.body), sub, barIdx);
+                }
               } else if (typeof val === "function") {
-                val = val(...posArgs);
+                const callArgs = Object.keys(kwArgs).length ? [...posArgs, ...Object.values(kwArgs)] : posArgs;
+                const res = val(...callArgs);
+                if (scalar && isSer(res)) {
+                  val = (peek() && peek().t === "op" && peek().v === "[") ? { __rawRef: res } : res[barIdx];
+                } else {
+                  val = res;
+                }
               } else {
                 val = null;
               }
             } else if (matchOp("[")) {
               const idxVal = parseTernary();
               matchOp("]");
-              val = pineShift(val, idxVal);
-            } else {
-              break;
-            }
+              if (scalar) {
+                const off = Math.max(0, Math.floor(Number(idxVal) || 0));
+                if (val && val.__rawRef) val = (barIdx - off >= 0) ? val.__rawRef[barIdx - off] : null;
+                else if (isSer(val)) val = (barIdx - off >= 0) ? val[barIdx - off] : null;
+              } else {
+                val = pineShift(val, idxVal);
+              }
+            } else break;
           }
+          if (scalar && val && val.__rawRef) val = val.__rawRef[barIdx];
           return val;
         };
-
         const parsePrimary = () => {
           const tok = peek();
           if (!tok) return null;
@@ -4124,96 +4396,263 @@
           if (matchOp("[")) {
             const arr = [];
             if (!matchOp("]")) {
-              while (peek()) {
-                arr.push(parseTernary());
-                if (matchOp(",")) continue;
-                matchOp("]");
-                break;
-              }
+              while (peek()) { arr.push(parseTernary()); if (matchOp(",")) continue; matchOp("]"); break; }
             }
             return arr;
           }
           if (tok.t === "id") {
             next();
-            return tok.v in localScope ? localScope[tok.v] : null;
+            const v = tok.v in localScope ? localScope[tok.v] : null;
+            if (scalar && isSer(v)) {
+              // If followed by `[`, keep reference to series so `[1]` looks up barIdx-1!
+              if (peek() && peek().t === "op" && peek().v === "[") return { __rawRef: v };
+              return v[barIdx];
+            }
+            return v;
           }
           next();
           return null;
         };
-
         return parseTernary();
       };
 
-      // 4) تنفيذ السطور المنطقية
-      for (let idx = 0; idx < logicalLines.length; idx++) {
-        const { indent, text } = logicalLines[idx];
+      const evalExpr = (exprText, localScope) => evalExprAtBar(tokenizePine(exprText), localScope, null);
 
-        // تعريف دالة سطر واحد: myFn(x, y) => expr
-        const fnDef = text.match(/^([a-zA-Z_]\w*)\s*\(([^)]*)\)\s*=>\s*(.+)$/);
-        if (fnDef) {
-          const params = fnDef[2].split(",").map(s => s.trim().split(/\s+/).pop()).filter(Boolean);
-          scope[fnDef[1]] = { __pineUserFn: true, params, body: fnDef[3] };
-          continue;
-        }
+      const RESERVED_CALLS = new Set(["plot","plotshape","plotchar","hline","study","indicator","strategy","bgcolor","barcolor","fill","alertcondition","alert","plotcandle","plotbar"]);
 
-        // جملة if (سطر واحد أو بلوك بمسافة بادئة)
-        const ifMatch = text.match(/^if\s+(.+)$/);
-        if (ifMatch) {
-          const condExpr = ifMatch[1].trim();
-          const condVal = toSer(evalExpr(condExpr, scope));
-          const prevMask = activeCondMask;
-          activeCondMask = prevMask ? mapBin(prevMask, condVal, (a, b) => !!(a && b)) : condVal;
-          // تنفيذ السطور التابعة بالمسافة البادئة
-          while (idx + 1 < logicalLines.length && logicalLines[idx + 1].indent > indent) {
-            idx++;
-            const subLine = logicalLines[idx].text;
-            const subAssign = subLine.match(/^(?:(?:var|varip)\s+)?(?:(?:float|int|bool|string|color|series)\s+)?([a-zA-Z_]\w*)\s*(:?=)(?!=)\s*(.+)$/);
-            if (subAssign) {
-              const vName = subAssign[1], rhs = evalExpr(subAssign[3], scope);
-              const oldV = vName in scope ? scope[vName] : null;
-              scope[vName] = mapBin(activeCondMask, rhs, (c, r) => c ? r : null);
-              if (oldV !== null) {
-                const merged = new Array(len);
-                for (let k = 0; k < len; k++) merged[k] = activeCondMask[k] ? valAt(rhs, k) : valAt(oldV, k);
-                scope[vName] = mkSer(merged);
+      // Helper: execute a list of {indent, text} statements cleanly (supports if/else if/else, switch, multi-line fn, bar-by-bar recursion)
+      const execBlock = (lines, localScope) => {
+        let lastVal = null;
+        for (let idx = 0; idx < lines.length; idx++) {
+          const { indent, text } = lines[idx];
+          try {
+            // 1) Multi-line or single-line user function definition: fn(a, b=1) => ...
+            const fnDef = text.match(/^(?:export\s+)?([a-zA-Z_]\w*)\s*\(([^)]*)\)\s*=>\s*(.*)$/);
+            if (fnDef) {
+              const rawParams = fnDef[2].split(",").map(s => s.trim()).filter(Boolean);
+              const params = [], defaults = [];
+              for (const rp of rawParams) {
+                const eqIdx = rp.indexOf("=");
+                if (eqIdx !== -1) {
+                  params.push(rp.slice(0, eqIdx).trim().split(/\s+/).pop());
+                  defaults.push(evalExpr(rp.slice(eqIdx + 1).trim(), localScope));
+                } else {
+                  params.push(rp.split(/\s+/).pop());
+                  defaults.push(null);
+                }
               }
-            } else {
-              evalExpr(subLine, scope);
+              const inlineBody = fnDef[3].trim();
+              if (inlineBody) {
+                localScope[fnDef[1]] = { __pineUserFn: true, params, defaults, body: inlineBody };
+              } else {
+                const bodyLines = [];
+                while (idx + 1 < lines.length && lines[idx + 1].indent > indent) { idx++; bodyLines.push(lines[idx]); }
+                localScope[fnDef[1]] = { __pineUserFn: true, params, defaults, bodyLines };
+              }
+              continue;
             }
-          }
-          activeCondMask = prevMask;
-          continue;
+
+            // 2) for loop: for i = a to b
+            const forMatch = text.match(/^for\s+([a-zA-Z_]\w*)\s*=\s*(.+?)\s+to\s+(.+)$/);
+            if (forMatch) {
+              const vName = forMatch[1];
+              const startV = Math.round(Number(valAt(evalExpr(forMatch[2], localScope), len - 1)) || 0);
+              const endV = Math.round(Number(valAt(evalExpr(forMatch[3], localScope), len - 1)) || 0);
+              const bodyLines = [];
+              while (idx + 1 < lines.length && lines[idx + 1].indent > indent) { idx++; bodyLines.push(lines[idx]); }
+              const maxIter = Math.min(endV, startV + 60);
+              for (let k = startV; k <= maxIter; k++) {
+                localScope[vName] = k;
+                lastVal = execBlock(bodyLines, localScope);
+              }
+              continue;
+            }
+
+            // 3) if / else if / else block chain!
+            const ifMatch = text.match(/^if\s+(.+)$/);
+            if (ifMatch) {
+              const branches = [];
+              const readIndented = () => {
+                const blk = [];
+                while (idx + 1 < lines.length && lines[idx + 1].indent > indent) { idx++; blk.push(lines[idx]); }
+                return blk;
+              };
+              branches.push({ condText: ifMatch[1].trim(), blk: readIndented() });
+              while (idx + 1 < lines.length && lines[idx + 1].indent === indent && /^(?:else\s+if\s+|else\b)/.test(lines[idx + 1].text)) {
+                idx++;
+                const t = lines[idx].text;
+                const ei = t.match(/^else\s+if\s+(.+)$/);
+                if (ei) branches.push({ condText: ei[1].trim(), blk: readIndented() });
+                else branches.push({ condText: null, blk: readIndented() });
+              }
+
+              // Check if any branch mutates a variable with `:=` referencing itself -> run bar-by-bar!
+              const mutatedVars = new Set();
+              let isSimpleAssignChain = true;
+              for (const br of branches) {
+                for (const st of br.blk) {
+                  const am = st.text.match(/^([a-zA-Z_]\w*)\s*:=\s*(.+)$/);
+                  if (am) mutatedVars.add(am[1]);
+                  else isSimpleAssignChain = false;
+                }
+              }
+
+              const prevMask = activeCondMask;
+              if (mutatedVars.size > 0 && isSimpleAssignChain) {
+                // Bar-by-bar stateful execution of if / else if / else!
+                for (const vn of mutatedVars) {
+                  const cur = localScope[vn];
+                  localScope[vn] = isSer(cur) ? mkSer(cur.slice()) : mkSer(new Array(len).fill(cur ?? null));
+                }
+                const compiledBranches = branches.map(br => ({
+                  condToks: br.condText ? tokenizePine(br.condText) : null,
+                  stmts: br.blk.map(st => {
+                    const am = st.text.match(/^([a-zA-Z_]\w*)\s*:=\s*(.+)$/);
+                    return { v: am[1], toks: tokenizePine(am[2]) };
+                  })
+                }));
+                for (let i = 0; i < len; i++) {
+                  if (prevMask && !prevMask[i]) continue;
+                  // Carry forward previous bar value for `var` semantics if needed
+                  for (const vn of mutatedVars) {
+                    if (i > 0 && localScope[vn][i] === null && localScope[vn][i - 1] !== null) {
+                      localScope[vn][i] = localScope[vn][i - 1];
+                    }
+                  }
+                  for (const br of compiledBranches) {
+                    const matched = br.condToks ? !!evalExprAtBar(br.condToks, localScope, i) : true;
+                    if (matched) {
+                      for (const st of br.stmts) localScope[st.v][i] = evalExprAtBar(st.toks, localScope, i);
+                      break;
+                    }
+                  }
+                }
+              } else {
+                // Vectorized if / else if / else
+                let takenMask = mkSer(new Array(len).fill(false));
+                for (const br of branches) {
+                  const rawCond = br.condText ? toSer(evalExpr(br.condText, localScope)) : mkSer(new Array(len).fill(true));
+                  const branchMask = mkSer(new Array(len));
+                  for (let i = 0; i < len; i++) {
+                    const m = !!rawCond[i] && !takenMask[i] && (!prevMask || !!prevMask[i]);
+                    branchMask[i] = m;
+                    if (m) takenMask[i] = true;
+                  }
+                  activeCondMask = branchMask;
+                  execBlock(br.blk, localScope);
+                }
+                activeCondMask = prevMask;
+              }
+              continue;
+            }
+
+            // 4) Tuple destructuring: [a, b, c] = ta.macd(...)
+            const tupleMatch = text.match(/^\[([^\]]+)\]\s*=\s*(.+)$/);
+            if (tupleMatch) {
+              const names = tupleMatch[1].split(",").map(s => s.trim());
+              const vals = evalExpr(tupleMatch[2], localScope);
+              if (Array.isArray(vals)) {
+                names.forEach((nm, k) => { if (nm && nm !== "_") localScope[nm] = vals[k] !== undefined ? vals[k] : null; });
+              }
+              continue;
+            }
+
+            // 5) Variable assignment (with bar-by-bar recursion detection for `x := ... x[1] ...`!)
+            const assignMatch = text.match(/^(?:(?:var|varip)\s+)?(?:(?:simple|series|input|const)\s+)?(?:(?:float|int|bool|string|color|line|label|box|table)\s+)?([a-zA-Z_]\w*)\s*(:?=)(?!=)\s*(.+)$/);
+            if (assignMatch && !RESERVED_CALLS.has(assignMatch[1])) {
+              const varName = assignMatch[1], op = assignMatch[2], rhsText = assignMatch[3].trim();
+
+              // Support `x = if cond\n ... \n else\n ...`
+              if (/^if\s+/.test(rhsText) && idx + 1 < lines.length && lines[idx + 1].indent > indent) {
+                const cond1 = toSer(evalExpr(rhsText.replace(/^if\s+/, ""), localScope));
+                const blk1 = [];
+                while (idx + 1 < lines.length && lines[idx + 1].indent > indent) { idx++; blk1.push(lines[idx]); }
+                const v1 = execBlock(blk1, Object.create(localScope));
+                let v2 = null;
+                if (idx + 1 < lines.length && lines[idx + 1].indent === indent && /^else\b/.test(lines[idx + 1].text)) {
+                  idx++;
+                  const blk2 = [];
+                  while (idx + 1 < lines.length && lines[idx + 1].indent > indent) { idx++; blk2.push(lines[idx]); }
+                  v2 = execBlock(blk2, Object.create(localScope));
+                }
+                const merged = new Array(len);
+                for (let i = 0; i < len; i++) merged[i] = cond1[i] ? valAt(v1, i) : valAt(v2, i);
+                localScope[varName] = mkSer(merged);
+                lastVal = localScope[varName];
+                continue;
+              }
+
+              // Support `x = switch expr\n case => val`
+              if (/^switch\b/.test(rhsText) && idx + 1 < lines.length && lines[idx + 1].indent > indent) {
+                const swExprTxt = rhsText.replace(/^switch\b/, "").trim();
+                const swVal = swExprTxt ? evalExpr(swExprTxt, localScope) : null;
+                const cases = [];
+                while (idx + 1 < lines.length && lines[idx + 1].indent > indent) {
+                  idx++;
+                  const cm = lines[idx].text.match(/^(.+?)\s*=>\s*(.+)$/);
+                  if (cm) cases.push({ k: cm[1].trim(), v: cm[2].trim() });
+                  else cases.push({ k: null, v: lines[idx].text.trim() });
+                }
+                let picked = null;
+                for (const c of cases) {
+                  if (c.k === null) { picked = evalExpr(c.v, localScope); break; }
+                  const kv = evalExpr(c.k, localScope);
+                  if (swExprTxt ? (valAt(swVal, len - 1) === valAt(kv, len - 1)) : !!valAt(kv, len - 1)) {
+                    picked = evalExpr(c.v, localScope); break;
+                  }
+                }
+                localScope[varName] = picked;
+                lastVal = picked;
+                continue;
+              }
+
+              // Detect self-referential recurrence: `x := ... x[1] ...` (UT Bot, trailing stops, SuperTrend, trend flips!)
+              const selfRefRe = new RegExp("\\b" + varName + "\\s*\\[");
+              if (selfRefRe.test(rhsText)) {
+                const seed = localScope[varName];
+                const arr = mkSer(new Array(len).fill(isSer(seed) ? null : (seed ?? null)));
+                if (isSer(seed)) for (let i = 0; i < len; i++) arr[i] = seed[i];
+                localScope[varName] = arr;
+                const rhsToks = tokenizePine(rhsText);
+                for (let i = 0; i < len; i++) {
+                  if (activeCondMask && !activeCondMask[i]) {
+                    if (i > 0 && arr[i] === null) arr[i] = arr[i - 1];
+                    continue;
+                  }
+                  arr[i] = evalExprAtBar(rhsToks, localScope, i);
+                }
+                lastVal = arr;
+                continue;
+              }
+
+              const rhsVal = evalExpr(rhsText, localScope);
+              if (activeCondMask) {
+                const oldV = varName in localScope ? localScope[varName] : null;
+                const merged = new Array(len);
+                for (let i = 0; i < len; i++) merged[i] = activeCondMask[i] ? valAt(rhsVal, i) : valAt(oldV, i);
+                localScope[varName] = mkSer(merged);
+              } else {
+                localScope[varName] = rhsVal;
+              }
+              lastVal = localScope[varName];
+              continue;
+            }
+
+            // 6) Direct expression / call (plot, plotshape, label.new, line.new, indicator...)
+            lastVal = evalExpr(text, localScope);
+          } catch {}
         }
+        return lastVal;
+      };
 
-        // تفكيك مصفوفة (Tuple): [macdLine, signalLine, histLine] = ta.macd(...)
-        const tupleMatch = text.match(/^\[([^\]]+)\]\s*=\s*(.+)$/);
-        if (tupleMatch) {
-          const names = tupleMatch[1].split(",").map(s => s.trim());
-          const vals = evalExpr(tupleMatch[2], scope);
-          if (Array.isArray(vals)) {
-            names.forEach((nm, k) => { if (nm && nm !== "_") scope[nm] = vals[k] !== undefined ? vals[k] : null; });
-          }
-          continue;
-        }
+      execBlock(logicalLines, scope);
 
-        // إسناد متغير: [var] [type] name = expr أو name := expr
-        const assignMatch = text.match(/^(?:(?:var|varip)\s+)?(?:(?:simple|series|input|const)\s+)?(?:(?:float|int|bool|string|color|line|label)\s+)?([a-zA-Z_]\w*)\s*(:?=)(?!=)\s*(.+)$/);
-        if (assignMatch && !/^(==|!=|<=|>=)/.test(assignMatch[2])) {
-          const varName = assignMatch[1];
-          // لا تخلط بين f(x=1) وبين إسناد متغير
-          if (!["plot", "plotshape", "plotchar", "hline", "study", "indicator", "strategy", "bgcolor", "barcolor", "fill", "alertcondition"].includes(varName)) {
-            scope[varName] = evalExpr(assignMatch[3], scope);
-            continue;
-          }
-        }
-
-        // تنفيذ تعبير مباشر (مثل plot(...) أو plotshape(...) أو study(...))
-        evalExpr(text, scope);
-      }
-
-      if (pineTitle || signalsAdded > 0) {
-        env.log(`Pine Script${pineTitle ? " (" + pineTitle + ")" : ""}: ${signalsAdded} إشارة`);
-      }
+      const parts = [];
+      if (plotsAdded) parts.push(`${plotsAdded} خطوط`);
+      if (signalsAdded) parts.push(`${signalsAdded} إشارة`);
+      if (linesAdded) parts.push(`${linesAdded} مستويات`);
+      env.log(`Pine${pineTitle ? " (" + pineTitle + ")" : ""}: ${parts.length ? parts.join(" • ") : "0 رسومات (تأكد من وجود plot أو plotshape)"}`);
+      return { pineTitle, plotsAdded, signalsAdded, linesAdded };
     }
 
     function runActiveProScripts(previewOverride = null) {
@@ -4257,10 +4696,16 @@
               title: p.opts.title || ""
             });
             const data = [];
+            const cols = Array.isArray(p.opts.colors) ? p.opts.colors : null;
             for (let i = 0; i < currentProBars.length; i++) {
               const v = p.values[i];
-              if (Number.isFinite(v)) data.push({ time: currentProBars[i].time, value: v });
-              else data.push({ time: currentProBars[i].time });
+              if (Number.isFinite(v)) {
+                const pt = { time: currentProBars[i].time, value: v };
+                if (cols && cols[i]) pt.color = cols[i];
+                data.push(pt);
+              } else {
+                data.push({ time: currentProBars[i].time });
+              }
             }
             series.setData(data);
             proOverlaySeries.push(series);
@@ -4319,11 +4764,12 @@
         let anchorSeries = null;
         allPaneHists.forEach(h => {
           const hs = proSubChart.addHistogramSeries({ priceLineVisible: false, lastValueVisible: false, title: h.opts.title || "" });
+          const cols = Array.isArray(h.opts.colors) ? h.opts.colors : null;
           const data = [];
           for (let i = 0; i < currentProBars.length; i++) {
             const v = h.values[i];
             if (Number.isFinite(v)) {
-              data.push({ time: currentProBars[i].time, value: v, color: v >= 0 ? (h.opts.upColor || "rgba(16,185,129,0.55)") : (h.opts.downColor || "rgba(244,63,94,0.55)") });
+              data.push({ time: currentProBars[i].time, value: v, color: (cols && cols[i]) || (v >= 0 ? (h.opts.upColor || "rgba(16,185,129,0.55)") : (h.opts.downColor || "rgba(244,63,94,0.55)")) });
             } else data.push({ time: currentProBars[i].time });
           }
           hs.setData(data);
@@ -4341,11 +4787,15 @@
             crosshairMarkerVisible: false,
             title: p.opts.title || ""
           });
+          const cols = Array.isArray(p.opts.colors) ? p.opts.colors : null;
           const data = [];
           for (let i = 0; i < currentProBars.length; i++) {
             const v = p.values[i];
-            if (Number.isFinite(v)) data.push({ time: currentProBars[i].time, value: v });
-            else data.push({ time: currentProBars[i].time });
+            if (Number.isFinite(v)) {
+              const pt = { time: currentProBars[i].time, value: v };
+              if (cols && cols[i]) pt.color = cols[i];
+              data.push(pt);
+            } else data.push({ time: currentProBars[i].time });
           }
           ls.setData(data);
           proSubSeries.push(ls);
@@ -4398,8 +4848,8 @@
         const sells = allMarkers.filter(m => m.shape === "arrowDown").length;
         con.className = "pro-console ok";
         con.textContent = allLogs.length
-          ? `✅ ${allLogs.join(" • ")}`
-          : `✅ تم تشغيل ${scriptsToRun.length} مؤشر — ${buys} إشارة شراء | ${sells} إشارة بيع | ${proPriceLines.length} خطوط سعرية.`;
+          ? `✅ ${allLogs.join(" | ")}`
+          : `✅ تم تشغيل ${scriptsToRun.length} مؤشر — ${proOverlaySeries.length} خطوط | ${buys} شراء | ${sells} بيع`;
       }
     }
 
@@ -5041,6 +5491,7 @@
       if (!force && state.moversData && Date.now() - (state.moversFetchedAt || 0) < 7000) {
         renderMarketPulse(state.moversData);
         if (state.moversData.indices) renderIndicesLive(state.moversData.indices);
+        renderEgxHeatmap();
         return renderMoversList();
       }
       if (!silent) {
@@ -5070,12 +5521,213 @@
         if (data.indices) renderIndicesLive(data.indices);
         renderMarketPulse(data);
         renderMoversList();
+        renderEgxHeatmap();
       } catch {
         if (!silent) {
           state.moversData = null;
           renderMoversTvFallback();
         }
       }
+    }
+
+    // 8.55 الخريطة الحرارية التفاعلية للبورصة المصرية (Squarified Treemap حسب القطاعات)
+    const HM_SECTOR_EN_TO_AR = {
+      "Finance": "بنوك وخدمات مالية", "Financial": "بنوك وخدمات مالية",
+      "Real Estate": "عقارات", "Process Industries": "كيماويات وأسمدة",
+      "Non-Energy Minerals": "مواد بناء ومعادن", "Producer Manufacturing": "صناعة ومقاولات",
+      "Industrial Services": "مقاولات وخدمات", "Consumer Non-Durables": "أغذية ومشروبات",
+      "Health Technology": "رعاية صحية وأدوية", "Health Services": "رعاية صحية وأدوية",
+      "Communications": "اتصالات وتكنولوجيا", "Technology Services": "اتصالات وتكنولوجيا",
+      "Energy Minerals": "طاقة وبترول", "Utilities": "طاقة ومرافق",
+      "Transportation": "شحن وموانئ", "Consumer Services": "سياحة وتعليم",
+      "Retail Trade": "تجارة وتوزيع", "Distribution Services": "تجارة وتوزيع"
+    };
+
+    function getHeatmapSectorAr(ticker, sectorEn) {
+      const info = STOCK_MAP[ticker];
+      if (info && info.sector) {
+        const s = info.sector;
+        if (s.includes("بنوك")) return "بنوك";
+        if (s.includes("عقار")) return "عقارات";
+        if (s.includes("خدمات مالية") || s.includes("استثمار") || s.includes("تأمين")) return "خدمات مالية";
+        if (s.includes("كيماو") || s.includes("أسمدة")) return "كيماويات وأسمدة";
+        if (s.includes("أغذية") || s.includes("مطاحن") || s.includes("زراعة")) return "أغذية ومشروبات";
+        if (s.includes("أدوية") || s.includes("رعاية صحية")) return "أدوية ورعاية صحية";
+        if (s.includes("صناعة") || s.includes("مقاولات") || s.includes("مواد بناء") || s.includes("منسوجات") || s.includes("تعبئة")) return "صناعة ومقاولات";
+        if (s.includes("تكنولوجيا") || s.includes("اتصالات") || s.includes("تعليم")) return "تكنولوجيا واتصالات";
+        if (s.includes("طاقة") || s.includes("بترول") || s.includes("تعدين") || s.includes("موارد")) return "طاقة وموارد";
+        if (s.includes("شحن") || s.includes("سياحة") || s.includes("تجارة")) return "شحن وسياحة";
+      }
+      return HM_SECTOR_EN_TO_AR[sectorEn] || "قطاعات أخرى";
+    }
+
+    function heatmapColorForPct(pct) {
+      const c = Number(pct || 0);
+      if (c >= 4.5)  return "#16a34a";
+      if (c >= 2.5)  return "#15803d";
+      if (c >= 1.0)  return "#166534";
+      if (c > 0.05)  return "#14532d";
+      if (c <= -4.5) return "#ef4444";
+      if (c <= -2.5) return "#dc2626";
+      if (c <= -1.0) return "#991b1b";
+      if (c < -0.05) return "#7f1d1d";
+      return "#334155";
+    }
+
+    // Squarified Treemap layout (returns rects [{ item, x, y, w, h }])
+    function layoutTreemap(items, x, y, w, h) {
+      if (!items.length || w <= 1 || h <= 1) return [];
+      const sorted = [...items].sort((a, b) => b.weight - a.weight);
+      const total = sorted.reduce((s, it) => s + it.weight, 0);
+      if (total <= 0) return [];
+      const areaScale = (w * h) / total;
+      const rects = [];
+
+      let rx = x, ry = y, rw = w, rh = h;
+      let idx = 0;
+
+      const worstAspect = (row, side) => {
+        if (!row.length || side <= 0) return Infinity;
+        const s = row.reduce((acc, r) => acc + r.area, 0);
+        const mx = Math.max(...row.map(r => r.area));
+        const mn = Math.min(...row.map(r => r.area));
+        if (mn <= 0) return Infinity;
+        return Math.max((side * side * mx) / (s * s), (s * s) / (side * side * mn));
+      };
+
+      const scaled = sorted.map(it => ({ item: it, area: it.weight * areaScale }));
+      while (idx < scaled.length && rw > 0.5 && rh > 0.5) {
+        const shortSide = Math.min(rw, rh);
+        const row = [scaled[idx++]];
+        let best = worstAspect(row, shortSide);
+        while (idx < scaled.length) {
+          const cand = [...row, scaled[idx]];
+          const wNew = worstAspect(cand, shortSide);
+          if (wNew <= best) { row.push(scaled[idx++]); best = wNew; }
+          else break;
+        }
+        const rowArea = row.reduce((acc, r) => acc + r.area, 0);
+        if (rw >= rh) {
+          const colW = rowArea / rh;
+          let cy = ry;
+          for (const r of row) {
+            const tileH = r.area / Math.max(0.01, colW);
+            rects.push({ item: r.item, x: rx, y: cy, w: colW, h: tileH });
+            cy += tileH;
+          }
+          rx += colW; rw -= colW;
+        } else {
+          const rowH = rowArea / rw;
+          let cx = rx;
+          for (const r of row) {
+            const tileW = r.area / Math.max(0.01, rowH);
+            rects.push({ item: r.item, x: cx, y: ry, w: tileW, h: rowH });
+            cx += tileW;
+          }
+          ry += rowH; rh -= rowH;
+        }
+      }
+      return rects;
+    }
+
+    state.hmFilter = "ALL";
+    state.hmSizeBy = "turnover";
+
+    function renderEgxHeatmap() {
+      const stage = $("egxHeatmapStage");
+      if (!stage) return;
+      const data = state.moversData;
+      if (!data) return;
+
+      let pool = Array.isArray(data.heatmap) && data.heatmap.length
+        ? data.heatmap
+        : (() => {
+            const m = new Map();
+            [...(data.active || []), ...(data.gainers || []), ...(data.losers || [])].forEach(r => {
+              if (r?.ticker && !m.has(r.ticker)) {
+                m.set(r.ticker, { t: r.ticker, n: r.name, p: r.price, c: r.change, tv: r.turnover || 1, mc: r.marketCap || 0, s: r.sectorEn || "", l: r.logoid || "" });
+              }
+            });
+            return Array.from(m.values());
+          })();
+
+      pool = pool.filter(r => {
+        if (!isValidEgxTicker(r.t)) return false;
+        const info = STOCK_MAP[r.t];
+        if (state.hmFilter === "EGX30")   return !!(info && info.groups.includes("EGX30"));
+        if (state.hmFilter === "EGX70")   return !!(info && info.groups.includes("EGX70"));
+        if (state.hmFilter === "SHARIAH") return !!(info && info.shariah);
+        return true;
+      });
+
+      const limit = state.hmFilter === "ALL" ? (document.body.classList.contains("hm-fullscreen") ? 95 : 55) : 70;
+      const getWeight = (r) => {
+        if (state.hmSizeBy === "equal") return 1;
+        if (state.hmSizeBy === "mcap") return Math.max(1e6, Number(r.mc || r.tv || 1e6));
+        return Math.max(50000, Number(r.tv || 50000));
+      };
+
+      const picked = [...pool]
+        .sort((a, b) => getWeight(b) - getWeight(a))
+        .slice(0, limit)
+        .map(r => ({ ...r, weight: Math.pow(getWeight(r), state.hmSizeBy === "equal" ? 1 : 0.62), sec: getHeatmapSectorAr(r.t, r.s) }));
+
+      if (!picked.length) {
+        stage.innerHTML = `<div class="movers-empty" style="padding-top:160px;">لا توجد أسهم لهذا التصنيف حالياً</div>`;
+        return;
+      }
+
+      const W = stage.clientWidth || 350;
+      const H = stage.clientHeight || 430;
+
+      // Group by Arabic sector
+      const secMap = new Map();
+      for (const it of picked) {
+        if (!secMap.has(it.sec)) secMap.set(it.sec, { name: it.sec, weight: 0, items: [] });
+        const g = secMap.get(it.sec);
+        g.items.push(it);
+        g.weight += it.weight;
+      }
+      const sectors = Array.from(secMap.values());
+      const secRects = layoutTreemap(sectors, 0, 0, W, H);
+
+      const headerH = 19;
+      const htmlParts = [];
+      for (const sr of secRects) {
+        const showHead = sr.h >= 46 && sr.w >= 48;
+        const innerY = showHead ? headerH : 0;
+        const innerH = Math.max(1, sr.h - innerY);
+        const tileRects = layoutTreemap(sr.item.items, 0, innerY, sr.w, innerH);
+
+        const tilesHtml = tileRects.map(tr => {
+          const it = tr.item;
+          const bg = heatmapColorForPct(it.c);
+          const sign = it.c > 0 ? "+" : "";
+          const chgStr = `${sign}${Number(it.c).toFixed(2)}%`;
+          const showLogo = tr.w >= 64 && tr.h >= 66 && (it.l || state.stockLogos[it.t]);
+          const showChg = tr.w >= 38 && tr.h >= 30;
+          const showTk = tr.w >= 26 && tr.h >= 16;
+          const tkSize = Math.max(8, Math.min(14, Math.floor(Math.min(tr.w / 4.2, tr.h / 2.8))));
+          const chgSize = Math.max(7.5, Math.min(11.5, tkSize - 1.5));
+          const lid = (it.l || state.stockLogos[it.t] || "").replace(/[^a-zA-Z0-9/_-]/g, "");
+          const logoHtml = showLogo && lid
+            ? `<span class="hm-tile-logo"><img src="https://s3-symbol-logo.tradingview.com/${lid}.svg" alt="" loading="lazy" onerror="this.parentElement.style.display='none'"></span>`
+            : "";
+          return `<div class="hm-tile" data-hm-ticker="${it.t}" title="${it.n} (${it.t}) • ${Number(it.p).toFixed(2)} ج.م (${chgStr})" style="left:${tr.x.toFixed(1)}px;top:${tr.y.toFixed(1)}px;width:${tr.w.toFixed(1)}px;height:${tr.h.toFixed(1)}px;background:${bg};">
+            ${logoHtml}
+            ${showTk ? `<span class="hm-tile-tk" style="font-size:${tkSize}px;">${it.t}</span>` : ""}
+            ${showChg ? `<span class="hm-tile-chg" style="font-size:${chgSize}px;">${chgStr}</span>` : ""}
+          </div>`;
+        }).join("");
+
+        htmlParts.push(`<div class="hm-sector" style="left:${sr.x.toFixed(1)}px;top:${sr.y.toFixed(1)}px;width:${sr.w.toFixed(1)}px;height:${sr.h.toFixed(1)}px;">
+          ${showHead ? `<div class="hm-sector-lbl">${sr.item.name}</div>` : ""}
+          ${tilesHtml}
+        </div>`);
+      }
+
+      stage.innerHTML = htmlParts.join("");
+      if ($("hmCountMeta")) $("hmCountMeta").textContent = `عرض ${picked.length} سهم • اضغط على أي سهم لفتح الشارت`;
     }
 
     // 8.6 سحب أسعار الذهب (عيار 21 و 24 والأونصة) والدولار مقابل الجنيه
@@ -5612,6 +6264,30 @@
       if ($("cleanLoading")) $("cleanLoading").classList.remove("show");
       if (state.ticker !== t || state.perfSelectedKey !== pKey) return;
 
+      // احتياطي: لو المؤشر أو السهم لسه بدون بيانات شموع، نبني منحنى من نقاط TradingView الحية (prevClose / open / perf)
+      if (pts.length < 2 && state.liveQuote?.ticker === t && Number.isFinite(Number(state.liveQuote.price))) {
+        const q = state.liveQuote, p = Number(q.price), nowSec = Math.floor(Date.now() / 1000);
+        const pct = q.perf?.[pKey];
+        if (pKey === "1D" && q.prevClose > 0) {
+          pts = [
+            { ts: nowSec - 16200, c: Number(q.prevClose), v: 0 },
+            ...(q.open > 0 ? [{ ts: nowSec - 14400, c: Number(q.open), v: 0 }] : []),
+            ...(q.low > 0 ? [{ ts: nowSec - 9000, c: Number(q.low), v: 0 }] : []),
+            ...(q.high > 0 ? [{ ts: nowSec - 4500, c: Number(q.high), v: 0 }] : []),
+            { ts: nowSec, c: p, v: Number(q.volume || 0) }
+          ];
+        } else if (pct != null && Number.isFinite(Number(pct)) && Number(pct) > -95) {
+          const daysMap = { "1W": 7, "1M": 30, "3M": 90, "6M": 180, "1Y": 365, "5Y": 1825, "MAX": 1825 };
+          const dSpan = daysMap[pKey] || 30;
+          const startP = p / (1 + Number(pct) / 100);
+          pts = [
+            { ts: nowSec - dSpan * 86400, c: startP, v: 0 },
+            { ts: nowSec - Math.floor(dSpan * 0.5) * 86400, c: (startP + p) / 2, v: 0 },
+            { ts: nowSec, c: p, v: 0 }
+          ];
+        }
+      }
+
       // دمج السعر اللحظي كآخر نقطة حية
       if (pts.length >= 2 && state.liveQuote?.ticker === t && Number.isFinite(Number(state.liveQuote.price))) {
         const liveP = Number(state.liveQuote.price);
@@ -6123,22 +6799,44 @@ ${buildStockContextString()}
         runActiveProScripts({ id, name, code });
       };
 
+      if ($("proPasteCodeBtn")) {
+        $("proPasteCodeBtn").onclick = async () => {
+          try {
+            const clip = await navigator.clipboard.readText();
+            if (clip && clip.trim()) {
+              $("proCodeArea").value = clip;
+              const tm = clip.match(/(?:indicator|study|strategy)\s*\(\s*["']([^"']+)["']/i);
+              if (tm && ($("proScriptNameInput").value.trim() === "مؤشري الجديد" || !$("proScriptNameInput").value.trim())) {
+                $("proScriptNameInput").value = tm[1].slice(0, 32);
+              }
+              $("proConsole").className = "pro-console ok";
+              $("proConsole").textContent = "📋 تم لصق الكود — اضغط '💾 حفظ المؤشر' أو '▶ تشغيل على الشارت'.";
+            }
+          } catch {
+            $("proCodeArea").focus();
+            $("proConsole").className = "pro-console";
+            $("proConsole").textContent = "ℹ️ اضغط مطولاً داخل صندوق الكود واختر لصق (Paste).";
+          }
+        };
+      }
+
       $("proSaveScriptBtn").onclick = () => {
         const id = state.editingScriptId;
-        const name = $("proScriptNameInput").value.trim() || "مؤشر مخصص";
         const code = $("proCodeArea").value;
+        let name = $("proScriptNameInput").value.trim() || "مؤشر مخصص";
+        const tm = code.match(/(?:indicator|study|strategy)\s*\(\s*["']([^"']+)["']/i);
+        if (tm && name === "مؤشري الجديد") {
+          name = tm[1].slice(0, 32);
+          $("proScriptNameInput").value = name;
+        }
         const sc = state.proScripts.find(s => s.id === id);
         if (sc) { sc.name = name; sc.code = code; }
-        localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
-        if (!state.activeProScripts.includes(id)) {
-          state.activeProScripts.push(id);
-          localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
-        }
-        markLocalChange(true); syncUserToCloud(true);
+        if (!state.activeProScripts.includes(id)) state.activeProScripts.push(id);
+        saveProState(true);
         renderProScriptsUI();
         runActiveProScripts();
         const con = $("proConsole");
-        if (!con.classList.contains("err")) con.textContent = "💾 تم الحفظ والتشغيل بنجاح — " + con.textContent.replace(/^✅\s*/, "");
+        if (!con.classList.contains("err")) con.textContent = "💾 تم الحفظ والتشغيل — " + con.textContent.replace(/^✅\s*/, "");
       };
 
       $("proNewScriptBtn").onclick = () => {
@@ -6232,6 +6930,43 @@ ${buildStockContextString()}
         if (!row) return;
         selectStock(row.dataset.moverTicker, true, true, true);
       };
+
+      // أحداث الخريطة الحرارية للبورصة المصرية
+      if ($("hmFilterPills")) {
+        $("hmFilterPills").onclick = e => {
+          const btn = e.target.closest("[data-hm-filter]");
+          if (!btn) return;
+          state.hmFilter = btn.dataset.hmFilter;
+          $("hmFilterPills").querySelectorAll(".hm-pill").forEach(x => x.classList.toggle("active", x.dataset.hmFilter === state.hmFilter));
+          renderEgxHeatmap();
+        };
+      }
+      if ($("hmSizeSelect")) {
+        $("hmSizeSelect").onchange = e => { state.hmSizeBy = e.target.value; renderEgxHeatmap(); };
+      }
+      if ($("egxHeatmapStage")) {
+        $("egxHeatmapStage").onclick = e => {
+          const tile = e.target.closest("[data-hm-ticker]");
+          if (!tile) return;
+          document.body.classList.remove("hm-fullscreen");
+          if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير";
+          selectStock(tile.dataset.hmTicker, true, true, true);
+        };
+      }
+      if ($("hmExpandBtn")) {
+        $("hmExpandBtn").onclick = () => {
+          const isFs = document.body.classList.toggle("hm-fullscreen");
+          $("hmExpandBtn").textContent = isFs ? "✕ إغلاق" : "⛶ تكبير";
+          setTimeout(renderEgxHeatmap, 60);
+        };
+      }
+      if ($("menuHeatmapBtn")) {
+        $("menuHeatmapBtn").onclick = () => {
+          closeMoreMenu();
+          switchTab("home", false);
+          setTimeout(() => $("heatmapSection")?.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+        };
+      }
       $("gainersList").onclick = onMoverClick;
       $("losersList").onclick = onMoverClick;
       $("activeMoversList").onclick = onMoverClick;
@@ -6484,10 +7219,10 @@ ${buildStockContextString()}
       $("proZoomOutBtn").onclick = () => zoomProChart(1.4);
       $("proZoomResetBtn").onclick = () => applyProDefaultZoom();
       $("proZoomAllBtn").onclick = () => { if (proChart) proChart.timeScale().fitContent(); };
-      window.addEventListener("resize", () => { resizeProCharts(); setTimeout(resizeProCharts, 120); });
+      window.addEventListener("resize", () => { resizeProCharts(); setTimeout(() => { resizeProCharts(); if (state.activeTab === "home") renderEgxHeatmap(); }, 140); });
       window.addEventListener("orientationchange", () => setTimeout(resizeProCharts, 250));
       document.addEventListener("keydown", e => {
-        if (e.key === "Escape") { exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeApiModal(); closeAccountModal(); closeMcpModal(); }
+        if (e.key === "Escape") { document.body.classList.remove("hm-fullscreen"); if ($("hmExpandBtn")) $("hmExpandBtn").textContent = "⛶ تكبير"; exitFocus(); closeDrawer(); closeMoreMenu(); closeQuickSearch(); closeApiModal(); closeAccountModal(); closeMcpModal(); }
       });
 
       const syncSearchInputs = (val) => {
