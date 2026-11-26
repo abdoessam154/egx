@@ -354,7 +354,7 @@
     .pro-stage { display: none; width: 100%; height: 100%; position: relative; background: var(--bg-card); flex-direction: column; overflow: hidden; }
     .pro-stage.show { display: flex; }
     .pro-main-pane { flex: 1; min-height: 0; width: 100%; position: relative; touch-action: none; }
-    .pro-sub-pane { display: none; height: 130px; flex-shrink: 0; width: 100%; position: relative; border-top: 1px solid var(--border-strong); touch-action: none; }
+    .pro-sub-pane { display: none; height: 155px; flex-shrink: 0; width: 100%; position: relative; border-top: 1px solid var(--border-strong); touch-action: none; }
     .pro-sub-pane.show { display: block; }
     .pro-sub-label { position: absolute; top: 4px; right: 8px; z-index: 5; pointer-events: none; font-size: 10px; font-weight: 800; color: var(--text-muted); background: rgba(5, 8, 17, 0.72); padding: 1px 7px; border-radius: 6px; border: 1px solid var(--border); }
     [data-theme="light"] .pro-sub-label { background: rgba(255, 255, 255, 0.85); }
@@ -2188,7 +2188,7 @@
       THEME: "egx_term_theme_v3", LANG: "egx_term_lang_v3", INDICATORS: "egx_term_indicators_v4",
       LAST_TICKER: "egx_term_last_ticker_v4", TF: "egx_term_tf_v4",
       UPDATED_AT: "egx_term_updated_at_v5", IND_UPDATED_AT: "egx_term_ind_updated_at_v5",
-      CHART_MODE: "egx_term_chart_mode_v6", PRO_SCRIPTS: "egx_term_pro_scripts_v6", PRO_ACTIVE: "egx_term_pro_active_v6",
+      CHART_MODE: "egx_term_chart_mode_v6", PRO_SCRIPTS: "egx_term_pro_scripts_v7", PRO_ACTIVE: "egx_term_pro_active_v7",
       AUTH_HINT: "sahm_auth_uid_v1", LOGOS: "sahm_stock_logos_v1", ALL_STOCKS: "sahm_all_egx_stocks_v1"
     };
 
@@ -2399,6 +2399,7 @@
           indicators: [...state.indicators],
           proScripts: state.proScripts,
           activeProScripts: [...state.activeProScripts],
+          proScriptsVer: 7,
           chartMode: state.chartMode,
           lastTicker: state.ticker,
           tf: state.tf,
@@ -2482,13 +2483,18 @@
           shouldPushBack = true;
         }
 
-        if (Array.isArray(d.proScripts) && d.proScripts.length && cloudIndMs > state.indUpdatedAt) {
-          state.proScripts = sanitizeProScriptsList(d.proScripts);
-          localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
-        }
-        if (Array.isArray(d.activeProScripts) && cloudIndMs > state.indUpdatedAt) {
-          state.activeProScripts = d.activeProScripts.filter(id => !REMOVED_BUILTIN_PRO_IDS.has(id));
-          localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+        if (Number(d.proScriptsVer || 0) >= 7) {
+          if (Array.isArray(d.proScripts) && d.proScripts.length && cloudIndMs > state.indUpdatedAt) {
+            state.proScripts = sanitizeProScriptsList(d.proScripts);
+            localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
+          }
+          if (Array.isArray(d.activeProScripts) && cloudIndMs > state.indUpdatedAt) {
+            state.activeProScripts = d.activeProScripts.filter(id => !REMOVED_BUILTIN_PRO_IDS.has(id));
+            localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+          }
+        } else {
+          // ترقية الحساب من النسخة القديمة: مسح المؤشرات القديمة والإبقاء على الدعوم والمقاومات فقط
+          shouldPushBack = true;
         }
         syncTfButtonsUI(); syncIndicatorsUI(); syncChartModeUI(); renderProScriptsUI(); updateHeaderFavStar(); renderStockList();
         if (chartNeedsReload) selectStock(state.ticker, false, false);
@@ -3764,7 +3770,7 @@
         if (pos[0] && typeof pos[0] === "string") pineTitle = pos[0];
         if (kw && kw.title) pineTitle = String(kw.title);
         if (kw && kw.shorttitle && !pineTitle) pineTitle = String(kw.shorttitle);
-        if (kw && kw.overlay !== undefined) overlayMode = !!kw.overlay;
+        overlayMode = (kw && kw.overlay !== undefined) ? !!kw.overlay : false;
         return null;
       };
 
@@ -3775,15 +3781,22 @@
         const title = String(kw.title ?? pos[1] ?? "");
         const rawCol = kw.color !== undefined ? kw.color : pos[2];
         const width = Math.max(1, Math.min(4, Math.round(Number(kw.linewidth ?? pos[3] ?? 2) || 2)));
-        const styleVal = kw.style ?? pos[4] ?? "solid";
+        let rawStyle = kw.style !== undefined ? kw.style : (pos[4] ?? "solid");
+        if (rawStyle === scope.line) rawStyle = "solid";
+        else if (rawStyle === scope.cross) rawStyle = "circles";
+        const styleVal = String(rawStyle || "solid").toLowerCase();
         const isHist = styleVal === "histogram" || styleVal === "columns";
-        const lineStyle = styleVal === "dashed" ? "dashed" : (styleVal === "dotted" || styleVal === "circles") ? "dotted" : "solid";
+        const isDots = styleVal === "circles" || styleVal === "cross";
+        const lineStyle = styleVal === "dashed" ? "dashed" : styleVal === "dotted" ? "dotted" : "solid";
 
-        // دعم إخفاء النقاط لما يكون اللون na + دعم الألوان الديناميكية لكل شمعة!
+        // دعم الألوان الديناميكية لكل شمعة، مع حماية من مسح الخط بالكامل لو اللون فاضي
         let colorsArr = null;
         if (isSer(rawCol)) {
-          colorsArr = rawCol.map(c => (typeof c === "string" && c.trim()) ? pineNormColor(c, null) : null);
-          series = mkSer(series.map((v, i) => colorsArr[i] === null ? null : v));
+          const mapped = rawCol.map(c => (typeof c === "string" && c.trim()) ? pineNormColor(c, null) : null);
+          if (mapped.some(Boolean)) {
+            colorsArr = mapped;
+            series = mkSer(series.map((v, i) => colorsArr[i] === null ? null : v));
+          }
         }
         const col = pineNormColor(rawCol, "#38bdf8");
 
@@ -3803,9 +3816,9 @@
         plotsAdded++;
         if (useSubPane) {
           if (isHist) env.histPane(series, { title, upColor: "rgba(16,185,129,0.55)", downColor: "rgba(244,63,94,0.55)", colors: colorsArr });
-          else env.plotPane(series, { title, color: col, width, style: lineStyle, colors: colorsArr });
+          else env.plotPane(series, { title, color: col, width, style: lineStyle, dots: isDots, colors: colorsArr });
         } else {
-          env.plot(series, { title, color: col, width, style: lineStyle, colors: colorsArr });
+          env.plot(series, { title, color: col, width, style: lineStyle, dots: isDots, colors: colorsArr });
         }
         return series;
       };
@@ -4086,6 +4099,16 @@
         int: (x) => mapUn(x, v => isNa(v) ? null : Math.trunc(Number(v))),
         bool: (x) => mapUn(x, v => !!v),
         tostring: (x) => String(valAt(x, len - 1) ?? ""),
+        // ثوابت Pine v2 / v3 / v4 المباشرة (الألوان بدون color. والأنماط بدون plot.style_)
+        green: colorNS.green, lime: colorNS.lime, red: colorNS.red, blue: colorNS.blue,
+        orange: colorNS.orange, yellow: colorNS.yellow, purple: colorNS.purple, fuchsia: colorNS.fuchsia,
+        white: colorNS.white, black: colorNS.black, gray: colorNS.gray, silver: colorNS.silver,
+        aqua: colorNS.aqua, teal: colorNS.teal, maroon: colorNS.maroon, navy: colorNS.navy, olive: colorNS.olive,
+        histogram: "histogram", columns: "columns", circles: "circles", area: "area",
+        stepline: "stepline", linebr: "solid", areabr: "solid",
+        solid: "solid", dashed: "dashed", dotted: "dotted",
+        resolution: "resolution", integer: "integer", source: "source", session: "session",
+        period: state.tf, interval: state.tf, tickerid: "EGX:" + state.ticker,
         // Pine v4 direct aliases
         sma: taNS.sma, ema: taNS.ema, rma: taNS.rma, wma: taNS.wma, vwma: taNS.vwma, hma: taNS.hma, alma: taNS.alma, linreg: taNS.linreg,
         rsi: taNS.rsi, mfi: taNS.mfi, atr: taNS.atr, sar: taNS.sar, cci: taNS.cci, stoch: taNS.stoch, stdev: taNS.stdev, wpr: taNS.wpr,
@@ -4122,11 +4145,40 @@
         return { p, b };
       };
 
+      const splitTopLevelCommaStmts = (lineText) => {
+        const parts = [];
+        let start = 0, inS = null, p = 0, b = 0;
+        for (let i = 0; i < lineText.length; i++) {
+          const c = lineText[i];
+          if (inS) { if (c === "\\") { i++; continue; } if (c === inS) inS = null; continue; }
+          if (c === '"' || c === "'") { inS = c; continue; }
+          if (c === "(") p++; else if (c === ")") p--;
+          else if (c === "[") b++; else if (c === "]") b--;
+          else if (c === "," && p === 0 && b === 0) {
+            const left = lineText.slice(start, i).trim();
+            const right = lineText.slice(i + 1).trim();
+            // افصل فقط لو الجزء بعد الفاصلة جملة إسناد أو استدعاء منفصل (مثل fastLength=input(12), slowLength=input(26))
+            if (left && right && /^(?:(?:var|varip|int|float|bool|string|color)\s+)?[a-zA-Z_]\w*\s*(?::?=)(?!=)/.test(right)) {
+              parts.push(left);
+              start = i + 1;
+            }
+          }
+        }
+        const tail = lineText.slice(start).trim();
+        if (tail) parts.push(tail);
+        return parts.length ? parts : [lineText];
+      };
+
       const rawLines = String(code || "").replace(/\r\n?/g, "\n").split("\n");
       const logicalLines = [];
       const pineWarnings = [];
       let curBuf = "", curIndent = 0, parenDepth = 0, brackDepth = 0;
-      const topStmtRe = /^(?:(?:var|varip|int|float|bool|string|color)\s+)?[a-zA-Z_]\w*\s*(?::?=)(?!=)|^(?:study|indicator|strategy|plot|plotshape|plotchar|hline|barcolor|bgcolor|alertcondition|if|for)/;
+      // فقط الكلمات المفتاحية التي لا يمكن أن تكون معاملات مسماة داخل دالة
+      const hardNewStmtRe = /^(?:study|indicator|strategy|plot|plotshape|plotchar|hline|barcolor|bgcolor|alertcondition|for)\s*\(|^\/\/@version/;
+
+      const pushLogical = (ind, txt) => {
+        for (const sub of splitTopLevelCommaStmts(txt)) logicalLines.push({ indent: ind, text: sub });
+      };
 
       for (let li = 0; li < rawLines.length; li++) {
         const clean = stripLineComment(rawLines[li]);
@@ -4136,11 +4188,10 @@
         const prevEndsCont = /(?:(?:\band|\bor)\b|[?:+\-*/,]|:=|==|!=|<=|>=|(?<![!<>=])=(?![=>]))\s*$/.test(curBuf);
         const curStartsCont = /^(?:(?:and|or)\b|[?:+\-*/,\)\]])/.test(trimmed);
 
-        // حماية: لو سطر اتقص أثناء اللصق وترك قوس مفتوح، لا نبتلع باقي الكود كله!
-        const brokenUnclosed = curBuf && (parenDepth > 0 || brackDepth > 0) && indent === 0 && !curStartsCont && topStmtRe.test(trimmed);
+        const brokenUnclosed = curBuf && (parenDepth > 0 || brackDepth > 0) && indent === 0 && !curStartsCont && hardNewStmtRe.test(trimmed);
         if (brokenUnclosed) {
-          pineWarnings.push(`سطر ناقص/قوس مفتوح قبل السطر ${li + 1}`);
-          logicalLines.push({ indent: curIndent, text: curBuf });
+          pineWarnings.push(`قوس مفتوح قبل السطر ${li + 1}`);
+          pushLogical(curIndent, curBuf);
           curBuf = trimmed;
           curIndent = indent;
           const d = countDelims(trimmed);
@@ -4150,14 +4201,14 @@
           const d = countDelims(trimmed);
           parenDepth += d.p; brackDepth += d.b;
         } else {
-          if (curBuf) logicalLines.push({ indent: curIndent, text: curBuf });
+          if (curBuf) pushLogical(curIndent, curBuf);
           curBuf = trimmed;
           curIndent = indent;
           const d = countDelims(trimmed);
           parenDepth = d.p; brackDepth = d.b;
         }
       }
-      if (curBuf) logicalLines.push({ indent: curIndent, text: curBuf });
+      if (curBuf) pushLogical(curIndent, curBuf);
 
       // 2) Tokenizer
       const tokenizePine = (src) => {
@@ -4643,12 +4694,16 @@
           }
 
           api.out.plots.forEach(p => {
+            const isDots = !!p.opts.dots;
             const series = proChart.addLineSeries({
               color: p.opts.color || "#38bdf8",
               lineWidth: p.opts.width || 2,
               lineStyle: lineStyleMap[p.opts.style] ?? 0,
-              priceLineVisible: !!p.opts.priceLine,
-              lastValueVisible: true,
+              lineVisible: !isDots,
+              pointMarkersVisible: isDots,
+              pointMarkersRadius: isDots ? Math.max(3, Math.min(5, p.opts.width || 4)) : 0,
+              priceLineVisible: !isDots && !!p.opts.priceLine,
+              lastValueVisible: !isDots,
               crosshairMarkerVisible: false,
               title: p.opts.title || ""
             });
@@ -4707,7 +4762,7 @@
         const isDark = state.theme === "dark";
         proSubChart = LightweightCharts.createChart(subContainer, {
           width: subContainer.clientWidth || ($("proChartContainer").clientWidth || 340),
-          height: subContainer.clientHeight || 130,
+          height: subContainer.clientHeight || 155,
           layout: {
             background: { type: "solid", color: isDark ? "#0b1120" : "#ffffff" },
             textColor: isDark ? "#94a3b8" : "#334155",
@@ -4740,12 +4795,16 @@
         });
 
         allPanePlots.forEach(p => {
+          const isDots = !!p.opts.dots;
           const ls = proSubChart.addLineSeries({
             color: p.opts.color || "#a78bfa",
             lineWidth: p.opts.width || 2,
             lineStyle: lineStyleMap[p.opts.style] ?? 0,
+            lineVisible: !isDots,
+            pointMarkersVisible: isDots,
+            pointMarkersRadius: isDots ? Math.max(3, Math.min(5, p.opts.width || 4)) : 0,
             priceLineVisible: false,
-            lastValueVisible: true,
+            lastValueVisible: !isDots,
             crosshairMarkerVisible: false,
             title: p.opts.title || ""
           });
