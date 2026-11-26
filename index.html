@@ -1446,7 +1446,7 @@
         </div>
 
         <div class="pro-docs-box" id="proDocsBox">
-          <strong>الدوال والمتغيرات المتاحة لبرمجة مؤشرك (بأسلوب شبيه بـ Pine Script):</strong><br/>
+          <strong>يدعم لصق أكواد TradingView Pine Script (v4 / v5) مباشرةً (<code>plotshape</code>, <code>ta.ema</code>, <code>and/or</code>, <code>#FFFFFF</code>) أو JavaScript:</strong><br/>
           • <strong>البيانات:</strong> <code>open</code> <code>high</code> <code>low</code> <code>close</code> <code>volume</code> <code>len</code> <code>bars</code><br/>
           • <strong>المؤشرات:</strong> <code>ema(close, 20)</code> <code>sma(close, 50)</code> <code>rsi(close, 14)</code> <code>mfi(14)</code> <code>atr(14)</code> <code>macd(close, 12, 26, 9)</code> <code>bb(close, 20, 2)</code> <code>supertrend(10, 2.5)</code> <code>vwap(20)</code> <code>pivots(6, 6)</code> <code>highest(high, 20)</code> <code>lowest(low, 20)</code><br/>
           • <strong>التقاطعات:</strong> <code>crossover(fast, slow, i)</code> <code>crossunder(fast, slow, i)</code> (يدعم رقم ثابت مثل <code>crossover(r, 30, i)</code>)<br/>
@@ -2665,7 +2665,9 @@
       if (!proChart || !currentProBars.length) return;
       const n = currentProBars.length;
       const visibleCount = window.innerWidth < 640 ? 60 : 95;
-      proChart.timeScale().setVisibleLogicalRange({ from: Math.max(0, n - visibleCount), to: n + 4 });
+      // حماية ضد تمدد الشموع بشكل ضخم لو عدد الشموع قليل
+      const fromIdx = n < 25 ? Math.min(0, n - 40) : Math.max(0, n - visibleCount);
+      proChart.timeScale().setVisibleLogicalRange({ from: fromIdx, to: n + 4 });
       proChart.priceScale("right").applyOptions({ autoScale: true });
     }
 
@@ -2788,10 +2790,52 @@
       let bars = res ? parseYahooBars(res, cfg.intraday, cfg.agg4h) : [];
       let fallbackDaily = false;
 
+      const aggregateClientBars = (srcBars, mode) => {
+        const map = new Map();
+        for (const b of srcBars) {
+          const tsMs = typeof b.time === "number" ? (b.time * 1000) : Date.parse(b.time + "T10:00:00Z");
+          if (!Number.isFinite(tsMs)) continue;
+          const d = new Date(tsMs);
+          let key;
+          if (mode === "week") {
+            const dow = d.getUTCDay();
+            const ws = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - dow));
+            key = ws.toISOString().slice(0, 10);
+          } else {
+            key = d.toISOString().slice(0, 10);
+          }
+          const ex = map.get(key);
+          if (!ex) map.set(key, { time: key, open: b.open, high: b.high, low: b.low, close: b.close, volume: b.volume || 0 });
+          else {
+            ex.high = Math.max(ex.high, b.high);
+            ex.low = Math.min(ex.low, b.low);
+            ex.close = b.close;
+            ex.volume += (b.volume || 0);
+          }
+        }
+        return Array.from(map.values()).sort((a, b) => a.time.localeCompare(b.time));
+      };
+
       if (bars.length < 15 && cfg.intraday) {
         res = await fetchYahooChartRaw(ticker, "1d", "2y");
         bars = res ? parseYahooBars(res, false, false) : [];
         fallbackDaily = bars.length >= 5;
+      } else if (bars.length < 15 && tf === "W") {
+        // احتياطي للأسبوعي: تجميع الشموع اليومية إلى أسبوعية
+        const dRes = await fetchYahooChartRaw(ticker, "1d", "5y");
+        const dBars = dRes ? parseYahooBars(dRes, false, false) : [];
+        if (dBars.length >= 10) {
+          const wAgg = aggregateClientBars(dBars, "week");
+          if (wAgg.length > bars.length) bars = wAgg;
+        }
+      } else if (bars.length < 15 && tf === "D") {
+        // احتياطي لليومي لو Yahoo رجّع شمعة واحدة فقط (مثل ^CASE30): تجميع شموع الساعة إلى يومية
+        const hRes = await fetchYahooChartRaw(ticker, "60m", "6mo");
+        const hBars = hRes ? parseYahooBars(hRes, true, false) : [];
+        if (hBars.length >= 10) {
+          const dAgg = aggregateClientBars(hBars, "day");
+          if (dAgg.length > bars.length) bars = dAgg;
+        }
       }
 
       const out = { bars, fallbackDaily, isIntraday: cfg.intraday && !fallbackDaily, at: Date.now() };
@@ -3058,6 +3102,918 @@
       destroyProSubChart();
     }
 
+    // 6.2 محرك تشغيل أكواد TradingView Pine Script (v3 / v4 / v5) مباشرة داخل الشارت المبرمج
+    function isPineScriptCode(code) {
+      const stripped = String(code || "")
+        .replace(/\/\/[^\n]*/g, "")
+        .replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g, '""');
+      if (/\/\/@version\s*=/.test(code)) return true;
+      if (/\b(study|indicator|strategy|plotshape|plotchar|alertcondition|bgcolor|barcolor|fill)\s*\(/.test(stripped)) return true;
+      if (/\b(ta|math|input|color|shape|location|size|strategy|barstate|syminfo|timeframe)\.[a-zA-Z_]/.test(stripped)) return true;
+      if (/\binput\s*\(/.test(stripped)) return true;
+      if (/:=/.test(stripped)) return true;
+      if (/=\s*#[0-9a-fA-F]{6,8}\b/.test(stripped)) return true;
+      const hasJsDecl = /\b(const|let|var\s+\w+\s*=\s*function|function\s+\w+\s*\()/.test(stripped);
+      if (!hasJsDecl && /\b(and|or|not)\b/.test(stripped)) return true;
+      return false;
+    }
+
+    function runPineScript(code, api, bars) {
+      const env = api.env;
+      const len = env.len;
+      const isSer = (v) => Array.isArray(v) && v.__pineSeries === true;
+      const mkSer = (arr) => { arr.__pineSeries = true; return arr; };
+      const toSer = (v) => {
+        if (isSer(v)) return v;
+        if (Array.isArray(v) && v.length === len) return mkSer(v.slice());
+        const out = new Array(len).fill(v === undefined ? null : v);
+        return mkSer(out);
+      };
+      const valAt = (v, i) => isSer(v) ? v[i] : (Array.isArray(v) && v.length === len ? v[i] : v);
+      const isNa = (v) => v === null || v === undefined || (typeof v === "number" && !Number.isFinite(v));
+
+      const mapBin = (a, b, fn) => {
+        if (!isSer(a) && !isSer(b)) return fn(a, b);
+        const out = new Array(len);
+        for (let i = 0; i < len; i++) out[i] = fn(valAt(a, i), valAt(b, i));
+        return mkSer(out);
+      };
+      const mapUn = (a, fn) => {
+        if (!isSer(a)) return fn(a);
+        const out = new Array(len);
+        for (let i = 0; i < len; i++) out[i] = fn(a[i]);
+        return mkSer(out);
+      };
+      const toNum = (x) => (x === true ? 1 : x === false ? 0 : x);
+
+      const pineShift = (src, off) => {
+        const n = Math.max(0, Math.floor(Number(valAt(off, len - 1)) || 0));
+        if (!isSer(src) && !Array.isArray(src)) return src;
+        if (n === 0) return isSer(src) ? src : mkSer(src.slice());
+        const out = new Array(len).fill(null);
+        for (let i = n; i < len; i++) out[i] = src[i - n];
+        return mkSer(out);
+      };
+
+      const pineWma = (s, p) => {
+        const src = toSer(s), period = Math.max(1, Math.round(Number(p) || 14));
+        const out = new Array(len).fill(null);
+        const denom = (period * (period + 1)) / 2;
+        for (let i = period - 1; i < len; i++) {
+          let sum = 0, ok = true;
+          for (let j = 0; j < period; j++) {
+            const v = src[i - period + 1 + j];
+            if (isNa(v)) { ok = false; break; }
+            sum += v * (j + 1);
+          }
+          if (ok) out[i] = sum / denom;
+        }
+        return mkSer(out);
+      };
+
+      const pineVwma = (s, p) => {
+        const src = toSer(s), period = Math.max(1, Math.round(Number(p) || 20));
+        const out = new Array(len).fill(null);
+        for (let i = period - 1; i < len; i++) {
+          let pv = 0, vv = 0;
+          for (let j = i - period + 1; j <= i; j++) {
+            const v = src[j], vol = env.volume[j] || 0;
+            if (!isNa(v)) { pv += v * vol; vv += vol; }
+          }
+          out[i] = vv > 0 ? pv / vv : null;
+        }
+        return mkSer(out);
+      };
+
+      const pineHma = (s, p) => {
+        const period = Math.max(2, Math.round(Number(p) || 16));
+        const w1 = pineWma(s, Math.max(1, Math.floor(period / 2)));
+        const w2 = pineWma(s, period);
+        const diff = mapBin(w1, w2, (a, b) => (isNa(a) || isNa(b)) ? null : 2 * a - b);
+        return pineWma(diff, Math.max(1, Math.round(Math.sqrt(period))));
+      };
+
+      const pineStdev = (s, p) => {
+        const src = toSer(s), period = Math.max(1, Math.round(Number(p) || 20));
+        const mean = mkSer(env.sma(src, period));
+        const out = new Array(len).fill(null);
+        for (let i = period - 1; i < len; i++) {
+          if (isNa(mean[i])) continue;
+          let sq = 0;
+          for (let j = i - period + 1; j <= i; j++) {
+            const v = isNa(src[j]) ? mean[i] : src[j];
+            sq += (v - mean[i]) * (v - mean[i]);
+          }
+          out[i] = Math.sqrt(sq / period);
+        }
+        return mkSer(out);
+      };
+
+      const pineTr = () => {
+        const out = new Array(len).fill(null);
+        for (let i = 0; i < len; i++) {
+          out[i] = i === 0
+            ? (env.high[i] - env.low[i])
+            : Math.max(env.high[i] - env.low[i], Math.abs(env.high[i] - env.close[i - 1]), Math.abs(env.low[i] - env.close[i - 1]));
+        }
+        return mkSer(out);
+      };
+
+      const pineStoch = (src, hi, lo, p) => {
+        const s = toSer(src), h = toSer(hi), l = toSer(lo), period = Math.max(1, Math.round(Number(p) || 14));
+        const hh = env.highest(h, period), ll = env.lowest(l, period);
+        const out = new Array(len).fill(null);
+        for (let i = 0; i < len; i++) {
+          if (isNa(s[i]) || isNa(hh[i]) || isNa(ll[i])) continue;
+          const denom = hh[i] - ll[i];
+          out[i] = denom === 0 ? 50 : ((s[i] - ll[i]) / denom) * 100;
+        }
+        return mkSer(out);
+      };
+
+      const pineCci = (src, p) => {
+        const s = toSer(src), period = Math.max(1, Math.round(Number(p) || 20));
+        const mean = env.sma(s, period);
+        const out = new Array(len).fill(null);
+        for (let i = period - 1; i < len; i++) {
+          if (isNa(mean[i]) || isNa(s[i])) continue;
+          let devSum = 0;
+          for (let j = i - period + 1; j <= i; j++) devSum += Math.abs((s[j] ?? mean[i]) - mean[i]);
+          const md = devSum / period;
+          out[i] = md === 0 ? 0 : (s[i] - mean[i]) / (0.015 * md);
+        }
+        return mkSer(out);
+      };
+
+      const pineDmi = (diLen = 14, adxSmooth = 14) => {
+        const upMove = new Array(len).fill(0), dnMove = new Array(len).fill(0);
+        for (let i = 1; i < len; i++) {
+          const up = env.high[i] - env.high[i - 1], dn = env.low[i - 1] - env.low[i];
+          upMove[i] = (up > dn && up > 0) ? up : 0;
+          dnMove[i] = (dn > up && dn > 0) ? dn : 0;
+        }
+        const trS = env.rma(pineTr(), diLen);
+        const pS = env.rma(upMove, diLen), mS = env.rma(dnMove, diLen);
+        const plus = new Array(len).fill(null), minus = new Array(len).fill(null), dx = new Array(len).fill(null);
+        for (let i = 0; i < len; i++) {
+          if (isNa(trS[i]) || trS[i] === 0) continue;
+          plus[i] = (100 * (pS[i] || 0)) / trS[i];
+          minus[i] = (100 * (mS[i] || 0)) / trS[i];
+          const sum = plus[i] + minus[i];
+          dx[i] = sum === 0 ? 0 : (100 * Math.abs(plus[i] - minus[i])) / sum;
+        }
+        const adx = env.rma(dx, adxSmooth);
+        return [mkSer(plus), mkSer(minus), mkSer(adx)];
+      };
+
+      const pineCrossover = (a, b) => {
+        const out = new Array(len).fill(false);
+        for (let i = 1; i < len; i++) {
+          const a0 = valAt(a, i - 1), b0 = valAt(b, i - 1), a1 = valAt(a, i), b1 = valAt(b, i);
+          out[i] = !isNa(a0) && !isNa(b0) && !isNa(a1) && !isNa(b1) && a0 <= b0 && a1 > b1;
+        }
+        return mkSer(out);
+      };
+
+      const pineCrossunder = (a, b) => {
+        const out = new Array(len).fill(false);
+        for (let i = 1; i < len; i++) {
+          const a0 = valAt(a, i - 1), b0 = valAt(b, i - 1), a1 = valAt(a, i), b1 = valAt(b, i);
+          out[i] = !isNa(a0) && !isNa(b0) && !isNa(a1) && !isNa(b1) && a0 >= b0 && a1 < b1;
+        }
+        return mkSer(out);
+      };
+
+      const pineBarssince = (cond) => {
+        const c = toSer(cond), out = new Array(len).fill(null);
+        let cnt = null;
+        for (let i = 0; i < len; i++) {
+          if (c[i]) cnt = 0;
+          else if (cnt !== null) cnt++;
+          out[i] = cnt;
+        }
+        return mkSer(out);
+      };
+
+      const pineValuewhen = (cond, src, occ = 0) => {
+        const c = toSer(cond), s = toSer(src), k = Math.max(0, Math.round(Number(occ) || 0));
+        const out = new Array(len).fill(null), hits = [];
+        for (let i = 0; i < len; i++) {
+          if (c[i]) hits.unshift(s[i]);
+          out[i] = hits[k] !== undefined ? hits[k] : null;
+        }
+        return mkSer(out);
+      };
+
+      const pineFixnan = (src) => {
+        const s = toSer(src), out = new Array(len).fill(null);
+        let last = null;
+        for (let i = 0; i < len; i++) {
+          if (!isNa(s[i])) last = s[i];
+          out[i] = last;
+        }
+        return mkSer(out);
+      };
+
+      const pineRising = (src, p) => {
+        const s = toSer(src), period = Math.max(1, Math.round(Number(p) || 1));
+        const out = new Array(len).fill(false);
+        for (let i = period; i < len; i++) {
+          let ok = !isNa(s[i]);
+          for (let j = 1; j <= period && ok; j++) if (isNa(s[i - j]) || s[i] <= s[i - j]) ok = false;
+          out[i] = ok;
+        }
+        return mkSer(out);
+      };
+
+      const pineFalling = (src, p) => {
+        const s = toSer(src), period = Math.max(1, Math.round(Number(p) || 1));
+        const out = new Array(len).fill(false);
+        for (let i = period; i < len; i++) {
+          let ok = !isNa(s[i]);
+          for (let j = 1; j <= period && ok; j++) if (isNa(s[i - j]) || s[i] >= s[i - j]) ok = false;
+          out[i] = ok;
+        }
+        return mkSer(out);
+      };
+
+      const pinePivotHigh = (src, left, right) => {
+        const s = right === undefined ? mkSer(env.high.slice()) : toSer(src);
+        const l = Math.max(1, Math.round(Number(right === undefined ? src : left) || 5));
+        const r = Math.max(1, Math.round(Number(right === undefined ? left : right) || 5));
+        const out = new Array(len).fill(null);
+        for (let i = l; i < len - r; i++) {
+          if (isNa(s[i])) continue;
+          let ok = true;
+          for (let j = i - l; j <= i + r; j++) if (j !== i && !isNa(s[j]) && s[j] >= s[i]) { ok = false; break; }
+          if (ok) out[i + r] = s[i];
+        }
+        return mkSer(out);
+      };
+
+      const pinePivotLow = (src, left, right) => {
+        const s = right === undefined ? mkSer(env.low.slice()) : toSer(src);
+        const l = Math.max(1, Math.round(Number(right === undefined ? src : left) || 5));
+        const r = Math.max(1, Math.round(Number(right === undefined ? left : right) || 5));
+        const out = new Array(len).fill(null);
+        for (let i = l; i < len - r; i++) {
+          if (isNa(s[i])) continue;
+          let ok = true;
+          for (let j = i - l; j <= i + r; j++) if (j !== i && !isNa(s[j]) && s[j] <= s[i]) { ok = false; break; }
+          if (ok) out[i + r] = s[i];
+        }
+        return mkSer(out);
+      };
+
+      const pineNormColor = (c, fallback = "#38bdf8") => {
+        let col = isSer(c) ? c.slice().reverse().find(x => typeof x === "string" && x) : c;
+        if (typeof col !== "string" || !col.trim()) return fallback;
+        col = col.trim();
+        if (/^#[0-9a-fA-F]{8}$/.test(col)) return col.slice(0, 7);
+        return col;
+      };
+
+      let overlayMode = true;
+      let pineTitle = "";
+      let activeCondMask = null;
+      let signalsAdded = 0;
+
+      const taNS = {
+        sma: (s, p) => mkSer(env.sma(toSer(s), Math.max(1, Math.round(Number(p) || 20)))),
+        ema: (s, p) => mkSer(env.ema(toSer(s), Math.max(1, Math.round(Number(p) || 20)))),
+        rma: (s, p) => mkSer(env.rma(toSer(s), Math.max(1, Math.round(Number(p) || 14)))),
+        wma: pineWma,
+        vwma: pineVwma,
+        hma: pineHma,
+        rsi: (s, p) => mkSer(env.rsi(toSer(s), Math.max(1, Math.round(Number(p) || 14)))),
+        mfi: (s, p) => mkSer(env.mfi(Math.max(1, Math.round(Number(p !== undefined ? p : s) || 14)))),
+        atr: (p) => mkSer(env.atr(Math.max(1, Math.round(Number(p) || 14)))),
+        tr: () => pineTr(),
+        cci: pineCci,
+        stoch: pineStoch,
+        stdev: pineStdev,
+        highest: (s, p) => mkSer(env.highest(p === undefined ? env.high : toSer(s), Math.max(1, Math.round(Number(p === undefined ? s : p) || 20)))),
+        lowest:  (s, p) => mkSer(env.lowest(p === undefined ? env.low  : toSer(s), Math.max(1, Math.round(Number(p === undefined ? s : p) || 20)))),
+        vwap: (s) => mkSer(env.vwap(20)),
+        macd: (s, f = 12, sl = 26, sg = 9) => {
+          const m = env.macd(toSer(s), Math.round(Number(f) || 12), Math.round(Number(sl) || 26), Math.round(Number(sg) || 9));
+          return [mkSer(m.macd), mkSer(m.signal), mkSer(m.hist)];
+        },
+        bb: (s, p = 20, mult = 2) => {
+          const b = env.bb(toSer(s), Math.round(Number(p) || 20), Number(mult) || 2);
+          return [mkSer(b.middle), mkSer(b.upper), mkSer(b.lower)];
+        },
+        supertrend: (factor = 3, atrPeriod = 10) => {
+          // Pine ta.supertrend(factor, atrPeriod) -> direction: -1 uptrend, +1 downtrend
+          const st = env.supertrend(Math.max(1, Math.round(Number(atrPeriod) || 10)), Number(factor) || 3);
+          const pineDir = st.dir.map(d => d === 1 ? -1 : 1);
+          return [mkSer(st.line), mkSer(pineDir)];
+        },
+        dmi: pineDmi,
+        crossover: pineCrossover,
+        crossunder: pineCrossunder,
+        cross: (a, b) => mapBin(pineCrossover(a, b), pineCrossunder(a, b), (x, y) => !!(x || y)),
+        change: (s, p = 1) => mapBin(toSer(s), pineShift(toSer(s), p), (a, b) => (isNa(a) || isNa(b)) ? null : a - b),
+        mom: (s, p = 10) => mapBin(toSer(s), pineShift(toSer(s), p), (a, b) => (isNa(a) || isNa(b)) ? null : a - b),
+        roc: (s, p = 9) => mapBin(toSer(s), pineShift(toSer(s), p), (a, b) => (isNa(a) || isNa(b) || b === 0) ? null : ((a - b) / b) * 100),
+        rising: pineRising,
+        falling: pineFalling,
+        barssince: pineBarssince,
+        valuewhen: pineValuewhen,
+        pivothigh: pinePivotHigh,
+        pivotlow: pinePivotLow,
+        cum: (s) => {
+          const a = toSer(s), out = new Array(len).fill(0);
+          let acc = 0;
+          for (let i = 0; i < len; i++) { acc += isNa(a[i]) ? 0 : Number(a[i]); out[i] = acc; }
+          return mkSer(out);
+        }
+      };
+
+      const mathNS = {
+        abs: (x) => mapUn(x, v => isNa(v) ? null : Math.abs(v)),
+        round: (x) => mapUn(x, v => isNa(v) ? null : Math.round(v)),
+        floor: (x) => mapUn(x, v => isNa(v) ? null : Math.floor(v)),
+        ceil: (x) => mapUn(x, v => isNa(v) ? null : Math.ceil(v)),
+        sqrt: (x) => mapUn(x, v => isNa(v) ? null : Math.sqrt(Math.max(0, v))),
+        log: (x) => mapUn(x, v => isNa(v) || v <= 0 ? null : Math.log(v)),
+        log10: (x) => mapUn(x, v => isNa(v) || v <= 0 ? null : Math.log10(v)),
+        exp: (x) => mapUn(x, v => isNa(v) ? null : Math.exp(v)),
+        sign: (x) => mapUn(x, v => isNa(v) ? null : Math.sign(v)),
+        pow: (a, b) => mapBin(a, b, (x, y) => (isNa(x) || isNa(y)) ? null : Math.pow(x, y)),
+        max: (...args) => args.reduce((acc, cur) => mapBin(acc, cur, (x, y) => isNa(x) ? y : isNa(y) ? x : Math.max(x, y))),
+        min: (...args) => args.reduce((acc, cur) => mapBin(acc, cur, (x, y) => isNa(x) ? y : isNa(y) ? x : Math.min(x, y))),
+        avg: (...args) => {
+          const sum = args.reduce((acc, cur) => mapBin(acc, cur, (x, y) => (isNa(x) || isNa(y)) ? null : x + y));
+          return mapUn(sum, v => isNa(v) ? null : v / args.length);
+        },
+        sum: (s, p) => {
+          const src = toSer(s), period = Math.max(1, Math.round(Number(p) || 14));
+          const out = new Array(len).fill(null);
+          for (let i = period - 1; i < len; i++) {
+            let sm = 0;
+            for (let j = i - period + 1; j <= i; j++) sm += isNa(src[j]) ? 0 : src[j];
+            out[i] = sm;
+          }
+          return mkSer(out);
+        }
+      };
+
+      const colorNS = {
+        green: "#10b981", lime: "#22c55e", red: "#f43f5e", blue: "#38bdf8",
+        orange: "#f59e0b", yellow: "#eab308", purple: "#a78bfa", fuchsia: "#d946ef",
+        white: "#ffffff", black: "#000000", gray: "#94a3b8", silver: "#cbd5e1",
+        aqua: "#06b6d4", teal: "#14b8a6", maroon: "#991b1b", navy: "#1e3a8a", olive: "#65a30d",
+        new: (c) => pineNormColor(c, "#38bdf8"),
+        rgb: (r, g, b) => `rgb(${Math.round(r||0)},${Math.round(g||0)},${Math.round(b||0)})`
+      };
+
+      const inputFn = (pos, kw) => {
+        if (kw && kw.defval !== undefined) return kw.defval;
+        return pos.length ? pos[0] : 14;
+      };
+      const inputNS = Object.assign((...a) => a[0], {
+        int: inputFn, float: inputFn, bool: inputFn, string: inputFn,
+        source: inputFn, color: inputFn, timeframe: inputFn, symbol: inputFn, session: inputFn
+      });
+
+      const handleMeta = (pos, kw) => {
+        if (pos[0] && typeof pos[0] === "string") pineTitle = pos[0];
+        if (kw && kw.title) pineTitle = String(kw.title);
+        if (kw && kw.overlay !== undefined) overlayMode = !!kw.overlay;
+        return null;
+      };
+
+      const handlePlot = (pos, kw) => {
+        const series = toSer(pos[0]);
+        const title = kw.title ?? pos[1] ?? "";
+        const col = pineNormColor(kw.color ?? pos[2], "#38bdf8");
+        const width = Math.max(1, Math.min(4, Math.round(Number(kw.linewidth ?? pos[3] ?? 2) || 2)));
+        const styleVal = kw.style ?? pos[4] ?? "solid";
+        const isHist = styleVal === "histogram" || styleVal === "columns";
+        const lineStyle = styleVal === "dashed" ? "dashed" : styleVal === "dotted" || styleVal === "circles" ? "dotted" : "solid";
+
+        // كشف ذكي: لو المؤشر غير محدد overlay وكان خارج نطاق السعر تماماً (مثل RSI/MACD) ارسمه في النافذة السفلية
+        let useSubPane = !overlayMode;
+        if (overlayMode) {
+          const lastC = env.close[len - 1] || 1;
+          const validVals = series.filter(v => typeof v === "number" && Number.isFinite(v));
+          if (validVals.length > 5 && lastC > 15) {
+            const mx = Math.max(...validVals.map(Math.abs));
+            const mn = Math.min(...validVals);
+            if (isHist || (mx <= 100 && mn >= -100 && mx < lastC * 0.15)) useSubPane = true;
+          }
+        }
+
+        if (useSubPane) {
+          if (isHist) env.histPane(series, { title, upColor: "rgba(16,185,129,0.55)", downColor: "rgba(244,63,94,0.55)" });
+          else env.plotPane(series, { title, color: col, width, style: lineStyle });
+        } else {
+          env.plot(series, { title, color: col, width, style: lineStyle });
+        }
+        return series;
+      };
+
+      const handlePlotShape = (pos, kw) => {
+        const cond = toSer(pos[0]);
+        const title = String(kw.title ?? pos[1] ?? "");
+        const style = String(kw.style ?? pos[2] ?? "labelup").toLowerCase();
+        const loc = String(kw.location ?? pos[3] ?? "").toLowerCase();
+        const text = String(kw.text ?? kw.char ?? title ?? "");
+        const isDown = loc.includes("above") || loc.includes("top") || style.includes("down") || /sell|short|بيع/i.test(text + " " + title);
+        const col = pineNormColor(kw.color ?? pos[4], isDown ? "#f43f5e" : "#10b981");
+        const position = isDown ? "aboveBar" : "belowBar";
+        const shape = isDown ? "arrowDown" : "arrowUp";
+        const label = text || (isDown ? "SELL" : "BUY");
+
+        for (let i = 0; i < len; i++) {
+          const ok = cond[i] && (!activeCondMask || activeCondMask[i]);
+          if (ok) {
+            env.mark(i, { position, color: col, shape, text: label });
+            signalsAdded++;
+          }
+        }
+        return null;
+      };
+
+      const handleHline = (pos, kw) => {
+        const price = Number(valAt(pos[0], len - 1));
+        if (!Number.isFinite(price)) return null;
+        const title = String(kw.title ?? pos[1] ?? "");
+        const col = pineNormColor(kw.color ?? pos[2], "#94a3b8");
+        const st = String(kw.linestyle ?? pos[3] ?? "dashed");
+        const style = st.includes("dot") ? "dotted" : st.includes("solid") ? "solid" : "dashed";
+        if (overlayMode) env.hline(price, { title, color: col, style, width: 1 });
+        else env.hlinePane(price, { title, color: col, style });
+        return null;
+      };
+
+      const strategyNS = {
+        long: "long",
+        short: "short",
+        entry: (pos, kw) => {
+          const id = String(pos[0] || kw.id || "");
+          const dir = String(pos[1] || kw.direction || "long").toLowerCase();
+          const cond = kw.when !== undefined ? toSer(kw.when) : activeCondMask;
+          if (!cond) return null;
+          const isShort = dir === "short";
+          for (let i = 0; i < len; i++) {
+            if (cond[i]) {
+              if (isShort) env.sell(i, id || "SELL");
+              else env.buy(i, id || "BUY");
+              signalsAdded++;
+            }
+          }
+          return null;
+        },
+        close: () => null,
+        close_all: () => null,
+        exit: () => null,
+        percent_of_equity: "percent_of_equity",
+        cash: "cash",
+        fixed: "fixed"
+      };
+
+      // بناء بيئة المتغيرات الافتراضية لـ Pine Script
+      const scope = Object.create(null);
+      scope.open   = mkSer(env.open.slice());
+      scope.high   = mkSer(env.high.slice());
+      scope.low    = mkSer(env.low.slice());
+      scope.close  = mkSer(env.close.slice());
+      scope.volume = mkSer(env.volume.slice());
+      scope.time   = mkSer(env.time.slice());
+      scope.hl2    = mkSer(env.high.map((h, i) => (h + env.low[i]) / 2));
+      scope.hlc3   = mkSer(env.high.map((h, i) => (h + env.low[i] + env.close[i]) / 3));
+      scope.ohlc4  = mkSer(env.high.map((h, i) => (env.open[i] + h + env.low[i] + env.close[i]) / 4));
+      scope.hlcc4  = mkSer(env.high.map((h, i) => (h + env.low[i] + 2 * env.close[i]) / 4));
+      scope.bar_index = mkSer(Array.from({ length: len }, (_, i) => i));
+      scope.tr     = pineTr();
+      scope.na     = null;
+      scope.true   = true;
+      scope.false  = false;
+      scope.ta     = taNS;
+      scope.math   = mathNS;
+      scope.color  = colorNS;
+      scope.input  = inputNS;
+      scope.strategy = strategyNS;
+      scope.shape  = {
+        labelup: "labelup", labeldown: "labeldown", triangleup: "triangleup", triangledown: "triangledown",
+        arrowup: "arrowup", arrowdown: "arrowdown", circle: "circle", cross: "cross", xcross: "xcross",
+        diamond: "diamond", flag: "flag", square: "square"
+      };
+      scope.location = { belowbar: "belowbar", abovebar: "abovebar", top: "top", bottom: "bottom", absolute: "absolute" };
+      scope.size   = { auto: "auto", tiny: "tiny", small: "small", normal: "normal", large: "large", huge: "huge" };
+      scope.plot   = Object.assign({ __pineSpecial: handlePlot }, {
+        style_line: "solid", style_linebr: "solid", style_stepline: "solid",
+        style_histogram: "histogram", style_columns: "columns", style_area: "solid",
+        style_circles: "circles", style_cross: "dotted"
+      });
+      scope.hline  = Object.assign({ __pineSpecial: handleHline }, { style_dashed: "dashed", style_dotted: "dotted", style_solid: "solid" });
+      scope.barstate = { islast: true, isconfirmed: true, isrealtime: true, isfirst: false, ishistory: false };
+      scope.syminfo  = { ticker: state.ticker, tickerid: "EGX:" + state.ticker, mintick: 0.01 };
+      scope.timeframe = { period: state.tf, isdaily: state.tf === "D", isweekly: state.tf === "W", isintraday: ["5","15","60","240"].includes(state.tf) };
+      scope.str = { tostring: (x) => String(x ?? ""), format: (f, ...a) => String(f || "") };
+      scope.request = { security: { __pineSpecial: (pos) => pos[2] !== undefined ? pos[2] : scope.close } };
+
+      // دوال Pine v4 المباشرة (بدون ta. / math.)
+      const directFns = {
+        study: { __pineSpecial: handleMeta },
+        indicator: { __pineSpecial: handleMeta },
+        strategy: { __pineSpecial: handleMeta },
+        plotshape: { __pineSpecial: handlePlotShape },
+        plotchar: { __pineSpecial: handlePlotShape },
+        bgcolor: { __pineSpecial: () => null },
+        barcolor: { __pineSpecial: () => null },
+        fill: { __pineSpecial: () => null },
+        alertcondition: { __pineSpecial: () => null },
+        alert: { __pineSpecial: () => null },
+        plotcandle: { __pineSpecial: () => null },
+        plotbar: { __pineSpecial: () => null },
+        security: { __pineSpecial: (pos) => pos[2] !== undefined ? pos[2] : scope.close },
+        nz: (x, rep = 0) => mapBin(x, rep, (a, b) => isNa(a) ? b : a),
+        na: (x) => mapUn(x, v => isNa(v)),
+        fixnan: pineFixnan,
+        iff: (cond, a, b) => {
+          const out = new Array(len);
+          for (let i = 0; i < len; i++) out[i] = valAt(cond, i) ? valAt(a, i) : valAt(b, i);
+          return mkSer(out);
+        },
+        float: (x) => mapUn(x, v => isNa(v) ? null : Number(v)),
+        int: (x) => mapUn(x, v => isNa(v) ? null : Math.trunc(Number(v))),
+        bool: (x) => mapUn(x, v => !!v),
+        tostring: (x) => String(x ?? ""),
+        // Pine v4 aliases for ta.* & math.*
+        sma: taNS.sma, ema: taNS.ema, rma: taNS.rma, wma: taNS.wma, vwma: taNS.vwma, hma: taNS.hma,
+        rsi: taNS.rsi, mfi: taNS.mfi, atr: taNS.atr, cci: taNS.cci, stoch: taNS.stoch, stdev: taNS.stdev,
+        highest: taNS.highest, lowest: taNS.lowest, vwap: taNS.vwap, macd: taNS.macd, bb: taNS.bb,
+        supertrend: taNS.supertrend, dmi: taNS.dmi, crossover: taNS.crossover, crossunder: taNS.crossunder,
+        cross: taNS.cross, change: taNS.change, mom: taNS.mom, roc: taNS.roc, rising: taNS.rising,
+        falling: taNS.falling, barssince: taNS.barssince, valuewhen: taNS.valuewhen,
+        pivothigh: taNS.pivothigh, pivotlow: taNS.pivotlow, cum: taNS.cum,
+        abs: mathNS.abs, round: mathNS.round, floor: mathNS.floor, ceil: mathNS.ceil,
+        sqrt: mathNS.sqrt, pow: mathNS.pow, max: mathNS.max, min: mathNS.min, avg: mathNS.avg, sum: mathNS.sum
+      };
+      Object.assign(scope, directFns);
+      scope.input = Object.assign({ __pineSpecial: inputFn }, inputNS);
+      scope.input.int = { __pineSpecial: inputFn };
+      scope.input.float = { __pineSpecial: inputFn };
+      scope.input.bool = { __pineSpecial: inputFn };
+      scope.input.string = { __pineSpecial: inputFn };
+      scope.input.source = { __pineSpecial: inputFn };
+      scope.input.color = { __pineSpecial: inputFn };
+      scope.input.timeframe = { __pineSpecial: inputFn };
+      scope.strategy.entry = { __pineSpecial: strategyNS.entry };
+
+      // 1) تقطيع الكود إلى سطور منطقية (دمج السطور المقسمة بين الأقواس مثل plotshape متعدد السطور)
+      const stripLineComment = (line) => {
+        let inS = null;
+        for (let i = 0; i < line.length; i++) {
+          const c = line[i];
+          if (inS) { if (c === "\\") { i++; continue; } if (c === inS) inS = null; continue; }
+          if (c === '"' || c === "'") { inS = c; continue; }
+          if (c === "/" && line[i + 1] === "/") return line.slice(0, i);
+        }
+        return line;
+      };
+
+      const rawLines = String(code || "").replace(/\r\n?/g, "\n").split("\n");
+      const logicalLines = [];
+      let curBuf = "", curIndent = 0, parenDepth = 0, brackDepth = 0;
+
+      const countDelims = (s) => {
+        let inS = null, p = 0, b = 0;
+        for (let i = 0; i < s.length; i++) {
+          const c = s[i];
+          if (inS) { if (c === "\\") { i++; continue; } if (c === inS) inS = null; continue; }
+          if (c === '"' || c === "'") { inS = c; continue; }
+          if (c === "(") p++; else if (c === ")") p--;
+          else if (c === "[") b++; else if (c === "]") b--;
+        }
+        return { p, b };
+      };
+
+      for (const raw of rawLines) {
+        const clean = stripLineComment(raw);
+        const trimmed = clean.trim();
+        if (!trimmed) continue;
+        const indent = clean.match(/^[\t ]*/)[0].replace(/\t/g, "    ").length;
+        const isContStart = /^(?:(?:and|or)\b|[?:+\-*/,\)\]])/.test(trimmed);
+
+        if (curBuf && (parenDepth > 0 || brackDepth > 0 || isContStart)) {
+          curBuf += " " + trimmed;
+          const d = countDelims(trimmed);
+          parenDepth += d.p; brackDepth += d.b;
+        } else {
+          if (curBuf) logicalLines.push({ indent: curIndent, text: curBuf });
+          curBuf = trimmed;
+          curIndent = indent;
+          const d = countDelims(trimmed);
+          parenDepth = d.p; brackDepth = d.b;
+        }
+      }
+      if (curBuf) logicalLines.push({ indent: curIndent, text: curBuf });
+
+      // 2) Tokenizer
+      const tokenizePine = (src) => {
+        const toks = [];
+        let i = 0, n = src.length;
+        while (i < n) {
+          const c = src[i];
+          if (/\s/.test(c)) { i++; continue; }
+          if (c === '"' || c === "'") {
+            let s = ""; i++;
+            while (i < n && src[i] !== c) {
+              if (src[i] === "\\" && i + 1 < n) { s += src[i + 1]; i += 2; }
+              else { s += src[i]; i++; }
+            }
+            i++;
+            toks.push({ t: "str", v: s });
+            continue;
+          }
+          if (c === "#" && /[0-9a-fA-F]{6,8}/.test(src.slice(i + 1, i + 9))) {
+            const m = src.slice(i).match(/^#[0-9a-fA-F]{6,8}/);
+            toks.push({ t: "str", v: m[0] });
+            i += m[0].length;
+            continue;
+          }
+          if (/[0-9]/.test(c) || (c === "." && /[0-9]/.test(src[i + 1] || ""))) {
+            const m = src.slice(i).match(/^(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?/);
+            toks.push({ t: "num", v: Number(m[0]) });
+            i += m[0].length;
+            continue;
+          }
+          const two = src.slice(i, i + 2);
+          if ([":=", "==", "!=", "<=", ">=", "&&", "||", "=>"].includes(two)) {
+            toks.push({ t: "op", v: two });
+            i += 2;
+            continue;
+          }
+          if ("+-*/%<>=?!:,.()[]".includes(c)) {
+            toks.push({ t: "op", v: c });
+            i++;
+            continue;
+          }
+          if (/[a-zA-Z_]/.test(c)) {
+            const m = src.slice(i).match(/^[a-zA-Z_][a-zA-Z0-9_]*/);
+            const w = m[0];
+            if (w === "and" || w === "or" || w === "not") toks.push({ t: "kw", v: w });
+            else toks.push({ t: "id", v: w });
+            i += w.length;
+            continue;
+          }
+          i++;
+        }
+        return toks;
+      };
+
+      // 3) Recursive-Descent Expression Evaluator
+      const evalExpr = (exprText, localScope) => {
+        const toks = tokenizePine(exprText);
+        let pos = 0;
+        const peek = (k = 0) => toks[pos + k] || null;
+        const next = () => toks[pos++] || null;
+        const matchOp = (v) => { if (peek() && (peek().t === "op" || peek().t === "kw") && peek().v === v) { pos++; return true; } return false; };
+
+        const parseTernary = () => {
+          let left = parseOr();
+          if (matchOp("?")) {
+            const tVal = parseTernary();
+            matchOp(":");
+            const fVal = parseTernary();
+            if (!isSer(left)) return left ? tVal : fVal;
+            const out = new Array(len);
+            for (let i = 0; i < len; i++) out[i] = left[i] ? valAt(tVal, i) : valAt(fVal, i);
+            return mkSer(out);
+          }
+          return left;
+        };
+
+        const parseOr = () => {
+          let left = parseAnd();
+          while (matchOp("or") || matchOp("||")) {
+            const right = parseAnd();
+            left = mapBin(left, right, (a, b) => !!(a || b));
+          }
+          return left;
+        };
+
+        const parseAnd = () => {
+          let left = parseEq();
+          while (matchOp("and") || matchOp("&&")) {
+            const right = parseEq();
+            left = mapBin(left, right, (a, b) => !!(a && b));
+          }
+          return left;
+        };
+
+        const parseEq = () => {
+          let left = parseCmp();
+          while (true) {
+            if (matchOp("==")) {
+              const r = parseCmp();
+              left = mapBin(left, r, (a, b) => a === b);
+            } else if (matchOp("!=")) {
+              const r = parseCmp();
+              left = mapBin(left, r, (a, b) => a !== b);
+            } else break;
+          }
+          return left;
+        };
+
+        const parseCmp = () => {
+          let left = parseAdd();
+          while (true) {
+            if (matchOp("<"))       { const r = parseAdd(); left = mapBin(left, r, (a, b) => !isNa(a) && !isNa(b) && a < b); }
+            else if (matchOp("<=")) { const r = parseAdd(); left = mapBin(left, r, (a, b) => !isNa(a) && !isNa(b) && a <= b); }
+            else if (matchOp(">"))  { const r = parseAdd(); left = mapBin(left, r, (a, b) => !isNa(a) && !isNa(b) && a > b); }
+            else if (matchOp(">=")) { const r = parseAdd(); left = mapBin(left, r, (a, b) => !isNa(a) && !isNa(b) && a >= b); }
+            else break;
+          }
+          return left;
+        };
+
+        const parseAdd = () => {
+          let left = parseMul();
+          while (true) {
+            if (matchOp("+")) {
+              const r = parseMul();
+              left = mapBin(left, r, (a, b) => (typeof a === "string" || typeof b === "string") ? String(a ?? "") + String(b ?? "") : (isNa(a) || isNa(b)) ? null : toNum(a) + toNum(b));
+            } else if (matchOp("-")) {
+              const r = parseMul();
+              left = mapBin(left, r, (a, b) => (isNa(a) || isNa(b)) ? null : toNum(a) - toNum(b));
+            } else break;
+          }
+          return left;
+        };
+
+        const parseMul = () => {
+          let left = parseUnary();
+          while (true) {
+            if (matchOp("*")) {
+              const r = parseUnary();
+              left = mapBin(left, r, (a, b) => (isNa(a) || isNa(b)) ? null : toNum(a) * toNum(b));
+            } else if (matchOp("/")) {
+              const r = parseUnary();
+              left = mapBin(left, r, (a, b) => (isNa(a) || isNa(b) || toNum(b) === 0) ? null : toNum(a) / toNum(b));
+            } else if (matchOp("%")) {
+              const r = parseUnary();
+              left = mapBin(left, r, (a, b) => (isNa(a) || isNa(b) || toNum(b) === 0) ? null : toNum(a) % toNum(b));
+            } else break;
+          }
+          return left;
+        };
+
+        const parseUnary = () => {
+          if (matchOp("not") || matchOp("!")) return mapUn(parseUnary(), a => !a);
+          if (matchOp("-")) return mapUn(parseUnary(), a => isNa(a) ? null : -toNum(a));
+          if (matchOp("+")) return parseUnary();
+          return parsePostfix();
+        };
+
+        const parsePostfix = () => {
+          let val = parsePrimary();
+          while (peek()) {
+            if (matchOp(".")) {
+              const prop = next();
+              val = (val != null && prop) ? val[prop.v] : undefined;
+            } else if (matchOp("(")) {
+              const posArgs = [], kwArgs = {};
+              if (!matchOp(")")) {
+                while (peek()) {
+                  if (peek().t === "id" && peek(1) && peek(1).t === "op" && peek(1).v === "=") {
+                    const kName = next().v;
+                    next(); // "="
+                    kwArgs[kName] = parseTernary();
+                  } else {
+                    posArgs.push(parseTernary());
+                  }
+                  if (matchOp(",")) continue;
+                  matchOp(")");
+                  break;
+                }
+              }
+              if (val && typeof val === "object" && typeof val.__pineSpecial === "function") {
+                val = val.__pineSpecial(posArgs, kwArgs);
+              } else if (val && typeof val === "object" && val.__pineUserFn) {
+                const sub = Object.create(localScope);
+                val.params.forEach((pn, idx) => { sub[pn] = posArgs[idx] !== undefined ? posArgs[idx] : kwArgs[pn]; });
+                val = evalExpr(val.body, sub);
+              } else if (typeof val === "function") {
+                val = val(...posArgs);
+              } else {
+                val = null;
+              }
+            } else if (matchOp("[")) {
+              const idxVal = parseTernary();
+              matchOp("]");
+              val = pineShift(val, idxVal);
+            } else {
+              break;
+            }
+          }
+          return val;
+        };
+
+        const parsePrimary = () => {
+          const tok = peek();
+          if (!tok) return null;
+          if (tok.t === "num" || tok.t === "str") { next(); return tok.v; }
+          if (matchOp("(")) { const v = parseTernary(); matchOp(")"); return v; }
+          if (matchOp("[")) {
+            const arr = [];
+            if (!matchOp("]")) {
+              while (peek()) {
+                arr.push(parseTernary());
+                if (matchOp(",")) continue;
+                matchOp("]");
+                break;
+              }
+            }
+            return arr;
+          }
+          if (tok.t === "id") {
+            next();
+            return tok.v in localScope ? localScope[tok.v] : null;
+          }
+          next();
+          return null;
+        };
+
+        return parseTernary();
+      };
+
+      // 4) تنفيذ السطور المنطقية
+      for (let idx = 0; idx < logicalLines.length; idx++) {
+        const { indent, text } = logicalLines[idx];
+
+        // تعريف دالة سطر واحد: myFn(x, y) => expr
+        const fnDef = text.match(/^([a-zA-Z_]\w*)\s*\(([^)]*)\)\s*=>\s*(.+)$/);
+        if (fnDef) {
+          const params = fnDef[2].split(",").map(s => s.trim().split(/\s+/).pop()).filter(Boolean);
+          scope[fnDef[1]] = { __pineUserFn: true, params, body: fnDef[3] };
+          continue;
+        }
+
+        // جملة if (سطر واحد أو بلوك بمسافة بادئة)
+        const ifMatch = text.match(/^if\s+(.+)$/);
+        if (ifMatch) {
+          const condExpr = ifMatch[1].trim();
+          const condVal = toSer(evalExpr(condExpr, scope));
+          const prevMask = activeCondMask;
+          activeCondMask = prevMask ? mapBin(prevMask, condVal, (a, b) => !!(a && b)) : condVal;
+          // تنفيذ السطور التابعة بالمسافة البادئة
+          while (idx + 1 < logicalLines.length && logicalLines[idx + 1].indent > indent) {
+            idx++;
+            const subLine = logicalLines[idx].text;
+            const subAssign = subLine.match(/^(?:(?:var|varip)\s+)?(?:(?:float|int|bool|string|color|series)\s+)?([a-zA-Z_]\w*)\s*(:?=)(?!=)\s*(.+)$/);
+            if (subAssign) {
+              const vName = subAssign[1], rhs = evalExpr(subAssign[3], scope);
+              const oldV = vName in scope ? scope[vName] : null;
+              scope[vName] = mapBin(activeCondMask, rhs, (c, r) => c ? r : null);
+              if (oldV !== null) {
+                const merged = new Array(len);
+                for (let k = 0; k < len; k++) merged[k] = activeCondMask[k] ? valAt(rhs, k) : valAt(oldV, k);
+                scope[vName] = mkSer(merged);
+              }
+            } else {
+              evalExpr(subLine, scope);
+            }
+          }
+          activeCondMask = prevMask;
+          continue;
+        }
+
+        // تفكيك مصفوفة (Tuple): [macdLine, signalLine, histLine] = ta.macd(...)
+        const tupleMatch = text.match(/^\[([^\]]+)\]\s*=\s*(.+)$/);
+        if (tupleMatch) {
+          const names = tupleMatch[1].split(",").map(s => s.trim());
+          const vals = evalExpr(tupleMatch[2], scope);
+          if (Array.isArray(vals)) {
+            names.forEach((nm, k) => { if (nm && nm !== "_") scope[nm] = vals[k] !== undefined ? vals[k] : null; });
+          }
+          continue;
+        }
+
+        // إسناد متغير: [var] [type] name = expr أو name := expr
+        const assignMatch = text.match(/^(?:(?:var|varip)\s+)?(?:(?:simple|series|input|const)\s+)?(?:(?:float|int|bool|string|color|line|label)\s+)?([a-zA-Z_]\w*)\s*(:?=)(?!=)\s*(.+)$/);
+        if (assignMatch && !/^(==|!=|<=|>=)/.test(assignMatch[2])) {
+          const varName = assignMatch[1];
+          // لا تخلط بين f(x=1) وبين إسناد متغير
+          if (!["plot", "plotshape", "plotchar", "hline", "study", "indicator", "strategy", "bgcolor", "barcolor", "fill", "alertcondition"].includes(varName)) {
+            scope[varName] = evalExpr(assignMatch[3], scope);
+            continue;
+          }
+        }
+
+        // تنفيذ تعبير مباشر (مثل plot(...) أو plotshape(...) أو study(...))
+        evalExpr(text, scope);
+      }
+
+      if (pineTitle || signalsAdded > 0) {
+        env.log(`Pine Script${pineTitle ? " (" + pineTitle + ")" : ""}: ${signalsAdded} إشارة`);
+      }
+    }
+
     function runActiveProScripts(previewOverride = null) {
       if (!proChart || !proCandleSeries || !currentProBars.length) return;
       clearProOverlays();
@@ -3079,10 +4035,14 @@
       for (const sc of scriptsToRun) {
         const api = createScriptAPI(currentProBars);
         try {
-          const keys = Object.keys(api.env);
-          const vals = Object.values(api.env);
-          const fn = new Function(...keys, `"use strict";\n${sc.code}`);
-          fn(...vals);
+          if (isPineScriptCode(sc.code)) {
+            runPineScript(sc.code, api, currentProBars);
+          } else {
+            const keys = Object.keys(api.env);
+            const vals = Object.values(api.env);
+            const fn = new Function(...keys, `"use strict";\n${sc.code}`);
+            fn(...vals);
+          }
 
           api.out.plots.forEach(p => {
             const series = proChart.addLineSeries({
@@ -3149,7 +4109,7 @@
             horzLines: { color: isDark ? "rgba(255,255,255,0.05)" : "rgba(15,23,42,0.07)" }
           },
           rightPriceScale: { borderColor: isDark ? "rgba(255,255,255,0.08)" : "rgba(15,23,42,0.12)", scaleMargins: { top: 0.12, bottom: 0.12 } },
-          timeScale: { visible: false, rightOffset: 6, barSpacing: 7, minBarSpacing: 2 },
+          timeScale: { visible: false, rightOffset: 6, barSpacing: 7, minBarSpacing: 2, maxBarSpacing: 22 },
           handleScroll: { mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false },
           handleScale: { axisPressedMouseMove: true, mouseWheel: true, pinch: true }
         });
@@ -3295,7 +4255,8 @@
           secondsVisible: false,
           rightOffset: 6,
           barSpacing: 7,
-          minBarSpacing: 2
+          minBarSpacing: 2,
+          maxBarSpacing: 22
         },
         handleScroll: { mouseWheel: true, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: true },
         handleScale: { axisPressedMouseMove: true, mouseWheel: true, pinch: true }
