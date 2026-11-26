@@ -391,16 +391,13 @@
     .pro-editor-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; flex: 1; min-width: 200px; }
     .pro-editor-controls select, .pro-editor-controls input { padding: 6px 10px; border-radius: 9px; border: 1px solid var(--border-strong); background: var(--bg-input); font-size: 12px; outline: none; }
     .pro-editor-controls select:focus, .pro-editor-controls input:focus { border-color: var(--emerald); }
-    .pro-code-area { width: 100%; min-height: 195px; max-height: 360px; resize: vertical; background: #040710; color: #e2e8f0; border: 1px solid var(--border-strong); border-radius: 11px; padding: 11px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.6; direction: ltr; text-align: left; outline: none; tab-size: 2; }
+    .pro-code-area { width: 100%; min-height: 190px; max-height: 360px; resize: vertical; background: #040710; color: #e2e8f0; border: 1px solid var(--border-strong); border-radius: 11px; padding: 11px 12px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; line-height: 1.6; direction: ltr; text-align: left; outline: none; tab-size: 2; white-space: pre; overflow-x: auto; }
     .pro-code-area:focus { border-color: var(--gold); }
     .pro-editor-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; justify-content: space-between; }
     .pro-editor-btns { display: flex; flex-wrap: wrap; gap: 6px; }
     .pro-console { padding: 7px 10px; border-radius: 9px; background: var(--bg-input); border: 1px solid var(--border); font-size: 11.5px; font-weight: 700; color: var(--text-muted); line-height: 1.5; }
     .pro-console.ok { color: var(--emerald); border-color: rgba(16, 185, 129, 0.35); background: var(--emerald-dim); }
     .pro-console.err { color: var(--red); border-color: rgba(244, 63, 94, 0.35); background: var(--red-dim); }
-    .pro-docs-box { display: none; padding: 10px 12px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-strong); font-size: 11.5px; line-height: 1.75; color: var(--text-muted); }
-    .pro-docs-box.show { display: block; }
-    .pro-docs-box code { color: var(--gold); background: rgba(245, 158, 11, 0.1); padding: 1px 5px; border-radius: 5px; direction: ltr; display: inline-block; font-family: ui-monospace, monospace; font-size: 11px; }
     body.focus-mode .pro-scripts-bar, body.focus-mode .pro-editor-panel { display: none !important; }
 
     /* Auth Gate — Full-Screen Animated Luxury Landing (سهم - Sahm) */
@@ -1073,7 +1070,7 @@
       border: 1px solid rgba(5, 8, 17, 0.72);
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
       padding: 2px; text-align: center; color: #ffffff;
-      transition: filter 0.14s, transform 0.14s;
+      transition: background 0.35s ease, filter 0.14s;
       user-select: none; -webkit-user-select: none;
     }
     .hm-tile:hover { filter: brightness(1.16); z-index: 5; border-color: #ffffff; }
@@ -1681,41 +1678,27 @@
         </div>
       </div>
 
-      <!-- محرر الأكواد المدمج (شبيه Pine Script) -->
+      <!-- محرر المؤشرات (Pine Script) -->
       <div class="pro-editor-panel" id="proEditorPanel">
         <div class="pro-editor-top">
           <div class="pro-editor-controls">
-            <select id="proEditorSelect" title="اختر مؤشر للتعديل"></select>
-            <input type="text" id="proScriptNameInput" placeholder="اسم المؤشر..." style="min-width:140px;flex:1;" />
+            <select id="proEditorSelect" title="اختر مؤشر"></select>
+            <input type="text" id="proScriptNameInput" placeholder="اسم المؤشر..." style="min-width:120px;flex:1;" />
           </div>
           <div class="pro-editor-btns">
-            <button class="btn-sm emerald" id="proNewScriptBtn">+ مؤشر جديد</button>
-            <button class="btn-sm blue" id="proPasteCodeBtn" title="لصق كود Pine Script من الحافظة">📋 لصق Pine</button>
-            <button class="btn-sm danger" id="proDeleteScriptBtn" title="حذف المؤشر">🗑️ حذف</button>
-            <button class="btn-sm" id="proToggleDocsBtn">📘 الدوال</button>
+            <button type="button" class="btn-sm emerald" id="proNewScriptBtn">+ جديد</button>
+            <button type="button" class="btn-sm danger" id="proDeleteScriptBtn" title="حذف المؤشر">🗑️</button>
           </div>
         </div>
 
-        <div class="pro-docs-box" id="proDocsBox">
-          <strong>يدعم لصق أكواد TradingView Pine Script (v4 / v5) مباشرةً (<code>plotshape</code>, <code>ta.ema</code>, <code>and/or</code>, <code>#FFFFFF</code>) أو JavaScript:</strong><br/>
-          • <strong>البيانات:</strong> <code>open</code> <code>high</code> <code>low</code> <code>close</code> <code>volume</code> <code>len</code> <code>bars</code><br/>
-          • <strong>المؤشرات:</strong> <code>ema(close, 20)</code> <code>sma(close, 50)</code> <code>rsi(close, 14)</code> <code>mfi(14)</code> <code>atr(14)</code> <code>macd(close, 12, 26, 9)</code> <code>bb(close, 20, 2)</code> <code>supertrend(10, 2.5)</code> <code>vwap(20)</code> <code>pivots(6, 6)</code> <code>highest(high, 20)</code> <code>lowest(low, 20)</code><br/>
-          • <strong>التقاطعات:</strong> <code>crossover(fast, slow, i)</code> <code>crossunder(fast, slow, i)</code> (يدعم رقم ثابت مثل <code>crossover(r, 30, i)</code>)<br/>
-          • <strong>الرسم والإشارات:</strong> <code>plot(arr, {title, color, width, style})</code> • <code>hline(price, {title, color, style})</code> • <code>plotPane(arr, opts)</code> • <code>histPane(arr, opts)</code> • <code>hlinePane(val, opts)</code> • <code>buy(i, "شراء")</code> • <code>sell(i, "بيع")</code> • <code>log("نص")</code>
-        </div>
-
-        <textarea class="pro-code-area" id="proCodeArea" spellcheck="false"></textarea>
+        <textarea class="pro-code-area" id="proCodeArea" wrap="off" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="الصق كود Pine Script من TradingView هنا..."></textarea>
 
         <div class="pro-editor-actions">
-          <div class="pro-editor-btns">
-            <button class="btn-sm emerald" id="proRunCodeBtn">▶ تشغيل على الشارت</button>
-            <button class="btn-sm gold" id="proSaveScriptBtn">💾 حفظ المؤشر</button>
-            <button class="btn-sm" id="proResetScriptBtn">↺ استعادة الافتراضي</button>
-          </div>
-          <span style="font-size:11px;color:var(--text-muted);">يُحفظ محلياً + في حساب Google</span>
+          <button type="button" class="btn-sm emerald" id="proRunCodeBtn" style="flex:1;padding:8px 12px;">▶ تشغيل على الشارت</button>
+          <button type="button" class="btn-sm gold" id="proSaveScriptBtn" style="flex:1;padding:8px 12px;">💾 حفظ المؤشر</button>
         </div>
 
-        <div class="pro-console" id="proConsole">جاهز — عدّل الكود واضغط "▶ تشغيل على الشارت".</div>
+        <div class="pro-console" id="proConsole">الصق كود Pine Script واضغط "▶ تشغيل" أو "💾 حفظ".</div>
       </div>
 
       <div class="scroll-helper">
@@ -2209,48 +2192,8 @@
       AUTH_HINT: "sahm_auth_uid_v1", LOGOS: "sahm_stock_logos_v1", ALL_STOCKS: "sahm_all_egx_stocks_v1"
     };
 
+    const REMOVED_BUILTIN_PRO_IDS = new Set(["ut_bot", "ema_cross", "bb_rsi", "pro_macd", "pro_mfi", "pro_rsi"]);
     const DEFAULT_PRO_SCRIPTS = [
-      {
-        id: "ut_bot",
-        name: "UT Bot (Supertrend)",
-        builtin: true,
-        code: [
-          "// مؤشر UT Bot / Supertrend مع إشارات شراء وبيع",
-          "const period = 10;",
-          "const mult = 2.5;",
-          "const st = supertrend(period, mult);",
-          "",
-          "plot(st.up,   { title: 'دعم صاعد',    color: '#10b981', width: 2 });",
-          "plot(st.down, { title: 'مقاومة هابطة', color: '#f43f5e', width: 2 });",
-          "",
-          "let bCnt = 0, sCnt = 0;",
-          "for (let i = 1; i < len; i++) {",
-          "  if (st.buy[i])  { buy(i, 'شراء'); bCnt++; }",
-          "  if (st.sell[i]) { sell(i, 'بيع'); sCnt++; }",
-          "}",
-          "log(`UT Bot(${period}, ${mult}): ${bCnt} شراء | ${sCnt} بيع`);"
-        ].join("\n")
-      },
-      {
-        id: "ema_cross",
-        name: "MA Cross (9/21/50)",
-        builtin: true,
-        code: [
-          "// تقاطع المتوسطات السريعة مع فلتر الاتجاه EMA 50",
-          "const fast  = ema(close, 9);",
-          "const slow  = ema(close, 21);",
-          "const trend = ema(close, 50);",
-          "",
-          "plot(fast,  { title: 'EMA 9',  color: '#38bdf8', width: 2 });",
-          "plot(slow,  { title: 'EMA 21', color: '#f59e0b', width: 2 });",
-          "plot(trend, { title: 'EMA 50', color: '#a78bfa', width: 1, style: 'dashed' });",
-          "",
-          "for (let i = 1; i < len; i++) {",
-          "  if (crossover(fast, slow, i))  buy(i, 'شراء EMA');",
-          "  if (crossunder(fast, slow, i)) sell(i, 'بيع EMA');",
-          "}"
-        ].join("\n")
-      },
       {
         id: "auto_sr",
         name: "دعوم ومقاومات تلقائية",
@@ -2274,72 +2217,19 @@
           "pick(res).forEach((lvl, idx) => hline(lvl, { title: 'مقاومة ' + (idx + 1), color: '#f43f5e', style: 'dashed', width: 1 }));",
           "pick(sup).forEach((lvl, idx) => hline(lvl, { title: 'دعم ' + (idx + 1), color: '#10b981', style: 'dashed', width: 1 }));"
         ].join("\n")
-      },
-      {
-        id: "bb_rsi",
-        name: "ارتداد Bollinger + RSI",
-        builtin: true,
-        code: [
-          "// فرص الارتداد عند حدود البولينجر مع تأكيد RSI",
-          "const b = bb(close, 20, 2);",
-          "const r = rsi(close, 14);",
-          "",
-          "plot(b.upper,  { title: 'BB علوي', color: '#f43f5e', width: 1, style: 'dotted' });",
-          "plot(b.middle, { title: 'BB وسط',  color: '#94a3b8', width: 1, style: 'dashed' });",
-          "plot(b.lower,  { title: 'BB سفلي', color: '#10b981', width: 1, style: 'dotted' });",
-          "",
-          "for (let i = 20; i < len; i++) {",
-          "  if (low[i] <= b.lower[i] && r[i] < 35)  buy(i, 'ارتداد RSI');",
-          "  if (high[i] >= b.upper[i] && r[i] > 65) sell(i, 'تشبع RSI');",
-          "}"
-        ].join("\n")
-      },
-      {
-        id: "pro_macd",
-        name: "MACD (12/26/9)",
-        builtin: true,
-        code: [
-          "// مؤشر MACD في نافذة سفلية متزامنة مع الشارت",
-          "const m = macd(close, 12, 26, 9);",
-          "histPane(m.hist,   { title: 'Hist',   upColor: 'rgba(16,185,129,0.55)', downColor: 'rgba(244,63,94,0.55)' });",
-          "plotPane(m.macd,   { title: 'MACD',   color: '#38bdf8', width: 2 });",
-          "plotPane(m.signal, { title: 'Signal', color: '#f59e0b', width: 1 });",
-          "hlinePane(0,       { title: '0',      color: '#64748b', style: 'dashed' });"
-        ].join("\n")
-      },
-      {
-        id: "pro_mfi",
-        name: "MFI (14)",
-        builtin: true,
-        code: [
-          "// مؤشر تدفق السيولة Money Flow Index (MFI 14)",
-          "const f = mfi(14);",
-          "plotPane(f,  { title: 'MFI 14', color: '#10b981', width: 2 });",
-          "hlinePane(80, { title: '80', color: '#f43f5e', style: 'dashed' });",
-          "hlinePane(20, { title: '20', color: '#10b981', style: 'dashed' });"
-        ].join("\n")
-      },
-      {
-        id: "pro_rsi",
-        name: "RSI (14)",
-        builtin: true,
-        code: [
-          "// مؤشر القوة النسبية Relative Strength Index (RSI 14)",
-          "const r = rsi(close, 14);",
-          "plotPane(r,  { title: 'RSI 14', color: '#a78bfa', width: 2 });",
-          "hlinePane(70, { title: '70', color: '#f43f5e', style: 'dashed' });",
-          "hlinePane(30, { title: '30', color: '#10b981', style: 'dashed' });"
-        ].join("\n")
       }
     ];
 
-    function loadSavedProScripts() {
-      const saved = safeJson(LS.PRO_SCRIPTS, null);
-      if (!Array.isArray(saved) || !saved.length) return DEFAULT_PRO_SCRIPTS.map(s => ({ ...s }));
+    function sanitizeProScriptsList(list) {
+      const saved = Array.isArray(list) ? list.filter(s => s && s.id && !REMOVED_BUILTIN_PRO_IDS.has(s.id)) : [];
       const byId = Object.fromEntries(saved.map(s => [s.id, s]));
       const merged = DEFAULT_PRO_SCRIPTS.map(def => byId[def.id] ? { ...def, ...byId[def.id], builtin: true } : { ...def });
-      saved.forEach(s => { if (!DEFAULT_PRO_SCRIPTS.some(d => d.id === s.id)) merged.push(s); });
+      saved.forEach(s => { if (!DEFAULT_PRO_SCRIPTS.some(d => d.id === s.id)) merged.push({ ...s, builtin: false }); });
       return merged;
+    }
+
+    function loadSavedProScripts() {
+      return sanitizeProScriptsList(safeJson(LS.PRO_SCRIPTS, null));
     }
 
     const PROVIDER_DEFAULTS = {
@@ -2427,8 +2317,8 @@
       attachedImage: null,
       chartMode: initialChartMode,
       proScripts: loadSavedProScripts(),
-      activeProScripts: safeJson(LS.PRO_ACTIVE, ["ut_bot", "auto_sr"]),
-      editingScriptId: "ut_bot",
+      activeProScripts: safeJson(LS.PRO_ACTIVE, ["auto_sr"]).filter(id => !REMOVED_BUILTIN_PRO_IDS.has(id)),
+      editingScriptId: "auto_sr",
       proEditorOpen: false,
       activeTab: initialTab,
       chartDirty: true,
@@ -2593,11 +2483,11 @@
         }
 
         if (Array.isArray(d.proScripts) && d.proScripts.length && cloudIndMs > state.indUpdatedAt) {
-          state.proScripts = d.proScripts;
+          state.proScripts = sanitizeProScriptsList(d.proScripts);
           localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
         }
         if (Array.isArray(d.activeProScripts) && cloudIndMs > state.indUpdatedAt) {
-          state.activeProScripts = d.activeProScripts;
+          state.activeProScripts = d.activeProScripts.filter(id => !REMOVED_BUILTIN_PRO_IDS.has(id));
           localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
         }
         syncTfButtonsUI(); syncIndicatorsUI(); syncChartModeUI(); renderProScriptsUI(); updateHeaderFavStar(); renderStockList();
@@ -2937,7 +2827,7 @@
       }).join("");
 
       if (!state.proScripts.some(s => s.id === state.editingScriptId)) {
-        state.editingScriptId = state.proScripts[0]?.id || "ut_bot";
+        state.editingScriptId = state.proScripts[0]?.id || "auto_sr";
       }
       selEl.innerHTML = state.proScripts.map(s => `<option value="${s.id}">${s.name}</option>`).join("");
       selEl.value = state.editingScriptId;
@@ -2947,7 +2837,6 @@
         $("proScriptNameInput").value = cur.name;
         $("proCodeArea").value = cur.code;
         $("proDeleteScriptBtn").style.display = cur.builtin ? "none" : "inline-flex";
-        $("proResetScriptBtn").style.display = cur.builtin ? "inline-flex" : "none";
       }
     }
 
@@ -3388,7 +3277,14 @@
         return out;
       };
 
-      const plots = [], hlines = [], markers = [], logs = [], panePlots = [], paneHists = [], paneHlines = [];
+      const plots = [], hlines = [], markers = [], logs = [], panePlots = [], paneHists = [], paneHlines = [], barColors = new Array(len).fill(null);
+      const barcolor = (values) => {
+        if (Array.isArray(values)) {
+          for (let i = 0; i < len; i++) if (typeof values[i] === "string" && values[i]) barColors[i] = values[i];
+        } else if (typeof values === "string" && values) {
+          barColors.fill(values);
+        }
+      };
       const plot = (values, opts = {}) => { if (Array.isArray(values)) plots.push({ values, opts }); };
       const hline = (price, opts = {}) => { if (Number.isFinite(price)) hlines.push({ price, opts }); };
       const plotPane = (values, opts = {}) => { if (Array.isArray(values)) panePlots.push({ values, opts }); };
@@ -3402,8 +3298,8 @@
       const log = (msg) => { logs.push(String(msg)); };
 
       return {
-        env: { bars, len, open, high, low, close, volume, time, sma, ema, rma, rsi, mfi, atr, macd, bb, highest, lowest, vwap, supertrend, pivots, crossover, crossunder, plot, hline, plotPane, histPane, hlinePane, buy, sell, mark, log },
-        out: { plots, hlines, markers, logs, panePlots, paneHists, paneHlines }
+        env: { bars, len, open, high, low, close, volume, time, sma, ema, rma, rsi, mfi, atr, macd, bb, highest, lowest, vwap, supertrend, pivots, crossover, crossunder, plot, hline, plotPane, histPane, hlinePane, barcolor, buy, sell, mark, log },
+        out: { plots, hlines, markers, logs, panePlots, paneHists, paneHlines, barColors }
       };
     }
 
@@ -3414,6 +3310,9 @@
       if (proCandleSeries) {
         proPriceLines.forEach(l => { try { proCandleSeries.removePriceLine(l); } catch {} });
         try { proCandleSeries.setMarkers([]); } catch {}
+        if (currentProBars.length) {
+          try { proCandleSeries.setData(currentProBars.map(b => ({ time: b.time, open: b.open, high: b.high, low: b.low, close: b.close }))); } catch {}
+        }
       }
       proOverlaySeries = [];
       proPriceLines = [];
@@ -4124,13 +4023,56 @@
       scope.syminfo  = { ticker: state.ticker, tickerid: "EGX:" + state.ticker, mintick: 0.01 };
       scope.timeframe = { period: state.tf, isdaily: state.tf === "D", isweekly: state.tf === "W", isintraday: ["5","15","60","240"].includes(state.tf) };
       scope.str = { tostring: (x) => String(valAt(x, len - 1) ?? ""), format: (f) => String(f || "") };
-      scope.request = { security: { __pineSpecial: (pos) => pos[2] !== undefined ? pos[2] : scope.close } };
+      // حساب شموع Heikin Ashi الحقيقية (عشان خيار Heikin Ashi في UT Bot وغيره يشتغل زي TradingView)
+      const calcHeikinAshi = () => {
+        const haO = new Array(len), haH = new Array(len), haL = new Array(len), haC = new Array(len);
+        for (let i = 0; i < len; i++) {
+          haC[i] = (env.open[i] + env.high[i] + env.low[i] + env.close[i]) / 4;
+          haO[i] = i === 0 ? (env.open[i] + env.close[i]) / 2 : (haO[i - 1] + haC[i - 1]) / 2;
+          haH[i] = Math.max(env.high[i], haO[i], haC[i]);
+          haL[i] = Math.min(env.low[i], haO[i], haC[i]);
+        }
+        return { __ha: true, open: mkSer(haO), high: mkSer(haH), low: mkSer(haL), close: mkSer(haC) };
+      };
+      const handleSecurity = (pos, kw) => {
+        const symObj = pos[0];
+        const exprVal = pos[2] !== undefined ? pos[2] : (kw.expression !== undefined ? kw.expression : scope.close);
+        if (symObj && symObj.__ha) {
+          if (exprVal === scope.open)  return symObj.open;
+          if (exprVal === scope.high)  return symObj.high;
+          if (exprVal === scope.low)   return symObj.low;
+          return symObj.close;
+        }
+        return exprVal;
+      };
+      let barColorsCount = 0;
+      const handleBarcolor = (pos, kw) => {
+        const rawCol = pos[0] !== undefined ? pos[0] : kw.color;
+        if (rawCol === undefined || rawCol === null) return null;
+        if (isSer(rawCol)) {
+          const arr = new Array(len).fill(null);
+          for (let i = 0; i < len; i++) {
+            if (typeof rawCol[i] === "string" && rawCol[i].trim()) {
+              arr[i] = pineNormColor(rawCol[i], null);
+              if (arr[i]) barColorsCount++;
+            }
+          }
+          env.barcolor(arr);
+        } else if (typeof rawCol === "string" && rawCol.trim()) {
+          env.barcolor(pineNormColor(rawCol, null));
+          barColorsCount += len;
+        }
+        return null;
+      };
+      scope.ticker = { heikinashi: () => calcHeikinAshi() };
+      scope.heikinashi = () => calcHeikinAshi();
+      scope.request = { security: { __pineSpecial: handleSecurity } };
 
       Object.assign(scope, {
         study: { __pineSpecial: handleMeta }, indicator: { __pineSpecial: handleMeta }, strategy: Object.assign({ __pineSpecial: handleMeta }, strategyNS),
         plotshape: { __pineSpecial: handlePlotShape }, plotchar: { __pineSpecial: handlePlotShape },
-        bgcolor: noopSpecial, barcolor: noopSpecial, fill: noopSpecial, alertcondition: noopSpecial, alert: noopSpecial, plotcandle: noopSpecial, plotbar: noopSpecial,
-        security: { __pineSpecial: (pos) => pos[2] !== undefined ? pos[2] : scope.close },
+        bgcolor: noopSpecial, barcolor: { __pineSpecial: handleBarcolor }, fill: noopSpecial, alertcondition: noopSpecial, alert: noopSpecial, plotcandle: noopSpecial, plotbar: noopSpecial,
+        security: { __pineSpecial: handleSecurity },
         nz: (x, rep = 0) => mapBin(x, rep, (a, b) => isNa(a) ? b : a),
         na: (x) => mapUn(x, v => isNa(v)),
         fixnan: pineFixnan,
@@ -4182,17 +4124,28 @@
 
       const rawLines = String(code || "").replace(/\r\n?/g, "\n").split("\n");
       const logicalLines = [];
+      const pineWarnings = [];
       let curBuf = "", curIndent = 0, parenDepth = 0, brackDepth = 0;
+      const topStmtRe = /^(?:(?:var|varip|int|float|bool|string|color)\s+)?[a-zA-Z_]\w*\s*(?::?=)(?!=)|^(?:study|indicator|strategy|plot|plotshape|plotchar|hline|barcolor|bgcolor|alertcondition|if|for)/;
 
-      for (const raw of rawLines) {
-        const clean = stripLineComment(raw);
+      for (let li = 0; li < rawLines.length; li++) {
+        const clean = stripLineComment(rawLines[li]);
         const trimmed = clean.trim();
         if (!trimmed) continue;
         const indent = clean.match(/^[\t ]*/)[0].replace(/\t/g, "    ").length;
         const prevEndsCont = /(?:(?:\band|\bor)\b|[?:+\-*/,]|:=|==|!=|<=|>=|(?<![!<>=])=(?![=>]))\s*$/.test(curBuf);
         const curStartsCont = /^(?:(?:and|or)\b|[?:+\-*/,\)\]])/.test(trimmed);
 
-        if (curBuf && (parenDepth > 0 || brackDepth > 0 || curStartsCont || prevEndsCont)) {
+        // حماية: لو سطر اتقص أثناء اللصق وترك قوس مفتوح، لا نبتلع باقي الكود كله!
+        const brokenUnclosed = curBuf && (parenDepth > 0 || brackDepth > 0) && indent === 0 && !curStartsCont && topStmtRe.test(trimmed);
+        if (brokenUnclosed) {
+          pineWarnings.push(`سطر ناقص/قوس مفتوح قبل السطر ${li + 1}`);
+          logicalLines.push({ indent: curIndent, text: curBuf });
+          curBuf = trimmed;
+          curIndent = indent;
+          const d = countDelims(trimmed);
+          parenDepth = d.p; brackDepth = d.b;
+        } else if (curBuf && (parenDepth > 0 || brackDepth > 0 || curStartsCont || prevEndsCont)) {
           curBuf += " " + trimmed;
           const d = countDelims(trimmed);
           parenDepth += d.p; brackDepth += d.b;
@@ -4651,8 +4604,10 @@
       if (plotsAdded) parts.push(`${plotsAdded} خطوط`);
       if (signalsAdded) parts.push(`${signalsAdded} إشارة`);
       if (linesAdded) parts.push(`${linesAdded} مستويات`);
-      env.log(`Pine${pineTitle ? " (" + pineTitle + ")" : ""}: ${parts.length ? parts.join(" • ") : "0 رسومات (تأكد من وجود plot أو plotshape)"}`);
-      return { pineTitle, plotsAdded, signalsAdded, linesAdded };
+      if (barColorsCount) parts.push("تلوين الشموع");
+      const warnTxt = pineWarnings.length ? ` ⚠️ (${pineWarnings[0]} — تأكد أن الكود منسوخ كامل)` : "";
+      env.log(`Pine${pineTitle ? " (" + pineTitle + ")" : ""}: ${parts.length ? parts.join(" • ") : "0 رسومات"}${warnTxt}`);
+      return { pineTitle, plotsAdded, signalsAdded, linesAdded, barColorsCount, pineWarnings };
     }
 
     function runActiveProScripts(previewOverride = null) {
@@ -4670,6 +4625,8 @@
       const allMarkers = [];
       const allLogs = [];
       const errors = [];
+      const mergedBarColors = new Array(currentProBars.length).fill(null);
+      let hasBarColors = false;
       const allPanePlots = [], allPaneHists = [], allPaneHlines = [], paneNames = [];
       const lineStyleMap = { solid: 0, dotted: 1, dashed: 2 };
 
@@ -4731,6 +4688,11 @@
           }
 
           api.out.markers.forEach(m => allMarkers.push(m));
+          if (Array.isArray(api.out.barColors)) {
+            for (let i = 0; i < currentProBars.length; i++) {
+              if (api.out.barColors[i]) { mergedBarColors[i] = api.out.barColors[i]; hasBarColors = true; }
+            }
+          }
           api.out.logs.forEach(l => allLogs.push(l));
         } catch (err) {
           errors.push(`${sc.name}: ${err.message}`);
@@ -4826,6 +4788,15 @@
         requestAnimationFrame(resizeProCharts);
       } else {
         requestAnimationFrame(resizeProCharts);
+      }
+
+      if (hasBarColors && proCandleSeries) {
+        proCandleSeries.setData(currentProBars.map((b, i) => {
+          const c = mergedBarColors[i];
+          return c
+            ? { time: b.time, open: b.open, high: b.high, low: b.low, close: b.close, color: c, borderColor: c, wickColor: c }
+            : { time: b.time, open: b.open, high: b.high, low: b.low, close: b.close };
+        }));
       }
 
       if (allMarkers.length) {
@@ -5632,8 +5603,10 @@
 
     state.hmFilter = "ALL";
     state.hmSizeBy = "turnover";
+    let hmLastSig = "";
+    let hmLayoutKey = "";
 
-    function renderEgxHeatmap() {
+    function renderEgxHeatmap(forceRebuild = false) {
       const stage = $("egxHeatmapStage");
       if (!stage) return;
       const data = state.moversData;
@@ -5660,7 +5633,8 @@
         return true;
       });
 
-      const limit = state.hmFilter === "ALL" ? (document.body.classList.contains("hm-fullscreen") ? 95 : 55) : 70;
+      const isFs = document.body.classList.contains("hm-fullscreen");
+      const limit = state.hmFilter === "ALL" ? (isFs ? 95 : 55) : 70;
       const getWeight = (r) => {
         if (state.hmSizeBy === "equal") return 1;
         if (state.hmSizeBy === "mcap") return Math.max(1e6, Number(r.mc || r.tv || 1e6));
@@ -5673,14 +5647,37 @@
         .map(r => ({ ...r, weight: Math.pow(getWeight(r), state.hmSizeBy === "equal" ? 1 : 0.62), sec: getHeatmapSectorAr(r.t, r.s) }));
 
       if (!picked.length) {
-        stage.innerHTML = `<div class="movers-empty" style="padding-top:160px;">لا توجد أسهم لهذا التصنيف حالياً</div>`;
+        if (hmLastSig !== "EMPTY") {
+          hmLastSig = "EMPTY"; hmLayoutKey = "";
+          stage.innerHTML = `<div class="movers-empty" style="padding-top:160px;">لا توجد أسهم لهذا التصنيف حالياً</div>`;
+        }
         return;
       }
 
-      const W = stage.clientWidth || 350;
-      const H = stage.clientHeight || 430;
+      const W = Math.round(stage.clientWidth || 350);
+      const H = Math.round(stage.clientHeight || 430);
+      const sig = `${state.hmFilter}|${state.hmSizeBy}|${W}x${H}|${isFs ? 1 : 0}|` + picked.map(x => `${x.t}:${Number(x.c).toFixed(2)}`).join(",");
+      if (!forceRebuild && sig === hmLastSig) return;
+      hmLastSig = sig;
 
-      // Group by Arabic sector
+      // لو نفس التوزيع والمقاس، حدّث ألوان ونسب المربعات في مكانها بدون مسح DOM أو إعادة تحميل الشعارات (صفر بربشة!)
+      const layKey = `${state.hmFilter}|${state.hmSizeBy}|${W}x${H}|${isFs ? 1 : 0}|` + picked.map(x => x.t).join(",");
+      if (!forceRebuild && layKey === hmLayoutKey && stage.querySelector(".hm-tile")) {
+        const byTk = Object.fromEntries(picked.map(x => [x.t, x]));
+        stage.querySelectorAll(".hm-tile[data-hm-ticker]").forEach(el => {
+          const it = byTk[el.dataset.hmTicker];
+          if (!it) return;
+          const bg = heatmapColorForPct(it.c);
+          const chgStr = `${it.c > 0 ? "+" : ""}${Number(it.c).toFixed(2)}%`;
+          if (el.style.background !== bg) el.style.background = bg;
+          el.title = `${it.n} (${it.t}) • ${Number(it.p).toFixed(2)} ج.م (${chgStr})`;
+          const chgEl = el.querySelector(".hm-tile-chg");
+          if (chgEl && chgEl.textContent !== chgStr) chgEl.textContent = chgStr;
+        });
+        return;
+      }
+      hmLayoutKey = layKey;
+
       const secMap = new Map();
       for (const it of picked) {
         if (!secMap.has(it.sec)) secMap.set(it.sec, { name: it.sec, weight: 0, items: [] });
@@ -6776,8 +6773,6 @@ ${buildStockContextString()}
         renderProScriptsUI();
       };
 
-      $("proToggleDocsBtn").onclick = () => $("proDocsBox").classList.toggle("show");
-
       $("proCodeArea").addEventListener("keydown", e => {
         if (e.key === "Tab") {
           e.preventDefault();
@@ -6790,7 +6785,9 @@ ${buildStockContextString()}
       $("proRunCodeBtn").onclick = () => {
         const id = state.editingScriptId;
         const code = $("proCodeArea").value;
-        const name = $("proScriptNameInput").value.trim() || "مؤشر مخصص";
+        let name = $("proScriptNameInput").value.trim() || "مؤشر مخصص";
+        const tm = code.match(/(?:indicator|study|strategy)\s*\(\s*(?:title\s*=\s*)?["']([^"']+)["']/i);
+        if (tm && (name === "مؤشر جديد" || name === "مؤشر مخصص")) { name = tm[1].slice(0, 32); $("proScriptNameInput").value = name; }
         if (!state.activeProScripts.includes(id)) {
           state.activeProScripts.push(id);
           localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
@@ -6799,33 +6796,12 @@ ${buildStockContextString()}
         runActiveProScripts({ id, name, code });
       };
 
-      if ($("proPasteCodeBtn")) {
-        $("proPasteCodeBtn").onclick = async () => {
-          try {
-            const clip = await navigator.clipboard.readText();
-            if (clip && clip.trim()) {
-              $("proCodeArea").value = clip;
-              const tm = clip.match(/(?:indicator|study|strategy)\s*\(\s*["']([^"']+)["']/i);
-              if (tm && ($("proScriptNameInput").value.trim() === "مؤشري الجديد" || !$("proScriptNameInput").value.trim())) {
-                $("proScriptNameInput").value = tm[1].slice(0, 32);
-              }
-              $("proConsole").className = "pro-console ok";
-              $("proConsole").textContent = "📋 تم لصق الكود — اضغط '💾 حفظ المؤشر' أو '▶ تشغيل على الشارت'.";
-            }
-          } catch {
-            $("proCodeArea").focus();
-            $("proConsole").className = "pro-console";
-            $("proConsole").textContent = "ℹ️ اضغط مطولاً داخل صندوق الكود واختر لصق (Paste).";
-          }
-        };
-      }
-
       $("proSaveScriptBtn").onclick = () => {
         const id = state.editingScriptId;
         const code = $("proCodeArea").value;
         let name = $("proScriptNameInput").value.trim() || "مؤشر مخصص";
-        const tm = code.match(/(?:indicator|study|strategy)\s*\(\s*["']([^"']+)["']/i);
-        if (tm && name === "مؤشري الجديد") {
+        const tm = code.match(/(?:indicator|study|strategy)\s*\(\s*(?:title\s*=\s*)?["']([^"']+)["']/i);
+        if (tm && (name === "مؤشر جديد" || name === "مؤشر مخصص")) {
           name = tm[1].slice(0, 32);
           $("proScriptNameInput").value = name;
         }
@@ -6841,33 +6817,15 @@ ${buildStockContextString()}
 
       $("proNewScriptBtn").onclick = () => {
         const id = "custom_" + Date.now();
-        const newScript = {
-          id,
-          name: "مؤشري الجديد",
-          builtin: false,
-          code: [
-            "// اكتب شروط مؤشرك الخاص هنا",
-            "const fast = ema(close, 10);",
-            "const slow = ema(close, 30);",
-            "const r = rsi(close, 14);",
-            "",
-            "plot(fast, { title: 'EMA 10', color: '#10b981', width: 2 });",
-            "plot(slow, { title: 'EMA 30', color: '#f59e0b', width: 2 });",
-            "",
-            "for (let i = 1; i < len; i++) {",
-            "  if (crossover(fast, slow, i) && r[i] < 65) buy(i, 'دخول');",
-            "  if (crossunder(fast, slow, i)) sell(i, 'خروج');",
-            "}"
-          ].join("\n")
-        };
+        const newScript = { id, name: "مؤشر جديد", builtin: false, code: "" };
         state.proScripts.push(newScript);
         state.editingScriptId = id;
         if (!state.activeProScripts.includes(id)) state.activeProScripts.push(id);
-        localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
-        localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
-        markLocalChange(true); syncUserToCloud(true);
+        saveProState(true);
         renderProScriptsUI();
-        runActiveProScripts();
+        $("proCodeArea").focus();
+        $("proConsole").className = "pro-console";
+        $("proConsole").textContent = "الصق كود Pine Script في الخانة ثم اضغط '▶ تشغيل' أو '💾 حفظ'.";
       };
 
       $("proDeleteScriptBtn").onclick = () => {
@@ -6875,21 +6833,8 @@ ${buildStockContextString()}
         if (!sc || sc.builtin) return;
         state.proScripts = state.proScripts.filter(s => s.id !== sc.id);
         state.activeProScripts = state.activeProScripts.filter(x => x !== sc.id);
-        state.editingScriptId = state.proScripts[0]?.id || "ut_bot";
-        localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
-        localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
-        markLocalChange(true); syncUserToCloud(true);
-        renderProScriptsUI();
-        runActiveProScripts();
-      };
-
-      $("proResetScriptBtn").onclick = () => {
-        const def = DEFAULT_PRO_SCRIPTS.find(d => d.id === state.editingScriptId);
-        const sc = state.proScripts.find(s => s.id === state.editingScriptId);
-        if (!def || !sc) return;
-        sc.name = def.name; sc.code = def.code;
-        localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
-        markLocalChange(true); syncUserToCloud(true);
+        state.editingScriptId = state.proScripts[0]?.id || "auto_sr";
+        saveProState(true);
         renderProScriptsUI();
         runActiveProScripts();
       };
