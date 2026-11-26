@@ -415,8 +415,7 @@ body.auth-locked .auth-gate{display: flex;}
 .stk-logo.sm.fallback{font-size: 8px;}
 .stk-logo.index-logo{background: linear-gradient(135deg,rgba(245,158,11,0.24),rgba(16,185,129,0.24));border-color: rgba(245,158,11,0.45);color: var(--gold);font-size: 13px;}
 .pulse-header{padding: 15px 12px 12px;text-align: center;position: relative;background: radial-gradient(520px 180px at 50% -10%,rgba(16,185,129,0.12),transparent 70%),var(--bg-card);border-bottom: 1px solid var(--border);}
-.pulse-refresh-btn{position: absolute;top: 10px;left: 10px;}
-.pulse-live-badge{display: inline-flex;align-items: center;gap: 6px;padding: 3px 10px;border-radius: 20px;background: var(--bg-elevated);border: 1px solid var(--border-strong);font-size: 10.5px;font-weight: 800;color: var(--text);margin-bottom: 8px;max-width: calc(100% - 76px);}
+.pulse-live-badge{display: inline-flex;align-items: center;gap: 6px;padding: 3px 10px;border-radius: 20px;background: var(--bg-elevated);border: 1px solid var(--border-strong);font-size: 10.5px;font-weight: 800;color: var(--text);margin-bottom: 8px;}
 .pulse-live-dot{width: 7px;height: 7px;border-radius: 50%;background: var(--emerald);flex-shrink: 0;box-shadow: 0 0 0 0 rgba(16,185,129,0.7);animation: pulsePing 1.8s infinite;}
 @keyframes pulsePing{0%{box-shadow: 0 0 0 0 rgba(16,185,129,0.65);}
 70%{box-shadow: 0 0 0 7px rgba(16,185,129,0);}
@@ -548,8 +547,6 @@ body.focus-mode #moversSection,body.focus-mode #moversDualSection,body.focus-mod
 .perf-sim-box{padding: 10px 12px;border-radius: 12px;background: linear-gradient(135deg,rgba(16,185,129,0.08),rgba(245,158,11,0.08));border: 1px solid var(--border-strong);display: flex;align-items: center;justify-content: space-between;gap: 8px;flex-wrap: wrap;font-size: 11.5px;font-weight: 700;}
 .perf-sim-result{font-size: 13px;font-weight: 800;direction: ltr;}
 .perf-updated-note{font-size: 10.5px;color: var(--text-muted);text-align: center;}
-.pulse-auto-spin{display: inline-block;transition: transform 0.4s ease;}
-.pulse-auto-spin.spinning{animation: spin 0.7s linear infinite;}
 .hm-head{padding: 11px 12px 9px;background: var(--bg-elevated);border-bottom: 1px solid var(--border);display: flex;flex-direction: column;gap: 8px;}
 .hm-top-row{display: flex;align-items: center;justify-content: space-between;gap: 8px;flex-wrap: wrap;}
 .hm-controls-row{display: flex;align-items: center;justify-content: space-between;gap: 6px;flex-wrap: wrap;}
@@ -619,7 +616,6 @@ body.focus-mode #heatmapSection{display: none !important;}
 .clean-tf-btn{padding: 6px 6px;font-size: 11px;}
 .clean-name-txt{font-size: 13.5px;}
 }
-.scr-select{width: 100%;padding: 7px 9px;border-radius: 9px;border: 1px solid var(--border-strong);background: var(--bg-input);font-size: 11.5px;font-weight: 700;color: var(--text);outline: none;}
   </style>
 </head>
 <body class="auth-locked">
@@ -836,7 +832,6 @@ body.focus-mode #heatmapSection{display: none !important;}
     </section>
     <section class="card" id="moversSection">
       <div class="pulse-header">
-        <button class="btn-sm pulse-refresh-btn" id="refreshMoversBtn" title="يتحدث تلقائياً كل 10 ثواني — اضغط للتحديث الفوري"><span class="pulse-auto-spin" id="pulseRefreshSpin">↻</span> <span id="pulseAutoCountdown">10ث</span></button>
         <div class="pulse-live-badge">
           <span class="pulse-live-dot"></span>
           <span>نبض السوق المباشر</span>
@@ -1101,30 +1096,21 @@ body.focus-mode #heatmapSection{display: none !important;}
       <div class="pro-editor-panel" id="proEditorPanel">
         <div class="pro-editor-top">
           <div class="pro-editor-controls">
-            <input type="text" id="proScriptNameInput" placeholder="اسم المؤشر..." style="min-width:130px;flex:1;" />
+            <input type="text" id="proScriptNameInput" placeholder="اسم المؤشر الجديد..." style="min-width:130px;flex:1;" />
           </div>
           <div class="pro-editor-btns">
-            <button type="button" class="btn-sm emerald" id="proNewScriptBtn">+ جديد</button>
-            <button type="button" class="btn-sm danger" id="proDeleteScriptBtn" title="حذف المؤشر">🗑️</button>
+            <button type="button" class="btn-sm emerald" id="proNewScriptBtn">+ مؤشر جديد</button>
+            <button type="button" class="btn-sm blue" id="proPasteCleanBtn" title="يمسح القديم ويلصق الكود الجديد نظيف بدون تداخل">📋 لصق</button>
+            <button type="button" class="btn-sm" id="proClearCodeBtn" title="مسح نص الكود فقط">🧹 مسح</button>
+            <button type="button" class="btn-sm danger" id="proDeleteScriptBtn" title="حذف المؤشر" style="display:none;">🗑️</button>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-          <select id="proTemplatePicker" class="scr-select" style="flex:1;min-width:150px;" title="أدخل مؤشر Pine Script سليم ومجرب بضغطة زر">
-            <option value="">📚 قوالب جاهزة ومجربة (اختر لإدراجها)...</option>
-            <option value="ut_bot">⚡ شراء او بيع (UT Bot Alerts)</option>
-            <option value="ema_cross">🔀 sell and buy (EMA 10 / 20 Cross)</option>
-            <option value="supertrend">📈 SuperTrend (10, 3) + إشارات</option>
-            <option value="rsi_macd">📉 MACD Classic (لوحة سفلية)</option>
-          </select>
-          <button type="button" class="btn-sm blue" id="proPasteCleanBtn" title="يمسح القديم ويلصق الكود الجديد نظيف بدون تداخل">📋 مسح ولصق</button>
-          <button type="button" class="btn-sm" id="proClearCodeBtn" title="مسح نص الكود فقط">🧹 مسح</button>
-        </div>
-        <textarea class="pro-code-area" id="proCodeArea" wrap="off" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="الصق كود Pine Script من TradingView هنا..."></textarea>
+        <textarea class="pro-code-area" id="proCodeArea" wrap="off" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off" placeholder="اكتب أو الصق كود Pine Script لمؤشر جديد هنا..."></textarea>
         <div class="pro-editor-actions">
           <button type="button" class="btn-sm emerald" id="proRunCodeBtn" style="flex:1;padding:8px 12px;">▶ تشغيل على الشارت</button>
-          <button type="button" class="btn-sm gold" id="proSaveScriptBtn" style="flex:1;padding:8px 12px;">💾 حفظ المؤشر</button>
+          <button type="button" class="btn-sm gold" id="proSaveScriptBtn" style="flex:1;padding:8px 12px;">💾 حفظ كمؤشر جديد</button>
         </div>
-        <div class="pro-console" id="proConsole">الصق كود Pine Script واضغط "▶ تشغيل" أو "💾 حفظ".</div>
+        <div class="pro-console" id="proConsole">المؤشرات الأساسية محمية من التعديل — أضف مؤشراً جديداً هنا واضغط "▶ تشغيل" أو "💾 حفظ".</div>
       </div>
       <div class="scroll-helper">
         <span>● اسحب من هنا للتمرير لأسفل</span>
@@ -1681,8 +1667,7 @@ code: [
 ];
 function sanitizeProScriptsList(list) {
 const saved = Array.isArray(list) ? list.filter(s => s && s.id && !REMOVED_BUILTIN_PRO_IDS.has(s.id)) : [];
-const byId = Object.fromEntries(saved.map(s => [s.id, s]));
-const merged = DEFAULT_PRO_SCRIPTS.map(def => byId[def.id] ? { ...def, ...byId[def.id], builtin: true } : { ...def });
+const merged = DEFAULT_PRO_SCRIPTS.map(def => ({ ...def, builtin: true }));
 saved.forEach(s => { if (!DEFAULT_PRO_SCRIPTS.some(d => d.id === s.id)) merged.push({ ...s, builtin: false }); });
 return merged;
 }
@@ -1767,7 +1752,7 @@ attachedImage: null,
 chartMode: initialChartMode,
 proScripts: loadSavedProScripts(),
 activeProScripts: safeJson(LS.PRO_ACTIVE, ["user_ut_bot"]).filter(id => !REMOVED_BUILTIN_PRO_IDS.has(id)),
-editingScriptId: "user_ut_bot",
+editingScriptId: null,
 proEditorOpen: false,
 activeTab: initialTab,
 chartDirty: true,
@@ -2228,19 +2213,25 @@ if ($("enterFocusBtn")) $("enterFocusBtn").style.display = isPerf ? "none" : "in
 function renderProScriptsUI(preserveInputs = false) {
 const chipsEl = $("proScriptChips");
 if (!chipsEl) return;
-if (!state.proScripts.some(s => s.id === state.editingScriptId)) {
-state.editingScriptId = state.proScripts[0]?.id || "auto_sr";
-}
+const curCustom = state.proScripts.find(s => s.id === state.editingScriptId && !s.builtin) || null;
+if (!curCustom) state.editingScriptId = null;
 chipsEl.innerHTML = state.proScripts.map(s => {
 const act = state.activeProScripts.includes(s.id);
-const ed = state.proEditorOpen && state.editingScriptId === s.id;
+const ed = state.proEditorOpen && !s.builtin && state.editingScriptId === s.id;
 return `<button class="pro-chip ${act ? "active" : ""} ${ed ? "editing" : ""}" data-pro-id="${s.id}">${s.name}</button>`;
 }).join("");
-const cur = state.proScripts.find(s => s.id === state.editingScriptId);
-if (cur && !preserveInputs) {
-$("proScriptNameInput").value = cur.name;
-$("proCodeArea").value = cur.code;
-$("proDeleteScriptBtn").style.display = cur.builtin ? "none" : "inline-flex";
+if (!preserveInputs) {
+if (curCustom) {
+$("proScriptNameInput").value = curCustom.name;
+$("proCodeArea").value = curCustom.code;
+$("proDeleteScriptBtn").style.display = "inline-flex";
+$("proSaveScriptBtn").textContent = "💾 حفظ التعديلات";
+} else {
+$("proScriptNameInput").value = "";
+$("proCodeArea").value = "";
+$("proDeleteScriptBtn").style.display = "none";
+$("proSaveScriptBtn").textContent = "💾 حفظ كمؤشر جديد";
+}
 }
 }
 function destroyProSubChart() {
@@ -5256,7 +5247,7 @@ return applyMacroRatesUI(state.macroRates);
 try {
 const ctrl = new AbortController();
 const t = setTimeout(() => ctrl.abort(), 6500);
-const res = await fetch(`${WORKER_ORIGIN}/rates`, { signal: ctrl.signal });
+const res = await fetch(`${WORKER_ORIGIN}/rates?t=${Date.now()}`, { signal: ctrl.signal });
 clearTimeout(t);
 if (res.ok) {
 const data = await res.json();
@@ -5965,22 +5956,24 @@ if (data && data.price != null) { applyLiveQuoteToHeader(data); return data; }
 } catch {}
 return null;
 }
-const AUTO_REFRESH_SEC = 10;
-let autoRefreshLeft = AUTO_REFRESH_SEC;
 let autoRefreshCycles = 0;
 let livePollTimer = null;
-let chartTickSec = 0;
+let liveRefreshInFlight = false;
+let marketCheckTick = 0;
 async function runLiveRefreshCycle(manual = false) {
-const spin = $("pulseRefreshSpin");
-if (spin) spin.classList.add("spinning");
+if (!manual && liveRefreshInFlight) return;
+liveRefreshInFlight = true;
 autoRefreshCycles++;
 try {
 if (state.activeTab === "home") {
-await Promise.all([fetchMarketMovers(true, !manual), fetchMacroRates(true)]);
+await Promise.all([
+fetchMarketMovers(true, !manual),
+(manual || autoRefreshCycles % 5 === 1) ? fetchMacroRates(true) : Promise.resolve()
+]);
 if (!(state.indicesData?.SHARIAH?.points > 0)) fetchEgxIndices(true);
 } else if (state.activeTab === "chart" || state.activeTab === "ai") {
 await fetchLiveQuote(state.ticker, true);
-if (state.chartMode === "pro" && autoRefreshCycles % 6 === 0 && proCandleSeries && currentProBars.length) {
+if (state.chartMode === "pro" && autoRefreshCycles % 15 === 0 && proCandleSeries && currentProBars.length) {
 const res = await fetchOhlcBars(state.ticker, state.tf, true);
 if (res?.bars?.length && state.chartMode === "pro") {
 const prevRange = proChart ? proChart.timeScale().getVisibleLogicalRange() : null;
@@ -5993,35 +5986,26 @@ runActiveProScripts();
 if (state.liveQuote?.ticker === state.ticker) tickProChartLiveCandle(state.liveQuote, null);
 if (prevRange && proChart) proChart.timeScale().setVisibleLogicalRange(prevRange);
 }
-} else if (state.chartMode === "perf" && state.perfSelectedKey === "1D" && autoRefreshCycles % 8 === 0) {
+} else if (state.chartMode === "perf" && state.perfSelectedKey === "1D" && autoRefreshCycles % 15 === 0) {
 loadCleanChartPeriod(state.ticker, "1D", true);
 }
 }
 } catch {}
-finally { setTimeout(() => { if (spin) spin.classList.remove("spinning"); }, 400); }
+finally { liveRefreshInFlight = false; }
 }
 function startLiveAutoRefresh() {
 if (livePollTimer) return;
-autoRefreshLeft = AUTO_REFRESH_SEC;
 livePollTimer = setInterval(() => {
 if (document.hidden || document.body.classList.contains("auth-locked") || !state.appBooted) return;
-if (state.activeTab === "chart" || state.activeTab === "ai") {
-chartTickSec++;
-const step = state.marketIsOpen ? (state.chartMode === "perf" ? 3 : 5) : 20;
-if (chartTickSec >= step) { chartTickSec = 0; runLiveRefreshCycle(false); }
-return;
-}
-autoRefreshLeft--;
-if ($("pulseAutoCountdown")) $("pulseAutoCountdown").textContent = autoRefreshLeft > 0 ? `${autoRefreshLeft}ث` : "تحديث";
-if (autoRefreshLeft <= 0) {
-autoRefreshLeft = state.marketIsOpen ? AUTO_REFRESH_SEC : 20;
+marketCheckTick++;
+if (marketCheckTick >= 15) { marketCheckTick = 0; updateMarketStatus(); }
+if (!state.marketIsOpen) return;
 runLiveRefreshCycle(false);
-}
 }, 1000);
 document.addEventListener("visibilitychange", () => {
 if (!document.hidden && state.appBooted && !document.body.classList.contains("auth-locked")) {
-autoRefreshLeft = state.marketIsOpen ? AUTO_REFRESH_SEC : 20;
-runLiveRefreshCycle(false);
+updateMarketStatus();
+if (state.marketIsOpen) runLiveRefreshCycle(false);
 }
 });
 }
@@ -6276,6 +6260,10 @@ loadCleanChartPeriod(state.ticker, state.perfSelectedKey, false);
 if ($("cleanTfRow")) $("cleanTfRow").onclick = onCleanTfPick;
 $("toggleProEditorBtn").onclick = () => {
 state.proEditorOpen = !state.proEditorOpen;
+if (state.proEditorOpen) {
+const cur = state.proScripts.find(s => s.id === state.editingScriptId && !s.builtin);
+if (!cur) state.editingScriptId = null;
+}
 syncChartModeUI();
 renderProScriptsUI();
 };
@@ -6288,11 +6276,23 @@ $("proScriptChips").onclick = e => {
 const chip = e.target.closest("[data-pro-id]");
 if (!chip) return;
 const id = chip.dataset.proId;
+const sc = state.proScripts.find(s => s.id === id);
+if (!sc) return;
+if (sc.builtin) {
+const idx = state.activeProScripts.indexOf(id);
+if (idx >= 0) state.activeProScripts.splice(idx, 1);
+else state.activeProScripts.push(id);
+localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+markLocalChange(true); syncUserToCloud(true);
+renderProScriptsUI(true);
+runActiveProScripts();
+return;
+}
 if (state.proEditorOpen && state.editingScriptId !== id) {
 state.editingScriptId = id;
 if (!state.activeProScripts.includes(id)) state.activeProScripts.push(id);
 } else {
-state.editingScriptId = id;
+if (state.proEditorOpen) state.editingScriptId = id;
 const idx = state.activeProScripts.indexOf(id);
 if (idx >= 0) state.activeProScripts.splice(idx, 1);
 else state.activeProScripts.push(id);
@@ -6310,67 +6310,12 @@ ta.value = ta.value.substring(0, s) + "  " + ta.value.substring(end);
 ta.selectionStart = ta.selectionEnd = s + 2;
 }
 });
-const PINE_TEMPLATES = {
-ut_bot:    { name: "شراء او بيع",  code: USER_PINE_UT_BOT },
-ema_cross: { name: "sell and buy", code: USER_PINE_SELL_BUY },
-supertrend: {
-name: "SuperTrend",
-code: [
-"//@version=5",
-'indicator("SuperTrend", overlay = true)',
-"atrPeriod = input(10, 'ATR Length')",
-"factor = input.float(3.0, 'Factor')",
-"[supertrend, direction] = ta.supertrend(factor, atrPeriod)",
-"upTrend = direction < 0 ? supertrend : na",
-"downTrend = direction > 0 ? supertrend : na",
-'plot(upTrend, "Up", color = color.green, linewidth = 2)',
-'plot(downTrend, "Down", color = color.red, linewidth = 2)',
-"buySig = ta.crossunder(direction, 0)",
-"sellSig = ta.crossover(direction, 0)",
-'plotshape(buySig, title="Buy", text="Buy", style=shape.labelup, location=location.belowbar, color=color.green)',
-'plotshape(sellSig, title="Sell", text="Sell", style=shape.labeldown, location=location.abovebar, color=color.red)'
-].join("\n")
-},
-rsi_macd: {
-name: "MACD Classic",
-code: [
-"//@version=5",
-'indicator("MACD Classic", overlay = false)',
-"[macdLine, signalLine, histLine] = ta.macd(close, 12, 26, 9)",
-"histCol = histLine >= 0 ? color.green : color.red",
-'plot(histLine, "Histogram", color = histCol, style = plot.style_histogram)',
-'plot(macdLine, "MACD", color = color.blue, linewidth = 2)',
-'plot(signalLine, "Signal", color = color.orange, linewidth = 2)',
-'hline(0, "Zero", color = color.gray)'
-].join("\n")
-}
-};
-$("proTemplatePicker").onchange = e => {
-const key = e.target.value;
-if (!key || !PINE_TEMPLATES[key]) return;
-const tpl = PINE_TEMPLATES[key];
-const curSc = state.proScripts.find(s => s.id === state.editingScriptId);
-if (!curSc || curSc.builtin) {
-const newId = "custom_" + Date.now();
-state.proScripts.push({ id: newId, name: tpl.name, builtin: false, code: tpl.code });
-state.editingScriptId = newId;
-if (!state.activeProScripts.includes(newId)) state.activeProScripts.push(newId);
-} else {
-curSc.name = tpl.name;
-curSc.code = tpl.code;
-if (!state.activeProScripts.includes(curSc.id)) state.activeProScripts.push(curSc.id);
-}
-e.target.value = "";
-saveProState(true);
-renderProScriptsUI();
-runActiveProScripts();
-};
 $("proPasteCleanBtn").onclick = async () => {
 try {
 const txt = await navigator.clipboard.readText();
 if (!txt || !txt.trim()) {
 $("proConsole").className = "pro-console err";
-$("proConsole").textContent = "الحافظة فارغة — انسخ الكود من TradingView أولاً ثم اضغط مسح ولصق.";
+$("proConsole").textContent = "الحافظة فارغة — انسخ الكود أولاً ثم اضغط لصق.";
 return;
 }
 $("proCodeArea").value = txt;
@@ -6386,33 +6331,50 @@ $("proClearCodeBtn").onclick = () => {
 $("proCodeArea").value = "";
 $("proCodeArea").focus();
 $("proConsole").className = "pro-console";
-$("proConsole").textContent = "تم مسح الكود — الصق الكود الجديد واضغط '▶ تشغيل' أو '💾 حفظ'.";
+$("proConsole").textContent = "تم مسح الكود — الصق كود المؤشر الجديد واضغط '▶ تشغيل' أو '💾 حفظ'.";
 };
 $("proRunCodeBtn").onclick = () => {
-const id = state.editingScriptId;
 const code = $("proCodeArea").value;
-let name = $("proScriptNameInput").value.trim() || "مؤشر مخصص";
-const tm = code.match(/(?:indicator|study|strategy)\s*\(\s*(?:title\s*=\s*)?["']([^"']+)["']/i);
-if (tm && (name === "مؤشر جديد" || name === "مؤشر مخصص")) { name = tm[1].slice(0, 32); $("proScriptNameInput").value = name; }
-if (!state.activeProScripts.includes(id)) {
-state.activeProScripts.push(id);
-localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
-renderProScriptsUI(true);
+if (!code.trim()) {
+$("proConsole").className = "pro-console err";
+$("proConsole").textContent = "الصق كود المؤشر أولاً ثم اضغط تشغيل.";
+return;
 }
-runActiveProScripts({ id, name, code });
-};
-$("proSaveScriptBtn").onclick = () => {
-const id = state.editingScriptId;
-const code = $("proCodeArea").value;
-let name = $("proScriptNameInput").value.trim() || "مؤشر مخصص";
+let name = $("proScriptNameInput").value.trim();
 const tm = code.match(/(?:indicator|study|strategy)\s*\(\s*(?:title\s*=\s*)?["']([^"']+)["']/i);
-if (tm && (name === "مؤشر جديد" || name === "مؤشر مخصص")) {
-name = tm[1].slice(0, 32);
+if (!name || name === "مؤشر جديد" || name === "مؤشر مخصص") {
+name = tm ? tm[1].slice(0, 32) : (name || "مؤشر مخصص");
 $("proScriptNameInput").value = name;
 }
-const sc = state.proScripts.find(s => s.id === id);
-if (sc) { sc.name = name; sc.code = code; }
-if (!state.activeProScripts.includes(id)) state.activeProScripts.push(id);
+const curCustom = state.proScripts.find(s => s.id === state.editingScriptId && !s.builtin);
+const previewId = curCustom ? curCustom.id : "__draft_preview__";
+runActiveProScripts({ id: previewId, name, code });
+};
+$("proSaveScriptBtn").onclick = () => {
+const code = $("proCodeArea").value;
+if (!code.trim()) {
+$("proConsole").className = "pro-console err";
+$("proConsole").textContent = "الصق كود المؤشر أولاً قبل الحفظ.";
+return;
+}
+let name = $("proScriptNameInput").value.trim();
+const tm = code.match(/(?:indicator|study|strategy)\s*\(\s*(?:title\s*=\s*)?["']([^"']+)["']/i);
+if (!name || name === "مؤشر جديد" || name === "مؤشر مخصص") {
+name = tm ? tm[1].slice(0, 32) : (name || "مؤشر مخصص");
+$("proScriptNameInput").value = name;
+}
+const existingCustom = state.proScripts.find(s => s.id === state.editingScriptId && !s.builtin);
+let targetId;
+if (existingCustom) {
+existingCustom.name = name;
+existingCustom.code = code;
+targetId = existingCustom.id;
+} else {
+targetId = "custom_" + Date.now();
+state.proScripts.push({ id: targetId, name, builtin: false, code });
+state.editingScriptId = targetId;
+}
+if (!state.activeProScripts.includes(targetId)) state.activeProScripts.push(targetId);
 saveProState(true);
 renderProScriptsUI();
 runActiveProScripts();
@@ -6420,28 +6382,24 @@ const con = $("proConsole");
 if (!con.classList.contains("err")) con.textContent = "💾 تم الحفظ والتشغيل — " + con.textContent.replace(/^✅\s*/, "");
 };
 $("proNewScriptBtn").onclick = () => {
-const id = "custom_" + Date.now();
-const newScript = { id, name: "مؤشر جديد", builtin: false, code: "" };
-state.proScripts.push(newScript);
-state.editingScriptId = id;
-if (!state.activeProScripts.includes(id)) state.activeProScripts.push(id);
-saveProState(true);
+state.editingScriptId = null;
 renderProScriptsUI();
-$("proCodeArea").focus();
+$("proScriptNameInput").focus();
 $("proConsole").className = "pro-console";
-$("proConsole").textContent = "الصق كود Pine Script في الخانة ثم اضغط '▶ تشغيل' أو '💾 حفظ'.";
+$("proConsole").textContent = "اكتب اسم المؤشر والصق كود Pine Script ثم اضغط '▶ تشغيل' أو '💾 حفظ كمؤشر جديد'.";
 };
 $("proDeleteScriptBtn").onclick = () => {
 const sc = state.proScripts.find(s => s.id === state.editingScriptId);
 if (!sc || sc.builtin) return;
 state.proScripts = state.proScripts.filter(s => s.id !== sc.id);
 state.activeProScripts = state.activeProScripts.filter(x => x !== sc.id);
-state.editingScriptId = state.proScripts[0]?.id || "auto_sr";
+const nextCustom = state.proScripts.find(s => !s.builtin);
+state.editingScriptId = nextCustom ? nextCustom.id : null;
 saveProState(true);
 renderProScriptsUI();
 runActiveProScripts();
 };
-setInterval(updateMarketStatus, 60000);
+setInterval(updateMarketStatus, 15000);
 function bootTerminalOnce() {
 if (state.appBooted) return;
 state.appBooted = true;
@@ -6467,7 +6425,6 @@ fetchMacroRates(false);
 startLiveAutoRefresh();
 }
 $("gateGoogleSignInBtn").onclick = signInWithGoogle;
-$("refreshMoversBtn").onclick = () => { autoRefreshLeft = state.marketIsOpen ? AUTO_REFRESH_SEC : 20; runLiveRefreshCycle(true); };
 const onMoverClick = e => {
 const row = e.target.closest("[data-mover-ticker]");
 if (!row) return;
