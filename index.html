@@ -33,12 +33,11 @@
     .brand-mini-arrow { color: var(--emerald); font-size: 13px; display: inline-block; animation: arrowNudge 2.2s ease-in-out infinite; }
     @keyframes arrowNudge { 0%, 100% { transform: translate(0, 1px); opacity: 0.65; } 50% { transform: translate(2px, -3px); opacity: 1; } }
     @keyframes textShimmer { 0% { background-position: 0% center; } 100% { background-position: 200% center; } }
-    .market-status-strip { display: flex; align-items: center; justify-content: center; }
-    .market-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 13px; border-radius: 20px; font-size: 11.5px; font-weight: 700; border: 1px solid var(--border-strong); background: var(--bg-card); color: var(--text-muted); white-space: nowrap; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.22); }
+    .market-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; border: 1px solid var(--border-strong); background: var(--bg-elevated); color: var(--text-muted); white-space: nowrap; flex-shrink: 0; }
     .market-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
     .market-pill.open { border-color: rgba(16, 185, 129, 0.42); background: var(--emerald-dim); color: var(--emerald); }
     .market-pill.open .dot { background: var(--emerald); box-shadow: 0 0 8px var(--emerald); }
-    body.focus-mode .market-status-strip { display: none !important; }
+    @media (max-width: 560px) { .market-pill .mkt-timer { display: none; } }
     .auth-btn { height: 35px; padding: 0 10px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; transition: 0.18s; border: 1px solid rgba(16, 185, 129, 0.4); background: var(--emerald-dim); color: var(--emerald); max-width: 145px; }
     .auth-btn:hover { background: var(--emerald); color: #03150e; }
     .auth-btn.signed-in { border-color: var(--border-strong); background: var(--bg-elevated); color: var(--text); padding: 0 7px 0 9px; }
@@ -721,6 +720,11 @@
   <header class="header">
     <div class="header-right">
       <button class="icon-btn" id="openDrawerBtn" title="قائمة الأسهم">☰</button>
+      <div class="market-pill" id="marketStatusPill" title="مواعيد جلسة البورصة المصرية: الأحد–الخميس 10:00 ص – 2:30 م بتوقيت القاهرة">
+        <span class="dot"></span>
+        <span id="marketStatusText">السوق</span>
+        <span class="mkt-timer" id="marketStatusTimer"></span>
+      </div>
     </div>
     <div class="header-left">
       <button class="icon-btn" id="langToggleBtn" title="تبديل لغة الشارت">AR</button>
@@ -749,15 +753,6 @@
         <button class="index-filter-btn" data-open-filter="SHARIAH">الأسهم</button>
       </div>
     </section>
-
-    <!-- شريط حالة جلسة السوق جوه الصفحة تحت المؤشرات -->
-    <div class="market-status-strip">
-      <div class="market-pill" id="marketStatusPill" title="مواعيد جلسة البورصة المصرية: الأحد–الخميس 10:00 ص – 2:30 م بتوقيت القاهرة">
-        <span class="dot"></span>
-        <span id="marketStatusText">السوق</span>
-        <span class="mkt-timer" id="marketStatusTimer"></span>
-      </div>
-    </div>
 
     <!-- الشارت -->
     <section class="card" id="chartCard">
@@ -948,9 +943,6 @@
           <button class="movers-tab" data-tab="losers">↘ هبوطاً (Losers)</button>
           <button class="movers-tab" data-tab="active">🔥 الأكثر تداولاً (Active)</button>
         </div>
-        <div class="movers-right-tools">
-          <button class="btn-sm gold" id="moversShariahToggle" title="عرض أسهم الشريعة فقط">☪ الشريعة</button>
-        </div>
       </div>
 
       <div class="movers-list-head" id="moversListHead">
@@ -960,6 +952,9 @@
 
       <div class="movers-grid" id="moversList">
         <div class="movers-empty">⏳ جاري تحميل نبض السوق والأكثر صعوداً وهبوطاً وتداولاً...</div>
+      </div>
+      <div class="movers-more-wrap" id="moversMoreWrap" style="display:none;padding:0 12px 12px;text-align:center;">
+        <button class="btn-sm emerald" id="moversToggleAllBtn" style="width:100%;padding:8px 12px;font-size:12px;">عرض كل الأسهم</button>
       </div>
       <div class="movers-tv-fallback" id="moversTvFallback" style="display:none;"></div>
     </section>
@@ -1277,7 +1272,17 @@
       ["SCTS","قناة السويس لتوطين التكنولوجيا","Suez Canal Tech","تعليم وتكنولوجيا","EGX70,EGX100",false], ["SEIG","السعودية المصرية للاستثمار والتمويل","Saudi Egyptian Inv","استثمار","EGX70,EGX100",false], ["SMPP","الشروق الحديثة للطباعة والتغليف","Modern Shorouk","تعبئة وتغليف","EGX70,EGX100",false],
       ["SMFR","سماد مصر - إيجيفرت","Samad Misr","أسمدة","EGX70,EGX100,SHARIAH",true], ["TANM","تنمية للاستثمار العقاري","Tanmiya Real Estate","عقارات","EGX70,EGX100",false], ["TRTO","ترانس أوشيان تورز","TransOceans","سياحة","EGX100",false],
       ["UPMS","يونيون فارما","Union Pharma","أدوية","EGX100",false], ["VERT","فيرتيكا للصناعة والتجارة","Vertika","تكنولوجيا","EGX100",false], ["WATP","وادي كوم أمبو لاستصلاح الأراضي","Wadi Kom Ombo","زراعة","EGX70,EGX100",false],
-      ["APSW","العربية بولفارا للغزل والنسيج","Arab Polvara","منسوجات","EGX70,EGX100",false], ["ARPI","العربية لاستصلاح الأراضي","Arab Land Reclamation","زراعة","EGX70,EGX100",false]
+      ["APSW","العربية بولفارا للغزل والنسيج","Arab Polvara","منسوجات","EGX70,EGX100",false], ["ARPI","العربية لاستصلاح الأراضي","Arab Land Reclamation","زراعة","EGX70,EGX100",false],
+      ["HBCO","هيبكو للاستثمارات التجارية والتنمية العقارية","HEPCO","عقارات وتجارة","EGX100",false], ["CPME","كاتليست بارتنرز ميديل إيست","Catalyst Partners ME","خدمات مالية","EGX100",false], ["IBCT","انترناشيونال بزنيس كوربوريشن للتجارة والتوكيلات","IBC Trade","تجارة وتوزيع","EGX100",false],
+      ["ACAMD","العربية لإدارة وتطوير الأصول","Arab Asset Mgmt","عقارات","EGX70,EGX100",false], ["AFDI","الأهلي للتنمية والاستثمار","Al Ahly Dev & Inv","خدمات مالية","EGX70,EGX100",false], ["AIDC","العربية للاستثمارات والتنمية القابضة","Arabia Investments","خدمات مالية","EGX70,EGX100",false],
+      ["ARVA","العربية للمحابس","Arab Valves","صناعة","EGX70,EGX100",false], ["ASPI","أسباير كابيتال القابضة للاستثمارات المالية","Aspire Capital","خدمات مالية","EGX70,EGX100",false], ["BIDI","البدر للاستثمار والتنمية","El Badr Investment","صناعة","EGX100",false],
+      ["BIGP","بي آي جي للتجارة والاستثمار","BIG Trading","تجارة","EGX100",false], ["BONY","بنيان للتنمية والتجارة","Bonyan","عقارات وتجارة","EGX70,EGX100",false], ["CAED","القاهرة للخدمات التعليمية","Cairo Educational","تعليم","EGX70,EGX100",false],
+      ["CCRS","الخليجية الكندية للاستثمار العقاري","Gulf Canadian","عقارات","EGX70,EGX100",false], ["COPR","كوبر للاستثمار التجاري والتطوير العقاري","Copper Commercial","عقارات","EGX70,EGX100",false], ["DGTZ","ديجيتايز للاستثمار والتقنية","Digitize Tech","تكنولوجيا","EGX70,EGX100",false],
+      ["EBSC","أصول للوساطة في الأوراق المالية","Osool ESB","خدمات مالية","EGX70,EGX100",false], ["EDFM","مطاحن شرق الدلتا","East Delta Mills","مطاحن وأغذية","EGX70,EGX100",false], ["EEII","العربية للصناعات الهندسية","Arab Engineering","صناعة وهندسة","EGX70,EGX100",false],
+      ["FTNS","فيتنس برايم للأندية الصحية","Fitness Prime","خدمات","EGX100",false], ["IDHC","انتجريتد دياجنوستكس هولدنجز (IDH)","IDH Diagnostics","رعاية صحية","EGX70,EGX100",false], ["INEG","المؤشر للبرمجيات ونشر المعلومات","El Moasher","تكنولوجيا","EGX100",false],
+      ["MBEN","أم بي للهندسة","MB Engineering","صناعة وهندسة","EGX70,EGX100",false], ["NAHO","نعيم القابضة للاستثمارات","Naim Holding","خدمات مالية","EGX70,EGX100",false], ["NCGC","النيل لحليج الأقطان","Nile Cotton Ginning","منسوجات","EGX70,EGX100",false],
+      ["NEDA","شمال الصعيد للتنمية والإنتاج الزراعي - نيوداب","NEDA Agri","أغذية وزراعة","EGX70,EGX100",false], ["NIPH","النيل للأدوية والصناعات الكيماوية","Nile Pharma","أدوية","EGX70,EGX100,SHARIAH",true], ["SAIB","بنك الشركة المصرفية العربية الدولية","SAIB Bank","بنوك","EGX100",false],
+      ["UBEE","المصرف المتحد","The United Bank","بنوك","EGX30,EGX100",false], ["UTOP","يوتوبيا للاستثمار العقاري والسياحي","Utopia Real Estate","عقارات","EGX70,EGX100",false]
     ];
 
     const INDICES_META = {
@@ -1474,7 +1479,7 @@
       proEditorOpen: false,
       moversData: null,
       moversTab: "gainers",
-      moversShariahOnly: false,
+      moversShowAll: false,
       appBooted: false,
       chatHistory: [],
       sending: false
@@ -2967,6 +2972,7 @@
       $("moversControlsBar").style.display = "none";
       $("moversListHead").style.display = "none";
       $("moversList").style.display = "none";
+      $("moversMoreWrap").style.display = "none";
       const wrap = $("moversTvFallback");
       wrap.style.display = "block";
       wrap.innerHTML = "";
@@ -2993,9 +2999,26 @@
       wrap.appendChild(w);
     }
 
+    function registerLiveStocksFromMovers(data) {
+      if (!data) return;
+      let added = false;
+      const all = [...(data.gainers || []), ...(data.losers || []), ...(data.active || [])];
+      for (const item of all) {
+        const t = String(item?.ticker || "").toUpperCase().trim();
+        if (!t || STOCK_MAP[t] || INDICES_META[t]) continue;
+        const obj = { ticker: t, name: item.name || t, en: item.name || t, sector: "البورصة المصرية", groups: ["EGX100"], shariah: false };
+        STOCK_MAP[t] = obj;
+        STOCKS.push(obj);
+        added = true;
+      }
+      if (added) renderStockList();
+    }
+
     function renderMoversList() {
       const data = state.moversData;
       const listEl = $("moversList");
+      const moreWrap = $("moversMoreWrap");
+      const moreBtn = $("moversToggleAllBtn");
       if (!data) return;
 
       $("moversControlsBar").style.display = "flex";
@@ -3003,25 +3026,32 @@
       $("moversList").style.display = "grid";
       $("moversTvFallback").style.display = "none";
 
+      const fullList = Array.isArray(data[state.moversTab]) ? [...data[state.moversTab]] : [];
       const tabTitles = {
-        gainers: "↗ الأكثر صعوداً · Top gainers",
-        losers:  "↘ الأكثر هبوطاً · Top losers",
-        active:  "🔥 الأكثر تداولاً · Most active"
+        gainers: `↗ الأكثر صعوداً · Top gainers (${fullList.length})`,
+        losers:  `↘ الأكثر هبوطاً · Top losers (${fullList.length})`,
+        active:  `🔥 الأكثر تداولاً · Most active (${fullList.length})`
       };
       $("moversActiveTitle").textContent = tabTitles[state.moversTab] || tabTitles.gainers;
 
-      let items = Array.isArray(data[state.moversTab]) ? [...data[state.moversTab]] : [];
-      if (state.moversShariahOnly) {
-        items = items.filter(x => {
-          const info = STOCK_MAP[x.ticker];
-          return info && info.shariah;
-        });
-      }
-      items = items.slice(0, 12);
-
-      if (!items.length) {
-        listEl.innerHTML = `<div class="movers-empty">لا توجد أسهم مطابقة في هذا التصنيف حالياً.</div>`;
+      if (!fullList.length) {
+        listEl.innerHTML = `<div class="movers-empty">لا توجد أسهم في هذا التصنيف حالياً.</div>`;
+        if (moreWrap) moreWrap.style.display = "none";
         return;
+      }
+
+      const limit = 20;
+      const items = state.moversShowAll ? fullList : fullList.slice(0, limit);
+
+      if (moreWrap && moreBtn) {
+        if (fullList.length > limit) {
+          moreWrap.style.display = "block";
+          moreBtn.textContent = state.moversShowAll
+            ? `▲ عرض أقل (أول ${limit} سهم)`
+            : `▼ عرض كل الأسهم (${fullList.length} سهم)`;
+        } else {
+          moreWrap.style.display = "none";
+        }
       }
 
       listEl.innerHTML = items.map((item, idx) => {
@@ -3038,7 +3068,7 @@
             : "";
         const volTxt = state.moversTab === "active"
           ? `قيمة ${formatCompactNum(item.turnover)} ج • حجم ${formatCompactNum(item.volume)}`
-          : (item.turnover > 0 ? `تداول ${formatCompactNum(item.turnover)} ج` : `حجم ${formatCompactNum(item.volume)}`);
+          : (item.turnover > 0 ? `تداول ${formatCompactNum(item.turnover)} ج` : (item.volume > 0 ? `حجم ${formatCompactNum(item.volume)}` : "تداول خفيف"));
         return `
           <div class="mover-row" data-mover-ticker="${item.ticker}">
             <div class="mover-left">
@@ -3088,6 +3118,7 @@
         state.moversFetchedAt = Date.now();
         const timeStr = new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit" }).format(new Date());
         $("moversSubLabel").textContent = `آخر تحديث ${timeStr} • اضغط على أي سهم لفتحه`;
+        registerLiveStocksFromMovers(data);
         renderMarketPulse(data);
         renderMoversList();
       } catch {
@@ -3501,14 +3532,12 @@ ${buildStockContextString()}
         const tab = e.target.closest("[data-tab]");
         if (!tab) return;
         state.moversTab = tab.dataset.tab;
+        state.moversShowAll = false;
         document.querySelectorAll("#moversTabs .movers-tab").forEach(b => b.classList.toggle("active", b === tab));
         renderMoversList();
       };
-      $("moversShariahToggle").onclick = () => {
-        state.moversShariahOnly = !state.moversShariahOnly;
-        const b = $("moversShariahToggle");
-        b.style.background = state.moversShariahOnly ? "var(--gold)" : "";
-        b.style.color = state.moversShariahOnly ? "#071018" : "";
+      $("moversToggleAllBtn").onclick = () => {
+        state.moversShowAll = !state.moversShowAll;
         renderMoversList();
       };
       $("moversList").onclick = e => {
