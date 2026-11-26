@@ -506,11 +506,6 @@
       height: 42px; padding: 0 13px; border-radius: 13px; font-size: 13.5px; max-width: 150px;
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     }
-    @media (max-width: 480px) {
-      .gate-top-bar { padding: calc(env(safe-area-inset-top, 0px) + 10px) 11px 8px; gap: 6px; }
-      .gate-top-bar .icon-btn { width: 40px; height: 40px; font-size: 18px; }
-      .gate-top-bar .auth-btn { height: 40px; padding: 0 11px; font-size: 12.5px; }
-    }
 
     /* Full-Height Minimalist Foreground Content */
     .gate-hero {
@@ -830,43 +825,6 @@
     .movers-tv-fallback { padding: 8px; min-height: 420px; }
     body.focus-mode #moversSection, body.focus-mode #moversDualSection, body.focus-mode #moversActiveSection { display: none !important; }
 
-    /* تحسينات مقاس التليفون (Responsive Mobile Fit) */
-    @media (max-width: 480px) {
-      .container { padding: calc(61px + env(safe-area-inset-top, 0px)) 9px calc(88px + env(safe-area-inset-bottom, 0px)); gap: 10px; }
-      .header { padding: calc(env(safe-area-inset-top, 0px) + 8px) 9px 8px; }
-      .brand-title { font-size: 15px; }
-      .brand-title .en-name { font-size: 12.5px; }
-      .icon-btn { width: 34px; height: 34px; font-size: 14px; }
-      .auth-btn { height: 34px; padding: 0 8px; font-size: 11px; }
-      .home-quick-bar { padding: 7px 9px; gap: 6px; }
-      .market-pill { font-size: 10.5px; padding: 4px 8px; }
-      .market-pill .mkt-timer { display: none; }
-      .home-pref-btn { height: 29px; padding: 0 8px; font-size: 10.5px; }
-      .indices-grid { gap: 6px; }
-      .index-card { padding: 8px 9px; gap: 5px; }
-      .index-name { font-size: 12px; }
-      .index-sub { font-size: 10px; }
-      .index-filter-btn { padding: 3px 7px; font-size: 10px; }
-      .chart-topbar { padding: 8px 9px; gap: 7px; }
-      .active-stock-name { font-size: 13.5px; }
-      .tf-btn { padding: 4px 7px; font-size: 10.5px; }
-      .mode-btn { padding: 4px 8px; font-size: 10.5px; }
-      .btn-focus { padding: 5px 10px; font-size: 11px; }
-      .section-head { padding: 9px 11px; }
-      .section-title { font-size: 13.5px; }
-      .movers-dual-grid { gap: 6px; }
-      .mover-box-head { padding: 8px 6px; font-size: 11.5px; }
-      .mover-compact-list { padding: 5px; gap: 5px; }
-      .mover-compact-row { padding: 6px 6px; }
-      .stk-logo.sm { width: 22px; height: 22px; }
-      .mover-c-name { font-size: 10.5px; }
-      .mover-c-code { font-size: 9.5px; }
-      .mover-price { font-size: 11px; }
-      .mover-chg { font-size: 9.5px; padding: 1px 5px; }
-      .msg-bubble { font-size: 12.5px; padding: 9px 11px; }
-      .pulse-live-badge span.en { display: none; }
-    }
-
     /* كروت الذهب والدولار تحت المؤشرات */
     .macro-grid {
       display: grid;
@@ -925,13 +883,6 @@
       font-size: 10.5px; font-weight: 700; color: var(--text-muted);
       white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
-    @media (max-width: 480px) {
-      .macro-grid { gap: 6px; }
-      .macro-card { padding: 9px 9px; gap: 4px; }
-      .macro-ico { width: 22px; height: 22px; font-size: 12px; }
-      .macro-name { font-size: 12px; }
-      .macro-sub { font-size: 9.8px; }
-    }
 
     /* السعر اللحظي ونسبة التغير بجانب اسم السهم في رأس الشارت */
     .chart-live-quote {
@@ -949,61 +900,62 @@
     .chart-live-price { font-size: 13.5px; font-weight: 800; color: var(--text); direction: ltr; }
     .chart-live-unit { font-size: 10px; font-weight: 700; color: var(--text-muted); }
 
-    /* الشاشة الثالثة: الشارت الصافي الأخضر (ستايل Thndr) + الأداء والإحصائيات */
-    .chart-wrap.perf-mode { height: auto !important; min-height: 460px; }
+    /* الشاشة الثالثة: الشارت الصافي (ستايل تيلدا) + إحصائيات السهم */
+    .chart-wrap.perf-mode { height: auto !important; min-height: 430px; }
     .perf-stage {
       display: none; width: 100%;
-      padding: 14px 14px 16px;
+      padding: 13px 13px 15px;
       background: #070b14;
-      flex-direction: column; gap: 14px;
+      flex-direction: column; gap: 12px;
     }
     [data-theme="light"] .perf-stage { background: #ffffff; }
     .perf-stage.show { display: flex; }
 
     .clean-head {
-      display: flex; align-items: flex-start; justify-content: space-between; gap: 10px;
-    }
-    .clean-head-right {
-      display: flex; flex-direction: column; gap: 4px; min-width: 0; flex: 1;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
     }
     .clean-identity-row {
-      display: flex; align-items: center; gap: 9px; min-width: 0;
+      display: flex; align-items: center; gap: 9px; min-width: 0; flex: 1;
     }
     .clean-name-wrap { display: flex; flex-direction: column; min-width: 0; }
     .clean-ticker-txt { font-size: 11px; font-weight: 800; color: var(--text-muted); direction: ltr; text-align: right; letter-spacing: 0.4px; }
     .clean-name-txt { font-size: 14.5px; font-weight: 800; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .clean-quote-left {
+      display: flex; flex-direction: column; align-items: flex-end; text-align: left;
+      flex-shrink: 0; gap: 2px;
+    }
     .clean-price-big {
-      font-size: clamp(26px, 7.2vw, 34px); font-weight: 800; color: var(--text);
-      line-height: 1.15; letter-spacing: 0.2px; margin-top: 6px;
-      display: inline-flex; align-items: baseline; gap: 6px;
+      font-size: clamp(20px, 5.8vw, 28px); font-weight: 800; color: var(--text);
+      line-height: 1.1; letter-spacing: 0.2px;
+      display: inline-flex; align-items: baseline; gap: 4px; direction: rtl;
     }
     .clean-price-big .num { direction: ltr; display: inline-block; }
     .clean-price-big .unit { font-size: 0.56em; font-weight: 700; color: var(--text-muted); }
     .clean-chg-line {
-      display: inline-flex; align-items: center; flex-wrap: wrap; gap: 5px;
-      font-size: 13px; font-weight: 800; line-height: 1.3;
+      display: inline-flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 4px;
+      font-size: 11.5px; font-weight: 800; line-height: 1.25; direction: rtl;
     }
     .clean-chg-line.up { color: #22c55e; }
     .clean-chg-line.down { color: #f43f5e; }
     .clean-chg-line.flat { color: var(--text-muted); }
-    .clean-chg-period { color: var(--text-muted); font-weight: 700; font-size: 12px; }
+    .clean-chg-period { color: var(--text-muted); font-weight: 700; font-size: 10.5px; }
     .clean-scrub-time {
-      display: none; padding: 3px 9px; border-radius: 8px;
+      display: none; padding: 1px 7px; border-radius: 6px;
       background: var(--bg-elevated); border: 1px solid var(--border-strong);
-      font-size: 11px; font-weight: 800; color: var(--gold); direction: ltr; white-space: nowrap;
+      font-size: 10px; font-weight: 800; color: var(--gold); direction: ltr; white-space: nowrap;
     }
     .clean-scrub-time.show { display: inline-flex; }
 
-    /* مساحة الشارت الصافي الأخضر/الأحمر */
     .clean-canvas-box {
-      position: relative; width: 100%; height: 230px;
+      position: relative; width: 100%; height: 225px;
       border-radius: 14px; overflow: hidden;
-      background: linear-gradient(180deg, rgba(16, 185, 129, 0.03), transparent 70%);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.03), transparent 72%);
       touch-action: pan-y; user-select: none; -webkit-user-select: none;
       cursor: crosshair;
     }
     .clean-canvas-box.down-bg {
-      background: linear-gradient(180deg, rgba(244, 63, 94, 0.03), transparent 70%);
+      background: linear-gradient(180deg, rgba(244, 63, 94, 0.03), transparent 72%);
     }
     .clean-svg { width: 100%; height: 100%; display: block; overflow: visible; }
     .clean-hl-pill {
@@ -1016,48 +968,39 @@
       background: rgba(241, 245, 249, 0.94); border-color: rgba(15, 23, 42, 0.12); color: #334155;
     }
     .clean-hl-pill.hi { top: 8px; }
-    .clean-hl-pill.lo { bottom: 8px; }
+    .clean-hl-pill.lo { bottom: 26px; }
     .clean-loading {
       position: absolute; inset: 0; z-index: 5;
       display: none; align-items: center; justify-content: center;
-      background: rgba(7, 11, 20, 0.65); backdrop-filter: blur(3px);
-      font-size: 12.5px; font-weight: 700; color: var(--text-muted);
+      background: rgba(7, 11, 20, 0.6); backdrop-filter: blur(3px);
+      font-size: 12px; font-weight: 700; color: var(--text-muted);
     }
     [data-theme="light"] .clean-loading { background: rgba(255, 255, 255, 0.72); }
     .clean-loading.show { display: flex; }
 
-    /* أزرار الفترات تحت الشارت الصافي (يوم / أسبوع / شهر / 3 شهور / 6 شهور / سنة / 5 سنوات / الحد الأقصى) */
     .clean-tf-row {
       display: flex; align-items: center; justify-content: space-between; gap: 4px;
-      overflow-x: auto; scrollbar-width: none;
-      padding: 2px 0;
+      overflow-x: auto; scrollbar-width: none; padding: 2px 0;
     }
     .clean-tf-row::-webkit-scrollbar { display: none; }
     .clean-tf-btn {
       flex: 1; min-width: max-content;
-      padding: 7px 9px; border-radius: 10px; border: 1px solid transparent;
+      padding: 7px 8px; border-radius: 10px; border: 1px solid transparent;
       background: transparent; color: var(--text-muted);
       font-size: 11.5px; font-weight: 800; cursor: pointer; transition: 0.16s;
       text-align: center; white-space: nowrap;
     }
     .clean-tf-btn:hover { color: var(--text); background: rgba(255, 255, 255, 0.04); }
-    .clean-tf-btn.active {
-      color: #22c55e; background: rgba(34, 197, 94, 0.12);
-      border-color: rgba(34, 197, 94, 0.34);
-    }
-    .clean-tf-btn.active.down {
-      color: #f43f5e; background: rgba(244, 63, 94, 0.12);
-      border-color: rgba(244, 63, 94, 0.34);
-    }
+    .clean-tf-btn.active { color: #22c55e; background: rgba(34, 197, 94, 0.12); border-color: rgba(34, 197, 94, 0.34); }
+    .clean-tf-btn.active.down { color: #f43f5e; background: rgba(244, 63, 94, 0.12); border-color: rgba(244, 63, 94, 0.34); }
 
-    /* كارت إحصائيات السهم (شبه الصورة الرابعة) */
     .clean-stats-card {
       background: var(--bg-elevated); border: 1px solid var(--border);
       border-radius: 16px; padding: 13px 14px;
       display: flex; flex-direction: column; gap: 11px;
     }
     .clean-stats-title {
-      font-size: 14.5px; font-weight: 800; color: var(--text);
+      font-size: 14px; font-weight: 800; color: var(--text);
       display: flex; align-items: center; justify-content: space-between; gap: 8px;
     }
     .clean-stats-grid {
@@ -1071,24 +1014,6 @@
     .clean-stat-lbl { font-size: 11px; font-weight: 700; color: var(--text-muted); }
     .clean-stat-val { font-size: 13.5px; font-weight: 800; color: var(--text); direction: ltr; text-align: right; }
 
-    /* ملخص العوائد لكل الفترات + حاسبة الـ 10,000 ج.م */
-    .perf-mini-grid {
-      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px;
-    }
-    @media (max-width: 520px) { .perf-mini-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; } }
-    .perf-mini-chip {
-      padding: 7px 5px; border-radius: 10px;
-      background: var(--bg-card); border: 1px solid var(--border);
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      cursor: pointer; transition: 0.15s;
-    }
-    .perf-mini-chip.active { border-color: var(--gold); background: rgba(245, 158, 11, 0.08); }
-    .perf-mini-lbl { font-size: 10px; font-weight: 700; color: var(--text-muted); }
-    .perf-mini-val { font-size: 12px; font-weight: 800; direction: ltr; }
-    .perf-mini-val.up { color: #22c55e; }
-    .perf-mini-val.down { color: #f43f5e; }
-    .perf-mini-val.flat { color: var(--text-muted); }
-
     .perf-sim-box {
       padding: 10px 12px; border-radius: 12px;
       background: linear-gradient(135deg, rgba(16, 185, 129, 0.08), rgba(245, 158, 11, 0.08));
@@ -1096,21 +1021,55 @@
       display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
       font-size: 11.5px; font-weight: 700;
     }
-    .perf-sim-result { font-size: 13.5px; font-weight: 800; direction: ltr; }
+    .perf-sim-result { font-size: 13px; font-weight: 800; direction: ltr; }
     .perf-updated-note { font-size: 10.5px; color: var(--text-muted); text-align: center; }
 
-    /* مؤشر التحديث التلقائي كل 10 ثواني */
     .pulse-auto-spin { display: inline-block; transition: transform 0.4s ease; }
     .pulse-auto-spin.spinning { animation: spin 0.7s linear infinite; }
 
     @media (max-width: 480px) {
+      .container { padding: calc(61px + env(safe-area-inset-top, 0px)) 9px calc(88px + env(safe-area-inset-bottom, 0px)); gap: 10px; }
+      .header { padding: calc(env(safe-area-inset-top, 0px) + 8px) 9px 8px; }
+      .brand-title { font-size: 15px; }
+      .brand-title .en-name { font-size: 12.5px; }
+      .icon-btn { width: 34px; height: 34px; font-size: 14px; }
+      .auth-btn { height: 34px; padding: 0 8px; font-size: 11px; }
+      .gate-top-bar { padding: calc(env(safe-area-inset-top, 0px) + 10px) 11px 8px; gap: 6px; }
+      .gate-top-bar .icon-btn { width: 40px; height: 40px; font-size: 18px; }
+      .gate-top-bar .auth-btn { height: 40px; padding: 0 11px; font-size: 12.5px; }
+      .home-quick-bar { padding: 7px 9px; gap: 6px; }
+      .market-pill { font-size: 10.5px; padding: 4px 8px; }
+      .market-pill .mkt-timer { display: none; }
+      .home-pref-btn { height: 29px; padding: 0 8px; font-size: 10.5px; }
+      .indices-grid, .macro-grid, .movers-dual-grid { gap: 6px; }
       .index-card { padding: 8px 9px; gap: 5px; }
-      .index-pts-val { font-size: 12.5px; }
-      .index-pts-lbl { display: none; }
-      .chart-live-price { font-size: 12.5px; }
-      .perf-stage { padding: 11px 10px 13px; gap: 11px; }
+      .index-name, .macro-name { font-size: 12px; }
+      .index-sub { font-size: 10px; }
+      .index-filter-btn { padding: 3px 7px; font-size: 10px; }
+      .index-pts-val, .chart-live-price { font-size: 12.5px; }
+      .index-pts-lbl, .pulse-live-badge span.en { display: none; }
+      .macro-card { padding: 9px; gap: 4px; }
+      .macro-ico { width: 22px; height: 22px; font-size: 12px; }
+      .macro-sub { font-size: 9.8px; }
+      .chart-topbar { padding: 8px 9px; gap: 7px; }
+      .active-stock-name, .section-title { font-size: 13.5px; }
+      .tf-btn { padding: 4px 7px; font-size: 10.5px; }
+      .mode-btn { padding: 4px 8px; font-size: 10.5px; }
+      .btn-focus { padding: 5px 10px; font-size: 11px; }
+      .section-head { padding: 9px 11px; }
+      .mover-box-head { padding: 8px 6px; font-size: 11.5px; }
+      .mover-compact-list { padding: 5px; gap: 5px; }
+      .mover-compact-row { padding: 6px; }
+      .stk-logo.sm { width: 22px; height: 22px; }
+      .mover-c-name { font-size: 10.5px; }
+      .mover-c-code { font-size: 9.5px; }
+      .mover-price { font-size: 11px; }
+      .mover-chg { font-size: 9.5px; padding: 1px 5px; }
+      .msg-bubble { font-size: 12.5px; padding: 9px 11px; }
+      .perf-stage { padding: 11px 10px 13px; gap: 10px; }
       .clean-canvas-box { height: 205px; }
-      .clean-tf-btn { padding: 6px 7px; font-size: 11px; }
+      .clean-tf-btn { padding: 6px 6px; font-size: 11px; }
+      .clean-name-txt { font-size: 13.5px; }
     }
   </style>
 </head>
@@ -1471,9 +1430,9 @@
         </div>
         <div class="chart-controls">
           <div class="mode-switch" id="chartModeSwitch">
-            <button class="mode-btn active" data-mode="tv">📊 TradingView</button>
+            <button class="mode-btn active" data-mode="perf">📈 الشارت الصافي</button>
+            <button class="mode-btn" data-mode="tv">📊 TradingView</button>
             <button class="mode-btn" data-mode="pro">⚡ مبرمج (Pro)</button>
-            <button class="mode-btn" data-mode="perf">📈 الشارت الصافي</button>
           </div>
           <div class="tf-group" id="tfGroup">
             <button class="tf-btn" data-tf="5">5m</button>
@@ -1544,17 +1503,17 @@
           </div>
         </div>
 
-        <!-- الشاشة الثالثة: الشارت الصافي الأخضر (ستايل Thndr) + إحصائيات السهم -->
+        <!-- الشاشة الثالثة: الشارت الصافي (ستايل تيلدا) + إحصائيات السهم -->
         <div class="perf-stage" id="perfChartStage">
           <div class="clean-head">
-            <div class="clean-head-right">
-              <div class="clean-identity-row">
-                <span id="cleanStockLogoSlot"></span>
-                <div class="clean-name-wrap">
-                  <span class="clean-ticker-txt" id="cleanTickerTxt">EGX30</span>
-                  <span class="clean-name-txt" id="cleanNameTxt">مؤشر EGX 30 الرئيسي</span>
-                </div>
+            <div class="clean-identity-row">
+              <span id="cleanStockLogoSlot"></span>
+              <div class="clean-name-wrap">
+                <span class="clean-ticker-txt" id="cleanTickerTxt">EGX30</span>
+                <span class="clean-name-txt" id="cleanNameTxt">مؤشر EGX 30 الرئيسي</span>
               </div>
+            </div>
+            <div class="clean-quote-left">
               <div class="clean-price-big">
                 <span class="num" id="cleanBigPrice">—</span>
                 <span class="unit" id="cleanBigUnit">ج.م</span>
@@ -1562,12 +1521,11 @@
               <div class="clean-chg-line flat" id="cleanChgLine">
                 <span id="cleanChgVal">—</span>
                 <span class="clean-chg-period" id="cleanChgPeriod">• اليوم</span>
+                <span class="clean-scrub-time" id="cleanScrubTime"></span>
               </div>
             </div>
-            <span class="clean-scrub-time" id="cleanScrubTime"></span>
           </div>
 
-          <!-- الشارت الصافي (خط أخضر/أحمر متدرج بدون خطوط شبكة) -->
           <div class="clean-canvas-box" id="cleanCanvasBox">
             <span class="clean-hl-pill hi" id="cleanHiPill" style="display:none;">—</span>
             <span class="clean-hl-pill lo" id="cleanLoPill" style="display:none;">—</span>
@@ -1575,7 +1533,6 @@
             <div class="clean-loading" id="cleanLoading">⏳ جاري رسم الشارت...</div>
           </div>
 
-          <!-- شريط الفترات تحت الشارت مباشرة -->
           <div class="clean-tf-row" id="cleanTfRow">
             <button type="button" class="clean-tf-btn active" data-clean-tf="1D">يوم</button>
             <button type="button" class="clean-tf-btn" data-clean-tf="1W">أسبوع</button>
@@ -1587,7 +1544,6 @@
             <button type="button" class="clean-tf-btn" data-clean-tf="MAX">الحد الأقصى</button>
           </div>
 
-          <!-- إحصائيات السهم -->
           <div class="clean-stats-card">
             <div class="clean-stats-title">
               <span>إحصائيات السهم</span>
@@ -1604,14 +1560,13 @@
               <div class="clean-stat-item"><span class="clean-stat-lbl">قيمة التداول</span><span class="clean-stat-val" id="csTurnover">—</span></div>
             </div>
 
-            <div class="perf-mini-grid" id="perfMiniGrid"></div>
             <div class="perf-sim-box" id="perfSimBox">
-              <span id="perfSimText">💰 عائد استثمار 10,000 ج.م في الفترة المختارة</span>
+              <span id="perfSimText">💰 عائد استثمار 10,000 ج.م خلال سنة:</span>
               <span class="perf-sim-result" id="perfSimVal">—</span>
             </div>
           </div>
 
-          <div class="perf-updated-note" id="perfUpdatedNote">يتحدث تلقائياً كل 10 ثواني أثناء الجلسة</div>
+          <div class="perf-updated-note" id="perfUpdatedNote">يتحدث تلقائياً أثناء الجلسة</div>
         </div>
       </div>
 
@@ -1985,7 +1940,6 @@
     </div>
   </div>
 
-
   <!-- Firebase + TradingView -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -2337,7 +2291,7 @@
     const initialTab = (urlShare && cleanUrlTicker)
       ? "chart"
       : (restoredSess?.tab || "home");
-    const initialChartMode = restoredSess?.chartMode || localStorage.getItem(LS.CHART_MODE) || "tv";
+    const initialChartMode = restoredSess?.chartMode || "perf";
 
     const state = {
       ticker: initialTicker,
@@ -2767,6 +2721,16 @@
       wrap.textContent = tk.slice(0, 3);
     };
 
+    function setLogoSlot(slotEl, ticker, size = "") {
+      if (!slotEl) return;
+      const t = String(ticker || "").toUpperCase().trim();
+      const lid = state.stockLogos[t] || "";
+      if (slotEl.dataset.tk === t && slotEl.dataset.lid === lid && slotEl.firstChild) return;
+      slotEl.dataset.tk = t;
+      slotEl.dataset.lid = lid;
+      slotEl.innerHTML = buildStockLogoHtml(t, size);
+    }
+
     function buildStockLogoHtml(ticker, size = "", logoidOverride = "") {
       const t = String(ticker || "").toUpperCase().trim();
       const sz = size ? ` ${size}` : "";
@@ -2901,10 +2865,12 @@
     function applyProDefaultZoom() {
       if (!proChart || !currentProBars.length) return;
       const n = currentProBars.length;
-      const visibleCount = window.innerWidth < 640 ? 60 : 95;
-      // حماية ضد تمدد الشموع بشكل ضخم لو عدد الشموع قليل
-      const fromIdx = n < 25 ? Math.min(0, n - 40) : Math.max(0, n - visibleCount);
-      proChart.timeScale().setVisibleLogicalRange({ from: fromIdx, to: n + 4 });
+      const visibleCount = window.innerWidth < 640 ? 55 : 90;
+      if (n <= visibleCount) {
+        proChart.timeScale().fitContent();
+      } else {
+        proChart.timeScale().setVisibleLogicalRange({ from: n - visibleCount, to: n + 3 });
+      }
       proChart.priceScale("right").applyOptions({ autoScale: true });
     }
 
@@ -2929,11 +2895,10 @@
     const WORKER_ORIGIN = FIXED_MCP_URL.replace(/\/mcp\/?$/, "");
 
     async function fetchYahooChartRaw(ticker, interval, range) {
-      // 1) الجلب المباشر والسريع عبر سيرفر Cloudflare Worker الخاص بك (بدون حظر CORS)
       try {
         const ctrl = new AbortController();
-        const t = setTimeout(() => ctrl.abort(), 6000);
-        const wUrl = `${WORKER_ORIGIN}/chart?ticker=${encodeURIComponent(ticker)}&interval=${encodeURIComponent(interval)}&range=${encodeURIComponent(range)}`;
+        const t = setTimeout(() => ctrl.abort(), 6500);
+        const wUrl = `${WORKER_ORIGIN}/chart?ticker=${encodeURIComponent(ticker)}&interval=${encodeURIComponent(interval)}&range=${encodeURIComponent(range)}&t=${Math.floor(Date.now()/3000)}`;
         const res = await fetch(wUrl, { signal: ctrl.signal });
         clearTimeout(t);
         if (res.ok) {
@@ -2942,29 +2907,19 @@
           if (result?.timestamp?.length && result?.indicators?.quote?.[0]?.close) return result;
         }
       } catch {}
-
-      // 2) احتياطي عبر بروكسيات خارجية في حال لم يتم تحديث كود الـ Worker بعد
-      const ySym = getYahooSymbol(ticker);
-      const target1 = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym)}?range=${encodeURIComponent(range)}&interval=${encodeURIComponent(interval)}`;
-      const target2 = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym)}?range=${encodeURIComponent(range)}&interval=${encodeURIComponent(interval)}`;
-      const proxies = [
-        { url: `https://api.allorigins.win/get?url=${encodeURIComponent(target1)}`, wrapped: true },
-        { url: `https://corsproxy.io/?url=${encodeURIComponent(target2)}`, wrapped: false },
-        { url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target1)}`, wrapped: false }
-      ];
-      for (const p of proxies) {
-        try {
-          const ctrl = new AbortController();
-          const t = setTimeout(() => ctrl.abort(), 6000);
-          const res = await fetch(p.url, { signal: ctrl.signal });
-          clearTimeout(t);
-          if (!res.ok) continue;
-          const rawJson = await res.json();
-          const json = p.wrapped && rawJson?.contents ? JSON.parse(rawJson.contents) : rawJson;
+      try {
+        const ySym = getYahooSymbol(ticker);
+        const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym)}?range=${encodeURIComponent(range)}&interval=${encodeURIComponent(interval)}`;
+        const ctrl = new AbortController();
+        const t = setTimeout(() => ctrl.abort(), 5500);
+        const res = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(target)}`, { signal: ctrl.signal });
+        clearTimeout(t);
+        if (res.ok) {
+          const json = await res.json();
           const result = json?.chart?.result?.[0];
           if (result?.timestamp?.length && result?.indicators?.quote?.[0]?.close) return result;
-        } catch {}
-      }
+        }
+      } catch {}
       return null;
     }
 
@@ -3012,13 +2967,13 @@
     async function fetchOhlcBars(ticker, tf, forceRefresh = false) {
       const cacheKey = `${ticker}_${tf}`;
       const cached = ohlcCache.get(cacheKey);
-      if (!forceRefresh && cached && Date.now() - cached.at < 45000) return cached;
+      if (!forceRefresh && cached && Date.now() - cached.at < 35000) return cached;
 
       const cfgMap = {
-        "5":   { interval: "5m",  range: "5d",  intraday: true,  agg4h: false },
-        "15":  { interval: "15m", range: "1mo", intraday: true,  agg4h: false },
-        "60":  { interval: "60m", range: "3mo", intraday: true,  agg4h: false },
-        "240": { interval: "60m", range: "6mo", intraday: true,  agg4h: true  },
+        "5":   { interval: "5m",  range: "60d", intraday: true,  agg4h: false },
+        "15":  { interval: "15m", range: "60d", intraday: true,  agg4h: false },
+        "60":  { interval: "60m", range: "1y",  intraday: true,  agg4h: false },
+        "240": { interval: "60m", range: "1y",  intraday: true,  agg4h: true  },
         "D":   { interval: "1d",  range: "2y",  intraday: false, agg4h: false },
         "W":   { interval: "1wk", range: "5y",  intraday: false, agg4h: false }
       };
@@ -3026,6 +2981,7 @@
       let res = await fetchYahooChartRaw(ticker, cfg.interval, cfg.range);
       let bars = res ? parseYahooBars(res, cfg.intraday, cfg.agg4h) : [];
       let fallbackDaily = false;
+      let actualTfLabel = "";
 
       const aggregateClientBars = (srcBars, mode) => {
         const map = new Map();
@@ -3033,60 +2989,50 @@
           const tsMs = typeof b.time === "number" ? (b.time * 1000) : Date.parse(b.time + "T10:00:00Z");
           if (!Number.isFinite(tsMs)) continue;
           const d = new Date(tsMs);
-          let key;
-          if (mode === "week") {
-            const dow = d.getUTCDay();
-            const ws = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - dow));
-            key = ws.toISOString().slice(0, 10);
-          } else {
-            key = d.toISOString().slice(0, 10);
-          }
+          const key = mode === "week"
+            ? new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() - d.getUTCDay())).toISOString().slice(0, 10)
+            : d.toISOString().slice(0, 10);
           const ex = map.get(key);
           if (!ex) map.set(key, { time: key, open: b.open, high: b.high, low: b.low, close: b.close, volume: b.volume || 0 });
-          else {
-            ex.high = Math.max(ex.high, b.high);
-            ex.low = Math.min(ex.low, b.low);
-            ex.close = b.close;
-            ex.volume += (b.volume || 0);
-          }
+          else { ex.high = Math.max(ex.high, b.high); ex.low = Math.min(ex.low, b.low); ex.close = b.close; ex.volume += (b.volume || 0); }
         }
         return Array.from(map.values()).sort((a, b) => a.time.localeCompare(b.time));
       };
 
-      let actualTfLabel = "";
-      if (bars.length < 10 && cfg.intraday) {
-        // جرب فريمات لحظية أوسع (15m ثم 60m) قبل التحويل لليومي
+      // لو فريم لحظي فيه شموع ناقصة (< 25 شمعة)، جرب الفريم الأوسع ثم اليومي عشان الشارت يكون مكتمل
+      if (bars.length < 25 && cfg.intraday) {
         const steps = tf === "5"
-          ? [{ iv: "15m", rg: "1mo", lbl: "15m" }, { iv: "60m", rg: "3mo", lbl: "1H" }]
+          ? [{ iv: "15m", rg: "60d", lbl: "15m" }, { iv: "60m", rg: "1y", lbl: "1H" }]
           : tf === "15"
-            ? [{ iv: "60m", rg: "3mo", lbl: "1H" }]
+            ? [{ iv: "60m", rg: "1y", lbl: "1H" }]
             : [];
         for (const st of steps) {
           const rStep = await fetchYahooChartRaw(ticker, st.iv, st.rg);
           const bStep = rStep ? parseYahooBars(rStep, true, false) : [];
-          if (bStep.length >= 10) {
+          if (bStep.length > bars.length) {
             bars = bStep;
             actualTfLabel = st.lbl;
-            break;
+            if (bars.length >= 25) break;
           }
         }
-        if (bars.length < 10) {
-          res = await fetchYahooChartRaw(ticker, "1d", "2y");
-          bars = res ? parseYahooBars(res, false, false) : [];
-          fallbackDaily = bars.length >= 5;
-          if (fallbackDaily) actualTfLabel = "يومي (لا يتوفر " + tfLabelAr(tf) + ")";
+        if (bars.length < 25) {
+          const dRes = await fetchYahooChartRaw(ticker, "1d", "2y");
+          const dBars = dRes ? parseYahooBars(dRes, false, false) : [];
+          if (dBars.length > bars.length) {
+            bars = dBars;
+            fallbackDaily = true;
+            actualTfLabel = "يومي (المتاح لـ " + tfLabelAr(tf) + ")";
+          }
         }
-      } else if (bars.length < 15 && tf === "W") {
-        // احتياطي للأسبوعي: تجميع الشموع اليومية إلى أسبوعية
+      } else if (bars.length < 20 && tf === "W") {
         const dRes = await fetchYahooChartRaw(ticker, "1d", "5y");
         const dBars = dRes ? parseYahooBars(dRes, false, false) : [];
         if (dBars.length >= 10) {
           const wAgg = aggregateClientBars(dBars, "week");
           if (wAgg.length > bars.length) bars = wAgg;
         }
-      } else if (bars.length < 15 && tf === "D") {
-        // احتياطي لليومي لو Yahoo رجّع شمعة واحدة فقط (مثل ^CASE30): تجميع شموع الساعة إلى يومية
-        const hRes = await fetchYahooChartRaw(ticker, "60m", "6mo");
+      } else if (bars.length < 20 && tf === "D") {
+        const hRes = await fetchYahooChartRaw(ticker, "60m", "1y");
         const hBars = hRes ? parseYahooBars(hRes, true, false) : [];
         if (hBars.length >= 10) {
           const dAgg = aggregateClientBars(hBars, "day");
@@ -4545,8 +4491,6 @@
         isSyncingProRange = false;
       });
 
-
-
       runActiveProScripts();
       applyProDefaultZoom();
       if (state.liveQuote && state.liveQuote.ticker === ticker) tickProChartLiveCandle(state.liveQuote, null);
@@ -4623,7 +4567,7 @@
       if (saveCloud) { markLocalChange(false); syncUserToCloud(false); }
 
       const info = getStockInfo(t);
-      if ($("activeStockLogoSlot")) $("activeStockLogoSlot").innerHTML = buildStockLogoHtml(t, "lg");
+      setLogoSlot($("activeStockLogoSlot"), t, "lg");
       $("activeStockName").textContent = info.name;
       $("activeTickerBadge").textContent = getTvSymbol(t);
       $("activeIndexBadges").innerHTML = buildIndexBadgesHtml(info, false);
@@ -4635,6 +4579,7 @@
 
       state.liveQuote = null;
       state.cleanSeriesPoints = [];
+      cleanLastSvgSig = "";
       if ($("activeLivePriceVal")) $("activeLivePriceVal").textContent = "—";
       if ($("activeLiveUnit")) $("activeLiveUnit").textContent = info.ticker === "GOLD" ? "$" : (info.isIndex && info.ticker !== "USDEGP" ? "نقطة" : "ج.م");
       if ($("activeLiveChgBadge")) { $("activeLiveChgBadge").className = "mover-chg flat"; $("activeLiveChgBadge").textContent = "—"; }
@@ -4642,8 +4587,18 @@
       state.chartDirty = true;
       state.taDirty = true;
 
-      if (openChartTab && state.activeTab !== "chart") {
-        switchTab("chart", true);
+      if (openChartTab) {
+        state.chartMode = "perf";
+        state.perfSelectedKey = "1D";
+        saveSessionNav();
+        if (state.activeTab !== "chart") {
+          switchTab("chart", true);
+        } else {
+          state.chartDirty = false;
+          state.taDirty = false;
+          renderChart();
+          renderTechnicalWidget();
+        }
       } else if (state.activeTab === "chart") {
         state.chartDirty = false;
         state.taDirty = false;
@@ -4780,57 +4735,19 @@
     }
     function closeDrawer() { $("drawerBackdrop").classList.remove("open"); $("stockDrawer").classList.remove("open"); }
 
-    // 8. سحب بيانات السهم (عبر سيرفر MCP السحابي أولاً ثم البروكسي كاحتياطي)
-    function calcEMA(arr, p) {
-      if (!arr || arr.length < p) return null;
-      const k = 2 / (p + 1);
-      let e = arr.slice(0, p).reduce((a, b) => a + b, 0) / p;
-      for (let i = p; i < arr.length; i++) e = arr[i] * k + e * (1 - k);
-      return e;
-    }
-    function calcRSI(closes, p = 14) {
-      if (!closes || closes.length <= p) return null;
-      let g = 0, l = 0;
-      for (let i = 1; i <= p; i++) { const d = closes[i] - closes[i - 1]; if (d >= 0) g += d; else l -= d; }
-      let ag = g / p, al = l / p;
-      for (let i = p + 1; i < closes.length; i++) {
-        const d = closes[i] - closes[i - 1];
-        ag = (ag * (p - 1) + (d > 0 ? d : 0)) / p;
-        al = (al * (p - 1) + (d < 0 ? -d : 0)) / p;
-      }
-      return al === 0 ? 100 : 100 - (100 / (1 + ag / al));
-    }
-    function calcMACD(closes) {
-      if (!closes || closes.length < 35) return null;
-      const line = [];
-      let e12 = closes.slice(0, 12).reduce((a, b) => a + b, 0) / 12;
-      let e26 = closes.slice(0, 26).reduce((a, b) => a + b, 0) / 26;
-      const k12 = 2 / 13, k26 = 2 / 27;
-      for (let i = 12; i < 26; i++) e12 = closes[i] * k12 + e12 * (1 - k12);
-      line.push(e12 - e26);
-      for (let i = 26; i < closes.length; i++) {
-        e12 = closes[i] * k12 + e12 * (1 - k12);
-        e26 = closes[i] * k26 + e26 * (1 - k26);
-        line.push(e12 - e26);
-      }
-      const sig = calcEMA(line, 9), macd = line[line.length - 1];
-      return { macd, signal: sig, hist: sig !== null ? macd - sig : null };
-    }
-
+    // 8. سحب بيانات التحليل الفوري للسهم (عبر سيرفر Cloudflare Worker)
     function renderAutoSummary(m) {
       const sumBody = $("autoSummaryBody");
       if (!m) {
-        sumBody.innerHTML = `<span style="color:var(--text-muted);">اضغط "نسخ برومبت تحليل السهم" أو أرفق لقطة شاشة من الشارت لتحليل فوري.</span>`;
+        sumBody.innerHTML = `<span style="color:var(--text-muted);">اضغط "نسخ البرومبت" أو أرفق لقطة شاشة من الشارت لتحليل فوري.</span>`;
         return;
       }
       const distSup = m.support1 ? (((m.last - m.support1) / m.last) * 100).toFixed(1) : null;
       const distRes = m.resistance1 ? (((m.resistance1 - m.last) / m.last) * 100).toFixed(1) : null;
       const rsiTxt = m.rsi == null ? "-" : m.rsi > 70 ? `تشبع شرائي (${m.rsi.toFixed(1)})` : m.rsi < 30 ? `تشبع بيعي (${m.rsi.toFixed(1)})` : `متوازن (${m.rsi.toFixed(1)})`;
-      const macdTxt = m.macd?.hist != null ? (m.macd.hist >= 0 ? "إيجابي ↑" : "سلبي ↓") : "-";
       sumBody.innerHTML = `
         <span class="auto-tag">الاتجاه: <strong style="color:${m.trend.includes("صاعد") ? "var(--emerald)" : m.trend.includes("هابط") ? "var(--red)" : "var(--gold)"}">${m.trend}</strong></span>
         <span class="auto-tag">RSI: ${rsiTxt}</span>
-        ${m.macd ? `<span class="auto-tag">MACD: ${macdTxt}</span>` : ""}
         ${m.support1 ? `<span class="auto-tag" style="color:var(--emerald);">دعم: ${m.support1.toFixed(2)} (${distSup}%)</span>` : ""}
         ${m.resistance1 ? `<span class="auto-tag" style="color:var(--red);">مقاومة: ${m.resistance1.toFixed(2)} (+${distRes}%)</span>` : ""}`;
     }
@@ -4847,10 +4764,13 @@
       renderAutoSummary(m);
     }
 
-    async function fetchMetricsViaWorker(ticker) {
+    async function fetchLiveMetrics(ticker) {
+      const row = $("liveMetricsRow");
+      state.liveMetrics = null;
+      row.innerHTML = `<span class="metric-pill"><span class="lbl">⏳ جاري قراءة EGX:${ticker}...</span></span>`;
       try {
         const ctrl = new AbortController();
-        const t = setTimeout(() => ctrl.abort(), 5000);
+        const t = setTimeout(() => ctrl.abort(), 5500);
         const res = await fetch(FIXED_MCP_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json", "Accept": "application/json" },
@@ -4858,109 +4778,33 @@
           signal: ctrl.signal
         });
         clearTimeout(t);
-        if (!res.ok) return null;
-        const json = await res.json();
-        const txt = json?.result?.content?.[0]?.text;
-        if (!txt) return null;
-        const d = JSON.parse(txt);
-        if (typeof d.price_egp !== "number") return null;
-        const last = d.price_egp, chgPct = Number(d.change_pct || 0);
-        const ema10 = d.ema10 ?? null, ema20 = d.ema20 ?? null, ema50 = d.ema50 ?? null;
-        let trend = "عرضي";
-        if (ema10 && ema20 && ema50) {
-          if (last > ema20 && ema10 > ema20 && ema20 > ema50) trend = "صاعد قوي";
-          else if (last > ema20) trend = "صاعد";
-          else if (last < ema20 && ema10 < ema20 && ema20 < ema50) trend = "هابط قوي";
-          else trend = "هابط";
-        }
-        return {
-          ticker, last, chg: (last * chgPct) / 100, chgPct,
-          ema10, ema20, ema50, rsi: d.rsi14 ?? null, macd: null,
-          support1: d.support_20d ?? null, resistance1: d.resistance_20d ?? null,
-          support2: d.support_60d ?? null, resistance2: d.resistance_60d ?? null, trend
-        };
-      } catch { return null; }
-    }
-
-    async function fetchLiveMetrics(ticker) {
-      const row = $("liveMetricsRow");
-      state.liveMetrics = null;
-      row.innerHTML = `<span class="metric-pill"><span class="lbl">⏳ جاري قراءة EGX:${ticker}...</span></span>`;
-
-      // 1) محاولة الجلب المباشر من Cloudflare Worker الخاص بك (أسرع وبدون CORS)
-      const workerMetrics = await fetchMetricsViaWorker(ticker);
-      if (state.ticker !== ticker) return;
-      if (workerMetrics) return applyMetricsUI(workerMetrics);
-
-      // 2) الاحتياطي عبر Yahoo Proxies
-      const ySym = getYahooSymbol(ticker);
-      const target = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(ySym)}?range=6mo&interval=1d`;
-      const proxies = [
-        `https://corsproxy.io/?url=${encodeURIComponent(target)}`,
-        `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`,
-        `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(target)}`
-      ];
-
-      let data = null;
-      for (const url of proxies) {
-        try {
-          const ctrl = new AbortController();
-          const t = setTimeout(() => ctrl.abort(), 5000);
-          const res = await fetch(url, { signal: ctrl.signal });
-          clearTimeout(t);
-          if (!res.ok) continue;
+        if (state.ticker !== ticker) return;
+        if (res.ok) {
           const json = await res.json();
-          if (json?.chart?.result?.[0]?.indicators?.quote?.[0]?.close) { data = json.chart.result[0]; break; }
-        } catch {}
-      }
-
-      if (state.ticker !== ticker) return;
-      if (!data) {
-        row.innerHTML = `<span class="metric-pill"><span class="lbl">ℹ️ EGX:${ticker} — يمكنك إرفاق صورة الشارت للتحليل</span></span>`;
-        renderAutoSummary(null);
-        return;
-      }
-
-      const q = data.indicators.quote[0];
-      const closes = [], highs = [], lows = [];
-      for (let i = 0; i < q.close.length; i++) {
-        if (q.close[i] != null && q.high[i] != null && q.low[i] != null) {
-          closes.push(q.close[i]); highs.push(q.high[i]); lows.push(q.low[i]);
+          const txt = json?.result?.content?.[0]?.text;
+          const d = txt ? JSON.parse(txt) : null;
+          if (d && typeof d.price_egp === "number") {
+            const last = d.price_egp, chgPct = Number(d.change_pct || 0);
+            const ema10 = d.ema10 ?? null, ema20 = d.ema20 ?? null, ema50 = d.ema50 ?? null;
+            let trend = "عرضي";
+            if (ema10 && ema20 && ema50) {
+              if (last > ema20 && ema10 > ema20 && ema20 > ema50) trend = "صاعد قوي";
+              else if (last > ema20) trend = "صاعد";
+              else if (last < ema20 && ema10 < ema20 && ema20 < ema50) trend = "هابط قوي";
+              else trend = "هابط";
+            }
+            return applyMetricsUI({
+              ticker, last, chg: (last * chgPct) / 100, chgPct,
+              ema10, ema20, ema50, rsi: d.rsi14 ?? null, macd: null,
+              support1: d.support_20d ?? null, resistance1: d.resistance_20d ?? null,
+              support2: d.support_60d ?? null, resistance2: d.resistance_60d ?? null, trend
+            });
+          }
         }
-      }
-      if (closes.length < 5) {
-        row.innerHTML = `<span class="metric-pill"><span class="lbl">ℹ️ بيانات محدودة لـ EGX:${ticker}</span></span>`;
-        renderAutoSummary(null);
-        return;
-      }
-
-      const lastClose = closes.at(-1);
-      const meta = data.meta || {};
-      let last = lastClose;
-      if (typeof meta.regularMarketPrice === "number" && meta.regularMarketPrice > 0 && Math.abs(meta.regularMarketPrice - lastClose) / lastClose < 0.25) {
-        last = meta.regularMarketPrice;
-      }
-      let prev = closes.length >= 2 ? closes.at(-2) : last;
-      if (typeof meta.previousClose === "number" && meta.previousClose > 0 && Math.abs(meta.previousClose - last) / last < 0.25) {
-        prev = meta.previousClose;
-      } else if (Math.abs(prev - last) < 1e-6 && closes.length >= 3) {
-        prev = closes.at(-3);
-      }
-      const chg = last - prev, chgPct = prev ? (chg / prev) * 100 : 0;
-      const ema10 = calcEMA(closes, 10), ema20 = calcEMA(closes, 20), ema50 = calcEMA(closes, 50);
-      const rsi = calcRSI(closes, 14), macd = calcMACD(closes);
-      const support1 = Math.min(...lows.slice(-20)), resistance1 = Math.max(...highs.slice(-20));
-      const support2 = Math.min(...lows.slice(-60)), resistance2 = Math.max(...highs.slice(-60));
-
-      let trend = "عرضي";
-      if (ema10 && ema20 && ema50) {
-        if (last > ema20 && ema10 > ema20 && ema20 > ema50) trend = "صاعد قوي";
-        else if (last > ema20) trend = "صاعد";
-        else if (last < ema20 && ema10 < ema20 && ema20 < ema50) trend = "هابط قوي";
-        else trend = "هابط";
-      }
-
-      applyMetricsUI({ ticker, last, chg, chgPct, ema10, ema20, ema50, rsi, macd, support1, resistance1, support2, resistance2, trend });
+      } catch {}
+      if (state.ticker !== ticker) return;
+      row.innerHTML = `<span class="metric-pill"><span class="lbl">ℹ️ EGX:${ticker} — يمكنك إرفاق صورة الشارت للتحليل</span></span>`;
+      renderAutoSummary(null);
     }
 
     // 8.5 نبض السوق المباشر + الأكثر ربحاً وخسارة (جنب بعض - 8) + الأكثر تداولاً (تحتهم - 8) + الشعارات
@@ -5114,7 +4958,7 @@
       }
       if (updatedLogo) {
         try { localStorage.setItem(LS.LOGOS, JSON.stringify(state.stockLogos)); } catch {}
-        if ($("activeStockLogoSlot")) $("activeStockLogoSlot").innerHTML = buildStockLogoHtml(state.ticker, "lg");
+        setLogoSlot($("activeStockLogoSlot"), state.ticker, "lg");
       }
       if (addedStock || updatedLogo) renderStockList();
     }
@@ -5311,7 +5155,7 @@
       } catch {}
     }
 
-    // 8.7 المؤشرات الحية (بما فيها EGX 33 الشريعة) + الشارت الصافي الأخضر (ستايل Thndr) + التحديث التلقائي كل 10 ثواني
+    // 8.7 المؤشرات الحية + الشارت الصافي (ستايل تيلدا بدون بربشة) + تحديث تلقائي حي
     function renderIndicesLive(indicesMap) {
       if (!indicesMap || typeof indicesMap !== "object") return;
       state.indicesData = { ...(state.indicesData || {}), ...indicesMap };
@@ -5320,11 +5164,7 @@
         const ptsEl = $("idxPts-" + key);
         const chgEl = $("idxChg-" + key);
         if (!item || !ptsEl || !chgEl) return;
-
-        if (key === "SHARIAH" && item.tvSymbol && INDICES_META.SHARIAH) {
-          INDICES_META.SHARIAH.tvSymbol = item.tvSymbol;
-        }
-
+        if (key === "SHARIAH" && item.tvSymbol && INDICES_META.SHARIAH) INDICES_META.SHARIAH.tvSymbol = item.tvSymbol;
         if (item.points != null && Number.isFinite(Number(item.points)) && Number(item.points) > 0) {
           ptsEl.textContent = Number(item.points).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         } else if (item.estimated) {
@@ -5337,9 +5177,7 @@
     }
 
     async function fetchEgxIndices(force = false) {
-      if (!force && state.indicesData && Date.now() - (state.indicesFetchedAt || 0) < 7000) {
-        return renderIndicesLive(state.indicesData);
-      }
+      if (!force && state.indicesData && Date.now() - (state.indicesFetchedAt || 0) < 7000) return renderIndicesLive(state.indicesData);
       try {
         const ctrl = new AbortController();
         const t = setTimeout(() => ctrl.abort(), 6000);
@@ -5347,7 +5185,7 @@
         clearTimeout(t);
         if (res.ok) {
           const data = await res.json();
-          if (data && data.indices && Object.keys(data.indices).length) {
+          if (data?.indices && Object.keys(data.indices).length) {
             state.indicesFetchedAt = Date.now();
             return renderIndicesLive(data.indices);
           }
@@ -5361,16 +5199,11 @@
       if ($("proHudDot")) $("proHudDot").classList.toggle("live", !!state.marketIsOpen);
       const tfNote = $("proHudTfNote");
       if (tfNote) {
-        if (currentProMeta.actualTfLabel) {
-          tfNote.textContent = currentProMeta.actualTfLabel;
-          tfNote.classList.add("show");
-        } else {
-          tfNote.classList.remove("show");
-        }
+        if (currentProMeta.actualTfLabel) { tfNote.textContent = currentProMeta.actualTfLabel; tfNote.classList.add("show"); }
+        else tfNote.classList.remove("show");
       }
       if (!q || !Number.isFinite(Number(q.price))) return;
-      const priceVal = Number(q.price);
-      const chg = Number(q.changePct || 0);
+      const priceVal = Number(q.price), chg = Number(q.changePct || 0);
       const info = getStockInfo(q.ticker);
       const isIndexPts = info.isIndex && q.ticker !== "GOLD" && q.ticker !== "USDEGP";
       if ($("proHudPrice")) {
@@ -5384,14 +5217,13 @@
         b.textContent = `${chg > 0 ? "+" : ""}${chg.toFixed(2)}%`;
       }
       if ($("proHudTime")) {
-        const tStr = new Intl.DateTimeFormat("en-GB", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).format(new Date());
-        $("proHudTime").textContent = tStr;
+        $("proHudTime").textContent = new Intl.DateTimeFormat("en-GB", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false }).format(new Date());
       }
       if (prevPrice != null && prevPrice !== priceVal) {
         hud.classList.remove("flash-up", "flash-dn");
         void hud.offsetWidth;
         hud.classList.add(priceVal > prevPrice ? "flash-up" : "flash-dn");
-        setTimeout(() => hud.classList.remove("flash-up", "flash-dn"), 850);
+        setTimeout(() => hud.classList.remove("flash-up", "flash-dn"), 700);
       }
     }
 
@@ -5402,11 +5234,10 @@
       const liveP = Number(q.price);
       const last = currentProBars[currentProBars.length - 1];
       if (!last) return;
-      if (last.close > 0 && Math.abs(liveP - last.close) / last.close > 0.28) return;
+      if (last.close > 0 && Math.abs(liveP - last.close) / last.close > 0.3) return;
 
       const nowSec = Math.floor(Date.now() / 1000);
       if (!currentProMeta.isIntraday && typeof last.time === "string") {
-        // فريم يومي أو أسبوعي: لو تاريخ آخر شمعة من Yahoo أقدم من اليوم، أضف شمعة اليوم الحية فوراً!
         const todayStr = formatCairoDate(nowSec);
         const targetKey = state.tf === "W" ? last.time : (todayStr > last.time ? todayStr : last.time);
         if (targetKey > last.time) {
@@ -5421,24 +5252,19 @@
           }
           return;
         }
-        const highP = Math.max(last.high, liveP, (q.high != null && Number(q.high) > 0 && targetKey === todayStr) ? Number(q.high) : liveP);
-        const lowP  = Math.min(last.low,  liveP, (q.low  != null && Number(q.low)  > 0 && targetKey === todayStr) ? Number(q.low)  : liveP);
-        last.high = highP; last.low = lowP; last.close = liveP;
+        last.high = Math.max(last.high, liveP, (q.high != null && Number(q.high) > 0 && targetKey === todayStr) ? Number(q.high) : liveP);
+        last.low  = Math.min(last.low,  liveP, (q.low  != null && Number(q.low)  > 0 && targetKey === todayStr) ? Number(q.low)  : liveP);
+        last.close = liveP;
         try { proCandleSeries.update({ time: last.time, open: last.open, high: last.high, low: last.low, close: last.close }); } catch {}
-        if (proVolumeSeries && q.volume > 0 && targetKey === todayStr) {
-          last.volume = Number(q.volume);
-          try { proVolumeSeries.update({ time: last.time, value: last.volume, color: last.close >= last.open ? "rgba(16, 185, 129, 0.26)" : "rgba(244, 63, 94, 0.26)" }); } catch {}
-        }
         return;
       }
 
-      // فريم لحظي حقيقي (5m / 15m / 1H / 4H)
-      const tfSecMap = { "5": 300, "15": 900, "60": 3600, "240": 14400 };
-      const tfSec = tfSecMap[state.tf] || 900;
-      const nowCairo = nowSec + 7200;
-      const bucket = Math.floor(nowCairo / tfSec) * tfSec;
-      if (state.marketIsOpen && typeof last.time === "number" && bucket > last.time && (bucket - last.time) <= tfSec * 4) {
-        const newBar = { time: bucket, open: last.close, high: Math.max(last.close, liveP), low: Math.min(last.close, liveP), close: liveP, volume: 0 };
+      // فريم لحظي: لو وقت الجلسة الحالي أحدث من آخر شمعة، افتح شمعة جديدة بالسعر اللحظي
+      const tfSec = { "5": 300, "15": 900, "60": 3600, "240": 14400 }[state.tf] || 900;
+      const bucket = Math.floor((nowSec + 7200) / tfSec) * tfSec;
+      if (typeof last.time === "number" && bucket > last.time) {
+        const openP = (bucket - last.time > tfSec * 6 && q.open > 0) ? Number(q.open) : last.close;
+        const newBar = { time: bucket, open: openP, high: Math.max(openP, liveP), low: Math.min(openP, liveP), close: liveP, volume: 0 };
         currentProBars.push(newBar);
         try { proCandleSeries.update({ time: newBar.time, open: newBar.open, high: newBar.high, low: newBar.low, close: newBar.close }); } catch {}
         return;
@@ -5457,8 +5283,7 @@
       const info = getStockInfo(q.ticker);
       const isIndexPts = info.isIndex && q.ticker !== "GOLD" && q.ticker !== "USDEGP";
       const unitTxt = q.ticker === "GOLD" ? "$" : isIndexPts ? "نقطة" : "ج.م";
-      const priceVal = Number(q.price);
-      const chg = Number(q.changePct || 0);
+      const priceVal = Number(q.price), chg = Number(q.changePct || 0);
 
       if ($("activeLivePriceVal")) {
         $("activeLivePriceVal").textContent = isIndexPts
@@ -5477,18 +5302,24 @@
         w.classList.remove("flash-up", "flash-dn");
         void w.offsetWidth;
         w.classList.add(priceVal > prevPrice ? "flash-up" : "flash-dn");
-        setTimeout(() => w.classList.remove("flash-up", "flash-dn"), 900);
+        setTimeout(() => w.classList.remove("flash-up", "flash-dn"), 750);
       }
 
       tickProChartLiveCandle(q, prevPrice);
 
-      if (state.chartMode === "perf") {
-        // تحديث آخر نقطة على الشارت الصافي الأخضر باللحظة
-        if (state.cleanSeriesPoints && state.cleanSeriesPoints.length && q.ticker === state.ticker) {
+      if (state.chartMode === "perf" && q.ticker === state.ticker) {
+        // على الشارت الصافي اليومي (1D): نضيف النقطة الحية الجديدة بدون مسح أو بربشة
+        if (state.cleanSeriesPoints && state.cleanSeriesPoints.length >= 2) {
           const pts = state.cleanSeriesPoints;
           const lastPt = pts[pts.length - 1];
+          const nowSec = Math.floor(Date.now() / 1000);
           if (lastPt && Math.abs(priceVal - lastPt.c) / Math.max(0.01, lastPt.c) < 0.25) {
-            lastPt.c = priceVal;
+            if (state.perfSelectedKey === "1D" && state.marketIsOpen && (priceVal !== lastPt.c || nowSec - lastPt.ts >= 20)) {
+              pts.push({ ts: nowSec, c: priceVal, v: 0 });
+              if (pts.length > 420) pts.shift();
+            } else {
+              lastPt.c = priceVal;
+            }
           }
           drawCleanAreaChart(pts, null);
         }
@@ -5497,18 +5328,19 @@
     }
 
     const PERF_PERIODS = [
-      { key: "1D",  ar: "اليوم",       shortAr: "يوم",         interval: "5m",  range: "5d",  intraday: true  },
-      { key: "1W",  ar: "آخر أسبوع",   shortAr: "أسبوع",       interval: "60m", range: "5d",  intraday: true  },
-      { key: "1M",  ar: "آخر شهر",     shortAr: "شهر",         interval: "1d",  range: "1mo", intraday: false },
-      { key: "3M",  ar: "آخر 3 شهور",  shortAr: "3 شهور",      interval: "1d",  range: "3mo", intraday: false },
-      { key: "6M",  ar: "آخر 6 شهور",  shortAr: "6 شهور",      interval: "1d",  range: "6mo", intraday: false },
-      { key: "1Y",  ar: "آخر سنة",     shortAr: "سنة",         interval: "1d",  range: "1y",  intraday: false },
-      { key: "5Y",  ar: "آخر 5 سنوات", shortAr: "5 سنوات",     interval: "1wk", range: "5y",  intraday: false },
-      { key: "MAX", ar: "الحد الأقصى", shortAr: "الحد الأقصى", interval: "1mo", range: "max", intraday: false }
+      { key: "1D",  ar: "اليوم",       interval: "1m",  range: "1d",  intraday: true  },
+      { key: "1W",  ar: "آخر أسبوع",   interval: "15m", range: "5d",  intraday: true  },
+      { key: "1M",  ar: "آخر شهر",     interval: "1d",  range: "1mo", intraday: false },
+      { key: "3M",  ar: "آخر 3 شهور",  interval: "1d",  range: "3mo", intraday: false },
+      { key: "6M",  ar: "آخر 6 شهور",  interval: "1d",  range: "6mo", intraday: false },
+      { key: "1Y",  ar: "آخر سنة",     interval: "1d",  range: "1y",  intraday: false },
+      { key: "5Y",  ar: "آخر 5 سنوات", interval: "1wk", range: "5y",  intraday: false },
+      { key: "MAX", ar: "الحد الأقصى", interval: "1mo", range: "max", intraday: false }
     ];
 
     const cleanSeriesCache = new Map();
     let cleanChartState = { pts: [], basePrice: 0, minV: 0, maxV: 0, isUp: true, coords: [] };
+    let cleanLastSvgSig = "";
 
     function formatCompactNum(v) {
       if (v == null || !Number.isFinite(Number(v))) return "—";
@@ -5522,10 +5354,9 @@
     function formatCleanPointDate(tsSec, intraday) {
       if (!Number.isFinite(tsSec)) return "";
       const d = new Date(tsSec * 1000);
-      if (intraday) {
-        return new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(d);
-      }
-      return new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", year: "numeric", month: "short", day: "numeric" }).format(d);
+      return intraday
+        ? new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit" }).format(d)
+        : new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", year: "numeric", month: "short", day: "numeric" }).format(d);
     }
 
     function getCleanPeriodMetrics(overrideIdx = null) {
@@ -5534,11 +5365,8 @@
       const pMeta = PERF_PERIODS.find(x => x.key === pKey) || PERF_PERIODS[0];
       const pts = cleanChartState.pts || [];
 
-      let displayPrice = q && q.price != null ? Number(q.price) : (pts.length ? pts[pts.length - 1].c : null);
-      let basePrice = null;
-      let chgPct = null;
-      let chgAbs = null;
-      let labelPeriod = pMeta.ar;
+      let displayPrice = q?.price != null ? Number(q.price) : (pts.length ? pts[pts.length - 1].c : null);
+      let basePrice = null, chgPct = null, chgAbs = null, labelPeriod = pMeta.ar;
 
       if (overrideIdx != null && pts[overrideIdx]) {
         displayPrice = pts[overrideIdx].c;
@@ -5546,23 +5374,20 @@
         chgAbs = displayPrice - basePrice;
         chgPct = basePrice > 0 ? (chgAbs / basePrice) * 100 : 0;
         labelPeriod = formatCleanPointDate(pts[overrideIdx].ts, pMeta.intraday);
-      } else {
-        if (pKey === "1D" && q && q.price != null) {
-          chgPct = Number(q.changePct || 0);
-          chgAbs = q.changeAbs != null ? Number(q.changeAbs) : (q.prevClose ? displayPrice - q.prevClose : (displayPrice * chgPct) / (100 + chgPct));
-          basePrice = q.prevClose || (displayPrice - chgAbs);
-        } else if (pts.length >= 2) {
-          basePrice = pts[0].c;
-          const endP = displayPrice != null ? displayPrice : pts[pts.length - 1].c;
-          chgAbs = endP - basePrice;
-          chgPct = basePrice > 0 ? (chgAbs / basePrice) * 100 : 0;
-        } else if (q && q.perf && q.perf[pKey] != null && displayPrice != null) {
-          chgPct = Number(q.perf[pKey]);
-          basePrice = chgPct !== -100 ? displayPrice / (1 + chgPct / 100) : displayPrice;
-          chgAbs = displayPrice - basePrice;
-        }
+      } else if (pKey === "1D" && q?.price != null) {
+        chgPct = Number(q.changePct || 0);
+        chgAbs = q.changeAbs != null ? Number(q.changeAbs) : (q.prevClose ? displayPrice - q.prevClose : (displayPrice * chgPct) / (100 + chgPct));
+        basePrice = q.prevClose || (displayPrice - chgAbs);
+      } else if (pts.length >= 2) {
+        basePrice = pts[0].c;
+        const endP = displayPrice != null ? displayPrice : pts[pts.length - 1].c;
+        chgAbs = endP - basePrice;
+        chgPct = basePrice > 0 ? (chgAbs / basePrice) * 100 : 0;
+      } else if (q?.perf?.[pKey] != null && displayPrice != null) {
+        chgPct = Number(q.perf[pKey]);
+        basePrice = chgPct !== -100 ? displayPrice / (1 + chgPct / 100) : displayPrice;
+        chgAbs = displayPrice - basePrice;
       }
-
       return { displayPrice, basePrice, chgAbs, chgPct, labelPeriod };
     }
 
@@ -5571,35 +5396,30 @@
       const isIndexPts = info.isIndex && state.ticker !== "GOLD" && state.ticker !== "USDEGP";
       const unitTxt = state.ticker === "GOLD" ? "$" : isIndexPts ? "نقطة" : "ج.م";
 
-      if ($("cleanStockLogoSlot")) $("cleanStockLogoSlot").innerHTML = buildStockLogoHtml(state.ticker, "lg");
-      if ($("cleanTickerTxt")) $("cleanTickerTxt").textContent = state.ticker;
-      if ($("cleanNameTxt")) $("cleanNameTxt").textContent = info.name;
-      if ($("cleanBigUnit")) $("cleanBigUnit").textContent = unitTxt;
+      // تحديث الشعار فقط لو اتغير السهم (منع البربشة نهائياً)
+      setLogoSlot($("cleanStockLogoSlot"), state.ticker, "lg");
+      if ($("cleanTickerTxt") && $("cleanTickerTxt").textContent !== state.ticker) $("cleanTickerTxt").textContent = state.ticker;
+      if ($("cleanNameTxt") && $("cleanNameTxt").textContent !== info.name) $("cleanNameTxt").textContent = info.name;
+      if ($("cleanBigUnit") && $("cleanBigUnit").textContent !== unitTxt) $("cleanBigUnit").textContent = unitTxt;
 
       const m = getCleanPeriodMetrics(overrideIdx);
       if ($("cleanBigPrice")) {
-        $("cleanBigPrice").textContent = m.displayPrice != null
-          ? (isIndexPts
-            ? Number(m.displayPrice).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-            : Number(m.displayPrice).toFixed(2))
+        const txt = m.displayPrice != null
+          ? (isIndexPts ? Number(m.displayPrice).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : Number(m.displayPrice).toFixed(2))
           : "—";
+        if ($("cleanBigPrice").textContent !== txt) $("cleanBigPrice").textContent = txt;
       }
 
-      const chgLine = $("cleanChgLine");
-      const chgVal = $("cleanChgVal");
-      const chgPer = $("cleanChgPeriod");
+      const chgLine = $("cleanChgLine"), chgVal = $("cleanChgVal"), chgPer = $("cleanChgPeriod");
       if (chgLine && chgVal && chgPer) {
         if (m.chgPct != null && Number.isFinite(m.chgPct)) {
           const isUp = m.chgPct >= 0;
           const sign = m.chgPct > 0 ? "+" : "";
-          const absTxt = (m.chgAbs != null && Number.isFinite(m.chgAbs))
-            ? `${m.chgAbs > 0 ? "+" : ""}${m.chgAbs.toFixed(2)} ${unitTxt} `
-            : "";
+          const absTxt = (m.chgAbs != null && Number.isFinite(m.chgAbs)) ? `${m.chgAbs > 0 ? "+" : ""}${m.chgAbs.toFixed(2)} ${unitTxt} ` : "";
           chgLine.className = "clean-chg-line " + (m.chgPct > 0 ? "up" : m.chgPct < 0 ? "down" : "flat");
           chgVal.textContent = `${absTxt}(${sign}${m.chgPct.toFixed(2)}%)`;
-          chgPer.textContent = `• ${m.labelPeriod}`;
+          chgPer.textContent = overrideIdx != null ? "" : `• ${m.labelPeriod}`;
 
-          // تلوين الزر النشط أخضر أو أحمر حسب اتجاه الفترة
           document.querySelectorAll("#cleanTfRow .clean-tf-btn").forEach(btn => {
             const act = btn.dataset.cleanTf === state.perfSelectedKey;
             btn.classList.toggle("active", act);
@@ -5624,14 +5444,15 @@
     }
 
     function drawCleanAreaChart(points, scrubIdx = null) {
-      const svg = $("cleanAreaSvg");
-      const box = $("cleanCanvasBox");
-      const hiPill = $("cleanHiPill");
-      const loPill = $("cleanLoPill");
+      const svg = $("cleanAreaSvg"), box = $("cleanCanvasBox");
+      const hiPill = $("cleanHiPill"), loPill = $("cleanLoPill");
       if (!svg || !box) return;
 
       if (!points || points.length < 2) {
-        svg.innerHTML = `<text x="300" y="115" text-anchor="middle" fill="#64748b" font-size="14" font-family="Cairo, sans-serif">لا تتوفر بيانات كافية لهذه الفترة</text>`;
+        if (cleanLastSvgSig !== "EMPTY") {
+          cleanLastSvgSig = "EMPTY";
+          svg.innerHTML = `<text x="300" y="115" text-anchor="middle" fill="#64748b" font-size="14" font-family="Cairo, sans-serif">لا تتوفر بيانات كافية لهذه الفترة</text>`;
+        }
         if (hiPill) hiPill.style.display = "none";
         if (loPill) loPill.style.display = "none";
         return;
@@ -5639,45 +5460,63 @@
 
       const q = state.liveQuote && state.liveQuote.ticker === state.ticker ? state.liveQuote : null;
       const pKey = state.perfSelectedKey || "1D";
-      const basePrice = (pKey === "1D" && q && q.prevClose > 0) ? Number(q.prevClose) : points[0].c;
+      const basePrice = (pKey === "1D" && q?.prevClose > 0) ? Number(q.prevClose) : points[0].c;
       const lastVal = points[points.length - 1].c;
+      const sig = `${state.ticker}|${pKey}|${points.length}|${points[0].c.toFixed(3)}|${lastVal.toFixed(3)}|${basePrice.toFixed(3)}|${scrubIdx ?? -1}`;
+      if (sig === cleanLastSvgSig) return;
+      cleanLastSvgSig = sig;
+
       const isUp = lastVal >= basePrice;
       const strokeCol = isUp ? "#22c55e" : "#f43f5e";
-      const gradTop = isUp ? "rgba(34, 197, 94, 0.34)" : "rgba(244, 63, 94, 0.34)";
+      const gradTop = isUp ? "rgba(34, 197, 94, 0.28)" : "rgba(244, 63, 94, 0.28)";
       const gradBot = isUp ? "rgba(34, 197, 94, 0.0)"  : "rgba(244, 63, 94, 0.0)";
-      const glowCol = isUp ? "rgba(34, 197, 94, 0.42)" : "rgba(244, 63, 94, 0.42)";
-
+      const glowCol = isUp ? "rgba(34, 197, 94, 0.36)" : "rgba(244, 63, 94, 0.36)";
       box.classList.toggle("down-bg", !isUp);
 
       const vals = points.map(p => p.c);
-      const rawMax = Math.max(...vals);
-      const rawMin = Math.min(...vals);
-      const maxWithBase = Math.max(rawMax, basePrice);
-      const minWithBase = Math.min(rawMin, basePrice);
+      const rawMax = Math.max(...vals), rawMin = Math.min(...vals);
+      const maxWithBase = Math.max(rawMax, basePrice), minWithBase = Math.min(rawMin, basePrice);
       const span = Math.max(maxWithBase - minWithBase, rawMax * 0.004 || 0.01);
 
       const W = 600, H = 220;
-      const padT = 22, padB = 22, padL = 8, padR = 14;
-      const plotW = W - padL - padR;
-      const plotH = H - padT - padB;
+      const padT = 18, padB = 34, padL = 8, padR = 14;
+      const plotW = W - padL - padR, plotH = H - padT - padB;
       const yOf = (v) => padT + ((maxWithBase - v) / span) * plotH;
       const xOf = (i) => padL + (i / (points.length - 1)) * plotW;
 
-      const coords = points.map((p, i) => ({ x: xOf(i), y: yOf(p.c), c: p.c, ts: p.ts }));
+      const coords = points.map((p, i) => ({ x: xOf(i), y: yOf(p.c), c: p.c, ts: p.ts, v: p.v || 0 }));
       cleanChartState = { pts: points, basePrice, minV: rawMin, maxV: rawMax, isUp, coords };
 
       const linePath = coords.map((pt, i) => `${i === 0 ? "M" : "L"}${pt.x.toFixed(1)},${pt.y.toFixed(1)}`).join(" ");
-      const areaPath = `${linePath} L${coords[coords.length - 1].x.toFixed(1)},${H} L${coords[0].x.toFixed(1)},${H} Z`;
+      const areaBottom = H - 22;
+      const areaPath = `${linePath} L${coords[coords.length - 1].x.toFixed(1)},${areaBottom} L${coords[0].x.toFixed(1)},${areaBottom} Z`;
       const baseY = yOf(basePrice);
       const endPt = coords[coords.length - 1];
 
-      let scrubSvg = "";
+      // أعمدة فوليوم خفيفة في الأسفل (شبه شارت تيلدا)
+      let volSvg = "";
+      const maxVol = Math.max(...coords.map(c => c.v), 0);
+      if (maxVol > 0) {
+        const step = Math.max(1, Math.floor(coords.length / 75));
+        const barW = Math.max(1.5, Math.min(3.5, (plotW / (coords.length / step)) * 0.55));
+        const bars = [];
+        for (let i = 0; i < coords.length; i += step) {
+          const vh = Math.max(1.5, (coords[i].v / maxVol) * 20);
+          bars.push(`<rect x="${(coords[i].x - barW/2).toFixed(1)}" y="${(H - vh).toFixed(1)}" width="${barW.toFixed(1)}" height="${vh.toFixed(1)}" rx="1" fill="rgba(148,163,184,0.28)" />`);
+        }
+        volSvg = bars.join("");
+      }
+
+      let markerSvg = `
+        <circle cx="${endPt.x.toFixed(1)}" cy="${endPt.y.toFixed(1)}" r="7" fill="${glowCol}" />
+        <circle cx="${endPt.x.toFixed(1)}" cy="${endPt.y.toFixed(1)}" r="3.6" fill="#ffffff" stroke="${strokeCol}" stroke-width="2" />
+      `;
       if (scrubIdx != null && coords[scrubIdx]) {
         const sp = coords[scrubIdx];
-        scrubSvg = `
-          <line x1="${sp.x.toFixed(1)}" y1="6" x2="${sp.x.toFixed(1)}" y2="${H - 6}" stroke="rgba(255,255,255,0.28)" stroke-width="1.2" stroke-dasharray="3 3" />
-          <circle cx="${sp.x.toFixed(1)}" cy="${sp.y.toFixed(1)}" r="8" fill="${glowCol}" />
-          <circle cx="${sp.x.toFixed(1)}" cy="${sp.y.toFixed(1)}" r="4" fill="#ffffff" stroke="${strokeCol}" stroke-width="2.2" />
+        markerSvg = `
+          <line x1="${sp.x.toFixed(1)}" y1="6" x2="${sp.x.toFixed(1)}" y2="${areaBottom}" stroke="rgba(255,255,255,0.28)" stroke-width="1.2" stroke-dasharray="3 3" />
+          <circle cx="${sp.x.toFixed(1)}" cy="${sp.y.toFixed(1)}" r="7.5" fill="${glowCol}" />
+          <circle cx="${sp.x.toFixed(1)}" cy="${sp.y.toFixed(1)}" r="3.8" fill="#ffffff" stroke="${strokeCol}" stroke-width="2.2" />
         `;
       }
 
@@ -5688,16 +5527,11 @@
             <stop offset="100%" stop-color="${gradBot}" />
           </linearGradient>
         </defs>
-        <line x1="${padL}" y1="${baseY.toFixed(1)}" x2="${W - padR}" y2="${baseY.toFixed(1)}" stroke="rgba(148,163,184,0.34)" stroke-width="1.2" stroke-dasharray="5 5" />
+        ${volSvg}
+        <line x1="${padL}" y1="${baseY.toFixed(1)}" x2="${W - padR}" y2="${baseY.toFixed(1)}" stroke="rgba(148,163,184,0.34)" stroke-width="1.2" stroke-dasharray="4 4" />
         <path d="${areaPath}" fill="url(#cleanAreaGrad)" />
-        <path d="${linePath}" fill="none" stroke="${strokeCol}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
-        ${scrubSvg || `
-          <circle cx="${endPt.x.toFixed(1)}" cy="${endPt.y.toFixed(1)}" r="9" fill="${glowCol}">
-            <animate attributeName="r" values="6;11;6" dur="2s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.75;0.15;0.75" dur="2s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="${endPt.x.toFixed(1)}" cy="${endPt.y.toFixed(1)}" r="4" fill="#ffffff" stroke="${strokeCol}" stroke-width="2" />
-        `}
+        <path d="${linePath}" fill="none" stroke="${strokeCol}" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" />
+        ${markerSvg}
       `;
 
       if (hiPill) { hiPill.textContent = rawMax.toFixed(2); hiPill.style.display = "block"; }
@@ -5715,7 +5549,7 @@
       });
 
       const cached = cleanSeriesCache.get(cacheKey);
-      if (!force && cached && Date.now() - cached.at < 30000 && cached.pts.length >= 2) {
+      if (!force && cached && Date.now() - cached.at < 25000 && cached.pts.length >= 2) {
         state.cleanSeriesPoints = cached.pts.map(x => ({ ...x }));
         state.cleanSeriesPeriod = pKey;
         drawCleanAreaChart(state.cleanSeriesPoints, null);
@@ -5724,62 +5558,69 @@
         return;
       }
 
-      if ($("cleanLoading")) $("cleanLoading").classList.add("show");
+      if ($("cleanLoading") && !force) $("cleanLoading").classList.add("show");
 
-      let res = await fetchYahooChartRaw(t, pMeta.interval, pMeta.range);
       const extractPts = (r) => {
-        if (!r || !r.timestamp || !r.indicators?.quote?.[0]?.close) return [];
-        const ts = r.timestamp, closes = r.indicators.quote[0].close;
+        if (!r?.timestamp || !r.indicators?.quote?.[0]?.close) return [];
+        const ts = r.timestamp, q = r.indicators.quote[0], closes = q.close, vols = q.volume || [];
         const out = [];
         for (let i = 0; i < ts.length; i++) {
           const c = closes[i];
-          if (typeof c === "number" && Number.isFinite(c) && c > 0) out.push({ ts: Math.floor(ts[i]), c });
+          if (typeof c === "number" && Number.isFinite(c) && c > 0) {
+            out.push({ ts: Math.floor(ts[i]), c, v: Number.isFinite(vols[i]) ? vols[i] : 0 });
+          }
         }
         return out;
       };
 
-      let pts = extractPts(res);
+      const filterLastDay = (arr) => {
+        if (arr.length <= 6) return arr;
+        const lastDay = formatCairoDate(arr[arr.length - 1].ts);
+        const same = arr.filter(p => formatCairoDate(p.ts) === lastDay);
+        return same.length >= 6 ? same : arr.slice(-40);
+      };
 
-      // لليوم (1D): نعرض شموع آخر يوم تداول فقط (عشان يطلع صافي زي ثندر)
-      if (pKey === "1D" && pts.length > 5) {
-        const lastDayStr = formatCairoDate(pts[pts.length - 1].ts);
-        const sameDay = pts.filter(p => formatCairoDate(p.ts) === lastDayStr);
-        if (sameDay.length >= 4) pts = sameDay;
-      }
-      // احتياطي لو اليومي اللحظي فاضي أو قليل جداً
-      if (pts.length < 3 && pKey === "1D") {
-        const r2 = await fetchYahooChartRaw(t, "15m", "5d");
-        pts = extractPts(r2);
-        if (pts.length > 5) {
-          const lastDayStr = formatCairoDate(pts[pts.length - 1].ts);
-          const sameDay = pts.filter(p => formatCairoDate(p.ts) === lastDayStr);
-          if (sameDay.length >= 3) pts = sameDay;
+      let pts = [];
+      if (pKey === "1D") {
+        // دقة عالية جداً لليوم (1m -> 2m -> 5m -> 15m) عشان يظهر الطلوع والنزول المفصّل شبه تيلدا
+        const intradayChain = [
+          ["1m", "1d"], ["1m", "5d"], ["2m", "5d"], ["5m", "5d"], ["15m", "5d"]
+        ];
+        for (const [iv, rg] of intradayChain) {
+          const r = await fetchYahooChartRaw(t, iv, rg);
+          const got = filterLastDay(extractPts(r));
+          if (got.length > pts.length) pts = got;
+          if (pts.length >= 18) break;
         }
-      }
-      if (pts.length < 3 && (pKey === "1D" || pKey === "1W")) {
-        const r3 = await fetchYahooChartRaw(t, "1d", "1mo");
-        const dPts = extractPts(r3);
-        if (dPts.length >= 2) pts = pKey === "1D" ? dPts.slice(-7) : dPts.slice(-10);
-      }
-      if (pts.length < 3 && pKey === "MAX") {
-        const r4 = await fetchYahooChartRaw(t, "1wk", "5y");
-        pts = extractPts(r4);
+        if (pts.length < 4) {
+          const rd = await fetchYahooChartRaw(t, "1d", "1mo");
+          pts = extractPts(rd).slice(-14);
+        }
+      } else {
+        const r = await fetchYahooChartRaw(t, pMeta.interval, pMeta.range);
+        pts = extractPts(r);
+        if (pts.length < 4 && pKey === "1W") {
+          const r2 = await fetchYahooChartRaw(t, "60m", "1mo");
+          pts = extractPts(r2).slice(-35);
+        }
+        if (pts.length < 4 && pKey === "MAX") {
+          const r3 = await fetchYahooChartRaw(t, "1wk", "5y");
+          pts = extractPts(r3);
+        }
       }
 
       if ($("cleanLoading")) $("cleanLoading").classList.remove("show");
       if (state.ticker !== t || state.perfSelectedKey !== pKey) return;
 
-      // دمج السعر اللحظي كآخر نقطة في المنحنى
-      if (pts.length >= 2 && state.liveQuote && state.liveQuote.ticker === t && Number.isFinite(Number(state.liveQuote.price))) {
+      // دمج السعر اللحظي كآخر نقطة حية
+      if (pts.length >= 2 && state.liveQuote?.ticker === t && Number.isFinite(Number(state.liveQuote.price))) {
         const liveP = Number(state.liveQuote.price);
         if (Math.abs(liveP - pts[pts.length - 1].c) / Math.max(0.01, pts[pts.length - 1].c) < 0.25) {
-          pts[pts.length - 1].c = liveP;
+          pts.push({ ts: Math.floor(Date.now() / 1000), c: liveP, v: 0 });
         }
       }
 
-      if (pts.length >= 2) {
-        cleanSeriesCache.set(cacheKey, { pts: pts.map(x => ({ ...x })), at: Date.now() });
-      }
+      if (pts.length >= 2) cleanSeriesCache.set(cacheKey, { pts: pts.map(x => ({ ...x })), at: Date.now() });
       state.cleanSeriesPoints = pts;
       state.cleanSeriesPeriod = pKey;
       drawCleanAreaChart(pts, null);
@@ -5791,7 +5632,6 @@
       const box = $("cleanCanvasBox");
       if (!box || box.__scrubBound) return;
       box.__scrubBound = true;
-
       let scrubbing = false;
       const scrubAtClientX = (clientX) => {
         const coords = cleanChartState.coords || [];
@@ -5808,40 +5648,37 @@
         drawCleanAreaChart(cleanChartState.pts, null);
         updateCleanHeaderNumbers(null);
       };
-
-      box.addEventListener("pointerdown", e => {
-        scrubbing = true;
-        scrubAtClientX(e.clientX);
-      });
-      box.addEventListener("pointermove", e => {
-        if (scrubbing || e.pointerType === "mouse") scrubAtClientX(e.clientX);
-      });
+      box.addEventListener("pointerdown", e => { scrubbing = true; scrubAtClientX(e.clientX); });
+      box.addEventListener("pointermove", e => { if (scrubbing || e.pointerType === "mouse") scrubAtClientX(e.clientX); });
       box.addEventListener("pointerup", endScrub);
       box.addEventListener("pointercancel", endScrub);
-      box.addEventListener("pointerleave", () => {
-        scrubbing = false;
-        drawCleanAreaChart(cleanChartState.pts, null);
-        updateCleanHeaderNumbers(null);
-      });
+      box.addEventListener("pointerleave", () => { scrubbing = false; drawCleanAreaChart(cleanChartState.pts, null); updateCleanHeaderNumbers(null); });
     }
 
+    // حاسبة استثمار 10,000 ج.م لمدة سنة ثابتة (1Y)
     function updatePerfSimBox() {
-      const m = getCleanPeriodMetrics(null);
-      const pMeta = PERF_PERIODS.find(p => p.key === state.perfSelectedKey) || PERF_PERIODS[0];
+      const q = state.liveQuote && state.liveQuote.ticker === state.ticker ? state.liveQuote : null;
       const txtEl = $("perfSimText"), resEl = $("perfSimVal");
       if (!txtEl || !resEl) return;
-      if (m.chgPct == null || !Number.isFinite(Number(m.chgPct))) {
-        txtEl.textContent = `💰 عائد 10,000 ج.م في (${pMeta.ar})`;
+      let pct1Y = q?.perf?.["1Y"];
+      if (pct1Y == null) {
+        const c1y = cleanSeriesCache.get(`${state.ticker}_1Y`);
+        if (c1y?.pts?.length >= 2 && c1y.pts[0].c > 0) {
+          const endP = q?.price ?? c1y.pts[c1y.pts.length - 1].c;
+          pct1Y = ((endP - c1y.pts[0].c) / c1y.pts[0].c) * 100;
+        }
+      }
+      txtEl.textContent = "💰 استثمار 10,000 ج.م لمدة سنة:";
+      if (pct1Y == null || !Number.isFinite(Number(pct1Y))) {
         resEl.textContent = "—";
         resEl.style.color = "var(--text-muted)";
         return;
       }
-      const pct = Number(m.chgPct);
+      const pct = Number(pct1Y);
       const finalAmt = Math.round(10000 * (1 + pct / 100));
       const diff = finalAmt - 10000;
       const sign = diff >= 0 ? "+" : "";
-      txtEl.textContent = `💰 استثمار 10,000 ج.م (${pMeta.ar}):`;
-      resEl.textContent = `${finalAmt.toLocaleString("en-US")} ج.م (${sign}${diff.toLocaleString("en-US")})`;
+      resEl.textContent = `${finalAmt.toLocaleString("en-US")} ج.م (${sign}${pct.toFixed(1)}%)`;
       resEl.style.color = diff >= 0 ? "#22c55e" : "#f43f5e";
     }
 
@@ -5869,28 +5706,11 @@
         else { b.textContent = "⚪ محايد" + (q?.rsi14 != null ? ` • RSI ${q.rsi14}` : ""); b.style.color = "var(--text-muted)"; }
       }
 
-      const miniGrid = $("perfMiniGrid");
-      if (miniGrid) {
-        const perf = q?.perf || {};
-        miniGrid.innerHTML = PERF_PERIODS.map(p => {
-          const raw = perf[p.key];
-          const has = raw != null && Number.isFinite(Number(raw));
-          const num = has ? Number(raw) : 0;
-          const cls = !has ? "flat" : num > 0 ? "up" : num < 0 ? "down" : "flat";
-          const sign = num > 0 ? "+" : "";
-          const act = state.perfSelectedKey === p.key ? " active" : "";
-          return `<div class="perf-mini-chip${act}" data-clean-tf="${p.key}">
-            <span class="perf-mini-lbl">${p.shortAr}</span>
-            <span class="perf-mini-val ${cls}">${has ? `${sign}${num.toFixed(1)}%` : "—"}</span>
-          </div>`;
-        }).join("");
-      }
-
       updatePerfSimBox();
       const tStr = new Intl.DateTimeFormat("ar-EG", { timeZone: "Africa/Cairo", hour: "2-digit", minute: "2-digit", second: "2-digit" }).format(new Date());
       if ($("perfUpdatedNote")) {
         $("perfUpdatedNote").textContent = state.marketIsOpen
-          ? `🟢 مباشر — آخر تحديث ${tStr} (يتحدث تلقائياً كل 10 ثواني)`
+          ? `🟢 مباشر — آخر تحديث ${tStr}`
           : `آخر تحديث ${tStr} • اسحب بإصبعك فوق المنحنى لمعرفة السعر في أي لحظة`;
       }
     }
@@ -5899,75 +5719,24 @@
       const t = String(ticker || state.ticker).toUpperCase().trim();
       try {
         const ctrl = new AbortController();
-        const tm = setTimeout(() => ctrl.abort(), 6500);
+        const tm = setTimeout(() => ctrl.abort(), 6000);
         const res = await fetch(`${WORKER_ORIGIN}/quote?ticker=${encodeURIComponent(t)}&t=${Date.now()}`, { signal: ctrl.signal });
         clearTimeout(tm);
         if (res.ok) {
           const data = await res.json();
           if (state.ticker !== t) return null;
-          if (data && data.price != null) {
-            applyLiveQuoteToHeader(data);
-            return data;
-          }
+          if (data && data.price != null) { applyLiveQuoteToHeader(data); return data; }
         }
       } catch {}
-
-      if (!silent) {
-        try {
-          const r = await fetchYahooChartRaw(t, "1wk", "5y");
-          if (state.ticker !== t || !r) return null;
-          const ts = r.timestamp || [];
-          const q = r.indicators?.quote?.[0] || {};
-          const pts = [];
-          for (let i = 0; i < ts.length; i++) {
-            const c = q.close?.[i];
-            if (Number.isFinite(c) && c > 0) pts.push({ ts: ts[i], c, h: q.high?.[i] ?? c, l: q.low?.[i] ?? c });
-          }
-          if (pts.length >= 2) {
-            const last = pts[pts.length - 1];
-            const prev = pts[pts.length - 2];
-            const pctDays = (days) => {
-              const tgt = last.ts - days * 86400;
-              if (pts[0].ts > tgt + 25 * 86400) return null;
-              let best = pts[0];
-              for (let i = pts.length - 1; i >= 0; i--) { if (pts[i].ts <= tgt) { best = pts[i]; break; } }
-              return best.c > 0 ? Number((((last.c - best.c) / best.c) * 100).toFixed(2)) : null;
-            };
-            const yStart = Math.floor(Date.UTC(new Date(last.ts * 1000).getUTCFullYear(), 0, 1) / 1000);
-            let yRef = null;
-            for (let i = pts.length - 1; i >= 0; i--) { if (pts[i].ts < yStart) { yRef = pts[i]; break; } }
-            const dayChg = state.liveMetrics ? state.liveMetrics.chgPct : Number((((last.c - prev.c) / prev.c) * 100).toFixed(2));
-            const fallbackPrice = state.liveMetrics ? state.liveMetrics.last : Number(last.c.toFixed(2));
-            const fallbackQ = {
-              ticker: t,
-              price: fallbackPrice,
-              prevClose: Number(prev.c.toFixed(2)),
-              changePct: dayChg,
-              changeAbs: Number((fallbackPrice - prev.c).toFixed(2)),
-              high: Number(last.h.toFixed(2)),
-              low: Number(last.l.toFixed(2)),
-              high52w: Number(Math.max(...pts.slice(-52).map(x => x.h)).toFixed(2)),
-              low52w: Number(Math.min(...pts.slice(-52).map(x => x.l)).toFixed(2)),
-              perf: {
-                "1D": dayChg, "1W": pctDays(7), "1M": pctDays(30), "3M": pctDays(90),
-                "6M": pctDays(180), "YTD": yRef ? Number((((last.c - yRef.c) / yRef.c) * 100).toFixed(2)) : null,
-                "1Y": pctDays(365), "5Y": pctDays(365 * 5),
-                "MAX": pts[0].c > 0 ? Number((((last.c - pts[0].c) / pts[0].c) * 100).toFixed(2)) : null
-              }
-            };
-            applyLiveQuoteToHeader(fallbackQ);
-            return fallbackQ;
-          }
-        } catch {}
-      }
       return null;
     }
 
-    // محرك التحديث التلقائي كل 10 ثواني مع عداد بصري هادئ
+    // محرك التحديث التلقائي: كل 3 ثواني على الشارت الصافي، كل 5 ثواني على Pro، وكل 10 ثواني على الرئيسية
     const AUTO_REFRESH_SEC = 10;
     let autoRefreshLeft = AUTO_REFRESH_SEC;
     let autoRefreshCycles = 0;
     let livePollTimer = null;
+    let chartTickSec = 0;
 
     async function runLiveRefreshCycle(manual = false) {
       const spin = $("pulseRefreshSpin");
@@ -5975,62 +5744,44 @@
       autoRefreshCycles++;
       try {
         if (state.activeTab === "home") {
-          await Promise.all([
-            fetchMarketMovers(true, !manual),
-            fetchMacroRates(true)
-          ]);
+          await Promise.all([fetchMarketMovers(true, !manual), fetchMacroRates(true)]);
           if (!state.moversData?.indices?.SHARIAH) fetchEgxIndices(true);
         } else if (state.activeTab === "chart" || state.activeTab === "ai") {
           await fetchLiveQuote(state.ticker, true);
-          if (state.chartMode === "pro" && autoRefreshCycles % 3 === 0 && proCandleSeries && currentProBars.length) {
+          if (state.chartMode === "pro" && autoRefreshCycles % 6 === 0 && proCandleSeries && currentProBars.length) {
             const res = await fetchOhlcBars(state.ticker, state.tf, true);
-            if (res && res.bars && res.bars.length && state.chartMode === "pro") {
+            if (res?.bars?.length && state.chartMode === "pro") {
               const prevRange = proChart ? proChart.timeScale().getVisibleLogicalRange() : null;
               currentProBars = res.bars;
               proCandleSeries.setData(currentProBars.map(b => ({ time: b.time, open: b.open, high: b.high, low: b.low, close: b.close })));
               if (proVolumeSeries) {
-                proVolumeSeries.setData(currentProBars.map(b => ({
-                  time: b.time, value: b.volume,
-                  color: b.close >= b.open ? "rgba(16, 185, 129, 0.26)" : "rgba(244, 63, 94, 0.26)"
-                })));
+                proVolumeSeries.setData(currentProBars.map(b => ({ time: b.time, value: b.volume, color: b.close >= b.open ? "rgba(16, 185, 129, 0.26)" : "rgba(244, 63, 94, 0.26)" })));
               }
               runActiveProScripts();
-              if (state.liveQuote && state.liveQuote.ticker === state.ticker) tickProChartLiveCandle(state.liveQuote);
+              if (state.liveQuote?.ticker === state.ticker) tickProChartLiveCandle(state.liveQuote, null);
               if (prevRange && proChart) proChart.timeScale().setVisibleLogicalRange(prevRange);
             }
-          } else if (state.chartMode === "perf" && autoRefreshCycles % 3 === 0) {
-            loadCleanChartPeriod(state.ticker, state.perfSelectedKey, true);
+          } else if (state.chartMode === "perf" && state.perfSelectedKey === "1D" && autoRefreshCycles % 8 === 0) {
+            loadCleanChartPeriod(state.ticker, "1D", true);
           }
         }
       } catch {}
-      finally {
-        setTimeout(() => { if (spin) spin.classList.remove("spinning"); }, 450);
-      }
+      finally { setTimeout(() => { if (spin) spin.classList.remove("spinning"); }, 400); }
     }
 
-    let chartTickSec = 0;
     function startLiveAutoRefresh() {
       if (livePollTimer) return;
       autoRefreshLeft = AUTO_REFRESH_SEC;
       livePollTimer = setInterval(() => {
         if (document.hidden || document.body.classList.contains("auth-locked") || !state.appBooted) return;
-
-        // على شاشة الرسمة (Pro / الشارت الصافي): تحديث السعر اللحظي كل 5 ثواني والسوق مفتوح
         if (state.activeTab === "chart" || state.activeTab === "ai") {
           chartTickSec++;
-          const step = state.marketIsOpen ? 5 : 20;
-          if (chartTickSec >= step) {
-            chartTickSec = 0;
-            runLiveRefreshCycle(false);
-          }
+          const step = state.marketIsOpen ? (state.chartMode === "perf" ? 3 : 5) : 20;
+          if (chartTickSec >= step) { chartTickSec = 0; runLiveRefreshCycle(false); }
           return;
         }
-
-        // على الصفحة الرئيسية: عدّاد كل 10 ثواني لنبض السوق والمؤشرات والأسهم
         autoRefreshLeft--;
-        if ($("pulseAutoCountdown")) {
-          $("pulseAutoCountdown").textContent = autoRefreshLeft > 0 ? `${autoRefreshLeft}ث` : "تحديث";
-        }
+        if ($("pulseAutoCountdown")) $("pulseAutoCountdown").textContent = autoRefreshLeft > 0 ? `${autoRefreshLeft}ث` : "تحديث";
         if (autoRefreshLeft <= 0) {
           autoRefreshLeft = state.marketIsOpen ? AUTO_REFRESH_SEC : 20;
           runLiveRefreshCycle(false);
@@ -6320,13 +6071,17 @@ ${buildStockContextString()}
         loadCleanChartPeriod(state.ticker, state.perfSelectedKey, false);
       };
       if ($("cleanTfRow")) $("cleanTfRow").onclick = onCleanTfPick;
-      if ($("perfMiniGrid")) $("perfMiniGrid").onclick = onCleanTfPick;
 
       $("toggleProEditorBtn").onclick = () => {
         state.proEditorOpen = !state.proEditorOpen;
         syncChartModeUI();
       };
 
+      const saveProState = (sync = true) => {
+        localStorage.setItem(LS.PRO_SCRIPTS, JSON.stringify(state.proScripts));
+        localStorage.setItem(LS.PRO_ACTIVE, JSON.stringify(state.activeProScripts));
+        if (sync) { markLocalChange(true); syncUserToCloud(true); }
+      };
       $("proScriptChips").onclick = e => {
         const chip = e.target.closest("[data-pro-id]");
         if (!chip) return;
