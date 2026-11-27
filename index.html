@@ -4227,72 +4227,72 @@ if (overlayMode) env.hline(price, { title, color: col, style, width: 1 });
 else env.hlinePane(price, { title, color: col, style });
 return price;
 };
+const pineLabels = [], pineLines = [], pineBoxes = [];
 const handleLabelNew = (pos, kw) => {
+drawCallsCount++;
 const xVal = kw.x !== undefined ? kw.x : pos[0];
 const yVal = kw.y !== undefined ? kw.y : pos[1];
 const txtVal = kw.text !== undefined ? kw.text : pos[2];
 const colVal = kw.color !== undefined ? kw.color : (kw.textcolor ?? pos[5]);
 const styleVal = String(kw.style ?? pos[4] ?? "").toLowerCase();
-const emitAt = (barIdx, y, txt, c) => {
-const i = Math.round(Number(barIdx));
-if (!Number.isFinite(i) || i < 0 || i >= len) return;
-const tStr = String(txt ?? "").trim();
-const isDown = styleVal.includes("down") || (Number.isFinite(Number(y)) && Number(y) >= env.high[i]) || /sell|short|bear|bos|choch|بيع/i.test(tStr);
-const col = pineNormColor(c, isDown ? "#f43f5e" : "#10b981");
-env.mark(i, { position: isDown ? "aboveBar" : "belowBar", color: col, shape: isDown ? "arrowDown" : "arrowUp", text: tStr || (isDown ? "▼" : "▲") });
-signalsAdded++;
+const addLbl = (barIdx, y, txt, c) => {
+const obj = { __pineObj: "label", deleted: false, x: Math.round(Number(barIdx)), y: Number(y), text: String(txt ?? "").trim(), color: c, style: styleVal };
+pineLabels.push(obj);
+return obj;
 };
 if (activeCondMask) {
+const hits = [];
 for (let i = 0; i < len; i++) {
-if (activeCondMask[i]) emitAt(valAt(xVal, i) ?? i, valAt(yVal, i), valAt(txtVal, i), valAt(colVal, i));
+if (activeCondMask[i]) hits.push({ x: valAt(xVal, i) ?? i, y: valAt(yVal, i), txt: valAt(txtVal, i), c: valAt(colV, i) });
 }
-} else {
+let lastObj = null;
+hits.slice(-8).forEach(hit => { lastObj = addLbl(hit.x, hit.y, hit.txt, hit.c); });
+return lastObj || { __pineObj: "label", deleted: true };
+}
 const i = valAt(xVal, len - 1);
-emitAt(i ?? (len - 1), valAt(yVal, len - 1), valAt(txtVal, len - 1), valAt(colVal, len - 1));
-}
-return {};
+return addLbl(i ?? (len - 1), valAt(yVal, len - 1), valAt(txtVal, len - 1), valAt(colVal, len - 1));
 };
 const handleLineNew = (pos, kw) => {
+drawCallsCount++;
 const y1Val = kw.y1 !== undefined ? kw.y1 : pos[1];
 const y2Val = kw.y2 !== undefined ? kw.y2 : pos[3];
 const colVal = kw.color !== undefined ? kw.color : pos[6];
 const stVal = String(kw.style ?? pos[7] ?? "dashed");
 const style = stVal.includes("dot") ? "dotted" : stVal.includes("solid") ? "solid" : "dashed";
-const emitLine = (y, c) => {
-const price = Number(y);
-if (!Number.isFinite(price) || price <= 0 || linesAdded >= 12) return;
-linesAdded++;
-env.hline(price, { title: "", color: pineNormColor(c, "#f59e0b"), style, width: 1 });
+const addLn = (y, c) => {
+const obj = { __pineObj: "line", deleted: false, y: Number(y), color: c, style };
+pineLines.push(obj);
+return obj;
 };
 if (activeCondMask) {
 const hits = [];
 for (let i = 0; i < len; i++) {
-if (activeCondMask[i]) hits.push({ y: valAt(y1Val, i) ?? valAt(y2Val, i), c: valAt(colVal, i) });
+if (activeCondMask[i]) hits.push({ y: valAt(y1Val, i) ?? valAt(y2Val, i), c: valAt(colV, i) });
 }
-hits.slice(-4).forEach(h => emitLine(h.y, h.c));
-} else {
-emitLine(valAt(y1Val, len - 1) ?? valAt(y2Val, len - 1), valAt(colVal, len - 1));
+let lastObj = null;
+hits.slice(-6).forEach(hit => { lastObj = addLn(hit.y, hit.c); });
+return lastObj || { __pineObj: "line", deleted: true };
 }
-return {};
+return addLn(valAt(y1Val, len - 1) ?? valAt(y2Val, len - 1), valAt(colVal, len - 1));
 };
 const handleBoxNew = (pos, kw) => {
+drawCallsCount++;
 const topV = kw.top !== undefined ? kw.top : pos[1];
 const botV = kw.bottom !== undefined ? kw.bottom : pos[3];
 const colV = kw.border_color ?? kw.bgcolor ?? "#38bdf8";
-const emitBox = (hi, lo, c) => {
-if (linesAdded >= 12) return;
-const col = pineNormColor(c, "#38bdf8");
-if (Number.isFinite(Number(hi)) && Number(hi) > 0) { linesAdded++; env.hline(Number(hi), { title: "Zone", color: col, style: "dotted", width: 1 }); }
-if (Number.isFinite(Number(lo)) && Number(lo) > 0) { linesAdded++; env.hline(Number(lo), { title: "", color: col, style: "dotted", width: 1 }); }
+const addBx = (hi, lo, c) => {
+const obj = { __pineObj: "box", deleted: false, top: Number(hi), bottom: Number(lo), color: c };
+pineBoxes.push(obj);
+return obj;
 };
 if (activeCondMask) {
 const hits = [];
 for (let i = 0; i < len; i++) if (activeCondMask[i]) hits.push({ hi: valAt(topV, i), lo: valAt(botV, i), c: valAt(colV, i) });
-hits.slice(-2).forEach(h => emitBox(h.hi, h.lo, h.c));
-} else {
-emitBox(valAt(topV, len - 1), valAt(botV, len - 1), valAt(colV, len - 1));
+let lastObj = null;
+hits.slice(-4).forEach(hit => { lastObj = addBx(hit.hi, hit.lo, hit.c); });
+return lastObj || { __pineObj: "box", deleted: true };
 }
-return {};
+return addBx(valAt(topV, len - 1), valAt(botV, len - 1), valAt(colV, len - 1));
 };
 const noopSpecial = { __pineSpecial: () => null };
 const strategyNS = {
@@ -4429,16 +4429,35 @@ scope.heikinashi = () => calcHeikinAshi();
 scope.request = { security: { __pineSpecial: handleSecurity }, security_lower_tf: { __pineSpecial: handleSecurity } };
 scope.label  = {
 new: { __pineSpecial: handleLabelNew },
-delete: noopSpecial, set_xy: noopSpecial, set_text: noopSpecial, set_color: noopSpecial, set_textcolor: noopSpecial,
-style_label_up: "label_up", style_label_down: "label_down", style_label_left: "label_up", style_label_right: "label_up",
+delete: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "label") pos[0].deleted = true; return null; } },
+set_xy: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "label") { pos[0].x = Math.round(Number(valAt(pos[1], len - 1))); pos[0].y = Number(valAt(pos[2], len - 1)); } return null; } },
+set_text: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "label") pos[0].text = String(valAt(pos[1], len - 1) ?? "").trim(); return null; } },
+set_color: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "label") pos[0].color = valAt(pos[1], len - 1); return null; } },
+set_textcolor: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "label" && !pos[0].color) pos[0].color = valAt(pos[1], len - 1); return null; } },
+style_label_up: "label_up", style_label_down: "label_down", style_label_left: "label_left", style_label_right: "label_right",
 style_triangleup: "triangleup", style_triangledown: "triangledown", style_none: "none", style_circle: "circle", style_diamond: "diamond"
 };
 scope.line   = {
 new: { __pineSpecial: handleLineNew },
-delete: noopSpecial, set_x1: noopSpecial, set_x2: noopSpecial, set_y1: noopSpecial, set_y2: noopSpecial, set_xy1: noopSpecial, set_xy2: noopSpecial, set_color: noopSpecial, set_style: noopSpecial, set_width: noopSpecial,
+delete: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") pos[0].deleted = true; return null; } },
+set_x1: noopSpecial, set_x2: noopSpecial,
+set_y1: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") pos[0].y = Number(valAt(pos[1], len - 1)); return null; } },
+set_y2: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") pos[0].y = Number(valAt(pos[1], len - 1)); return null; } },
+set_xy1: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") pos[0].y = Number(valAt(pos[2], len - 1)); return null; } },
+set_xy2: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") pos[0].y = Number(valAt(pos[2], len - 1)); return null; } },
+set_color: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") pos[0].color = valAt(pos[1], len - 1); return null; } },
+set_style: noopSpecial, set_width: noopSpecial,
 style_solid: "solid", style_dashed: "dashed", style_dotted: "dotted", style_arrow_left: "solid", style_arrow_right: "solid"
 };
-scope.box    = { new: { __pineSpecial: handleBoxNew }, delete: noopSpecial, set_left: noopSpecial, set_right: noopSpecial, set_top: noopSpecial, set_bottom: noopSpecial, set_bgcolor: noopSpecial, set_border_color: noopSpecial };
+scope.box    = {
+new: { __pineSpecial: handleBoxNew },
+delete: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "box") pos[0].deleted = true; return null; } },
+set_left: noopSpecial, set_right: noopSpecial,
+set_top: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "box") pos[0].top = Number(valAt(pos[1], len - 1)); return null; } },
+set_bottom: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "box") pos[0].bottom = Number(valAt(pos[1], len - 1)); return null; } },
+set_bgcolor: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "box") pos[0].color = valAt(pos[1], len - 1); return null; } },
+set_border_color: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "box") pos[0].color = valAt(pos[1], len - 1); return null; } }
+};
 scope.table  = { new: noopSpecial, cell: noopSpecial, delete: noopSpecial, clear: noopSpecial, merge_cells: noopSpecial };
 scope.xloc   = { bar_index: "bar_index", bar_time: "bar_time" };
 scope.yloc   = { price: "price", abovebar: "abovebar", belowbar: "belowbar" };
@@ -5042,6 +5061,31 @@ syntaxHint = `أقواس مربعة [ ] غير متوازنة في الكود �
 }
 }
 execBlock(logicalLines, scope);
+const seenLinePrices = [];
+const pushCleanLine = (price, title, color, style) => {
+if (!Number.isFinite(price) || price <= 0 || linesAdded >= 12) return;
+if (seenLinePrices.some(p => Math.abs(p - price) / price < 0.004)) return;
+seenLinePrices.push(price);
+linesAdded++;
+env.hline(price, { title: title || "", color: pineNormColor(color, "#f59e0b"), style: style || "dashed", width: 1 });
+};
+pineLines.filter(l => !l.deleted && Number.isFinite(l.y) && l.y > 0).slice(-12).forEach(l => pushCleanLine(l.y, "", l.color, l.style));
+pineBoxes.filter(b => !b.deleted).slice(-6).forEach(b => {
+if (Number.isFinite(b.top) && b.top > 0) pushCleanLine(b.top, "Zone", b.color || "#38bdf8", "dotted");
+if (Number.isFinite(b.bottom) && b.bottom > 0) pushCleanLine(b.bottom, "", b.color || "#38bdf8", "dotted");
+});
+const liveLabels = pineLabels.filter(l => !l.deleted && Number.isFinite(l.x) && l.x >= 0 && l.x < len);
+liveLabels.slice(-16).forEach(l => {
+const isSrLbl = l.style === "label_left" || l.style === "label_right" || /sr:|upper:|lower:|support|resistance/i.test(l.text);
+if (isSrLbl && Number.isFinite(l.y) && l.y > 0) {
+pushCleanLine(l.y, l.text.slice(0, 18), l.color || "#38bdf8", "dashed");
+return;
+}
+const isDown = l.style.includes("down") || (Number.isFinite(l.y) && l.y >= env.high[l.x]) || /sell|short|bear|bos|choch|بيع/i.test(l.text);
+const col = pineNormColor(l.color, isDown ? "#f43f5e" : "#10b981");
+env.mark(l.x, { position: isDown ? "aboveBar" : "belowBar", color: col, shape: isDown ? "arrowDown" : "arrowUp", text: l.text || (isDown ? "▼" : "▲") });
+signalsAdded++;
+});
 const totalDrawn = plotsAdded + signalsAdded + linesAdded + barColorsCount;
 if (totalDrawn === 0 && drawCallsCount === 0 && syntaxHint) {
 throw new Error(syntaxHint);
