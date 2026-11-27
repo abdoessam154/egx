@@ -851,6 +851,42 @@
     .movers-tv-fallback { padding: 8px; min-height: 420px; }
     body.focus-mode #moversSection, body.focus-mode #moversDualSection, body.focus-mode #moversActiveSection { display: none !important; }
 
+    /* شريط رادار فرص الجلسة القادمة في الصفحة الرئيسية */
+    .home-radar-banner {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: 15px;
+      border: 1px solid rgba(16, 185, 129, 0.36);
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.16), rgba(11, 17, 32, 0.94) 68%);
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      cursor: pointer; transition: 0.18s; box-shadow: var(--shadow);
+      text-align: right;
+    }
+    [data-theme="light"] .home-radar-banner {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.14), #ffffff 72%);
+      border-color: rgba(16, 185, 129, 0.42);
+    }
+    .home-radar-banner:hover { border-color: var(--emerald); transform: translateY(-1px); filter: brightness(1.05); }
+    .home-radar-banner:active { transform: scale(0.99); }
+    .home-radar-title {
+      display: inline-flex; align-items: center; gap: 7px; min-width: 0;
+      font-size: 13px; font-weight: 800; color: var(--text);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .home-radar-cta {
+      padding: 5px 12px; border-radius: 10px; flex-shrink: 0;
+      background: var(--emerald-dim); border: 1px solid rgba(16, 185, 129, 0.42);
+      color: var(--emerald); font-size: 11.5px; font-weight: 800;
+      display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;
+    }
+    body.focus-mode #homeRadarBannerBtn { display: none !important; }
+    @media (max-width: 480px) {
+      .home-radar-banner { padding: 10px 11px; }
+      .home-radar-title { font-size: 12px; }
+      .home-radar-cta { padding: 4px 10px; font-size: 11px; }
+    }
+
+
     /* كروت الذهب والدولار تحت المؤشرات */
     .macro-grid {
       display: grid;
@@ -1733,6 +1769,12 @@
         <div class="macro-sub" id="usdSubMeta">سعر الصرف USD/EGP • اضغط للشارت</div>
       </div>
     </section>
+
+    <!-- شريط رادار فرص الجلسة القادمة -->
+    <button type="button" class="home-radar-banner" id="homeRadarBannerBtn" title="فتح رادار فرص الجلسة القادمة">
+      <span class="home-radar-title"><span>🎯</span><span>رادار فرص الجلسة القادمة (أعلى 8 + نطاق الدخول)</span></span>
+      <span class="home-radar-cta">فتح ←</span>
+    </button>
 
     <!-- نبض السوق المباشر -->
     <section class="card" id="moversSection">
@@ -8551,6 +8593,7 @@ setTimeout(renderEgxHeatmap, 60);
 };
 }
 if ($("menuScreenerBtn")) $("menuScreenerBtn").onclick = () => { closeMoreMenu(); openScreenerModal(); };
+if ($("homeRadarBannerBtn")) $("homeRadarBannerBtn").onclick = () => openScreenerModal();
 if ($("closeScreenerModalBtn")) $("closeScreenerModalBtn").onclick = closeScreenerModal;
 if ($("screenerModalBackdrop")) $("screenerModalBackdrop").onclick = e => { if (e.target.id === "screenerModalBackdrop") closeScreenerModal(); };
 if ($("screenerTabs")) $("screenerTabs").onclick = e => {
