@@ -3417,9 +3417,12 @@ return { upper, middle: mid, lower };
 const highest = (s, p) => {
 const { src, period } = resolveSrc(s, p, 20);
 const out = new Array(len).fill(null);
-for (let i = period - 1; i < len; i++) {
+const effP = Math.max(1, Math.round(period || 20));
+const startIdx = effP >= len ? 0 : Math.min(effP - 1, 20);
+for (let i = startIdx; i < len; i++) {
 let mx = -Infinity;
-for (let j = i - period + 1; j <= i; j++) if (src[j] != null && src[j] > mx) mx = src[j];
+const from = Math.max(0, i - effP + 1);
+for (let j = from; j <= i; j++) if (src[j] != null && src[j] > mx) mx = src[j];
 out[i] = Number.isFinite(mx) ? mx : null;
 }
 return out;
@@ -3427,9 +3430,12 @@ return out;
 const lowest = (s, p) => {
 const { src, period } = resolveSrc(s, p, 20);
 const out = new Array(len).fill(null);
-for (let i = period - 1; i < len; i++) {
+const effP = Math.max(1, Math.round(period || 20));
+const startIdx = effP >= len ? 0 : Math.min(effP - 1, 20);
+for (let i = startIdx; i < len; i++) {
 let mn = Infinity;
-for (let j = i - period + 1; j <= i; j++) if (src[j] != null && src[j] < mn) mn = src[j];
+const from = Math.max(0, i - effP + 1);
+for (let j = from; j <= i; j++) if (src[j] != null && src[j] < mn) mn = src[j];
 out[i] = Number.isFinite(mn) ? mn : null;
 }
 return out;
@@ -3582,7 +3588,8 @@ let code = String(rawCode || "")
 .replace(/[\u201C\u201D\u201E\u00AB\u00BB]/g, '"')
 .replace(/[\u2018\u2019\u201A]/g, "'")
 .replace(/[\u2212\u2013\u2014]/g, "-")
-.replace(/(\/\/@version\s*=\s*\d+)([^\r\n]+)/g, "$1\n$2");
+.replace(/(\/\/@version\s*=\s*\d+)([^\r\n]+)/g, "$1\n$2")
+.replace(/\barray\.new\s*<\s*([a-zA-Z_]\w*)\s*>\s*\(/g, "array.new_$1(");
 {
 const fixedLines = [];
 const preLines = code.replace(/\r\n?/g, "\n").split("\n");
@@ -4243,7 +4250,7 @@ return obj;
 if (activeCondMask) {
 const hits = [];
 for (let i = 0; i < len; i++) {
-if (activeCondMask[i]) hits.push({ x: valAt(xVal, i) ?? i, y: valAt(yVal, i), txt: valAt(txtVal, i), c: valAt(colV, i) });
+if (activeCondMask[i]) hits.push({ x: valAt(xVal, i) ?? i, y: valAt(yVal, i), txt: valAt(txtVal, i), c: valAt(colVal, i) });
 }
 let lastObj = null;
 hits.slice(-8).forEach(hit => { lastObj = addLbl(hit.x, hit.y, hit.txt, hit.c); });
@@ -4267,7 +4274,7 @@ return obj;
 if (activeCondMask) {
 const hits = [];
 for (let i = 0; i < len; i++) {
-if (activeCondMask[i]) hits.push({ y: valAt(y1Val, i) ?? valAt(y2Val, i), c: valAt(colV, i) });
+if (activeCondMask[i]) hits.push({ y: valAt(y1Val, i) ?? valAt(y2Val, i), c: valAt(colVal, i) });
 }
 let lastObj = null;
 hits.slice(-6).forEach(hit => { lastObj = addLn(hit.y, hit.c); });
@@ -4339,16 +4346,26 @@ a.__pineArr = true;
 return a;
 };
 const arrayNS = {
-new_float: makePineArr, new_int: (sz = 0, v = 0) => makePineArr(sz, v),
+new: makePineArr, new_float: makePineArr, new_int: (sz = 0, v = 0) => makePineArr(sz, v),
 new_bool: (sz = 0, v = false) => makePineArr(sz, v), new_string: (sz = 0, v = "") => makePineArr(sz, v),
-new_color: makePineArr, new_line: () => makePineArr(0), new_label: () => makePineArr(0), new_box: () => makePineArr(0),
+new_color: makePineArr, new_line: (sz = 0, v = null) => makePineArr(sz, v), new_label: (sz = 0, v = null) => makePineArr(sz, v), new_box: (sz = 0, v = null) => makePineArr(sz, v),
 from: (...items) => { const a = [...items]; a.__pineArr = true; return a; },
 push: (a, v) => { if (Array.isArray(a)) a.push(v); return null; },
 unshift: (a, v) => { if (Array.isArray(a)) a.unshift(v); return null; },
 pop: (a) => (Array.isArray(a) ? a.pop() : null),
 shift: (a) => (Array.isArray(a) ? a.shift() : null),
-get: (a, idx) => (Array.isArray(a) ? (a[Math.round(Number(idx) || 0)] ?? null) : null),
-set: (a, idx, v) => { if (Array.isArray(a)) a[Math.round(Number(idx) || 0)] = v; return null; },
+get: (a, idx) => { if (!Array.isArray(a)) return null; const i = Math.round(Number(idx) || 0); return (i >= 0 && i < a.length) ? (a[i] ?? null) : null; },
+set: (a, idx, v) => { if (Array.isArray(a)) { const i = Math.round(Number(idx) || 0); if (i >= 0 && i < 2000) a[i] = v; } return null; },
+insert: (a, idx, v) => { if (Array.isArray(a)) a.splice(Math.max(0, Math.round(Number(idx) || 0)), 0, v); return null; },
+remove: (a, idx) => { if (!Array.isArray(a)) return null; const i = Math.round(Number(idx) || 0); return (i >= 0 && i < a.length) ? a.splice(i, 1)[0] : null; },
+includes: (a, v) => (Array.isArray(a) ? a.includes(v) : false),
+indexof: (a, v) => (Array.isArray(a) ? a.indexOf(v) : -1),
+lastindexof: (a, v) => (Array.isArray(a) ? a.lastIndexOf(v) : -1),
+copy: (a) => { const c = Array.isArray(a) ? a.slice() : []; c.__pineArr = true; return c; },
+slice: (a, s = 0, e) => { const c = Array.isArray(a) ? a.slice(Math.round(Number(s)||0), e != null ? Math.round(Number(e)) : undefined) : []; c.__pineArr = true; return c; },
+fill: (a, v, s = 0, e) => { if (Array.isArray(a)) a.fill(v, Math.round(Number(s)||0), e != null ? Math.round(Number(e)) : undefined); return null; },
+sort: (a, ord = "asc") => { if (Array.isArray(a)) { const desc = String(ord || "").toLowerCase().includes("desc"); a.sort((x, y) => desc ? ((Number(y)||0) - (Number(x)||0)) : ((Number(x)||0) - (Number(y)||0))); } return null; },
+reverse: (a) => { if (Array.isArray(a)) a.reverse(); return null; },
 first: (a) => (Array.isArray(a) && a.length ? a[0] : null),
 last: (a) => (Array.isArray(a) && a.length ? a[a.length - 1] : null),
 size: (a) => (Array.isArray(a) ? a.length : 0),
@@ -4495,6 +4512,7 @@ lower: (x) => String(valAt(x, len - 1) ?? "").toLowerCase(),
 format: (f, ...args) => String(f || "").replace(/\{(\d+)\}/g, (_, k) => String(valAt(args[Number(k)], len - 1) ?? ""))
 };
 scope.format = { inherit: "inherit", price: "price", volume: "volume", percent: "percent", mintick: "mintick" };
+scope.order = { ascending: "asc", descending: "desc" };
 scope.alert  = Object.assign({ __pineSpecial: () => null }, { freq_once_per_bar: "bar", freq_once_per_bar_close: "close", freq_all: "all" });
 Object.assign(scope, {
 study: { __pineSpecial: handleMeta }, indicator: { __pineSpecial: handleMeta }, strategy: Object.assign({ __pineSpecial: handleMeta }, strategyNS),
@@ -4637,7 +4655,7 @@ i += m[0].length;
 continue;
 }
 const two = src.slice(i, i + 2);
-if ([":=", "==", "!=", "<=", ">=", "&&", "||", "=>"].includes(two)) {
+if ([":=", "==", "!=", "<=", ">=", "&&", "||", "=>", "+=", "-=", "*=", "/="].includes(two)) {
 toks.push({ t: "op", v: two }); i += 2; continue;
 }
 if ("+-*/%<>=?!:,.()[]".includes(c)) { toks.push({ t: "op", v: c }); i++; continue; }
@@ -4736,6 +4754,15 @@ const prop = next();
 if (val && val.__pineArr && prop && typeof arrayNS[prop.v] === "function") {
 const arrRef = val, fn = arrayNS[prop.v];
 val = (...args) => fn(arrRef, ...args);
+} else if (val && val.__pineObj && prop) {
+const objRef = val;
+const ns = objRef.__pineObj === "label" ? scope.label : objRef.__pineObj === "line" ? scope.line : objRef.__pineObj === "box" ? scope.box : null;
+const m = ns && ns[prop.v];
+if (m && typeof m.__pineSpecial === "function") {
+val = { __pineSpecial: (pA, kA) => m.__pineSpecial([objRef, ...pA], kA) };
+} else {
+val = (val != null && prop) ? val[prop.v] : undefined;
+}
 } else {
 val = (val != null && prop) ? val[prop.v] : undefined;
 }
@@ -5060,7 +5087,504 @@ syntaxHint = `خطأ في الكود (أقواس غير متوازنة عند ا
 syntaxHint = `أقواس مربعة [ ] غير متوازنة في الكود — تأكد من نسخ الكود كامل`;
 }
 }
-execBlock(logicalLines, scope);
+// --- Detect if script needs true Bar-by-Bar Pine v5/v6 runtime ---
+const needsBarByBar = logicalLines.some(l =>
+  /\b(array\.|line\.new|box\.new|label\.new|barstate\.|for\s+[a-zA-Z_]|while\s+|var\s+|varip\s+)/.test(l.text)
+);
+
+if (needsBarByBar) {
+  // Compile flat indented logicalLines into a nested AST once
+  const compileBlock = (linesArr, startIdx, baseIndent) => {
+    const nodes = [];
+    let i = startIdx;
+    while (i < linesArr.length) {
+      const { indent, text } = linesArr[i];
+      if (indent < baseIndent) break;
+      if (indent > baseIndent) { i++; continue; }
+
+      if (text === "break") { nodes.push({ k: "break" }); i++; continue; }
+      if (text === "continue") { nodes.push({ k: "continue" }); i++; continue; }
+
+      const fnDef = text.match(/^(?:export\s+)?([a-zA-Z_]\w*)\s*\(([^)]*)\)\s*=>\s*(.*)$/);
+      if (fnDef) {
+        const rawParams = fnDef[2].split(",").map(s => s.trim()).filter(Boolean);
+        const params = [], defToks = [];
+        for (const rp of rawParams) {
+          const eqI = rp.indexOf("=");
+          if (eqI !== -1) {
+            params.push(rp.slice(0, eqI).trim().split(/\s+/).pop());
+            defToks.push(tokenizePine(rp.slice(eqI + 1).trim()));
+          } else {
+            params.push(rp.split(/\s+/).pop());
+            defToks.push(null);
+          }
+        }
+        const inlineB = fnDef[3].trim();
+        if (inlineB) {
+          nodes.push({ k: "fndef", name: fnDef[1], params, defToks, exprToks: tokenizePine(inlineB) });
+          i++;
+        } else {
+          i++;
+          const childInd = i < linesArr.length ? linesArr[i].indent : baseIndent + 4;
+          const sub = childInd > indent ? compileBlock(linesArr, i, childInd) : { nodes: [], next: i };
+          nodes.push({ k: "fndef", name: fnDef[1], params, defToks, body: sub.nodes });
+          i = sub.next;
+        }
+        continue;
+      }
+
+      const forInM = text.match(/^for\s+(?:\[([^\]]+)\]|([a-zA-Z_]\w*))\s+in\s+(.+)$/);
+      if (forInM) {
+        i++;
+        const childInd = i < linesArr.length ? linesArr[i].indent : baseIndent + 4;
+        const sub = childInd > indent ? compileBlock(linesArr, i, childInd) : { nodes: [], next: i };
+        nodes.push({ k: "forin", tuple: forInM[1] ? forInM[1].split(",").map(s => s.trim()) : null, v: forInM[2] || null, iterToks: tokenizePine(forInM[3]), body: sub.nodes });
+        i = sub.next;
+        continue;
+      }
+
+      const forM = text.match(/^for\s+([a-zA-Z_]\w*)\s*=\s*(.+?)\s+to\s+(.+?)(?:\s+by\s+(.+))?$/);
+      if (forM) {
+        i++;
+        const childInd = i < linesArr.length ? linesArr[i].indent : baseIndent + 4;
+        const sub = childInd > indent ? compileBlock(linesArr, i, childInd) : { nodes: [], next: i };
+        nodes.push({ k: "for", v: forM[1], fromToks: tokenizePine(forM[2]), toToks: tokenizePine(forM[3]), byToks: forM[4] ? tokenizePine(forM[4]) : null, body: sub.nodes });
+        i = sub.next;
+        continue;
+      }
+
+      const whileM = text.match(/^while\s+(.+)$/);
+      if (whileM) {
+        i++;
+        const childInd = i < linesArr.length ? linesArr[i].indent : baseIndent + 4;
+        const sub = childInd > indent ? compileBlock(linesArr, i, childInd) : { nodes: [], next: i };
+        nodes.push({ k: "while", condToks: tokenizePine(whileM[1]), body: sub.nodes });
+        i = sub.next;
+        continue;
+      }
+
+      const ifM = text.match(/^if\s+(.+)$/);
+      if (ifM) {
+        const branches = [];
+        i++;
+        let childInd = i < linesArr.length ? linesArr[i].indent : baseIndent + 4;
+        let sub = childInd > indent ? compileBlock(linesArr, i, childInd) : { nodes: [], next: i };
+        branches.push({ condToks: tokenizePine(ifM[1]), body: sub.nodes });
+        i = sub.next;
+        while (i < linesArr.length && linesArr[i].indent === indent && /^(?:else\s+if\s+|else\b)/.test(linesArr[i].text)) {
+          const t = linesArr[i].text;
+          const ei = t.match(/^else\s+if\s+(.+)$/);
+          i++;
+          childInd = i < linesArr.length ? linesArr[i].indent : baseIndent + 4;
+          sub = childInd > indent ? compileBlock(linesArr, i, childInd) : { nodes: [], next: i };
+          branches.push({ condToks: ei ? tokenizePine(ei[1]) : null, body: sub.nodes });
+          i = sub.next;
+        }
+        nodes.push({ k: "if", branches });
+        continue;
+      }
+
+      const tupM = text.match(/^\[([^\]]+)\]\s*=\s*(.+)$/);
+      if (tupM) {
+        nodes.push({ k: "tuple", names: tupM[1].split(",").map(s => s.trim()), toks: tokenizePine(tupM[2]) });
+        i++;
+        continue;
+      }
+
+      const compM = text.match(/^([a-zA-Z_]\w*)\s*(\+=|-=|\*=|\/=)\s*(.+)$/);
+      if (compM) {
+        nodes.push({ k: "comp", v: compM[1], op: compM[2], toks: tokenizePine(compM[3]) });
+        i++;
+        continue;
+      }
+
+      const asgnM = text.match(/^(?:(var|varip)\s+)?(?:(?:simple|series|input|const)\s+)?(?:(?:float|int|bool|string|color|line|label|box|table)(?:\[\])?|array<[^>]+>)?\s*([a-zA-Z_]\w*)\s*(:?=)(?!=)\s*(.+)$/);
+      if (asgnM && !RESERVED_CALLS.has(asgnM[2])) {
+        const isVar = !!asgnM[1], vName = asgnM[2], op = asgnM[3], rhsTxt = asgnM[4].trim();
+        if (/^if\s+/.test(rhsTxt) && i + 1 < linesArr.length && linesArr[i + 1].indent > indent) {
+          const branches = [];
+          const c1 = rhsTxt.replace(/^if\s+/, "");
+          i++;
+          let childInd = linesArr[i].indent;
+          let sub = compileBlock(linesArr, i, childInd);
+          branches.push({ condToks: tokenizePine(c1), body: sub.nodes });
+          i = sub.next;
+          while (i < linesArr.length && linesArr[i].indent === indent && /^(?:else\s+if\s+|else\b)/.test(linesArr[i].text)) {
+            const t = linesArr[i].text;
+            const ei = t.match(/^else\s+if\s+(.+)$/);
+            i++;
+            childInd = i < linesArr.length ? linesArr[i].indent : baseIndent + 4;
+            sub = childInd > indent ? compileBlock(linesArr, i, childInd) : { nodes: [], next: i };
+            branches.push({ condToks: ei ? tokenizePine(ei[1]) : null, body: sub.nodes });
+            i = sub.next;
+          }
+          nodes.push({ k: "assign_if", isVar, isReassign: op === ":=", v: vName, branches });
+          continue;
+        }
+        nodes.push({ k: "assign", isVar, isReassign: op === ":=", v: vName, toks: tokenizePine(rhsTxt), id: i });
+        i++;
+        continue;
+      }
+
+      nodes.push({ k: "expr", toks: tokenizePine(text), id: i });
+      i++;
+    }
+    return { nodes, next: i };
+  };
+
+  const astRoot = compileBlock(logicalLines, 0, logicalLines.length ? logicalLines[0].indent : 0).nodes;
+
+  // Bar-by-bar runtime state
+  let curBar = 0;
+  let opCount = 0;
+  const MAX_OPS = 450000;
+  const varInited = new Set();
+  const varHistory = Object.create(null);
+  const taCache = new Map();
+  const plotBuffers = new Map();
+  let curStmtKey = 0;
+
+  // Wrap TA functions so calling ta.pivothigh(10,10) or ta.highest(300) inside bar loop computes ONCE and indexes [curBar]!
+  const wrapTaFn = (name, fn) => (...args) => {
+    const sig = name + "|" + curStmtKey + "|" + args.map(a => {
+      if (a === scope.close) return "$c";
+      if (a === scope.high) return "$h";
+      if (a === scope.low) return "$l";
+      if (a === scope.open) return "$o";
+      if (a === scope.volume) return "$v";
+      if (a === scope.hl2) return "$hl2";
+      if (a === scope.hlc3) return "$hlc3";
+      if (typeof a === "number" || typeof a === "boolean" || typeof a === "string") return String(a);
+      return "S";
+    }).join(",");
+    let res = taCache.get(sig);
+    if (res === undefined) {
+      res = fn(...args);
+      taCache.set(sig, res);
+    }
+    if (Array.isArray(res) && !isSer(res)) {
+      return res.map(x => isSer(x) ? x[curBar] : x);
+    }
+    return isSer(res) ? res[curBar] : res;
+  };
+
+  const bbScope = Object.create(scope);
+  const bbTa = Object.create(taNS);
+  for (const k of Object.keys(taNS)) {
+    if (typeof taNS[k] === "function") bbTa[k] = wrapTaFn(k, taNS[k]);
+  }
+  bbScope.ta = bbTa;
+  ["sma","ema","rma","wma","swma","vwma","hma","alma","linreg","rsi","mfi","atr","sar","cci","cmo","tsi","stoch","stdev","dev","wpr","highest","lowest","highestbars","lowestbars","macd","bb","bbw","kc","supertrend","dmi","crossover","crossunder","cross","change","mom","roc","rising","falling","barssince","valuewhen","pivothigh","pivotlow","cum","percentrank"].forEach(k => {
+    if (typeof taNS[k] === "function") bbScope[k] = bbTa[k];
+  });
+
+  // Override plot / plotshape / barcolor / label.new / line.new / box.new for bar-by-bar mode!
+  bbScope.plot = Object.assign({
+    __pineSpecial: (pos, kw) => {
+      drawCallsCount++;
+      const v = pos[0] !== undefined ? pos[0] : kw.series;
+      const key = "p_" + curStmtKey;
+      let buf = plotBuffers.get(key);
+      if (!buf) {
+        buf = { values: new Array(len).fill(null), colors: new Array(len).fill(null), kw: { ...kw }, pos1: pos[1], pos2: pos[2], pos3: pos[3], pos4: pos[4] };
+        plotBuffers.set(key, buf);
+      }
+      if (typeof v === "number" && Number.isFinite(v)) buf.values[curBar] = v;
+      const rawC = kw.color !== undefined ? kw.color : pos[2];
+      if (typeof rawC === "string" && rawC.trim()) buf.colors[curBar] = pineNormColor(rawC, null, Number(kw.transp || 0));
+      return v;
+    }
+  }, scope.plot);
+
+  bbScope.plotshape = {
+    __pineSpecial: (pos, kw) => {
+      drawCallsCount++;
+      const cond = pos[0] !== undefined ? pos[0] : kw.series;
+      const truthy = cond !== null && cond !== undefined && cond !== false && cond !== 0 && !(typeof cond === "number" && !Number.isFinite(cond));
+      if (!truthy) return null;
+      const title = String(kw.title ?? pos[1] ?? "");
+      const style = String(kw.style ?? pos[2] ?? "labelup").toLowerCase();
+      const loc = String(kw.location ?? pos[3] ?? "").toLowerCase();
+      const text = String(kw.text ?? kw.char ?? title ?? "");
+      const isDown = loc.includes("above") || loc.includes("top") || style.includes("down") || /sell|short|bear|بيع/i.test(text + " " + title);
+      const col = pineNormColor(kw.color !== undefined ? kw.color : pos[4], isDown ? "#f43f5e" : "#10b981");
+      env.mark(curBar, { position: isDown ? "aboveBar" : "belowBar", color: col, shape: isDown ? "arrowDown" : "arrowUp", text: text || (isDown ? "SELL" : "BUY") });
+      signalsAdded++;
+      return null;
+    }
+  };
+  bbScope.plotchar = bbScope.plotshape;
+
+  const bbBarColors = new Array(len).fill(null);
+  bbScope.barcolor = {
+    __pineSpecial: (pos, kw) => {
+      drawCallsCount++;
+      const c = pos[0] !== undefined ? pos[0] : kw.color;
+      if (typeof c === "string" && c.trim()) {
+        const nc = pineNormColor(c, null);
+        if (nc) { bbBarColors[curBar] = nc; barColorsCount++; }
+      }
+      return null;
+    }
+  };
+
+  const bbLabelNew = (pos, kw) => {
+    drawCallsCount++;
+    const x = Math.round(Number(kw.x !== undefined ? kw.x : (pos[0] ?? curBar)));
+    const y = Number(kw.y !== undefined ? kw.y : pos[1]);
+    const txt = String(kw.text !== undefined ? kw.text : (pos[2] ?? "")).trim();
+    const col = kw.color !== undefined ? kw.color : (kw.textcolor ?? pos[5]);
+    const style = String(kw.style ?? pos[4] ?? "").toLowerCase();
+    const obj = { __pineObj: "label", deleted: false, x: Number.isFinite(x) ? x : curBar, y, text: txt, color: col, style };
+    pineLabels.push(obj);
+    return obj;
+  };
+  const bbLineNew = (pos, kw) => {
+    drawCallsCount++;
+    const x1 = Math.round(Number(kw.x1 !== undefined ? kw.x1 : (pos[0] ?? curBar)));
+    const y1 = Number(kw.y1 !== undefined ? kw.y1 : pos[1]);
+    const x2 = Math.round(Number(kw.x2 !== undefined ? kw.x2 : (pos[2] ?? curBar)));
+    const y2 = Number(kw.y2 !== undefined ? kw.y2 : (pos[3] ?? y1));
+    const col = kw.color !== undefined ? kw.color : pos[6];
+    const stVal = String(kw.style ?? pos[7] ?? "dashed");
+    const style = stVal.includes("dot") ? "dotted" : stVal.includes("solid") ? "solid" : "dashed";
+    const obj = { __pineObj: "line", deleted: false, x1, y1, x2, y2, y: Number.isFinite(y1) ? y1 : y2, color: col, style };
+    pineLines.push(obj);
+    return obj;
+  };
+  const bbBoxNew = (pos, kw) => {
+    drawCallsCount++;
+    const left = Math.round(Number(kw.left !== undefined ? kw.left : (pos[0] ?? curBar)));
+    const top = Number(kw.top !== undefined ? kw.top : pos[1]);
+    const right = Math.round(Number(kw.right !== undefined ? kw.right : (pos[2] ?? curBar)));
+    const bottom = Number(kw.bottom !== undefined ? kw.bottom : pos[3]);
+    const col = kw.border_color ?? kw.bgcolor ?? "#38bdf8";
+    const obj = { __pineObj: "box", deleted: false, left, top, right, bottom, color: col };
+    pineBoxes.push(obj);
+    return obj;
+  };
+
+  bbScope.label = Object.assign({}, scope.label, {
+    new: { __pineSpecial: bbLabelNew },
+    get_y: { __pineSpecial: (pos) => (pos[0] && pos[0].__pineObj === "label") ? pos[0].y : null },
+    get_text: { __pineSpecial: (pos) => (pos[0] && pos[0].__pineObj === "label") ? pos[0].text : "" }
+  });
+  bbScope.line = Object.assign({}, scope.line, {
+    new: { __pineSpecial: bbLineNew },
+    get_y1: { __pineSpecial: (pos) => (pos[0] && pos[0].__pineObj === "line") ? pos[0].y1 : null },
+    get_y2: { __pineSpecial: (pos) => (pos[0] && pos[0].__pineObj === "line") ? pos[0].y2 : null },
+    set_y1: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") { pos[0].y1 = Number(pos[1]); pos[0].y = pos[0].y1; } return null; } },
+    set_y2: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") { pos[0].y2 = Number(pos[1]); } return null; } },
+    set_xy1: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") { pos[0].x1 = Math.round(Number(pos[1])); pos[0].y1 = Number(pos[2]); pos[0].y = pos[0].y1; } return null; } },
+    set_xy2: { __pineSpecial: (pos) => { if (pos[0] && pos[0].__pineObj === "line") { pos[0].x2 = Math.round(Number(pos[1])); pos[0].y2 = Number(pos[2]); } return null; } }
+  });
+  bbScope.box = Object.assign({}, scope.box, {
+    new: { __pineSpecial: bbBoxNew },
+    get_top: { __pineSpecial: (pos) => (pos[0] && pos[0].__pineObj === "box") ? pos[0].top : null },
+    get_bottom: { __pineSpecial: (pos) => (pos[0] && pos[0].__pineObj === "box") ? pos[0].bottom : null }
+  });
+
+  // Allow user functions compiled as AST to run bar-by-bar with proper local scope & return value
+  const BREAK_SIG = { __sig: "break" }, CONT_SIG = { __sig: "continue" };
+  const evalBB = (toks, sc) => {
+    opCount++;
+    if (opCount > MAX_OPS) return null;
+    return evalExprAtBar(toks, sc, curBar);
+  };
+  const setVarBB = (sc, name, val, isReassign) => {
+    let target = sc;
+    if (isReassign) {
+      let cur = sc;
+      while (cur && cur !== scope) {
+        if (Object.prototype.hasOwnProperty.call(cur, name)) { target = cur; break; }
+        cur = Object.getPrototypeOf(cur);
+      }
+    }
+    target[name] = val;
+    if (target === bbScope) {
+      if (!varHistory[name]) varHistory[name] = mkSer(new Array(len).fill(null));
+      varHistory[name][curBar] = val;
+    }
+  };
+
+  const execAST = (nodes, sc) => {
+    let lastV = null;
+    for (let ni = 0; ni < nodes.length; ni++) {
+      if (++opCount > MAX_OPS) return lastV;
+      const nd = nodes[ni];
+      if (nd.id !== undefined) curStmtKey = nd.id;
+      try {
+        if (nd.k === "break") return BREAK_SIG;
+        if (nd.k === "continue") return CONT_SIG;
+        if (nd.k === "fndef") {
+          sc[nd.name] = {
+            __pineSpecial: (posA, kwA) => {
+              const fnSc = Object.create(sc);
+              nd.params.forEach((pn, pi) => {
+                fnSc[pn] = posA[pi] !== undefined ? posA[pi] : (kwA[pn] !== undefined ? kwA[pn] : (nd.defToks[pi] ? evalBB(nd.defToks[pi], sc) : null));
+              });
+              return nd.body ? execAST(nd.body, fnSc) : evalBB(nd.exprToks, fnSc);
+            }
+          };
+          continue;
+        }
+        if (nd.k === "assign") {
+          if (nd.isVar) {
+            const vk = (sc === bbScope ? "G:" : "L:") + nd.v + ":" + nd.id;
+            if (varInited.has(vk)) {
+              if (sc === bbScope && varHistory[nd.v]) varHistory[nd.v][curBar] = sc[nd.v];
+              continue;
+            }
+            varInited.add(vk);
+          }
+          const v = evalBB(nd.toks, sc);
+          setVarBB(sc, nd.v, v, nd.isReassign);
+          lastV = v;
+          continue;
+        }
+        if (nd.k === "assign_if") {
+          if (nd.isVar && varInited.has("G:" + nd.v + ":" + nd.id)) continue;
+          if (nd.isVar) varInited.add("G:" + nd.v + ":" + nd.id);
+          let v = null;
+          for (const br of nd.branches) {
+            if (!br.condToks || !!evalBB(br.condToks, sc)) { v = execAST(br.body, Object.create(sc)); break; }
+          }
+          setVarBB(sc, nd.v, v, nd.isReassign);
+          lastV = v;
+          continue;
+        }
+        if (nd.k === "comp") {
+          const curV = Number(sc[nd.v] ?? 0);
+          const rhsV = Number(evalBB(nd.toks, sc) ?? 0);
+          const nv = nd.op === "+=" ? curV + rhsV : nd.op === "-=" ? curV - rhsV : nd.op === "*=" ? curV * rhsV : (rhsV !== 0 ? curV / rhsV : curV);
+          setVarBB(sc, nd.v, nv, true);
+          lastV = nv;
+          continue;
+        }
+        if (nd.k === "tuple") {
+          const vals = evalBB(nd.toks, sc);
+          if (Array.isArray(vals)) {
+            nd.names.forEach((nm, ki) => { if (nm && nm !== "_") setVarBB(sc, nm, vals[ki] !== undefined ? vals[ki] : null, false); });
+          }
+          lastV = vals;
+          continue;
+        }
+        if (nd.k === "if") {
+          for (const br of nd.branches) {
+            if (!br.condToks || !!evalBB(br.condToks, sc)) {
+              const r = execAST(br.body, sc);
+              if (r === BREAK_SIG || r === CONT_SIG) return r;
+              lastV = r;
+              break;
+            }
+          }
+          continue;
+        }
+        if (nd.k === "for") {
+          const fromV = Math.round(Number(evalBB(nd.fromToks, sc)));
+          const toV = Math.round(Number(evalBB(nd.toToks, sc)));
+          if (!Number.isFinite(fromV) || !Number.isFinite(toV)) continue;
+          if (fromV === 0 && toV < 0 && !nd.byToks) continue;
+          const rawBy = nd.byToks ? Math.round(Number(evalBB(nd.byToks, sc))) : (fromV <= toV ? 1 : -1);
+          const stepV = rawBy === 0 ? 1 : rawBy;
+          let guard = 0;
+          if (stepV > 0) {
+            for (let k = fromV; k <= toV && guard < 160; k += stepV, guard++) {
+              sc[nd.v] = k;
+              const r = execAST(nd.body, sc);
+              if (r === BREAK_SIG) break;
+              if (r !== CONT_SIG) lastV = r;
+            }
+          } else {
+            for (let k = fromV; k >= toV && guard < 160; k += stepV, guard++) {
+              sc[nd.v] = k;
+              const r = execAST(nd.body, sc);
+              if (r === BREAK_SIG) break;
+              if (r !== CONT_SIG) lastV = r;
+            }
+          }
+          continue;
+        }
+        if (nd.k === "forin") {
+          const arr = evalBB(nd.iterToks, sc);
+          if (Array.isArray(arr)) {
+            for (let k = 0; k < arr.length && k < 160; k++) {
+              if (nd.tuple) { sc[nd.tuple[0]] = k; if (nd.tuple[1]) sc[nd.tuple[1]] = arr[k]; }
+              else if (nd.v) sc[nd.v] = arr[k];
+              const r = execAST(nd.body, sc);
+              if (r === BREAK_SIG) break;
+              if (r !== CONT_SIG) lastV = r;
+            }
+          }
+          continue;
+        }
+        if (nd.k === "while") {
+          let guard = 0;
+          while (guard < 120 && !!evalBB(nd.condToks, sc)) {
+            guard++;
+            const r = execAST(nd.body, sc);
+            if (r === BREAK_SIG) break;
+            if (r !== CONT_SIG) lastV = r;
+          }
+          continue;
+        }
+        if (nd.k === "expr") {
+          lastV = evalBB(nd.toks, sc);
+        }
+      } catch (e) {}
+    }
+    return lastV;
+  };
+
+  for (curBar = 0; curBar < len; curBar++) {
+    if (opCount > MAX_OPS) break;
+    bbScope.barstate = {
+      isfirst: curBar === 0,
+      islast: curBar === len - 1,
+      isconfirmed: true,
+      isrealtime: curBar === len - 1,
+      ishistory: curBar < len - 1,
+      isnew: true
+    };
+    execAST(astRoot, bbScope);
+  }
+
+  // Flush collected bar-by-bar plots & barcolors
+  if (barColorsCount > 0) env.barcolor(bbBarColors);
+  plotBuffers.forEach(buf => {
+    const validVals = buf.values.filter(v => typeof v === "number" && Number.isFinite(v));
+    if (!validVals.length) return;
+    const kw = buf.kw;
+    const title = String(kw.title ?? buf.pos1 ?? "");
+    const width = Math.max(1, Math.min(4, Math.round(Number(kw.linewidth ?? buf.pos3 ?? 2) || 2)));
+    const transp = Number(kw.transp ?? 0) || 0;
+    const styleVal = String(kw.style ?? buf.pos4 ?? "solid").toLowerCase();
+    const isHist = styleVal === "histogram" || styleVal === "columns";
+    const isDots = styleVal === "circles" || styleVal === "cross";
+    const isStep = styleVal === "stepline" || styleVal === "stepline_diamond";
+    const lineStyle = styleVal === "dashed" ? "dashed" : styleVal === "dotted" ? "dotted" : "solid";
+    const hasCols = buf.colors.some(Boolean);
+    const col = pineNormColor(hasCols ? buf.colors.find(Boolean) : (kw.color ?? buf.pos2), "#38bdf8", transp);
+    let useSubPane = !overlayMode;
+    if (overlayMode) {
+      const lastC = env.close[len - 1] || 1;
+      if (validVals.length > 5 && lastC > 15) {
+        const mx = Math.max(...validVals.map(Math.abs)), mn = Math.min(...validVals);
+        if (isHist || (mx <= 100 && mn >= -100 && mx < lastC * 0.15)) useSubPane = true;
+      }
+    }
+    plotsAdded++;
+    const opts = { title, color: col, width, style: lineStyle, dots: isDots, step: isStep, colors: hasCols ? buf.colors : null };
+    if (useSubPane) {
+      if (isHist) env.histPane(buf.values, { title, upColor: "rgba(16,185,129,0.55)", downColor: "rgba(244,63,94,0.55)", colors: hasCols ? buf.colors : null });
+      else env.plotPane(buf.values, opts);
+    } else {
+      env.plot(buf.values, opts);
+    }
+  });
+} else {
+  execBlock(logicalLines, scope);
+}
 const seenLinePrices = [];
 const pushCleanLine = (price, title, color, style) => {
 if (!Number.isFinite(price) || price <= 0 || linesAdded >= 12) return;
