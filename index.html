@@ -1282,11 +1282,27 @@
     .scr-tab.active { background: var(--emerald-dim); border-color: var(--emerald); color: var(--emerald); }
     .scr-list { display: flex; flex-direction: column; gap: 7px; }
     .scr-row {
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-      padding: 9px 11px; border-radius: 12px; background: var(--bg-elevated);
-      border: 1px solid var(--border); cursor: pointer; transition: 0.15s;
+      display: flex; flex-direction: column; gap: 7px;
+      padding: 10px 11px; border-radius: 13px; background: var(--bg-elevated);
+      border: 1px solid var(--border-strong); cursor: pointer; transition: 0.15s;
     }
     .scr-row:hover { border-color: var(--emerald); }
+    .scr-row-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .scr-reason {
+      font-size: 11px; font-weight: 700; color: var(--text); line-height: 1.5;
+      padding: 5px 8px; border-radius: 8px;
+      background: rgba(16, 185, 129, 0.07); border-right: 2.5px solid var(--emerald);
+    }
+    .scr-reason.dip { background: rgba(245, 158, 11, 0.08); border-right-color: var(--gold); }
+    .scr-badges { display: flex; flex-wrap: wrap; gap: 5px; }
+    .scr-pill {
+      padding: 2px 7px; border-radius: 7px; font-size: 10px; font-weight: 800;
+      background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted);
+    }
+    .scr-pill strong { color: var(--text); }
+    .scr-pill.up strong { color: var(--emerald); }
+    .scr-pill.gold strong { color: var(--gold); }
+    .scr-pill.blue strong { color: var(--blue); }
     .scr-left { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
     .scr-info { min-width: 0; flex: 1; }
     .scr-name { font-size: 12px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2189,15 +2205,15 @@
   <div class="modal-backdrop" id="screenerModalBackdrop">
     <div class="modal tool-modal">
       <div class="modal-head">
-        <strong style="font-size:14.5px;">🎯 رادار الفرص والفلترة (أعلى 8 أسهم)</strong>
+        <strong style="font-size:14.5px;">🎯 رادار فرص الجلسة القادمة (أعلى 8)</strong>
         <button type="button" class="icon-btn" id="closeScreenerModalBtn">✕</button>
       </div>
       <div class="tool-modal-body">
         <div class="scr-tabs" id="screenerTabs">
-          <button type="button" class="scr-tab active" data-scr="liquidity">🔥 سيولة مرتفعة</button>
-          <button type="button" class="scr-tab" data-scr="buy">🟢 إشارات شراء</button>
-          <button type="button" class="scr-tab" data-scr="shariah">☪️ الشريعة الصاعدة</button>
-          <button type="button" class="scr-tab" data-scr="dip">💎 فرص ارتداد</button>
+          <button type="button" class="scr-tab active" data-scr="breakout">🚀 اختراق وزخم</button>
+          <button type="button" class="scr-tab" data-scr="accum">🧲 تجميع هادئ</button>
+          <button type="button" class="scr-tab" data-scr="oversold">💎 ارتداد من دعم</button>
+          <button type="button" class="scr-tab" data-scr="strong_buy">🟢 أقوى إجماع شراء</button>
         </div>
         <div class="scr-list" id="screenerList">
           <div class="movers-empty">⏳ جاري فحص السوق...</div>
@@ -2601,7 +2617,7 @@ filter: "ALL",
 search: "",
 favs: safeJson(LS.FAVS, ["SWDY","COMI","TMGH","AMES"]),
 portfolio: safeJson(LS.PORTFOLIO, []),
-screenerTab: "liquidity",
+screenerTab: "breakout",
 customStocks: safeJson(LS.CUSTOM, {}),
 indicators: safeJson(LS.INDICATORS, ["MAExp@tv-basicstudies","RSI@tv-basicstudies"]),
 localUpdatedAt: Number(localStorage.getItem(LS.UPDATED_AT) || 0),
@@ -7065,7 +7081,7 @@ async function callSahmCloudAi(message, historyArr = [], imageBase64 = "") {
   return data;
 }
 
-// ==================== رادار الفرص (أعلى 8 أسهم) ====================
+// ==================== رادار فرص الجلسة القادمة (أعلى 8 أسهم) ====================
 function getScreenerPool() {
   const data = state.moversData;
   if (!data) return [];
@@ -7073,7 +7089,22 @@ function getScreenerPool() {
   if (Array.isArray(data.heatmap)) {
     for (const r of data.heatmap) {
       if (!r?.t || !isValidEgxTicker(r.t)) continue;
-      map.set(r.t, { ticker: r.t, name: STOCK_MAP[r.t]?.name || r.n || r.t, price: Number(r.p || 0), change: Number(r.c || 0), turnover: Number(r.tv || 0), logoid: r.l || "", signal: "neutral" });
+      map.set(r.t, {
+        ticker: r.t,
+        name: STOCK_MAP[r.t]?.name || r.n || r.t,
+        price: Number(r.p || 0),
+        change: Number(r.c || 0),
+        turnover: Number(r.tv || 0),
+        logoid: r.l || "",
+        signal: r.sig || "neutral",
+        score: r.sc != null ? Number(r.sc) : null,
+        rsi: r.rsi != null ? Number(r.rsi) : null,
+        volRatio: r.vr != null ? Number(r.vr) : null,
+        ema20: r.e20 != null ? Number(r.e20) : null,
+        ema50: r.e50 != null ? Number(r.e50) : null,
+        pivS1: r.s1 != null ? Number(r.s1) : null,
+        pivR1: r.r1 != null ? Number(r.r1) : null
+      });
     }
   }
   for (const list of [data.active || [], data.gainers || [], data.losers || []]) {
@@ -7087,11 +7118,46 @@ function getScreenerPool() {
         change: Number(r.change ?? prev.change ?? 0),
         turnover: Number(r.turnover ?? prev.turnover ?? 0),
         logoid: r.logoid || prev.logoid || "",
-        signal: r.signal || prev.signal || "neutral"
+        signal: r.signal || prev.signal || "neutral",
+        score: r.score ?? prev.score ?? null,
+        rsi: r.rsi ?? prev.rsi ?? null,
+        volRatio: r.volRatio ?? prev.volRatio ?? null,
+        ema20: r.ema20 ?? prev.ema20 ?? null,
+        ema50: r.ema50 ?? prev.ema50 ?? null,
+        pivS1: r.pivS1 ?? prev.pivS1 ?? null,
+        pivR1: r.pivR1 ?? prev.pivR1 ?? null
       });
     }
   }
-  return Array.from(map.values()).filter(x => x.price > 0);
+  return Array.from(map.values()).filter(x => x.price > 0 && x.turnover >= 100000);
+}
+
+function buildScreenerInsight(item, tab) {
+  const p = item.price;
+  const supRaw = (item.pivS1 && item.pivS1 < p * 0.995 && item.pivS1 > p * 0.90) ? item.pivS1
+    : (item.ema20 && item.ema20 < p * 0.995 && item.ema20 > p * 0.91) ? item.ema20
+    : p * 0.965;
+  const tgtRaw = (item.pivR1 && item.pivR1 > p * 1.025 && item.pivR1 < p * 1.15) ? item.pivR1 : p * 1.06;
+  const sup = supRaw < 5 ? supRaw.toFixed(3) : supRaw.toFixed(2);
+  const tgt = tgtRaw < 5 ? tgtRaw.toFixed(3) : tgtRaw.toFixed(2);
+  const tgtPct = (((tgtRaw - p) / p) * 100).toFixed(1);
+
+  let reason = "";
+  let isDip = false;
+  if (tab === "breakout") {
+    const vrTxt = item.volRatio != null ? ` بفوليوم ${item.volRatio}x المتوسط` : "";
+    reason = `زخم صاعد${vrTxt} فوق المتوسطات — متوقع استكمال الصعود لاختبار ${tgt} ج بشرط الثبات فوق ${sup} ج.`;
+  } else if (tab === "accum") {
+    reason = `حركة هادئة ومتماسكة قرب المتوسطات بدون تضخم سعري — مرشح لانطلاقة قادمة عند اختراق المقاومة نحو ${tgt} ج.`;
+  } else if (tab === "oversold") {
+    isDip = true;
+    const rsiTxt = item.rsi != null ? ` (RSI ${item.rsi})` : "";
+    reason = `ضغط بيعي قوي${rsiTxt} قرب دعم ${sup} ج — فرصة ارتداد مضاربي نحو ${tgt} ج بشرط عدم كسر الدعم.`;
+  } else {
+    const scTxt = item.score != null ? ` (+${item.score}/100)` : "";
+    reason = `إجماع فني قوي${scTxt} من المتوسطات والزخم — الاتجاه يدعم الصعود تدريجياً نحو ${tgt} ج.`;
+  }
+  return { sup, tgt, tgtPct, reason, isDip };
 }
 
 function renderScreenerList() {
@@ -7099,48 +7165,67 @@ function renderScreenerList() {
   if (!listEl) return;
   const pool = getScreenerPool();
   if (!pool.length) {
-    listEl.innerHTML = `<div class="movers-empty">⏳ جاري تحميل بيانات السوق...</div>`;
+    listEl.innerHTML = `<div class="movers-empty">⏳ جاري فحص السوق وتجهيز الفرص...</div>`;
     return;
   }
-  const tab = state.screenerTab || "liquidity";
+  const tab = state.screenerTab || "breakout";
   let picked = [];
-  if (tab === "liquidity") {
-    picked = [...pool].sort((a, b) => b.turnover - a.turnover).slice(0, 8);
-  } else if (tab === "buy") {
-    const buys = pool.filter(x => x.signal === "buy");
-    picked = (buys.length >= 4 ? buys : pool.filter(x => x.change > 0))
-      .sort((a, b) => (b.change - a.change) || (b.turnover - a.turnover))
+
+  if (tab === "breakout") {
+    picked = pool.filter(x =>
+      x.change > 0.5 && x.change < 14 &&
+      (x.volRatio == null || x.volRatio >= 1.15) &&
+      (x.rsi == null || (x.rsi >= 48 && x.rsi <= 76)) &&
+      (x.ema20 == null || x.price >= x.ema20 * 0.99)
+    ).sort((a, b) => ((b.volRatio || 1) * 18 + (b.score || 0) + b.change * 2) - ((a.volRatio || 1) * 18 + (a.score || 0) + a.change * 2)).slice(0, 8);
+    if (picked.length < 4) picked = pool.filter(x => x.change > 0).sort((a, b) => (b.volRatio || 0) - (a.volRatio || 0) || b.change - a.change).slice(0, 8);
+  } else if (tab === "accum") {
+    picked = pool.filter(x =>
+      x.change >= -1.8 && x.change <= 2.6 &&
+      (x.rsi == null || (x.rsi >= 40 && x.rsi <= 62)) &&
+      (x.ema50 == null || x.price >= x.ema50 * 0.97)
+    ).sort((a, b) => ((b.volRatio || 1) * 20 + (b.score || 0)) - ((a.volRatio || 1) * 20 + (a.score || 0))).slice(0, 8);
+    if (picked.length < 4) picked = pool.filter(x => Math.abs(x.change) <= 3).sort((a, b) => b.turnover - a.turnover).slice(0, 8);
+  } else if (tab === "oversold") {
+    const lowRsi = pool.filter(x => x.rsi != null && x.rsi <= 40 && x.turnover >= 300000);
+    picked = (lowRsi.length >= 4 ? lowRsi : pool.filter(x => x.change < -0.5))
+      .sort((a, b) => (a.rsi ?? 50) - (b.rsi ?? 50) || a.change - b.change)
       .slice(0, 8);
-  } else if (tab === "shariah") {
-    picked = pool.filter(x => STOCK_MAP[x.ticker]?.shariah && x.change >= 0)
-      .sort((a, b) => (b.change - a.change) || (b.turnover - a.turnover))
+  } else {
+    picked = pool.filter(x => (x.score != null ? x.score >= 15 : x.signal === "buy") && x.turnover >= 500000)
+      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0) || b.turnover - a.turnover)
       .slice(0, 8);
-  } else if (tab === "dip") {
-    picked = pool.filter(x => x.change < -0.5 && x.turnover >= 500000)
-      .sort((a, b) => (a.change - b.change) || (b.turnover - a.turnover))
-      .slice(0, 8);
-    if (!picked.length) picked = pool.filter(x => x.change < 0).sort((a, b) => a.change - b.change).slice(0, 8);
+    if (picked.length < 4) picked = pool.filter(x => x.signal === "buy" || x.change > 0).sort((a, b) => (b.score ?? b.change) - (a.score ?? a.change)).slice(0, 8);
   }
+
   if (!picked.length) {
-    listEl.innerHTML = `<div class="movers-empty">لا توجد أسهم مطابقة لهذا الفلتر حالياً.</div>`;
+    listEl.innerHTML = `<div class="movers-empty">لا توجد فرص مطابقة حالياً — جرّب فلتر آخر.</div>`;
     return;
   }
+
   listEl.innerHTML = picked.map(item => {
     const cls = item.change > 0 ? "up" : item.change < 0 ? "down" : "flat";
     const sign = item.change > 0 ? "+" : "";
-    const tvTxt = item.turnover > 0 ? formatCompactNum(item.turnover) + " ج.م" : "";
+    const ins = buildScreenerInsight(item, tab);
+    const scPill = item.score != null ? `<span class="scr-pill ${item.score >= 15 ? "up" : ""}">التقييم: <strong>${item.score > 0 ? "+" : ""}${item.score}</strong></span>` : "";
+    const rsiPill = item.rsi != null ? `<span class="scr-pill ${item.rsi <= 35 ? "gold" : ""}">RSI: <strong>${item.rsi}</strong></span>` : "";
+    const vrPill = item.volRatio != null ? `<span class="scr-pill ${item.volRatio >= 1.5 ? "up" : ""}">الفوليوم: <strong dir="ltr">${item.volRatio}x</strong></span>` : "";
     return `<div class="scr-row" data-scr-ticker="${item.ticker}">
-      <div class="scr-left">
-        ${buildStockLogoHtml(item.ticker, "sm", item.logoid)}
-        <div class="scr-info">
-          <div class="scr-name">${item.name}</div>
-          <div class="scr-meta"><span class="row-ticker">${item.ticker}</span>${tvTxt ? `<span>• سيولة ${tvTxt}</span>` : ""}</div>
+      <div class="scr-row-top">
+        <div class="scr-left">
+          ${buildStockLogoHtml(item.ticker, "sm", item.logoid)}
+          <div class="scr-info">
+            <div class="scr-name">${item.name}</div>
+            <div class="scr-meta"><span class="row-ticker">${item.ticker}</span><span>• دعم ${ins.sup}</span><span>• هدف ${ins.tgt} (+${ins.tgtPct}%)</span></div>
+          </div>
+        </div>
+        <div class="scr-right">
+          <span class="mover-price">${item.price.toFixed(2)} ج.م</span>
+          <span class="mover-chg ${cls}">${sign}${item.change.toFixed(2)}%</span>
         </div>
       </div>
-      <div class="scr-right">
-        <span class="mover-price">${item.price.toFixed(2)} ج.م</span>
-        <span class="mover-chg ${cls}">${sign}${item.change.toFixed(2)}%</span>
-      </div>
+      <div class="scr-reason ${ins.isDip ? "dip" : ""}">${ins.reason}</div>
+      <div class="scr-badges">${scPill}${rsiPill}${vrPill}<span class="scr-pill blue">السيولة: <strong>${formatCompactNum(item.turnover)}</strong></span></div>
     </div>`;
   }).join("");
 }
